@@ -1,0 +1,41 @@
+.legend-card-wrapper {
+  width: 100%;
+}
+
+.legend-card {
+  position: relative;
+  display: inline-block;
+  width: 30%;
+  padding: 1%;
+  opacity: 0.3;
+  transition: opacity 0.4s ease-out;
+}
+
+.legend-card>.legend-card-left {
+  width: 30%;
+  display: inline-block;
+}
+
+.legend-card>.legend-card-right {
+  width: 0;
+  height: 100%;
+  display: inline-block;
+  margin-left: 5%;
+  transition: width 0.4s ease-out;
+}
+
+.legend-card>.legend-card-left>img {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+
+.legend-card>.legend-card-text {
+  font-size: 9px;
+  color: white;
+}
+
+.legend-card-right > p {
+  width: 100%;
+  height: 100%;
+}

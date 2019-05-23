@@ -17,6 +17,7 @@ import { CardStyleDirective } from './map-main/interaction-element/card-style.di
 import { MapDirective } from './map-main/map-element/map.directive';
 import { MapLayerDirective } from './map-main/map-element/map-layer.directive';
 import { LegendComponent } from './map-main/legend/legend.component';
+import { LegendDirective } from './map-main/legend/legend.directive';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LegendComponent } from './map-main/legend/legend.component';
     CardStyleDirective,
     MapDirective,
     MapLayerDirective,
-    LegendComponent
+    LegendComponent,
+    LegendDirective
   ],
   imports: [
     BrowserModule,

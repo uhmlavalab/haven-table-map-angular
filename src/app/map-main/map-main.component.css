@@ -18,7 +18,15 @@
   background-color: rgba(0, 0, 0, 1);
   display: inline-block;
   position: absolute;
-  top: 0;
   left: 22vw;
   text-align: center;
+  top: 0;
+}
+
+.legend-container {
+  width: 25%;
+  height: 18vh;
+  left: 24%;
+  top: 2%;
+  position: absolute;
 }

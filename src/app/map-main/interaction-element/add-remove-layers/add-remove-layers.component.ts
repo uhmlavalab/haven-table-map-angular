@@ -50,7 +50,7 @@ export class AddRemoveLayersComponent implements OnInit {
   updateBackgroundColorAddRemove(layer) {
     let color = 'rgba(0,0,0,0.8)';
     if (layer.active) {
-      color = mapLayerColors[`${layer.colorName}`].fill;
+      color = mapLayerColors[`${layer.colorName}`].legend;
     }
     this.cardStyle.forEach((e) => {
       if (e.element.nativeElement.id === `mini-card-${layer.name}`) {
@@ -69,6 +69,8 @@ export class AddRemoveLayersComponent implements OnInit {
       const nameArray = e.element.nativeElement.id.split('-');
       const layerName = nameArray[2]; // Name of the layer associated with the element
       const color = (layerName === layer.name) ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0.6)';
+      const height = (layerName === layer.name) ? 100 + '%' : 80 + '%';
+      e.setCardHeight(height);
       const singleLayer = _.filter(this.layers, layer => layerName === layer.name);
       if (!singleLayer[0].active) {
         e.changeBackgroundColor(color);
