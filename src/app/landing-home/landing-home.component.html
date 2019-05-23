@@ -1,0 +1,41 @@
+<app-bouncing-title></app-bouncing-title>
+
+<!-- Selection Buttons -->
+<div class="landing-buttons-container">
+  <div *ngFor="let button of buttons" class="selection-button" id="{{ button.id }}" (click)="handleSelectButtonClick($event.target)">
+    {{ button.text }}
+  </div>
+</div>
+
+<!-- Contains the cards for each selectable map -->
+<div class="map-selector-container" id="map-selector-container" name="map-selector-container" appMapSelectionDirective>
+  <div *ngFor="let island of islands" class="map-selector-box">
+    <img src="{{ island.imagePath }}" />
+    <div class="map-selector-box-dark-overlay">
+      <div class="map-selector-stripe-button">
+        <h3>{{ island.text }}</h3>
+      </div>
+      <div class="map-selector-start-wrapper">
+        <div class="map-selector-start-button">
+          <input type="checkbox" checked="checked" id="second-screen-{{island.text}}" (change)="handleIncludeSecondScreenCheckboxChange(island, $event.target.checked)"> Include 2nd Screen
+          <h3 routerLink="/map-main" id="start-{{island.text}}"(click)="handleStartButtonClick(island)">Start</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contains the camera feed cards -->
+<div class="camera-selector-container" id="camera-selector-container" name="camera-selector-container" appMapSelectionDirective>
+    <app-video-feed></app-video-feed>
+    <app-video-feed></app-video-feed>
+</div>
+
+<!-- Contains the marker selection cards -->
+<div class="marker-selector-container" id="marker-selector-container" name="marker-selector-container" appMapSelectionDirective>
+
+</div>
+
+<!-- contains the layer selector cards -->
+<div class="layer-selector-container" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>
+</div>

@@ -1,0 +1,10 @@
+<div class="add-remove-wrapper">
+  <h2>{{ nextLayer.displayName }}</h2>
+  <img src="../../../assets/images/icons/{{ nextLayer.name }}-icon.png">
+  <div class="add-remove-cards-wrapper">
+    <div class="add-remove-mini-card" *ngFor="let layer of layers" id="mini-card-{{layer.name}}" appCardStyle >
+      <img src="../../../assets/images/icons/{{ layer.name }}-icon.png">
+    </div>
+  </div>
+  <app-large-year class="add-remove-large-year"></app-large-year>
+</div>
