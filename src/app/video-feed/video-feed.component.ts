@@ -10,15 +10,25 @@ export class VideoFeedComponent implements OnInit {
   @ViewChild('videoElement') videoElement: any;
 video: any;
 
-ngOnInit() {
-  this.video = this.videoElement.nativeElement;
-}
-  start() {
-     this.initCamera({ video: true, audio: false });
-   }
-    sound() {
-     this.initCamera({ video: true, audio: true });
-   }
+  ngOnInit() {
+    this.video = this.videoElement.nativeElement;
+    this.start();
+    console.log("test");
+  }
+
+  /** Starts the video feed */
+  start(): void {
+    this.initCamera({ video: true, audio: false });
+  }
+
+  /** Includes Sound from the video feed */
+  sound(): void {
+    this.initCamera({ video: true, audio: true });
+  }
+
+  /** Initializes the camera
+  * @param config => JSON object containing configuration options
+  */
   initCamera(config: any) {
     var browser = <any>navigator;
 
