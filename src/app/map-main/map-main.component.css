@@ -44,3 +44,25 @@
   top: 2%;
   position: absolute;
 }
+
+.title-container-oahu {
+  color: white;
+  left: 90vw;
+  top: 64vh;
+  position: absolute;
+  text-align: center;
+}
+.title-container-maui {
+  color: white;
+  left: 90vw;
+  top: 79vh;
+  position: absolute;
+  text-align: center;
+}
+.title-container-bigisland {
+  color: white;
+  left: 61vw;
+  top: 78vh;
+  position: absolute;
+  text-align: center; 
+}

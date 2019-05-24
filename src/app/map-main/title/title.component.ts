@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MapDataService } from '../../services/map-data.service';
 
 @Component({
   selector: 'app-title',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TitleComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _mapdataservice: MapDataService) { }
 
   ngOnInit() {
   }
 
+  /** Gets the title of the map
+  * @return the name of the map
+  */
+  getTitle(): string {
+    return this._mapdataservice.getSelectedIsland().text;
+  }
 }
