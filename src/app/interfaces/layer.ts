@@ -2,5 +2,8 @@ export interface Layer {
   name: string,
   displayName: string,
   colorName: string,
-  active: boolean
+  active: boolean,
+  icon: string,
+  included: boolean,
+  color: string
 }

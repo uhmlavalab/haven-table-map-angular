@@ -5,10 +5,14 @@
   <div *ngFor="let button of buttons" class="selection-button" id="{{ button.id }}" (click)="handleSelectButtonClick($event.target)">
     {{ button.text }}
   </div>
+  <!-- back button is only displayed when the map selection panel is not in view -->
+  <div class="selection-button" [style.opacity]="activePanel == 'maps' ? '0' : '1'" id="maps" (click)="handleSelectButtonClick($event.target)">
+    Back
+  </div>
 </div>
 
 <!-- Contains the cards for each selectable map -->
-<div class="map-selector-container" id="map-selector-container" name="map-selector-container" appMapSelectionDirective>
+<div class="map-selector-container" [style.left]="activePanel == 'maps' ? '25%' : '100%'" id="map-selector-container" name="map-selector-container" appMapSelectionDirective>
   <div *ngFor="let island of islands" class="map-selector-box">
     <img src="{{ island.imagePath }}" />
     <div class="map-selector-box-dark-overlay">
@@ -18,7 +22,7 @@
       <div class="map-selector-start-wrapper">
         <div class="map-selector-start-button">
           <input type="checkbox" checked="checked" id="second-screen-{{island.text}}" (change)="handleIncludeSecondScreenCheckboxChange(island, $event.target.checked)"> Include 2nd Screen
-          <h3 routerLink="/map-main" id="start-{{island.text}}"(click)="handleStartButtonClick(island)">Start</h3>
+          <h3 routerLink="/map-main" id="start-{{island.text}}" (click)="handleStartButtonClick(island)">Start</h3>
         </div>
       </div>
     </div>
@@ -26,16 +30,30 @@
 </div>
 
 <!-- Contains the camera feed cards -->
-<div class="camera-selector-container" id="camera-selector-container" name="camera-selector-container" appMapSelectionDirective>
-    <app-video-feed></app-video-feed>
-    <app-video-feed></app-video-feed>
+<div class="camera-selector-container" [style.left]="activePanel == 'cams' ? '25%' : '100%'" id="camera-selector-container" name="camera-selector-container" appMapSelectionDirective>
+  <app-video-feed></app-video-feed>
+  <app-video-feed></app-video-feed>
 </div>
 
 <!-- Contains the marker selection cards -->
-<div class="marker-selector-container" id="marker-selector-container" name="marker-selector-container" appMapSelectionDirective>
-
+<div class="marker-selector-container" [style.left]="activePanel == 'markers' ? '25%' : '100%'" id="marker-selector-container" name="marker-selector-container" appMapSelectionDirective>
+  <div class="marker-selector-card" *ngFor="let marker of markers">
+    <img src="../../assets/images/icons/{{marker.icon}}" />
+    <div class="marker-selector-card-info">
+      <h3>{{marker.text}}</h3>
+      <p>Aruco Marker ID: {{marker.markerId}}</p>
+      <div id="change-marker-button-{{marker.job}}" class="change-marker-button">Change</div>
+    </div>
+  </div>
 </div>
 
 <!-- contains the layer selector cards -->
-<div class="layer-selector-container" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>
+<div class="layer-selector-container" [style.left]="activePanel == 'layers' ? '25%' : '100%'" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>
+  <div class="layer-selector-card" *ngFor="let layer of layers">
+    <img src="../../assets/images/icons/{{layer.icon}}" />
+    <div class="info">
+    <h3>{{layer.displayName}}</h3>
+    <input type="checkbox" checked="checked" id="include-{{layer.name}}" (change)="handleLayerSetupCheck(layer, $event.target.checked)">Include Layer
+    </div>
+  </div>
 </div>

@@ -125,7 +125,7 @@
   border-radius: 5px;
   cursor: pointer;
   padding: 20px 0 0 0;
-  transition: background-color 0.4s ease-out;
+  transition: background-color 0.4s ease-out, opacity 0.4s ease-out;
 }
 
 .selection-button:hover {
@@ -135,14 +135,58 @@
 
 /* Styles for the marker selection */
 .marker-selector-container {
-  width: 50%;
-  height: 50%;
+  width: 70%;
   position: absolute;
   left: 100%;
-  top: 20%;
-  border: 1px solid white;
+  top: 15%;
   transition: left 0.4s ease-out;
+  text-align: center;
+  padding: 10px;
 }
+
+.marker-selector-card {
+  width: 44%;
+  margin: 2%;
+  color: white;
+  display: inline-block;
+  background-color: rgba(85, 60, 79, 1);
+  border-radius: 5px;
+}
+
+.marker-selector-card>img {
+  width: 27%;
+  display:inline-block;
+  padding: 10px;
+}
+
+.marker-selector-card-info {
+  width: 60%;
+  margin: 2%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.marker-selector-card-info>h3 {
+  margin: 0 0 -10px 0;
+}
+
+.change-marker-button {
+  background-color: rgba(130,145,188, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  width: 40%;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0 0 0 30%;
+  cursor: pointer;
+  transition: background-color 0.4s ease-out, color 0.4s ease-out;
+}
+
+.change-marker-button:hover {
+  background-color: rgba(130,145,188, 1);
+  color: rgba(255, 255, 255, 1);
+  text-decoration: underline;
+}
+
 
 /* Styles for the camera selection */
 .camera-selector-container {
@@ -156,11 +200,32 @@
 
 /* Styles for the layer selection */
 .layer-selector-container {
-  width: 50%;
-  height: 50%;
+  width: 70%;
   position: absolute;
   left: 100%;
   top: 20%;
-  border: 1px solid red;
   transition: left 0.4s ease-out;
+}
+
+.layer-selector-card {
+  width: 30%;
+  margin: 1%;
+  color: white;
+  display: inline-block;
+  background-color: rgba(85, 60, 79, 1);
+  border-radius: 5px;
+}
+
+
+.layer-selector-card>img {
+  width: 70px;
+  height: 70px;
+  display:inline-block;
+  padding: 10px;
+}
+
+.layer-selector-card>.info {
+  width: 62%;
+  display: inline-block;
+  vertical-align: top;
 }

@@ -2,7 +2,7 @@
   <h2>{{ nextLayer.displayName }}</h2>
   <img src="../../../assets/images/icons/{{ nextLayer.name }}-icon.png">
   <div class="add-remove-cards-wrapper">
-    <div class="add-remove-mini-card" *ngFor="let layer of layers" id="mini-card-{{layer.name}}" appCardStyle >
+    <div *ngFor="let layer of layers" class="add-remove-mini-card" [style.background-color]="layer.active ? layer.color : 'rgba(0,0,0,0.5)'" id="mini-card-{{layer.name}}" appCardStyle >
       <img src="../../../assets/images/icons/{{ layer.name }}-icon.png">
     </div>
   </div>

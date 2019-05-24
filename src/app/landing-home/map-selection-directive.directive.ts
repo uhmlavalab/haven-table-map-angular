@@ -20,7 +20,7 @@ export class MapSelectionDirectiveDirective implements OnInit {
   * @param element => the selected element.
   * @return none
   */
-  elementalSlide(value) {
+  elementalSlide(value: any) {
     this.element.nativeElement.style.left = `${value}%`;
   }
 

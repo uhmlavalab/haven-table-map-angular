@@ -21,7 +21,7 @@
   height: 100%;
   display: inline-block;
   margin-left: 5%;
-  transition: width 0.4s ease-out;
+  transition: width 0.4s ease-out, border 0.4s ease-out;
 }
 
 .legend-card>.legend-card-left>img {

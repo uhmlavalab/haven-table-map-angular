@@ -4,6 +4,11 @@ import { Layer } from '../interfaces/layer';
 import { Marker } from '../interfaces/marker';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
+import { islands } from '../../assets/defaultData/islands';
+import { layers } from '../../assets/defaultData/layers';
+import { markers } from '../../assets/defaultData/markers';
+import { mapDefaults } from '../../assets/defaultData/mapDefaults';
+import { chartColors, mapLayerColors } from '../../assets/defaultData/colors';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +24,7 @@ export class MapDataService {
   private layers: Layer[]; // Array Holding All Layers
   private nextLayer: number; // Index of next layer
   private activeLayers: Layer[] = []; // Array of Active Layers
+  private includedLayers: Layer[] = []; // Array of Layers that are included at start
   private markers: Marker[];
   private MAX_YEAR = 2045; // Maximum Year Permitted
   private MIN_YEAR = 2016; // Minimum Year Permitted
@@ -37,108 +43,29 @@ export class MapDataService {
 
   constructor() {
 
-    this.mapScale = 0.237; // Set the map scale
-    this.mapImageWidth = 3613;
-    this.mapImageHeight = 2794;
-    this.bounds = [[-158.281, 21.710], [-157.647, 21.252]];
-    this.mapImageName = 'oahu.png';
+    this.mapScale = mapDefaults.oahu.scale;
+    this.mapImageWidth = mapDefaults.oahu.imageWidth;
+    this.mapImageHeight = mapDefaults.oahu.imageHeight;
+    this.bounds = mapDefaults.oahu.bounds;
+    this.mapImageName = mapDefaults.oahu.imageName;
 
-    // Data for the map cards.
-    this.islands = [{
-      text: 'Oahu',
-      imagePath: './assets/images/landing-images/Oahu.jpg',
-      includeSecondScreen: true,
-      selectedIsland: false
-    }, {
-      text: 'Maui',
-      imagePath: './assets/images/landing-images/maui.jpg',
-      includeSecondScreen: true,
-      selectedIsland: false
-    }, {
-      text: 'Big Island',
-      imagePath: './assets/images/landing-images/bigisland.jpg',
-      includeSecondScreen: true,
-      selectedIsland: false
-    }];
-
-    this.layers = [
-      {
-        name: 'solar',
-        displayName: 'Solar Energy',
-        colorName: 'Solar',
-        active: false
-        //  createFn: () => map.addGeoJsonLayer(`../layers/${island}/solar.json`, 'solar', 2020, mapLayerColors.Solar.fill, mapLayerColors.Solar.border, 0.2)
-      },
-      {
-        name: 'transmission',
-        displayName: 'Transmission Lines',
-        colorName: 'Transmission',
-        active: false
-        //createFn: () => map.addGeoJsonLayer(`../layers/${island}/transmission.json`, 'transmission', null, mapLayerColors.Transmission.fill, mapLayerColors.Transmission.border, 1.0)
-      },
-      {
-        name: 'dod',
-        displayName: 'DOD Lands',
-        colorName: 'Dod',
-        active: false
-        //createFn: () => map.addGeoJsonLayer(`../layers/${island}/dod.json`, 'dod', null, mapLayerColors.Dod.fill, mapLayerColors.Dod.border, 0.5)
-      },
-      {
-        name: 'parks',
-        displayName: 'Park Lands',
-        colorName: 'Parks',
-        active: false
-        //createFn: () => map.addGeoJsonLayer(`../layers/${island}/parks.json`, 'parks', null, mapLayerColors.Parks.fill, mapLayerColors.Parks.border, 0.5)
-      },
-      {
-        name: 'existing_re',
-        displayName: 'Existing Renewables',
-        colorName: 'Existing_RE',
-        active: false
-        //createFn: () => map.addGeoJsonLayer(`../layers/${island}/existing_re_2.json`, 'existing_re', null, mapLayerColors.Existing_RE.fill, mapLayerColors.Existing_RE.border, 0.5)
-      },
-      {
-        name: 'wind',
-        displayName: 'Wind Energy',
-        colorName: 'Wind',
-        active: false
-        //createFn: () => map.addGeoJsonLayer(`../layers/${island}/wind_2.json`, 'wind', 2020, mapLayerColors.Wind.fill, mapLayerColors.Wind.border, 0.25)
-      },
-      {
-        name: 'agriculture',
-        displayName: 'Ag Lands',
-        colorName: 'Agriculture',
-        active: false
-        //createFn: () => map.addGeoJsonLayer(`../layers/${island}/agriculture.json`, 'agriculture', null, mapLayerColors.Agriculture.fill, mapLayerColors.Agriculture.border, 0.5)
-      },
-      {
-        name: 'ial',
-        displayName: 'Important Ag Lands',
-        colorName: 'Ial',
-        active: false
-      }];
-
-      // Data for the Marker setup
-      this.markers = [{
-        markerId: 0,
-        job: 'year',
-        icon: ''
-      }, {
-        markerId: 1,
-        job: 'scenario',
-        icon: ''
-      }, {
-        markerId: 2,
-        job: 'chart',
-        icon: ''
-      }, {
-        markerId: 3,
-        job: 'layer',
-        icon: ''
-      }];
+    this.islands = islands; // Imported from default data
+    this.layers = layers; // Imported from default data
+    this.markers = markers; // Imported from default data
 
     this.setCurrentYear(this.MIN_YEAR);
     this.nextLayer = 0;
+
+    // Load activeLayerArray
+    this.layers.forEach(layer => this.setLayerColor(layer));
+    this.layers.forEach(layer => this.addIncludedLayer(layer));
+  }
+
+  /** Gets the array of markers
+  * @return the array of Markers
+  */
+  getMarkers(): Marker[] {
+    return this.markers;
   }
 
   /** Gets the scale of the map
@@ -178,12 +105,12 @@ export class MapDataService {
 
   /** Adds layer if it is inactive, removes layer if it is active */
   public addRemoveLayer(): void {
-    if (this.layers[this.nextLayer].active) {
-      this.layers[this.nextLayer].active = false;
-      this.activeLayers = _.where(this.activeLayers, {active: true});
+    if (this.includedLayers[this.nextLayer].active) {
+      this.includedLayers[this.nextLayer].active = false;
+      this.activeLayers = _.where(this.activeLayers, { active: true });
     } else {
-      this.layers[this.nextLayer].active = true;
-      this.activeLayers.push(this.layers[this.nextLayer]);
+      this.includedLayers[this.nextLayer].active = true;
+      this.activeLayers.push(this.includedLayers[this.nextLayer]);
     }
     this.publishLayerChange();
   }
@@ -233,14 +160,14 @@ export class MapDataService {
 
   /* Increments the next layer and publishes */
   public incrementNextLayer(): void {
-    this.nextLayer = (this.nextLayer + 1) % this.layers.length;
+    this.nextLayer = (this.nextLayer + 1) % this.includedLayers.length;
     this.publishNextLayer();
   }
 
   /** Decrements the next Layer and publishes */
   public decrementNextLayer(): void {
     if (this.nextLayer === 0) {
-      this.nextLayer = this.layers.length - 1;
+      this.nextLayer = this.includedLayers.length - 1;
     } else {
       this.nextLayer--;
     }
@@ -249,7 +176,7 @@ export class MapDataService {
 
   /* Publishes the next Layer to all subscribers */
   private publishNextLayer(): void {
-    this.nextLayerSubject.next(this.layers[this.nextLayer]);
+    this.nextLayerSubject.next(this.includedLayers[this.nextLayer]);
   }
 
   /** Gets the data for all islands
@@ -298,6 +225,48 @@ export class MapDataService {
   */
   public getState(): string {
     return this.state;
+  }
+
+  /** Gets the active layers
+  * @return the array of active layers.
+  */
+  public getIncludedLayers(): Layer[] {
+    return this.includedLayers;
+  }
+
+  /** Adds a new layer to the list of Included layers
+  * @param layer => the layer to add
+  * @return true if successful, false if not
+  */
+  public addIncludedLayer(layer: Layer): boolean {
+    let success = true;
+    if (_.contains(this.includedLayers, layer)) {
+      success = false;
+    } else {
+      this.includedLayers.push(layer);
+    }
+    return success;
+  }
+
+  /** Removes an included layer from the list of included layers
+  * @param layer => the layer to remove
+  * @return true if layer removes, false if not found in layers
+  */
+  public removeIncludedLayer(layer: Layer): boolean {
+    let success = true;
+    if (_.contains(this.includedLayers, layer)) {
+      this.includedLayers = _.reject(this.includedLayers, activeLayer => activeLayer === layer);
+    } else {
+      success = false;
+    }
+    return success;
+  }
+
+  /** Sets the color for a layer from the default data
+  * @param layer => The layer whose color will be set
+  */
+  public setLayerColor(layer: Layer): void {
+    layer.color = mapLayerColors[layer.colorName].legend;
   }
 
 }

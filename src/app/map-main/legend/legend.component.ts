@@ -18,11 +18,11 @@ export class LegendComponent implements AfterViewInit {
   @ViewChildren(LegendDirective) legendElements;
 
   constructor(private _mapdataservice: MapDataService) {
-    this.layers = this._mapdataservice.getLayers();
+    this.layers = this._mapdataservice.getIncludedLayers();
   }
 
   ngAfterViewInit() {
-    
+
   }
 
   /** Changes the background of a mini-card when that layer is either added or

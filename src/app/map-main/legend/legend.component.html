@@ -6,6 +6,7 @@
     <div class="legend-card-right"
     [style.width]="layer.active ? '50%' : 0"
     [style.background-color]="getBackgroundColor(layer)"
+    [style.border]="layer.active ? '1px solid white' : '1px solid black'"
      id="legend-card-right-{{layer.name}}"
      appLegend><p></p>
     </div>

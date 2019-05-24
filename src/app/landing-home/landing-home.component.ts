@@ -3,9 +3,13 @@ import { AppComponent } from '../app.component';
 import { Panel } from '../interfaces/panel';
 import { Island } from '../interfaces/island';
 import { LandingButton } from '../interfaces/landing-button';
+import { Marker } from '../interfaces/marker';
+import { Layer } from '../interfaces/layer';
 import { VideoFeeds } from '../interfaces/video-feeds';
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
 import { MapDataService } from '../services/map-data.service';
+import { landingButtons } from '../../assets/defaultData/landingButtons';
+import { panels } from '../../assets/defaultData/landingPanels';
 
 @Component({
   selector: 'app-landing-home',
@@ -19,43 +23,23 @@ export class LandingHomeComponent implements OnInit {
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
   islands: Island[] = [];
+  activePanel: string;
+  markers: Marker[] = [];
+  layers: Layer[] = [];
+  buttons: LandingButton[] = [];
+  panels: Panel[];
 
-  constructor(private _mapdataservice:MapDataService) { }
+  constructor(private _mapdataservice: MapDataService) {
+    this.activePanel = 'maps';
+    this.markers = this._mapdataservice.getMarkers();
+    this.layers = this._mapdataservice.getLayers();
+    this.buttons = landingButtons; // Imported from Default Data
+    this.panels = panels; // Imported from default data
+  }
 
   ngOnInit() {
     this.islands = this._mapdataservice.getIslandData();
   }
-
-  // Data for the setup Panels
-  panels: Panel[] = [{
-    name: 'start',
-    active: true
-  }, {
-    name: 'cams',
-    active: false
-  }, {
-    name: 'markers',
-    active: false
-  }, {
-    name: 'layers',
-    active: false
-  }];
-
-  // Initialize the active panel to the map selection boxes.
-  activePanel: string = 'map-selector-container';
-
-  // Data for the Setup Buttons
-  buttons: LandingButton[] = [{
-    text: 'Setup Cameras',
-    id: 'cams'
-  }, {
-    text: 'Setup Markers',
-    id: 'markers'
-  }, {
-    text: 'Setup Layers',
-    id: 'layers'
-  }];
-
 
   /**
   * This function handles the clicks on the start buttons.  When the button is
@@ -80,9 +64,8 @@ export class LandingHomeComponent implements OnInit {
   * In the island object.
   * @param island => The island that will be used to start the program.
   * @param isChecked => true if checked, false if unchecked.
-  * @return none
   */
-  handleIncludeSecondScreenCheckboxChange(island:Island, isChecked): void {
+  handleIncludeSecondScreenCheckboxChange(island: Island, isChecked: boolean): void {
     island.includeSecondScreen = isChecked;
   }
 
@@ -91,40 +74,18 @@ export class LandingHomeComponent implements OnInit {
   * of the table to configure/setup.  It identifies which child element of the
   * directive slideDirective has been clicked and moves all elements accordingly.
   * @param targetElement => The element that was clicked.
-  * @return void.
   */
   handleSelectButtonClick(targetElement: any): void {
-
-    let targetId = null;
-
-    switch (targetElement.id) {
-      case 'cams':
-        targetId = 'camera-selector-container';
-        break;
-      case 'markers':
-        targetId = 'marker-selector-container';
-        break;
-      case 'layers':
-        targetId = 'layer-selector-container';
-        break;
-      default:
-        targetId = null;
-        break;
-    }
-
-    // If nothing has changed.  Exit function with no changes.
-    if (this.activePanel === targetId) {
-      return;
-    }
-
-    // If there is a new active element, move panels accordingly.
-    this.slideDirective.forEach((e) => {
-      if (e.element.nativeElement.id === targetId) {
-        e.elementalSlide(25, e.element.nativeElement);
-      } else {
-        e.elementalSlide(100, e.element.nativeElement);
-      }
-    });
+    this.activePanel = targetElement.id;
   }
 
+  /**
+  * This function adds and removes layers during setup when the checkbox is changed.
+  * @param layer => the layer that was changed.
+  * @param checked => true if checked, false if not checked.
+  */
+  handleLayerSetupCheck(layer: Layer, checked: boolean):void {
+    layer.included = checked;
+    checked ? this._mapdataservice.addIncludedLayer(layer) : this._mapdataservice.removeIncludedLayer(layer);
+  }
 }

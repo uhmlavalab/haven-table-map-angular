@@ -22,7 +22,7 @@ export class AddRemoveLayersComponent implements OnInit {
   nextLayer: Layer; // The next layer to be added or removed.
 
   constructor(private _mapdataservice: MapDataService) {
-    this.layers = this._mapdataservice.getLayers();
+    this.layers = this._mapdataservice.getIncludedLayers();
     this.nextLayer = this.layers[0];
   }
 
@@ -32,29 +32,6 @@ export class AddRemoveLayersComponent implements OnInit {
       next: value => {
         this.nextLayer = <Layer>value;
         this.updateBackgroundColorActive(<Layer>value);
-      }
-    });
-
-    // Subscribe to changes in the active layers
-    this._mapdataservice.layerChangeSubject.subscribe({
-      next: value => {
-        this.updateBackgroundColorAddRemove(<Layer>value);
-      }
-    });
-  }
-
-  /** Changes the background of a mini-card when that layer is either added or
-  * removed from the map.
-  * @param layer => The layer that was added or removed.
-  */
-  updateBackgroundColorAddRemove(layer) {
-    let color = 'rgba(0,0,0,0.8)';
-    if (layer.active) {
-      color = mapLayerColors[`${layer.colorName}`].legend;
-    }
-    this.cardStyle.forEach((e) => {
-      if (e.element.nativeElement.id === `mini-card-${layer.name}`) {
-        e.changeBackgroundColor(color);
       }
     });
   }
