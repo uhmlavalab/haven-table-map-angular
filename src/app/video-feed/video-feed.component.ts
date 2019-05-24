@@ -5,10 +5,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   templateUrl: './video-feed.component.html',
   styleUrls: ['./video-feed.component.css']
 })
-
 export class VideoFeedComponent implements OnInit {
   @ViewChild('videoElement') videoElement: any;
-video: any;
+  video: any;
+  constructor() {
+  }
 
   ngOnInit() {
     this.video = this.videoElement.nativeElement;
@@ -30,7 +31,7 @@ video: any;
   * @param config => JSON object containing configuration options
   */
   initCamera(config: any) {
-    var browser = <any>navigator;
+    const browser = <any>navigator;
 
     browser.getUserMedia = (browser.getUserMedia ||
       browser.webkitGetUserMedia ||
@@ -38,7 +39,7 @@ video: any;
       browser.msGetUserMedia);
 
     browser.mediaDevices.getUserMedia(config).then(stream => {
-      this.video.src = window.URL.createObjectURL(stream);
+      this.video.srcObject = stream;
       this.video.play();
     });
   }
