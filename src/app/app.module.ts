@@ -18,6 +18,7 @@ import { MapDirective } from './map-main/map-element/map.directive';
 import { MapLayerDirective } from './map-main/map-element/map-layer.directive';
 import { LegendComponent } from './map-main/legend/legend.component';
 import { LegendDirective } from './map-main/legend/legend.directive';
+import { TitleComponent } from './map-main/title/title.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { LegendDirective } from './map-main/legend/legend.directive';
     MapDirective,
     MapLayerDirective,
     LegendComponent,
-    LegendDirective
+    LegendDirective,
+    TitleComponent
   ],
   imports: [
     BrowserModule,

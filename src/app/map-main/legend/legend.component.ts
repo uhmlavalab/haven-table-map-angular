@@ -25,6 +25,7 @@ export class LegendComponent implements AfterViewInit {
 
   }
 
+
   /** Changes the background of a mini-card when that layer is either added or
   * removed from the map.
   * @param layer => The layer that was added or removed.

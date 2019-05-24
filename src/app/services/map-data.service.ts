@@ -43,12 +43,6 @@ export class MapDataService {
 
   constructor() {
 
-    this.mapScale = mapDefaults.oahu.scale;
-    this.mapImageWidth = mapDefaults.oahu.imageWidth;
-    this.mapImageHeight = mapDefaults.oahu.imageHeight;
-    this.bounds = mapDefaults.oahu.bounds;
-    this.mapImageName = mapDefaults.oahu.imageName;
-
     this.islands = islands; // Imported from default data
     this.layers = layers; // Imported from default data
     this.markers = markers; // Imported from default data
@@ -59,6 +53,18 @@ export class MapDataService {
     // Load activeLayerArray
     this.layers.forEach(layer => this.setLayerColor(layer));
     this.layers.forEach(layer => this.addIncludedLayer(layer));
+  }
+
+  /**
+  * Sets up all variables for the selected island.  It is called when user
+  * Starts the map from setup.
+  */
+  setupSelectedIsland(): void {
+    this.mapScale = mapDefaults[this.selectedIsland.islandName].scale;
+    this.mapImageWidth = mapDefaults[this.selectedIsland.islandName].imageWidth;
+    this.mapImageHeight = mapDefaults[this.selectedIsland.islandName].imageHeight;
+    this.bounds = mapDefaults[this.selectedIsland.islandName].bounds;
+    this.mapImageName = mapDefaults[this.selectedIsland.islandName].imageName;
   }
 
   /** Gets the array of markers

@@ -49,14 +49,14 @@ export class LandingHomeComponent implements OnInit {
   * @return none
   */
   handleStartButtonClick(island: Island): void {
+    this.islands.forEach(island => island.selectedIsland = false);
     island.selectedIsland = true;
     if (this._mapdataservice.setSelectedIsland()) {
+      this._mapdataservice.setupSelectedIsland();
       this._mapdataservice.setState('run');
-
     } else {
       // TODO: implement error handling
     }
-
   }
 
   /**

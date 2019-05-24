@@ -23,10 +23,24 @@
   top: 0;
 }
 
-.legend-container {
+.legend-container-oahu {
   width: 25%;
   height: 18vh;
   left: 24%;
+  top: 2%;
+  position: absolute;
+}
+.legend-container-maui {
+  width: 25%;
+  height: 18vh;
+  left: 45%;
+  top: 2%;
+  position: absolute;
+}
+.legend-container-bigisland {
+  width: 21%;
+  height: 18vh;
+  left: 23%;
   top: 2%;
   position: absolute;
 }
