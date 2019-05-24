@@ -14,6 +14,7 @@ export class VideoFeedComponent implements OnInit {
   ngOnInit() {
     this.video = this.videoElement.nativeElement;
     this.start();
+    console.log("test");
   }
 
   /** Starts the video feed */
