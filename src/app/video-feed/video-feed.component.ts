@@ -9,39 +9,34 @@ export class VideoFeedComponent implements OnInit {
   @ViewChild('videoElement') videoElement: any;
   @ViewChild('videoElement1') videoElement1: any;
 
-  video: any;
-  video2: any;
-  video3: any;
   devices: any[] = [];
+  videoArray: any[] = [];
+
+  private static numberOfFeeds: number = 0;
+  private static MAX_FEEDS: number = 2;
 
   constructor() {
   }
 
   ngOnInit() {
-
-    this.video = this.videoElement.nativeElement;
-    this.video2 = this.videoElement1.nativeElement;
-
+    this.videoArray = [this.videoElement.nativeElement, this.videoElement1.nativeElement];
+    /* Set Up the Video Feeds */
     navigator.mediaDevices.enumerateDevices().then(this.getDevices).then(feeds => {
-      let counter = 0;
       feeds.forEach(feed => {
-        if(counter === 0) {
-          this.initCamera(feed, this.video);
-        } else if ( counter === 1) {
-          this.initCamera(feed, this.video2);
+        if (VideoFeedComponent.numberOfFeeds < VideoFeedComponent.MAX_FEEDS) {
+          this.initCamera(feed, this.videoArray[VideoFeedComponent.numberOfFeeds++]);
         }
-        counter++;
       });
     });
-
   }
 
 
   /** Initializes the camera
-  * @param config => JSON object containing configuration options
+  * @param feed => The id of the video feed to connect to the video element
+  * @param vid => The html video element
+  * @return true when completed.
   */
   initCamera(feed, vid) {
-    console.log(feed);
     navigator.mediaDevices.getUserMedia({
       video: {
         deviceId: { exact: feed }
@@ -53,6 +48,11 @@ export class VideoFeedComponent implements OnInit {
     return true;
   }
 
+  /** This function detects the videoinput elements connected to the
+  * machine.
+  * @param devices => a list of all devices;
+  * @return an array of only videoinput devices.
+  */
   getDevices(devices): any[] {
     const videoFeeds: any[] = [];
     devices.forEach(device => {
