@@ -1,3 +1,4 @@
+import { _ } from 'underscore';
 /** Represents a projectable marker.  These are the tangibles that control
 *   The user interaction with the table.  Each projectable marker is connected
 *   to a arucojs marker by the markerId number */
@@ -6,6 +7,7 @@ export class ProjectableMarker {
   /* private static variables */
   private static MAX_ACTIVE_TIMER = 600;
   private static projectableMarkers: object = {};
+  private static projectableMarkerArray: ProjectableMarker[] = []
 
   /* private member variables */
   private markerId: number; // Id that cooresponds to arucojs marker
@@ -32,8 +34,16 @@ export class ProjectableMarker {
     this.rotation = 0;
     this.rotationMax = rotationMax;
     ProjectableMarker.projectableMarkers[`${id}`] = this;
+    ProjectableMarker.projectableMarkerArray.push(this);
   }
 
+
+  /** Gets an array of all markers whose live state is true.
+  * @return Array of live markers.
+  */
+  public static getLiveProjectableMarkers(): ProjectableMarker[] {
+    return _.filter(ProjectableMarker.projectableMarkerArray, marker => marker.live === true);
+  }
 
   /** Returns a single projectable marker object
   * @param id => The id of the marker to return
@@ -49,6 +59,7 @@ export class ProjectableMarker {
   public static getAllProjectableMarkers() {
     return ProjectableMarker.projectableMarkers;
   }
+
   /** This function is called when a marker is detected by a video feed.
   * @param corners => Array holding the positons of the corners of the arucojs marker
   * @return true if no issues, false if marker has errors.
