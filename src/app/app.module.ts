@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { WorkerAppModule } from '@angular/platform-webworker';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { LandingHomeComponent } from './landing-home/landing-home.component';
@@ -40,10 +40,10 @@ import { ProjectableMarker } from './classes/projectableMarker';
     TitleComponent
   ],
   imports: [
-    BrowserModule,
+    WorkerAppModule,
     AppRoutingModule
   ],
   providers: [MapDataService, ArService],
-  bootstrap: [AppComponent]
+  bootstrap: [bootstrapWorkerUI]
 })
 export class AppModule { }
