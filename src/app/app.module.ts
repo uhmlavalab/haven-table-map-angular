@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { LandingHomeComponent } from './landing-home/landing-home.component';
 import { BouncingTitleComponent } from './landing-home/bouncing-title/bouncing-title.component';
@@ -20,6 +19,7 @@ import { MapLayerDirective } from './map-main/map-element/map-layer.directive';
 import { LegendComponent } from './map-main/legend/legend.component';
 import { LegendDirective } from './map-main/legend/legend.directive';
 import { TitleComponent } from './map-main/title/title.component';
+import { ProjectableMarker } from './classes/projectableMarker';
 
 @NgModule({
   declarations: [

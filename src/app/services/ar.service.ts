@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Marker } from '../interfaces/marker';
+import { ProjectableMarker } from '../classes/projectableMarker';
 import { markers } from '../../assets/defaultData/markers';
+import { _ } from 'underscore';
 import AR from 'js-aruco';
 
 @Injectable({
@@ -15,43 +17,55 @@ export class ArService {
   tickFunction = null;
   width: number;
   height: number;
+  running: bolean;
+
+  /* If an active marker has not been detected for this many milliseconds,
+  * it is officially inactive. */
+  MAX_ACTIVE_TIMER = 600;
+
+  /* Only check rotation of a marker if this much time has expired since the
+  * last time it was checked */
+  MAX_ROTATION_TIME = 100;
 
   /* The array holding the video feeds is created by the video feed components.
   * The tick cannot be started until there is at least one video element */
   videoFeedArray: any[] = [];
 
-  /* Array holding all of the projectable marker data and objects.
-  * These objects are referenced against the data that is collected from the
-  * arucojs marker data.  The detector object. */
-  markerArray: Marker[] = [];
-
   constructor() {
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
-
-    // Load Markers With Default data
-    this.markerArray = markers;
-    console.log(this.markerArray);
-
+    markers.forEach(marker => new ProjectableMarker(marker.markerId, marker.job, marker.icon, marker.rotationMax));
+    this.running = true;
   }
 
   /* Detects the Markers and makes the changes in the program */
   tick(): void {
-    setTimeout(() => requestAnimationFrame(this.tickFunction), 200);
+
+    if (running) {  // As long as state is running, recurse
+      setTimeout(() => requestAnimationFrame(this.tickFunction));
+    }
+
     this.videoFeedArray.forEach(videoFeed => {
       if (videoFeed.video.readyState === videoFeed.video.HAVE_ENOUGH_DATA) {
+
+        // Collect the Image data for the detector
         const imageData = this.snapshot(videoFeed);
+
+        // Returns an array of active arucojs markers.
         const markers = this.detector.detect(imageData);
+
+        // Run detect marker for each one
+        markers.forEach(marker => ProjectableMarker.getProjectableMarkerById(marker.id).detectMarker());
       }
     });
   }
 
   /**
- * Creates an image from the video feed so that the app can look for markers.
- * @param videoElement Object containing the video and the canvas for each video input.
- * @return Returns the image data to be analyzed by the AR library
- */
+  * Creates an image from the video feed so that the app can look for markers.
+  * @param videoElement Object containing the video and the canvas for each video input.
+  * @return Returns the image data to be analyzed by the AR library
+  */
   snapshot(videoElement): any {
     videoElement.canvas.ctx.drawImage(videoElement.video, 0, 0, videoElement.canvas.width, videoElement.canvas.height);
     return videoElement.canvas.ctx.getImageData(0, 0, videoElement.canvas.width, videoElement.canvas.height);

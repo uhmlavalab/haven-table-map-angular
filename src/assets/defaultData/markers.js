@@ -1,21 +1,49 @@
 export const markers = [{
-  markerId: 0,
+  markerId: 3,
   job: 'year',
   icon: 'hourglass-01.png',
-  text: 'Year Changer'
+  live: false,
+  startTime: null,
+  rotationStartTime: null,
+  corners: null,
+  prevCorners: null,
+  rotation: 0,
+  rotationSum: 0,
+  rotationMax: 7
 }, {
   markerId: 1,
   job: 'scenario',
   icon: 'scenario-01.png',
-  text: 'Scenario Changer'
+  live: false,
+  startTime: null,
+  rotationStartTime: null,
+  corners: null,
+  prevCorners: null,
+  rotation: 0,
+  rotationSum: 0,
+  rotationMax: 20
 }, {
   markerId: 2,
   job: 'chart',
   icon: 'pie-01.png',
-  text: 'Chart Changer'
+  live: false,
+  startTime: null,
+  rotationStartTime: null,
+  corners: null,
+  prevCorners: null,
+  rotation: 0,
+  rotationSum: 0,
+  rotationMax: 20
 }, {
-  markerId: 3,
+  markerId: 0,
   job: 'layer',
   icon: 'layers-01.png',
-  text: 'Layer Changer'
+  live: false,
+  startTime: null,
+  rotationStartTime: null,
+  corners: null,
+  prevCorners: null,
+  rotation: 0,
+  rotationSum: 0,
+  rotationMax: 20
 }];

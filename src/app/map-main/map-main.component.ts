@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { MapDataService } from '../services/map-data.service';
+import { ArService } from '../services/ar.service';
 import { Island } from '../interfaces/island';
 import { Router } from '@angular/router';
 
@@ -15,7 +16,7 @@ export class MapMainComponent implements OnInit {
 
   island: Island;
 
-  constructor(private _mapdataservice: MapDataService, private router: Router) {
+  constructor(private _arservice: ArService, private _mapdataservice: MapDataService, private router: Router) {
     this.island = this._mapdataservice.getSelectedIsland();
   }
 

@@ -21,11 +21,14 @@ export class VideoFeedComponent implements OnInit {
   private static MAX_FEEDS: number = 2;
 
   constructor(private _arservice: ArService) {
-    this.canvasWidth = 300;
-    this.canvasHeight = 300;
+    this.canvasHeight = 400;
+    this.canvasWidth = 400;
+
   }
 
   ngOnInit() {
+    this.videoCanvas1.nativeElement.width = this.canvasWidth;
+    this.videoCanvas1.nativeElement.height = this.canvasHeight;
     this.videoArray = [
       {
         video: this.videoElement.nativeElement,
