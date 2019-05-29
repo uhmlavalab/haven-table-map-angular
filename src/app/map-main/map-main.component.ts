@@ -30,7 +30,7 @@ export class MapMainComponent implements OnInit {
   * @return the name of the css class
   */
   getLegendClassName(): string {
-    return this.island.islandName;
+    return this.island.islandName;  
   }
 
   /** KEYBOARD CONTROLS **/
