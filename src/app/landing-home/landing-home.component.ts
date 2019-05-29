@@ -8,6 +8,7 @@ import { Layer } from '../interfaces/layer';
 import { VideoFeeds } from '../interfaces/video-feeds';
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
 import { MapDataService } from '../services/map-data.service';
+import { ArService } from '../services/ar.service';
 import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
 
@@ -29,7 +30,7 @@ export class LandingHomeComponent implements OnInit {
   buttons: LandingButton[] = [];
   panels: Panel[];
 
-  constructor(private _mapdataservice: MapDataService) {
+  constructor(private _arservice: ArService, private _mapdataservice: MapDataService) {
     this.activePanel = 'maps';
     this.markers = this._mapdataservice.getMarkers();
     this.layers = this._mapdataservice.getLayers();

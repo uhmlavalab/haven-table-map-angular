@@ -11,6 +11,7 @@ import { MapElementComponent } from './map-main/map-element/map-element.componen
 import { MapMainComponent } from './map-main/map-main.component';
 import { AddRemoveLayersComponent } from './map-main/interaction-element/add-remove-layers/add-remove-layers.component';
 import { MapDataService } from './services/map-data.service';
+import { ArService } from './services/ar.service';
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { LargeYearComponent } from './map-main/large-year/large-year.component';
 import { CardStyleDirective } from './map-main/interaction-element/card-style.directive';
@@ -42,7 +43,7 @@ import { TitleComponent } from './map-main/title/title.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [MapDataService],
+  providers: [MapDataService, ArService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

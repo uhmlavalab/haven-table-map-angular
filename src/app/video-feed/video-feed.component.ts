@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ArService } from '../services/ar.service';
 
 @Component({
   selector: 'app-video-feed',
@@ -8,26 +9,53 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 export class VideoFeedComponent implements OnInit {
   @ViewChild('videoElement') videoElement: any;
   @ViewChild('videoElement1') videoElement1: any;
+  @ViewChild('videoCanvas1') videoCanvas1: any;
+  @ViewChild('videoCanvas2') videoCanvas2: any;
 
   devices: any[] = [];
   videoArray: any[] = [];
+  canvasWidth: number;
+  canvasHeight: number;
 
   private static numberOfFeeds: number = 0;
   private static MAX_FEEDS: number = 2;
 
-  constructor() {
+  constructor(private _arservice: ArService) {
+    this.canvasWidth = 300;
+    this.canvasHeight = 300;
   }
 
   ngOnInit() {
-    this.videoArray = [this.videoElement.nativeElement, this.videoElement1.nativeElement];
+    this.videoArray = [
+      {
+        video: this.videoElement.nativeElement,
+        canvas: {
+          element: this.videoCanvas1.nativeElement,
+          width: this.canvasWidth,
+          height: this.canvasHeight,
+          ctx: this.videoCanvas1.nativeElement.getContext("2d")
+        },
+      },
+      {
+        video: this.videoElement1.nativeElement,
+        canvas: {
+          element: this.videoCanvas2.nativeElement,
+          width: this.canvasWidth,
+          height: this.canvasHeight,
+          ctx: this.videoCanvas2.nativeElement.getContext("2d")
+        },
+      }];
+
     /* Set Up the Video Feeds */
-    navigator.mediaDevices.enumerateDevices().then(this.getDevices).then(feeds => {
-      feeds.forEach(feed => {
-        if (VideoFeedComponent.numberOfFeeds < VideoFeedComponent.MAX_FEEDS) {
-          this.initCamera(feed, this.videoArray[VideoFeedComponent.numberOfFeeds++]);
-        }
-      });
-    });
+    navigator.mediaDevices.enumerateDevices().then(this.getDevices)
+      .then(feeds => {
+        feeds.forEach(feed => {
+          if (VideoFeedComponent.numberOfFeeds < VideoFeedComponent.MAX_FEEDS) {
+            this.initCamera(feed, this.videoArray[VideoFeedComponent.numberOfFeeds++].video);
+          }
+        })
+      })
+      .then(this._arservice.runApplication(this.videoArray));
   }
 
 
