@@ -17,7 +17,7 @@ export class ArService {
   tickFunction = null;
   width: number;
   height: number;
-  running: bolean;
+  running: boolean;
 
   /* If an active marker has not been detected for this many milliseconds,
   * it is officially inactive. */

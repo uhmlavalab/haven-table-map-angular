@@ -31,7 +31,7 @@ export class MapElementComponent implements OnInit {
   path: any;
   map: any;
 
-  @ViewChild(MapDirective) mapElement;
+  @ViewChild(MapDirective, { static: true }) mapElement;
   //mapImageUrl, mapImageWidth, mapImageHeight, scale, bounds
   constructor(private _mapdataservice: MapDataService) {
     this.scale = _mapdataservice.getMapScale();

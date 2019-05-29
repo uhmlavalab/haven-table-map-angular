@@ -7,10 +7,10 @@ import { ArService } from '../services/ar.service';
   styleUrls: ['./video-feed.component.css']
 })
 export class VideoFeedComponent implements OnInit {
-  @ViewChild('videoElement') videoElement: any;
-  @ViewChild('videoElement1') videoElement1: any;
-  @ViewChild('videoCanvas1') videoCanvas1: any;
-  @ViewChild('videoCanvas2') videoCanvas2: any;
+  @ViewChild('videoElement', { static: true }) videoElement: any;
+  @ViewChild('videoElement1', { static: true }) videoElement1: any;
+  @ViewChild('videoCanvas1', { static: true }) videoCanvas1: any;
+  @ViewChild('videoCanvas2', { static: true }) videoCanvas2: any;
 
   devices: any[] = [];
   videoArray: any[] = [];
