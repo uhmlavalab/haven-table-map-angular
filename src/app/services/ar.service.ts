@@ -36,7 +36,7 @@ export class ArService {
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
     markers.forEach(marker => new ProjectableMarker(marker.markerId, marker.job, marker.icon, marker.rotationMax));
-    this.running = false; 
+    this.running = false;
   }
 
   /* Detects the Markers and makes the changes in the program */
@@ -80,7 +80,7 @@ export class ArService {
   * @param videoFeeds => An array holding all instantiated video feeds.  They
   *                      contain a video element and a canavas element.
   */
-  runApplication(videoFeeds: any[]) {
+  runApplication(videoFeeds: any): any {
     this.videoFeedArray = videoFeeds;
     if (this.videoFeedArray.length === 0) {
       console.log("Video Elements Not Instantiated");
