@@ -1,7 +1,7 @@
 /* Contains styles for the left side of the main map display */
 
 .interaction-container {
-  width: 22vw;
+  width: 24.5vw;
   height: 100vh;
   background-color: rgba(255, 255, 255, 1);
   display: inline-block;
@@ -13,12 +13,12 @@
 /* Contains styles for the right side of the main map display */
 
 .map-container {
-  width: 78vw;
+  width: 75.5vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 1);
   display: inline-block;
   position: absolute;
-  left: 22vw;
+  left: 24.5vw;
   text-align: center;
   top: 0;
 }
@@ -26,21 +26,23 @@
 .legend-container-oahu {
   width: 25%;
   height: 18vh;
-  left: 24%;
+  left: 27%;
   top: 2%;
   position: absolute;
 }
+
 .legend-container-maui {
   width: 25%;
   height: 18vh;
-  left: 45%;
+  left: 46%;
   top: 2%;
   position: absolute;
 }
+
 .legend-container-bigisland {
   width: 21%;
   height: 18vh;
-  left: 23%;
+  left: 26%;
   top: 2%;
   position: absolute;
 }
@@ -52,6 +54,7 @@
   position: absolute;
   text-align: center;
 }
+
 .title-container-maui {
   color: white;
   left: 90vw;
@@ -59,10 +62,11 @@
   position: absolute;
   text-align: center;
 }
+
 .title-container-bigisland {
   color: white;
   left: 61vw;
   top: 78vh;
   position: absolute;
-  text-align: center; 
+  text-align: center;
 }

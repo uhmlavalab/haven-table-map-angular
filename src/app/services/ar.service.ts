@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Marker } from '../interfaces/marker';
 import { ProjectableMarker } from '../classes/projectableMarker';
+import { MapDataService } from './map-data.service';
 import { markers } from '../../assets/defaultData/markers';
 import { _ } from 'underscore';
 import AR from 'js-aruco';
@@ -21,7 +22,7 @@ export class ArService {
 
   /* If an active marker has not been detected for this many milliseconds,
   * it is officially inactive. */
-  MAX_ACTIVE_TIMER = 600;
+  MAX_ACTIVE_TIMER = 200;
 
   /* Only check rotation of a marker if this much time has expired since the
   * last time it was checked */
@@ -31,21 +32,18 @@ export class ArService {
   * The tick cannot be started until there is at least one video element */
   videoFeedArray: any[] = [];
 
-  constructor() {
+  constructor(private _mapdataservice: MapDataService) {
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
-    markers.forEach(marker => new ProjectableMarker(marker.markerId, marker.job, marker.icon, marker.rotationMax));
+    markers.forEach(marker => new ProjectableMarker(marker.markerId, marker.job, marker.icon, marker.rotationMax, this._mapdataservice));
     this.running = false;
   }
 
   /* Detects the Markers and makes the changes in the program */
-  tick(): void {
-
-    console.log(this.running);
-
-    if (this.running) {  // As long as state is running, recurse
-      setTimeout(() => requestAnimationFrame(this.tickFunction));
+  private tick(): void {
+    if (this.running) {
+      setTimeout(() => requestAnimationFrame(this.tickFunction), 100);
     }
 
     this.videoFeedArray.forEach(videoFeed => {
@@ -55,10 +53,19 @@ export class ArService {
         const imageData = this.snapshot(videoFeed);
 
         // Returns an array of active arucojs markers.
-        const markers = this.detector.detect(imageData);
-
+        const arucoMarkers = this.detector.detect(imageData);
         // Run detect marker for each one
-        markers.forEach(marker => ProjectableMarker.getProjectableMarkerById(marker.id).detectMarker());
+
+        arucoMarkers.forEach(marker => {
+          const pm = ProjectableMarker.getProjectableMarkerById(marker.id);
+          if (pm) {
+            pm.detectMarker(marker.corners, videoFeed.id);
+          }
+        });
+
+        ProjectableMarker.getLiveProjectableMarkers().forEach(marker =>
+          marker.analyzeMarkerData() // Run normal operations on each live marker
+        );
       }
     });
   }
@@ -68,7 +75,7 @@ export class ArService {
   * @param videoElement Object containing the video and the canvas for each video input.
   * @return Returns the image data to be analyzed by the AR library
   */
-  snapshot(videoElement): any {
+  private snapshot(videoElement): any {
     videoElement.canvas.ctx.drawImage(videoElement.video, 0, 0, videoElement.canvas.width, videoElement.canvas.height);
     return videoElement.canvas.ctx.getImageData(0, 0, videoElement.canvas.width, videoElement.canvas.height);
   }
@@ -80,7 +87,7 @@ export class ArService {
   * @param videoFeeds => An array holding all instantiated video feeds.  They
   *                      contain a video element and a canavas element.
   */
-  runApplication(videoFeeds: any): any {
+  public runApplication(videoFeeds: any): any {
     this.videoFeedArray = videoFeeds;
     if (this.videoFeedArray.length === 0) {
       console.log("Video Elements Not Instantiated");
@@ -89,5 +96,12 @@ export class ArService {
       requestAnimationFrame(this.tickFunction);
       this.running = true;
     }
+  }
+
+  /** Kills the tick recursion.  This is called when we move from the landing
+  * screen to the main application to prevent the function from running twice.
+  */
+  public killTick(): void {
+    this.running = false;
   }
 }

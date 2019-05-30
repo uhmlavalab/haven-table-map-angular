@@ -52,6 +52,7 @@ export class LandingHomeComponent implements OnInit {
   handleStartButtonClick(island: Island): void {
     this.islands.forEach(island => island.selectedIsland = false);
     island.selectedIsland = true;
+    this._arservice.killTick();
     if (this._mapdataservice.setSelectedIsland()) {
       this._mapdataservice.setupSelectedIsland();
       this._mapdataservice.setState('run');

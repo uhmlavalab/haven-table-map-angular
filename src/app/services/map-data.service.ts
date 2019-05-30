@@ -53,6 +53,8 @@ export class MapDataService {
     // Load activeLayerArray
     this.layers.forEach(layer => this.setLayerColor(layer));
     this.layers.forEach(layer => this.addIncludedLayer(layer));
+
+    this.state = 'landing';
   }
 
   /**

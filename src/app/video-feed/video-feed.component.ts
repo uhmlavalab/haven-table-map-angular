@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ArService } from '../services/ar.service';
+import { MapDataService } from '../services/map-data.service';
 
 @Component({
   selector: 'app-video-feed',
@@ -20,17 +21,28 @@ export class VideoFeedComponent implements OnInit {
   private static numberOfFeeds: number = 0;
   private static MAX_FEEDS: number = 2;
 
-  constructor(private _arservice: ArService) {
+  constructor(private _arservice: ArService, private _mapdataservice: MapDataService) {
     this.canvasHeight = 400;
     this.canvasWidth = 400;
-
   }
 
   ngOnInit() {
     this.videoCanvas1.nativeElement.width = this.canvasWidth;
     this.videoCanvas1.nativeElement.height = this.canvasHeight;
+    this.videoCanvas2.nativeElement.width = this.canvasWidth;
+    this.videoCanvas2.nativeElement.height = this.canvasHeight;
+
+    if (this._mapdataservice.getState() === 'landing') {
+      this.videoCanvas1.nativeElement.style.display = 'block';
+      this.videoCanvas2.nativeElement.style.display = 'block';
+    } else {
+      this.videoCanvas1.nativeElement.style.display = 'none';
+      this.videoCanvas2.nativeElement.style.display = 'none';
+    }
+
     this.videoArray = [
       {
+        id: 1,
         video: this.videoElement.nativeElement,
         canvas: {
           element: this.videoCanvas1.nativeElement,
@@ -40,6 +52,7 @@ export class VideoFeedComponent implements OnInit {
         },
       },
       {
+        id: 2,
         video: this.videoElement1.nativeElement,
         canvas: {
           element: this.videoCanvas2.nativeElement,
@@ -59,6 +72,17 @@ export class VideoFeedComponent implements OnInit {
         })
       })
       .then(this._arservice.runApplication(this.videoArray));
+  }
+
+  ngOnDestroy() {
+    this.videoArray.forEach( videoElement => {
+      videoElement.video.pause();
+      videoElement.video.srcObject = null;
+      videoElement.video.load();
+    });
+
+    this._arservice.killTick();
+    VideoFeedComponent.numberOfFeeds = 0;
   }
 
 

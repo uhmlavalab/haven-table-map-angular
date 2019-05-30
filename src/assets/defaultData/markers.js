@@ -11,7 +11,7 @@ export const markers = [{
   rotationSum: 0,
   rotationMax: 7
 }, {
-  markerId: 1,
+  markerId: 6,
   job: 'scenario',
   icon: 'scenario-01.png',
   live: false,
@@ -23,7 +23,7 @@ export const markers = [{
   rotationSum: 0,
   rotationMax: 20
 }, {
-  markerId: 2,
+  markerId: 11,
   job: 'chart',
   icon: 'pie-01.png',
   live: false,
@@ -35,7 +35,7 @@ export const markers = [{
   rotationSum: 0,
   rotationMax: 20
 }, {
-  markerId: 0,
+  markerId: 5,
   job: 'layer',
   icon: 'layers-01.png',
   live: false,

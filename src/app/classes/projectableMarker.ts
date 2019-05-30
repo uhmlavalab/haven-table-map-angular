@@ -1,4 +1,6 @@
 import { _ } from 'underscore';
+import { MapDataService } from '../services/map-data.service';
+
 /** Represents a projectable marker.  These are the tangibles that control
 *   The user interaction with the table.  Each projectable marker is connected
 *   to a arucojs marker by the markerId number */
@@ -21,8 +23,9 @@ export class ProjectableMarker {
   private rotation: number; // Current Rotation
   private rotationSum: number; // Combined Rotation amounts
   private rotationMax: number; // When rotation sum hits this, rotate.
+  private _mapdataservice: MapDataService;
 
-  constructor(id: number, job: string, icon: string, rotationMax: number) {
+  constructor(id: number, job: string, icon: string, rotationMax: number, _mapdataservice: MapDataService) {
     this.markerId = id;
     this.job = job;
     this.icon = icon;
@@ -33,6 +36,7 @@ export class ProjectableMarker {
     this.prevCorners = null;
     this.rotation = 0;
     this.rotationMax = rotationMax;
+    this._mapdataservice = _mapdataservice;
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
   }
@@ -61,15 +65,115 @@ export class ProjectableMarker {
   }
 
   /** This function is called when a marker is detected by a video feed.
-  * @param corners => Array holding the positons of the corners of the arucojs marker
+  * @param corners => object holding the positons of the corners of the arucojs marker
   * @return true if no issues, false if marker has errors.
   */
-  public detectMarker(corners): boolean {
+  public detectMarker(corners: object, videoId: number): boolean {
     this.setDetectionStartTime(); // Reset detection timer
     this.goLive();
-    this.updatePrevPosition(this.corners);
-    this.updatePosition(corners);
+
+    if (this.corners === null) {
+      this.updatePosition(corners);
+      this.updatePrevPosition(corners);
+    }
+    // Has the marker moved at all?
+    if (this.wasMoved(corners)) {
+      this.doJob(videoId);
+    } else {
+      // Wasnt moved, dont do shit.
+    }
     return true;
+  }
+
+  /** This function analyzes each of the live markers with each tick.
+  * @return true if successful, false if did not work
+  */
+  public analyzeMarkerData(): boolean {
+    // Is the marker still active?
+    if (this.checkDetectionTimer()) {
+      this.die();
+    }
+    return true;
+  }
+
+  /** When the marker is moved, do job is called.  Each marker has a specific Job
+  * associated with it.  This function is called from here.
+  */
+  private doJob(id: number) {
+    const direction = this.calcDirection();
+    switch (this.job) {
+      case 'year':
+        this.changeYear(direction);
+        break;
+      case 'layer':
+        this.changeLayer(direction, id);
+        break;
+      default:
+        // Do nothing
+        break;
+    }
+  }
+
+  /** Changes the year of the map based on the direction that the marker was turned.
+  * Connects to the map data service for the function and stores all year data there.
+  * @param direction => The direction the marker was turned.
+  */
+  changeYear(direction) {
+    switch (direction) {
+      case 'left':
+        this._mapdataservice.decrementCurrentYear();
+        break;
+      case 'right':
+        this._mapdataservice.incrementCurrentYear();
+        break;
+      default:
+        // do nothing
+        break;
+    }
+  }
+
+  /** Changes the layer of the map based on the direction that the marker was turned.
+  * Connects to the map data service for the function and stores all year data there.
+  * Depending on which camera feed has spotted this marker, it will either advance the
+  * layer selection elements or add/remove an element
+  * @param direction => The direction the marker was turned.
+  */
+  changeLayer(direction, id) {
+    if (id === 1) {
+      switch (direction) {
+        case 'left':
+          this._mapdataservice.decrementNextLayer();
+          break;
+        case 'right':
+          this._mapdataservice.incrementNextLayer();
+          break;
+        default:
+          // do nothing
+          break;
+      }
+    } else {
+      this._mapdataservice.addRemoveLayer();
+    }
+  }
+
+  /** checks to see if the marker has been moved at all or if it was stationary
+  * on the table between detections.
+  * @param corners => The current location of the marker
+  * @return true if moved, false if stationary.
+  */
+  private wasMoved(corners: object): boolean {
+    let moved = false;
+    if (this.corners[0].x != corners[0].x) {
+      moved = true;
+      this.updatePrevPosition(this.corners);
+      this.updatePosition(corners);
+    }
+    return moved;
+  }
+
+  /** Kills marker.  ie no longer active */
+  private die(): void {
+    this.live = false;
   }
 
   /** Sets live to true */
@@ -201,7 +305,7 @@ export class ProjectableMarker {
   /** Calculate the direction that the marker was turned.
   * @return the direction that it was turned
   */
-  private calcDirection(marker) {
+  private calcDirection() {
 
     let direction = 'none'; // initialize direction
     const oldRotation = this.rotation;
@@ -226,7 +330,7 @@ export class ProjectableMarker {
     if (Math.abs(this.rotationSum) > this.rotationMax) {
       if (this.rotationSum < 0) {
         direction = 'left';
-      } else if (marker.rotationSum > 0) {
+      } else if (this.rotationSum > 0) {
         direction = 'right';
       } else {
         direction = 'none';

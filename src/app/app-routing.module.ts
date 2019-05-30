@@ -4,7 +4,7 @@ import { LandingHomeComponent } from './landing-home/landing-home.component';
 import { MapMainComponent } from './map-main/map-main.component';
 
 const routes: Routes = [
-  {path: 'setup', component: LandingHomeComponent},
+  {path: '', component: LandingHomeComponent},
   {path: 'map-main',component: MapMainComponent}
 ];
 

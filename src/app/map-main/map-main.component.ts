@@ -23,14 +23,13 @@ export class MapMainComponent implements OnInit {
   ngOnInit() {
   }
 
-
   /**
   * This function gets the css class name to apply to the legend based
   * on the map that is selected.
   * @return the name of the css class
   */
   getLegendClassName(): string {
-    return this.island.islandName;   
+    return this.island.islandName;
   }
 
   /** KEYBOARD CONTROLS **/
@@ -47,7 +46,8 @@ export class MapMainComponent implements OnInit {
     } else if (event.key === 'Enter') {
       this._mapdataservice.addRemoveLayer();
     } else if (event.key === 'p') {
-      this.router.navigateByUrl('setup');
+      this.router.navigateByUrl('');
+      this._mapdataservice.setState('landing');
     }
   }
 }
