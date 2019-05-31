@@ -59,5 +59,70 @@
 
 <!-- contains the layer selector cards -->
 <div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'" id="help-selector-container" name="help-selector-container" appMapSelectionDirective>
-  <p>HELP!</p>
+  <div class="help-nav" #helpNav>
+    <ul>
+      <li class="active">
+        <span class="accent"></span>
+        <span class="text">Keyboard Controls</span>
+      </li>
+      <li>
+        <span class="accent"></span>
+        <span class="text">Cameras</span>
+      </li>
+      <li>
+        <span class="accent"></span>
+        <span class="text">Projector</span>
+      </li>
+      <li>
+        <span class="accent"></span>
+        <span class="text">Pucks</span>
+      </li>
+      <li>
+        <span class="accent"></span>
+        <span class="text">Layers</span>
+      </li>
+      <li>
+        <span class="accent"></span>
+        <span class="text">Markers</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="content-container">
+    <div class="keyboard-controls-container">
+      <table>
+        <tr>
+          <th>Key</th>
+          <th>Function</th>
+        </tr>
+        <tr>
+          <td>Left arrow</td>
+          <td>Decrease Year by one</td>
+        </tr>
+        <tr>
+          <td>Right arrow</td>
+          <td>Increase Year by one</td>
+        </tr>
+        <tr>
+          <td>Up arrow</td>
+          <td>Cycle through layers</td>
+        </tr>
+        <tr>
+          <td>Down arrow</td>
+          <td>Cycle through layers</td>
+        </tr>
+        <tr>
+          <td>Enter</td>
+          <td>Add or Remove selected layer</td>
+        </tr>
+        <tr>
+          <td>p</td>
+          <td>Returns to setup screen from map screen</td>
+        </tr><tr>
+          <td>r</td>
+          <td>Resets map to initial state</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>

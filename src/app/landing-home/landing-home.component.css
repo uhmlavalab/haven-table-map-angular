@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Roboto-Regular';
-  src: url('../../assets/fonts/Roboto-Regular.ttf')  format('truetype');
+  src: url('../../assets/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 /* Wrapper for the map selection boxes */
@@ -25,22 +25,21 @@
   border-radius: 5px;
 }
 
-.map-selector-box:hover .map-selector-box-dark-overlay {
-  background-color: rgba(0,0,0, 0);
-  border-radius: 5px;
+  .map-selector-box:hover .map-selector-box-dark-overlay {
+    background-color: rgba(0,0,0, 0);
+    border-radius: 5px;
+  }
 
-}
+  .map-selector-box:hover .map-selector-start-wrapper {
+    opacity: 1;
+  }
 
-.map-selector-box:hover .map-selector-start-wrapper {
-  opacity: 1;
-}
-
-.map-selector-box>img {
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  border-radius: 5px;
-}
+  .map-selector-box > img {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    border-radius: 5px;
+  }
 
 .map-selector-box-dark-overlay {
   background-color: rgba(0,0,0, 0.5);
@@ -59,13 +58,14 @@
   top: 40%;
   text-align: center;
 }
-.map-selector-stripe-button> h3 {
-  width: 100%;
-  text-align: center;
-  vertical-align: middle;
-  color: white;
-  font-size: 26px;
-}
+
+  .map-selector-stripe-button > h3 {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+    font-size: 26px;
+  }
 
 .map-selector-start-wrapper {
   width: 100%;
@@ -79,32 +79,33 @@
   transition: opacity 0.4s ease-out;
 }
 
-.map-selector-start-wrapper>.map-selector-start-button {
-  text-align: center;
-}
+  .map-selector-start-wrapper > .map-selector-start-button {
+    text-align: center;
+  }
 
-.map-selector-start-wrapper>.map-selector-start-button>h3 {
-  background-color:rgba(130,145,188, 0.6);
-  width: 40%;
-  padding: 10px;
-  border-radius: 5px;
-  color: rgba(255, 255, 255, 0.6);
-  left: calc(30% - 10px);
-  font-size: 14px;
-  position: relative;
-  transition: background-color 0.4s ease-out, color 0.4s ease-out;
-}
+    .map-selector-start-wrapper > .map-selector-start-button > h3 {
+      background-color: rgba(130,145,188, 0.6);
+      width: 40%;
+      padding: 10px;
+      border-radius: 5px;
+      color: rgba(255, 255, 255, 0.6);
+      left: calc(30% - 10px);
+      font-size: 14px;
+      position: relative;
+      transition: background-color 0.4s ease-out, color 0.4s ease-out;
+    }
 
-.map-selector-start-wrapper>.map-selector-start-button>input {
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
-}
-.map-selector-start-wrapper>.map-selector-start-button>h3:hover {
-  background-color: rgba(130,145,188, 1);
-  color: rgba(255, 255, 255, 1);
-  text-decoration: underline;
-}
+    .map-selector-start-wrapper > .map-selector-start-button > input {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+
+    .map-selector-start-wrapper > .map-selector-start-button > h3:hover {
+      background-color: rgba(130,145,188, 1);
+      color: rgba(255, 255, 255, 1);
+      text-decoration: underline;
+    }
 
 
 /* Styles for the buttons on the left side of the landing page */
@@ -128,10 +129,10 @@
   transition: background-color 0.4s ease-out, opacity 0.4s ease-out;
 }
 
-.selection-button:hover {
-  background-color: rgba(109, 98, 125, 1);
-  text-decoration: underline;
-}
+  .selection-button:hover {
+    background-color: rgba(109, 98, 125, 1);
+    text-decoration: underline;
+  }
 
 /* Styles for the marker selection */
 .marker-selector-container {
@@ -153,11 +154,11 @@
   border-radius: 5px;
 }
 
-.marker-selector-card>img {
-  width: 27%;
-  display:inline-block;
-  padding: 10px;
-}
+  .marker-selector-card > img {
+    width: 27%;
+    display: inline-block;
+    padding: 10px;
+  }
 
 .marker-selector-card-info {
   width: 60%;
@@ -166,9 +167,9 @@
   vertical-align: top;
 }
 
-.marker-selector-card-info>h3 {
-  margin: 0 0 -10px 0;
-}
+  .marker-selector-card-info > h3 {
+    margin: 0 0 -10px 0;
+  }
 
 .change-marker-button {
   background-color: rgba(130,145,188, 0.7);
@@ -181,11 +182,11 @@
   transition: background-color 0.4s ease-out, color 0.4s ease-out;
 }
 
-.change-marker-button:hover {
-  background-color: rgba(130,145,188, 1);
-  color: rgba(255, 255, 255, 1);
-  text-decoration: underline;
-}
+  .change-marker-button:hover {
+    background-color: rgba(130,145,188, 1);
+    color: rgba(255, 255, 255, 1);
+    text-decoration: underline;
+  }
 
 
 /* Styles for the camera selection */
@@ -200,44 +201,115 @@
 
 /* Styles for the help section */
 .help-selector-container {
-  width: 70%;
+  width: 60%;
   height: 60%;
   position: absolute;
-  left: 100%; 
-  top: 20%;
+  left: 100%;
+  top: 19%;
   transition: left 0.4s ease-out;
   background-color: rgba(130,145,188, 1);
   color: rgba(255, 255, 255, 1);
+  border-radius: 5px 0 0 5px;
 }
 
-  /* Styles for the layer selection */
-  .layer-selector-container {
-  width: 70%;
-  position: absolute;
-  left: 100%;
-  top: 20%;
-  transition: left 0.4s ease-out;
-}
-
-.layer-selector-card {
+.help-nav {
   width: 30%;
-  margin: 1%;
+  position: absolute;
+  top: -2vh;
+  left: -2vw;
+}
+
+  .help-nav > ul {
+    list-style: none;
+  }
+
+    .help-nav > ul > li {
+      width: 100%;
+      height: 35px;
+      background-color: rgba(53,67,80,1);
+      margin: 5px 0 0 0;
+      cursor: pointer;
+    }
+
+      .help-nav > ul > li:hover span.text {
+        text-decoration: underline;
+      }
+
+      .help-nav > ul > li > span.text {
+        width: calc(92% - 12px);
+        padding: 9px 0 0 12px;
+        display: inline-block;
+        vertical-align: top;
+        color: WHITE;
+        font-size: 14px;
+      }
+
+      .help-nav > ul > li > span.accent {
+        width: 3px;
+        background-color: WHITE;
+        height: 100%;
+        display: inline-block;
+      }
+
+      .help-nav > ul > li.active > span.accent {
+        background-color: rgba(181, 31, 36, 1);
+      }
+
+      .help-nav > ul > li.active > span.text {
+        color: rgba(181, 31, 36, 1);
+      }
+
+      .help-nav > ul > li.active {
+        background-color: black;
+      }
+
+      /* Styles for the layer selection */
+      .layer-selector-container {
+        width: 70%;
+        position: absolute;
+        left: 100%;
+        top: 20%;
+        transition: left 0.4s ease-out;
+      }
+
+.help-selector-container > div.content-container {
+  position: relative;
+  left: 26%;
+  width: 94%;
+  height: calc(100% - 20px);
+  background-color: black;
   color: white;
-  display: inline-block;
-  background-color: rgba(85, 60, 79, 1);
-  border-radius: 5px;
+  padding: 20px 0 0 20px;
 }
 
+  .help-selector-container > div.content-container > div.keyboard-controls-container {
+    width: 100%;
+  }
 
-.layer-selector-card>img {
-  width: 70px;
-  height: 70px;
-  display:inline-block;
-  padding: 10px;
-}
+    .help-selector-container > div.content-container > div.keyboard-controls-container > table > tr > td {
+      padding: 5px 0 5px 15px;
+    }
+      
 
-.layer-selector-card>.info {
-  width: 62%;
-  display: inline-block;
-  vertical-align: top;
-}
+    .layer-selector-card {
+      width: 30%;
+      margin: 1%;
+      color: white;
+      display: inline-block;
+      background-color: rgba(85, 60, 79, 1);
+      border-radius: 5px;
+    }
+
+
+  .layer-selector-card > img {
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+    padding: 10px;
+  }
+
+  .layer-selector-card > .info {
+    width: 62%;
+    display: inline-block;
+    vertical-align: top;
+  }
