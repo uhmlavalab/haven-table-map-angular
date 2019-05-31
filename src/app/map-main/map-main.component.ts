@@ -57,4 +57,11 @@ export class MapMainComponent implements OnInit {
       this._windowrefservice.closeSecondScreen();
     }
   }
+
+  /** Handles the mouse down over elements on the screen.  These elements can be
+   * dragged and dropped to different locations on the screen (at this point).
+   */
+  private handleMouseDown(target: any) {
+    console.log(target);
+  }
 }

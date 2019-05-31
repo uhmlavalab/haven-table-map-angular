@@ -22,6 +22,7 @@ import { TitleComponent } from './map-main/title/title.component';
 import { ProjectableMarker } from './classes/projectableMarker';
 import { SecondScreenComponent } from './second-screen/second-screen.component';
 import { InsideComponent } from './second-screen/inside/inside.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { InsideComponent } from './second-screen/inside/inside.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragDropModule
   ],
   providers: [MapDataService, ArService],
   bootstrap: [AppComponent]
