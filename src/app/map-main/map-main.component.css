@@ -1,3 +1,7 @@
+html {
+  background-color: black;
+}
+
 /* Contains styles for the left side of the main map display */
 
 .interaction-container {
@@ -15,7 +19,7 @@
 .map-container {
   width: 75.5vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 1);
+  background-color: transparent;
   display: inline-block;
   position: absolute;
   left: 24.5vw;
