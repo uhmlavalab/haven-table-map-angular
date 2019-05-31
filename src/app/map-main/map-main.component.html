@@ -4,6 +4,8 @@
 
 <!-- This component contains the map, charts, etc that is displayed on the right side of the table -->
 <app-map-element class="map-container"></app-map-element>
-<app-legend class="legend-container-{{getLegendClassName()}}"></app-legend>
+<app-legend
+            class="legend-container-{{getLegendClassName()}}"
+            (mousedown)="handleMouseDown()"></app-legend>
 <app-title class="title-container-{{getLegendClassName()}}"></app-title>
 <app-video-feed></app-video-feed>
