@@ -55,6 +55,8 @@ export class MapMainComponent implements OnInit {
       this.router.navigateByUrl('');
       this._mapdataservice.setState('landing');
       this._windowrefservice.closeSecondScreen();
+    } else if (event.key === 'r') {
+      this._mapdataservice.resetMap();
     }
   }
 

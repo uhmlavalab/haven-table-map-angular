@@ -294,4 +294,17 @@ export class MapDataService {
     layer.color = mapLayerColors[layer.colorName].legend;
   }
 
+  /** Resets all layers, elements, and year to original state.  It is called
+   *  by placing the year marker into the add/remove section or pressing the
+   *  r button on the keyboard.
+   */
+  public resetMap(): void {
+    for (let i = 0; i < this.includedLayers.length; i++) {
+      if (this.includedLayers[i].active) {
+        this.nextLayer = i;
+        this.addRemoveLayer();
+      }
+    }
+    this.setCurrentYear(this.MIN_YEAR);
+  }
 }
