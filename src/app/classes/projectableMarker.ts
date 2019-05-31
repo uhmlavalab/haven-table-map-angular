@@ -8,6 +8,7 @@ export class ProjectableMarker {
 
   /* private static variables */
   private static MAX_ACTIVE_TIMER = 600;
+  private static MAX_ADD_REMOVE_TIMER = 1000;
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = []
 
@@ -18,6 +19,7 @@ export class ProjectableMarker {
   private live: boolean; // Live when marker is detected on the table
   private detectionStartTime: number; // Time when marker was detected on table
   private rotationStartTime: number; // Last time rotation was checked
+  private addRemoveStartTime: number; // Last time add and remove executed
   private corners: object; // Holds x and y positions of the tangible
   private prevCorners: number[]; // Holds x and y of previous position.
   private rotation: number; // Current Rotation
@@ -30,8 +32,9 @@ export class ProjectableMarker {
     this.job = job;
     this.icon = icon;
     this.live = false;
-    this.detectionStartTime = 0;
-    this.rotationStartTime = 0;
+    this.detectionStartTime = this.getCurrentTime();
+    this.rotationStartTime = this.getCurrentTime();
+    this.addRemoveStartTime = this.getCurrentTime();
     this.corners = null;
     this.prevCorners = null;
     this.rotation = 0;
@@ -152,7 +155,10 @@ export class ProjectableMarker {
           break;
       }
     } else {
-      this._mapdataservice.addRemoveLayer();
+      if (this.checkaddRemoveTimer()) {
+        this._mapdataservice.addRemoveLayer();
+        this.addRemoveStartTime = this.getCurrentTime();
+      }
     }
   }
 
@@ -284,6 +290,15 @@ export class ProjectableMarker {
   private checkRotationTimer() {
     const difference = this.getCurrentTime() - this.rotationStartTime;
     return difference > 20;
+  }
+
+  /** Checks the add remove timer.  If the rotation timer is greater than the
+  * MAX_ROTATION_TIME, check the rotation.
+  * @return true if time is up, false if time is not up.
+  */
+  private checkaddRemoveTimer() {
+    const difference = this.getCurrentTime() - this.addRemoveStartTime;
+    return difference > ProjectableMarker.MAX_ADD_REMOVE_TIMER;
   }
 
   /** Resets the rotation timer to the current system time
