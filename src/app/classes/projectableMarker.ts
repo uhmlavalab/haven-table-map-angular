@@ -1,5 +1,6 @@
 import { _ } from 'underscore';
 import { MapDataService } from '../services/map-data.service';
+import { SoundsService } from '../services/sounds.service';
 
 /** Represents a projectable marker.  These are the tangibles that control
 *   The user interaction with the table.  Each projectable marker is connected
@@ -9,6 +10,7 @@ export class ProjectableMarker {
   /* private static variables */
   private static MAX_ACTIVE_TIMER = 600;
   private static MAX_ADD_REMOVE_TIMER = 1000;
+  private static MAX_TIME_ROTATION = 100;
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = []
 
@@ -26,8 +28,9 @@ export class ProjectableMarker {
   private rotationSum: number; // Combined Rotation amounts
   private rotationMax: number; // When rotation sum hits this, rotate.
   private _mapdataservice: MapDataService;
+  private _soundsservice: SoundsService;
 
-  constructor(id: number, job: string, icon: string, rotationMax: number, _mapdataservice: MapDataService) {
+  constructor(id: number, job: string, icon: string, rotationMax: number, _mapdataservice: MapDataService, _soundsservice: SoundsService) {
     this.markerId = id;
     this.job = job;
     this.icon = icon;
@@ -40,6 +43,7 @@ export class ProjectableMarker {
     this.rotation = 0;
     this.rotationMax = rotationMax;
     this._mapdataservice = _mapdataservice;
+    this._soundsservice = _soundsservice;
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
   }
@@ -289,7 +293,7 @@ export class ProjectableMarker {
   */
   private checkRotationTimer() {
     const difference = this.getCurrentTime() - this.rotationStartTime;
-    return difference > 20;
+    return difference > ProjectableMarker.MAX_TIME_ROTATION;
   }
 
   /** Checks the add remove timer.  If the rotation timer is greater than the

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Island } from '../interfaces/island';
 import { Layer } from '../interfaces/layer';
 import { Marker } from '../interfaces/marker';
+import { SoundsService } from './sounds.service';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
 import { islands } from '../../assets/defaultData/islands';
@@ -44,7 +45,7 @@ export class MapDataService {
 
   public test: number;
 
-  constructor() {
+  constructor(private _soundsservice: SoundsService) {
 
     this.islands = islands; // Imported from default data
     this.layers = layers; // Imported from default data
@@ -119,9 +120,11 @@ export class MapDataService {
     if (this.includedLayers[this.nextLayer].active) {
       this.includedLayers[this.nextLayer].active = false;
       this.activeLayers = _.where(this.activeLayers, { active: true });
+      this._soundsservice.dropDown();
     } else {
       this.includedLayers[this.nextLayer].active = true;
       this.activeLayers.push(this.includedLayers[this.nextLayer]);
+      this._soundsservice.dropUp();
     }
     this.publishLayerChange();
   }
@@ -136,6 +139,7 @@ export class MapDataService {
   public incrementCurrentYear(): void {
     if (this.currentYear < this.MAX_YEAR) {
       this.currentYear++;
+      this._soundsservice.click();
     }
     this.publishCurrentYear();
   }
@@ -145,6 +149,7 @@ export class MapDataService {
   public decrementCurrentYear(): void {
     if (this.currentYear > this.MIN_YEAR) {
       this.currentYear--;
+      this._soundsservice.click();
     }
     this.publishCurrentYear();
   }
@@ -173,6 +178,7 @@ export class MapDataService {
   public incrementNextLayer(): void {
     this.nextLayer = (this.nextLayer + 1) % this.includedLayers.length;
     this.publishNextLayer();
+    this._soundsservice.tick();
   }
 
   /** Decrements the next Layer and publishes */
@@ -183,6 +189,7 @@ export class MapDataService {
       this.nextLayer--;
     }
     this.publishNextLayer();
+    this._soundsservice.tick();
   }
 
   /* Publishes the next Layer to all subscribers */

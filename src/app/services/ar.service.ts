@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Marker } from '../interfaces/marker';
 import { ProjectableMarker } from '../classes/projectableMarker';
 import { MapDataService } from './map-data.service';
+import { SoundsService } from './sounds.service';
 import { markers } from '../../assets/defaultData/markers';
 import { _ } from 'underscore';
 import AR from 'js-aruco';
@@ -32,11 +33,17 @@ export class ArService {
   * The tick cannot be started until there is at least one video element */
   videoFeedArray: any[] = [];
 
-  constructor(private _mapdataservice: MapDataService) {
+  constructor(private _mapdataservice: MapDataService, private _soundsservice: SoundsService) {
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
-    markers.forEach(marker => new ProjectableMarker(marker.markerId, marker.job, marker.icon, marker.rotationMax, this._mapdataservice));
+    markers.forEach(marker => new ProjectableMarker(
+      marker.markerId,
+      marker.job,
+      marker.icon,
+      marker.rotationMax,
+      this._mapdataservice,
+      this._soundsservice));
     this.running = false;
   }
 
