@@ -51,8 +51,13 @@
   <div class="layer-selector-card" *ngFor="let layer of layers">
     <img src="../../assets/images/icons/{{layer.icon}}" />
     <div class="info">
-    <h3>{{layer.displayName}}</h3>
-    <input type="checkbox" checked="checked" id="include-{{layer.name}}" (change)="handleLayerSetupCheck(layer, $event.target.checked)">Include Layer
+      <h3>{{layer.displayName}}</h3>
+      <input type="checkbox" checked="checked" id="include-{{layer.name}}" (change)="handleLayerSetupCheck(layer, $event.target.checked)">Include Layer
     </div>
   </div>
+</div>
+
+<!-- contains the layer selector cards -->
+<div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'" id="help-selector-container" name="help-selector-container" appMapSelectionDirective>
+  <p>HELP!</p>
 </div>

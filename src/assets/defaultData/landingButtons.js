@@ -8,4 +8,7 @@ export const landingButtons = [{
 }, {
   text: 'Setup Layers',
   id: 'layers'
+},{
+  text: 'Help',
+  id: 'help'
 }];
