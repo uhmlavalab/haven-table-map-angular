@@ -20,6 +20,8 @@ import { LegendComponent } from './map-main/legend/legend.component';
 import { LegendDirective } from './map-main/legend/legend.directive';
 import { TitleComponent } from './map-main/title/title.component';
 import { ProjectableMarker } from './classes/projectableMarker';
+import { SecondScreenComponent } from './second-screen/second-screen.component';
+import { InsideComponent } from './second-screen/inside/inside.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { ProjectableMarker } from './classes/projectableMarker';
     MapLayerDirective,
     LegendComponent,
     LegendDirective,
-    TitleComponent
+    TitleComponent,
+    SecondScreenComponent,
+    InsideComponent
   ],
   imports: [
     BrowserModule,

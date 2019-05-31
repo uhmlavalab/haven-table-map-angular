@@ -9,6 +9,7 @@ import { VideoFeeds } from '../interfaces/video-feeds';
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
 import { MapDataService } from '../services/map-data.service';
 import { ArService } from '../services/ar.service';
+import { WindowRefService } from '../services/window-ref.service';
 import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
 
@@ -23,19 +24,21 @@ export class LandingHomeComponent implements OnInit {
 
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
-  islands: Island[] = [];
-  activePanel: string;
-  markers: Marker[] = [];
-  layers: Layer[] = [];
-  buttons: LandingButton[] = [];
-  panels: Panel[];
+  private islands: Island[] = [];
+  private activePanel: string;
+  private markers: Marker[] = [];
+  private layers: Layer[] = [];
+  private buttons: LandingButton[] = [];
+  private panels: Panel[];
+  private nativeWindow: any;
 
-  constructor(private _arservice: ArService, private _mapdataservice: MapDataService) {
+  constructor(private _arservice: ArService, private _mapdataservice: MapDataService, private _windowrefservice: WindowRefService) {
     this.activePanel = 'maps';
     this.markers = this._mapdataservice.getMarkers();
     this.layers = this._mapdataservice.getLayers();
     this.buttons = landingButtons; // Imported from Default Data
     this.panels = panels; // Imported from default data
+    this.nativeWindow = this._windowrefservice.getNativeWindow();
   }
 
   ngOnInit() {
@@ -56,6 +59,9 @@ export class LandingHomeComponent implements OnInit {
     if (this._mapdataservice.setSelectedIsland()) {
       this._mapdataservice.setupSelectedIsland();
       this._mapdataservice.setState('run');
+      if (island.includeSecondScreen) {
+        this.openSecondScreen();
+      }
     } else {
       // TODO: implement error handling
     }
@@ -67,7 +73,7 @@ export class LandingHomeComponent implements OnInit {
   * @param island => The island that will be used to start the program.
   * @param isChecked => true if checked, false if unchecked.
   */
-  handleIncludeSecondScreenCheckboxChange(island: Island, isChecked: boolean): void {
+  private handleIncludeSecondScreenCheckboxChange(island: Island, isChecked: boolean): void {
     island.includeSecondScreen = isChecked;
   }
 
@@ -77,7 +83,7 @@ export class LandingHomeComponent implements OnInit {
   * directive slideDirective has been clicked and moves all elements accordingly.
   * @param targetElement => The element that was clicked.
   */
-  handleSelectButtonClick(targetElement: any): void {
+  private handleSelectButtonClick(targetElement: any): void {
     this.activePanel = targetElement.id;
   }
 
@@ -86,8 +92,20 @@ export class LandingHomeComponent implements OnInit {
   * @param layer => the layer that was changed.
   * @param checked => true if checked, false if not checked.
   */
-  handleLayerSetupCheck(layer: Layer, checked: boolean):void {
+  private handleLayerSetupCheck(layer: Layer, checked: boolean): void {
     layer.included = checked;
     checked ? this._mapdataservice.addIncludedLayer(layer) : this._mapdataservice.removeIncludedLayer(layer);
+  }
+
+  /** Opens a second screen as long as there isnt one opened already.
+  * @return true if scucessful, false if not opened
+  */
+  private openSecondScreen(): boolean {
+    if (!(this._windowrefservice.secondScreenIsSet())) {
+      this._windowrefservice.setSecondSceenObject(this.nativeWindow.open('second-screen'));
+      return true;
+    } else {
+      return false;
+    }
   }
 }

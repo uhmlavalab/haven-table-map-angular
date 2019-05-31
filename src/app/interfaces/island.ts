@@ -3,5 +3,6 @@ export interface Island {
   imagePath: string,
   includeSecondScreen: boolean,
   selectedIsland: boolean,
-  islandName: string
+  islandName: string,
+  secondScreenImage: string
 }

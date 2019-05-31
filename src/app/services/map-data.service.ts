@@ -40,6 +40,9 @@ export class MapDataService {
   public yearSubject = new Subject(); // Publisher for year
   public nextLayerSubject = new Subject(); // Publisher for the next Layer to add
   public layerChangeSubject = new Subject(); // Pubisher for when a layer is added or removed
+  public selectedIslandSubject = new Subject(); // Pubisher for when a layer is added or removed
+
+  public test: number;
 
   constructor() {
 
@@ -205,6 +208,13 @@ export class MapDataService {
       this.selectedIsland = islandArray[0];
       return true;
     }
+
+    this.publishSelectedIsland();
+  }
+
+  /** Publishes the selected Island */
+  private publishSelectedIsland() {
+    this.selectedIslandSubject.next(this.selectedIsland);
   }
 
   /** Gets the selected Island.
