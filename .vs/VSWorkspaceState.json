@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\interfaces",
+    "\\src\\app\\landing-home",
+    "\\src\\app\\services",
+    "\\src\\assets",
+    "\\src\\assets\\defaultData",
+    "\\src\\assets\\images",
+    "\\src\\assets\\images\\landing-icons"
+  ],
+  "SelectedNode": "\\src\\app\\landing-home\\landing-home.component.ts",
+  "PreviewInSolutionExplorer": false
+}
