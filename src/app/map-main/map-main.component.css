@@ -38,8 +38,8 @@ html {
 .legend-container-maui {
   width: 25%;
   height: 18vh;
-  left: 46%;
-  top: 2%;
+  left: 50%;
+  top: 1%;
   position: absolute;
 }
 
@@ -53,16 +53,16 @@ html {
 
 .title-container-oahu {
   color: white;
-  left: 90vw;
-  top: 64vh;
+  left: 77vw;
+  top: 39vh;
   position: absolute;
   text-align: center;
 }
 
 .title-container-maui {
   color: white;
-  left: 90vw;
-  top: 79vh;
+  left: 41vw;
+  top: 0vh;
   position: absolute;
   text-align: center;
 }

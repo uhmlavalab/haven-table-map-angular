@@ -61,27 +61,27 @@
 <div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'" id="help-selector-container" name="help-selector-container" appMapSelectionDirective>
   <div class="help-nav" #helpNav>
     <ul>
-      <li class="active">
+      <li [className]="help === 'keyboard' ? 'active' : ''" (click)="handleHelpNavClick($event, 'keyboard')" #keyboard>
         <span class="accent"></span>
         <span class="text">Keyboard Controls</span>
       </li>
-      <li>
+      <li [className]="help === 'cameras' ? 'active' : ''" (click)="handleHelpNavClick($event, 'cameras')" #cameras>
         <span class="accent"></span>
         <span class="text">Cameras</span>
       </li>
-      <li>
+      <li [className]="help === 'projector' ? 'active' : ''" (click)="handleHelpNavClick($event, 'projector')" #projector>
         <span class="accent"></span>
         <span class="text">Projector</span>
       </li>
-      <li>
+      <li [className]="help === 'pucks' ? 'active' : ''" (click)="handleHelpNavClick($event, 'pucks')" #pucks>
         <span class="accent"></span>
         <span class="text">Pucks</span>
       </li>
-      <li>
+      <li [className]="help === 'layers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'layers')" #layers>
         <span class="accent"></span>
         <span class="text">Layers</span>
       </li>
-      <li>
+      <li [className]="help === 'markers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'markers')" #markers>
         <span class="accent"></span>
         <span class="text">Markers</span>
       </li>
@@ -89,7 +89,9 @@
   </div>
 
   <div class="content-container">
-    <div class="keyboard-controls-container">
+
+    <!-- Keyboard Controls Help Content -->
+    <div [style.opacity]="help === 'keyboard' ? '1' : '0'">
       <table>
         <tr>
           <th>Key</th>
@@ -118,11 +120,16 @@
         <tr>
           <td>p</td>
           <td>Returns to setup screen from map screen</td>
-        </tr><tr>
+        </tr>
+        <tr>
           <td>r</td>
           <td>Resets map to initial state</td>
         </tr>
       </table>
     </div>
+
+    <!-- Camera Setup Help content -->
+    <div [style.opacity]="help === 'camera' ? '1' : '0'">
+      </div>
+    </div>
   </div>
-</div>

@@ -31,6 +31,7 @@ export class LandingHomeComponent implements OnInit {
   private buttons: LandingButton[] = [];
   private panels: Panel[];
   private nativeWindow: any;
+  private help: string;
 
   constructor(private _arservice: ArService, private _mapdataservice: MapDataService, private _windowrefservice: WindowRefService) {
     this.activePanel = 'maps';
@@ -39,6 +40,7 @@ export class LandingHomeComponent implements OnInit {
     this.buttons = landingButtons; // Imported from Default Data
     this.panels = panels; // Imported from default data
     this.nativeWindow = this._windowrefservice.getNativeWindow();
+    this.help = 'keyboard';
   }
 
   ngOnInit() {
@@ -107,5 +109,16 @@ export class LandingHomeComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  /**
+   * This function is called when user clicks on one of the help navigation buttons.  It changes the
+   * class of the button that was clicked to active, reverts the previous to normal and swaps the view of
+   * the content container.
+   * @param event => The mouseclick event.
+   * @param tag => The string that identifies the button that was clicked.
+   */
+  private handleHelpNavClick(event: any, tag: string): void {
+    this.help = tag;
   }
 }
