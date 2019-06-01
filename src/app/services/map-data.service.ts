@@ -6,7 +6,7 @@ import { SoundsService } from './sounds.service';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
 import { islands } from '../../assets/defaultData/islands';
-import { layers } from '../../assets/defaultData/layers';
+// import { layers } from '../../assets/defaultData/layers';
 import { markers } from '../../assets/defaultData/markers';
 import { mapDefaults } from '../../assets/defaultData/mapDefaults';
 import { chartColors, mapLayerColors } from '../../assets/defaultData/colors';
@@ -48,15 +48,10 @@ export class MapDataService {
   constructor(private _soundsservice: SoundsService) {
 
     this.islands = islands; // Imported from default data
-    this.layers = layers; // Imported from default data
     this.markers = markers; // Imported from default data
 
     this.setCurrentYear(this.MIN_YEAR);
     this.nextLayer = 0;
-
-    // Load activeLayerArray
-    this.layers.forEach(layer => this.setLayerColor(layer));
-    this.layers.forEach(layer => this.addIncludedLayer(layer));
 
     this.state = 'landing';
   }
@@ -71,6 +66,10 @@ export class MapDataService {
     this.mapImageHeight = mapDefaults[this.selectedIsland.islandName].imageHeight;
     this.bounds = mapDefaults[this.selectedIsland.islandName].bounds;
     this.mapImageName = mapDefaults[this.selectedIsland.islandName].imageName;
+
+    this.layers = mapDefaults[this.selectedIsland.islandName].layers; // Imported from default data
+    this.layers.forEach(layer => this.setLayerColor(layer));
+    this.layers.forEach(layer => this.addIncludedLayer(layer));
   }
 
   /** Gets the array of markers
@@ -131,7 +130,7 @@ export class MapDataService {
 
   /* Publishes the layer changes to all subscribers */
   private publishLayerChange(): void {
-    this.layerChangeSubject.next(this.layers[this.nextLayer]);
+    this.layerChangeSubject.next(this.layers[this.nextLayer] as Layer);
   }
 
   /** Adds 1 year to the current year
