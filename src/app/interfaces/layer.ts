@@ -5,5 +5,6 @@ export interface Layer {
   active: boolean,
   icon: string,
   included: boolean,
-  color: string
+  color: string,
+  checked: string
 }
