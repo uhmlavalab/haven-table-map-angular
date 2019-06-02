@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Island } from '../interfaces/island';
 import { Layer } from '../interfaces/layer';
 import { Marker } from '../interfaces/marker';
+import { Chart } from '../interfaces/chart';
 import { SoundsService } from './sounds.service';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
@@ -9,6 +10,7 @@ import { islands } from '../../assets/defaultData/islands';
 import { layers } from '../../assets/defaultData/layers';
 import { markers } from '../../assets/defaultData/markers';
 import { mapDefaults } from '../../assets/defaultData/mapDefaults';
+import { charts } from '../../assets/defaultData/chartDefaults';
 import { chartColors, mapLayerColors } from '../../assets/defaultData/colors';
 
 @Injectable({
@@ -18,17 +20,19 @@ import { chartColors, mapLayerColors } from '../../assets/defaultData/colors';
 export class MapDataService {
 
   /* Service Variables */
-  private islands: Island[];  // Array holding all islands
-  private selectedIsland: Island; // The island that is selected for main application
-  private state: string; // Current state of the machine
-  private currentYear: number; // Current year
-  private layers: Layer[]; // Array Holding All Layers
-  private nextLayer: number; // Index of next layer
-  private activeLayers: Layer[] = []; // Array of Active Layers
-  private includedLayers: Layer[] = []; // Array of Layers that are included at start
-  private markers: Marker[];
-  private MAX_YEAR = 2045; // Maximum Year Permitted
-  private MIN_YEAR = 2016; // Minimum Year Permitted
+  private islands: Island[];           // Array holding all islands
+  private selectedIsland: Island;      // The island that is selected for main application
+  private state: string;               // Current state of the machine
+  private currentYear: number;         // Current year
+  private layers: Layer[];             // Array Holding All Layers
+  private nextLayer: number;           // Index of next layer
+  private activeLayers: Layer[] = [];  // Array of Active Layers
+  private includedLayers: Layer[] = [];// Array of Layers that are included at start
+  private markers: Marker[];           // Array holding all marker data.
+  private charts: Chart[] = [];        // Array of charts loaded from default data.
+  private currentChart: number;         // Currently displayed chart
+  private MAX_YEAR = 2045;             // Maximum Year Permitted
+  private MIN_YEAR = 2016;             // Minimum Year Permitted
 
   /* Map Settings Variables */
   private mapScale: number;
@@ -38,18 +42,21 @@ export class MapDataService {
   private mapImageName: string;
 
   /* Subjects */
-  public yearSubject = new Subject(); // Publisher for year
-  public nextLayerSubject = new Subject(); // Publisher for the next Layer to add
-  public layerChangeSubject = new Subject(); // Pubisher for when a layer is added or removed
+  public yearSubject = new Subject();           // Publisher for year
+  public nextLayerSubject = new Subject();      // Publisher for the next Layer to add
+  public layerChangeSubject = new Subject();    // Pubisher for when a layer is added or removed
   public selectedIslandSubject = new Subject(); // Pubisher for when a layer is added or removed
+  public currentChartSubject = new Subject();   // Publisher when chart is changed.
 
   public test: number;
 
   constructor(private _soundsservice: SoundsService) {
 
-    this.islands = islands; // Imported from default data
-    this.layers = layers; // Imported from default data
-    this.markers = markers; // Imported from default data
+    this.islands = islands;      // Imported from default data
+    this.layers = layers;        // Imported from default data
+    this.markers = markers;      // Imported from default data
+    this.charts = charts; // Imported from default data
+    this.currentChart = 0; // Index of chart array
 
     this.setCurrentYear(this.MIN_YEAR);
     this.nextLayer = 0;
@@ -114,6 +121,46 @@ export class MapDataService {
   public getMapImageName(): string {
     return this.mapImageName;
   }
+
+  /** Gets the currently selected chart
+   * @return the current chart
+   */
+  public getCurrentChart(): Chart {
+    return this.charts[this.currentChart];
+  }
+
+  /** Gets the array of charts.
+   * @return the array of charts
+   */
+  public getCharts(): Chart[] {
+    return this.charts;
+  }
+
+  /** Cycles through the various optional charts
+   * publishes changes to all subscribers.
+   */
+  public incrementChart(): void {
+    this.currentChart = (this.currentChart + 1) % this.charts.length;
+    this.publishCurrentChart();
+  }
+
+/** Cycles through the various optional charts
+ * publishes changes to all subscribers.
+ */
+  public decrementChart(): void {
+    if (this.currentChart === 0) {
+      this.currentChart = this.charts.length - 1;
+    } else {
+      this.currentChart--;
+    }
+    this.publishCurrentChart();
+  }
+
+  /* Publishes the current Chart to display to all subscribers */
+  private publishCurrentChart(): void {
+    this.currentChartSubject.next(this.currentChart);
+  }
+
 
   /** Adds layer if it is inactive, removes layer if it is active */
   public addRemoveLayer(): void {
@@ -307,4 +354,6 @@ export class MapDataService {
     }
     this.setCurrentYear(this.MIN_YEAR);
   }
+
+
 }

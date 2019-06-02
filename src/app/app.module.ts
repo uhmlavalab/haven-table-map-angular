@@ -23,6 +23,7 @@ import { ProjectableMarker } from './classes/projectableMarker';
 import { SecondScreenComponent } from './second-screen/second-screen.component';
 import { InsideComponent } from './second-screen/inside/inside.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ChartContainerComponent } from './chart-container/chart-container.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     LegendDirective,
     TitleComponent,
     SecondScreenComponent,
-    InsideComponent
+    InsideComponent,
+    ChartContainerComponent
   ],
   imports: [
     BrowserModule,

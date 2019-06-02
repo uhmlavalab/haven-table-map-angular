@@ -22,39 +22,43 @@ html {
   background-color: transparent;
   display: inline-block;
   position: absolute;
-  left: 24.5vw;
+  left: 27.5vw;
   text-align: center;
   top: 0;
 }
 
+/* Legends for each map.  Each is placed in a different location */
 .legend-container-oahu {
-  width: 25%;
+  width: 22%;
   height: 18vh;
-  left: 27%;
-  top: 2%;
+  left: 25%;
+  top: 0%;
   position: absolute;
 }
 
 .legend-container-maui {
-  width: 25%;
+  width: 22%;
   height: 18vh;
-  left: 50%;
+  left: 53%;
   top: 1%;
   position: absolute;
 }
 
 .legend-container-bigisland {
-  width: 21%;
+  width: 22%;
   height: 18vh;
-  left: 26%;
+  left: 29%;
   top: 2%;
   position: absolute;
 }
 
+/* Each title is placed in a different section based on the map.  Each
+  map is a different size.
+*/
 .title-container-oahu {
   color: white;
-  left: 77vw;
-  top: 39vh;
+  left: 80vw;
+  top: 38vh;
   position: absolute;
   text-align: center;
 }
@@ -73,4 +77,33 @@ html {
   top: 78vh;
   position: absolute;
   text-align: center;
+}
+
+/* Holds the chart data.  Positioned for each island*/
+.chart-container-oahu {
+  width: 220px;
+  height: 220px;
+  border: 1px solid white;
+  position: absolute;
+  left: 26vw;
+  top: 68vh;
+  color: white;
+}
+.chart-container-maui {
+  width: 220px;
+  height: 220px;
+  border: 1px solid white;
+  position: absolute;
+  left: 26vw;
+  top: 68vh;
+  color: white;
+}
+.chart-container-bigisland {
+  width: 220px;
+  height: 220px;
+  border: 1px solid white;
+  position: absolute;
+  left: 26vw;
+  top: 68vh;
+  color: white;
 }

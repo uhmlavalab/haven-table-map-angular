@@ -57,7 +57,11 @@ export class MapMainComponent implements OnInit {
       this._windowrefservice.closeSecondScreen();
     } else if (event.key === 'r') {
       this._mapdataservice.resetMap();
-    }
+    } else if (event.key === 'a') {
+      this._mapdataservice.incrementChart();
+    } else if (event.key === 's') {
+      this._mapdataservice.decrementChart();
+    } 
   }
 
   /** Handles the mouse down over elements on the screen.  These elements can be
