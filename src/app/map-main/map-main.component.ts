@@ -34,7 +34,7 @@ export class MapMainComponent implements OnInit {
   * on the map that is selected.
   * @return the name of the css class
   */
-  getLegendClassName(): string {
+  getIslandName(): string {
     return this.island.islandName;
   }
 
@@ -61,6 +61,10 @@ export class MapMainComponent implements OnInit {
       this._mapdataservice.incrementChart();
     } else if (event.key === 's') {
       this._mapdataservice.decrementChart();
+    } else if (event.key === 'q') {
+      this._mapdataservice.incrementScenario();
+    } else if (event.key === 'w') {
+      this._mapdataservice.decrementScenario();
     } 
   }
 

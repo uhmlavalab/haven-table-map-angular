@@ -3,6 +3,7 @@ import { Island } from '../interfaces/island';
 import { Layer } from '../interfaces/layer';
 import { Marker } from '../interfaces/marker';
 import { Chart } from '../interfaces/chart';
+import { Scenario } from '../interfaces/scenario';
 import { SoundsService } from './sounds.service';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
@@ -11,6 +12,7 @@ import { layers } from '../../assets/defaultData/layers';
 import { markers } from '../../assets/defaultData/markers';
 import { mapDefaults } from '../../assets/defaultData/mapDefaults';
 import { charts } from '../../assets/defaultData/chartDefaults';
+import { scenarios } from '../../assets/defaultData/scenarios';
 import { chartColors, mapLayerColors } from '../../assets/defaultData/colors';
 
 @Injectable({
@@ -30,7 +32,9 @@ export class MapDataService {
   private includedLayers: Layer[] = [];// Array of Layers that are included at start
   private markers: Marker[];           // Array holding all marker data.
   private charts: Chart[] = [];        // Array of charts loaded from default data.
-  private currentChart: number;         // Currently displayed chart
+  private currentChart: number;        // Currently displayed chart
+  private scenarios: Scenario[] = [];  // Array of scenarios loaded from default data
+  private currentScenario: number;     // Currently displayed scenario
   private MAX_YEAR = 2045;             // Maximum Year Permitted
   private MIN_YEAR = 2016;             // Minimum Year Permitted
 
@@ -47,6 +51,7 @@ export class MapDataService {
   public layerChangeSubject = new Subject();    // Pubisher for when a layer is added or removed
   public selectedIslandSubject = new Subject(); // Pubisher for when a layer is added or removed
   public currentChartSubject = new Subject();   // Publisher when chart is changed.
+  public currentScenarioSubject = new Subject();// Publisher when scenario is changed
 
   public test: number;
 
@@ -57,6 +62,8 @@ export class MapDataService {
     this.markers = markers;      // Imported from default data
     this.charts = charts; // Imported from default data
     this.currentChart = 0; // Index of chart array
+    this.scenarios = scenarios // Imported from default data
+    this.currentScenario = 0; // Index of scenario array
 
     this.setCurrentYear(this.MIN_YEAR);
     this.nextLayer = 0;
@@ -121,6 +128,47 @@ export class MapDataService {
   public getMapImageName(): string {
     return this.mapImageName;
   }
+
+  /** Gets the currently selected Scenario
+   * @return the current scenario
+   */
+  public getCurrentScenarios(): Scenario {
+    return this.scenarios[this.currentScenario];
+  }
+
+  /** Gets the array of scenarios.
+   * @return the array of scenarios
+   */
+  public getScenarios(): Scenario[] {
+    return this.scenarios;
+  }
+
+  /** Cycles through the optional scenarios
+   * publishes changes to all subscribers.
+   */
+  public incrementScenario(): void {
+    this.currentScenario = (this.currentScenario + 1) % this.scenarios.length;
+    this.publishCurrentScenario();
+  }
+
+  /** Cycles through the optional scenarios
+   * publishes changes to all subscribers.
+   */
+  public decrementScenario(): void {
+    if (this.currentScenario === 0) {
+      this.currentScenario = this.scenarios.length - 1;
+    } else {
+      this.currentScenario--;
+    }
+    this.publishCurrentScenario();
+  }
+
+  /* Publishes the current Scenario to all subscribers */
+  private publishCurrentScenario(): void {
+    this.currentScenarioSubject.next(this.currentScenario);
+  }
+
+
 
   /** Gets the currently selected chart
    * @return the current chart

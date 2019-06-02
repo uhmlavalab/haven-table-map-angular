@@ -24,6 +24,7 @@ import { SecondScreenComponent } from './second-screen/second-screen.component';
 import { InsideComponent } from './second-screen/inside/inside.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ChartContainerComponent } from './chart-container/chart-container.component';
+import { ScenarioComponent } from './scenario/scenario.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ChartContainerComponent } from './chart-container/chart-container.compo
     TitleComponent,
     SecondScreenComponent,
     InsideComponent,
-    ChartContainerComponent
+    ChartContainerComponent,
+    ScenarioComponent
   ],
   imports: [
     BrowserModule,
