@@ -3,14 +3,10 @@
     "",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\interfaces",
-    "\\src\\app\\landing-home",
-    "\\src\\app\\services",
-    "\\src\\assets",
-    "\\src\\assets\\defaultData",
-    "\\src\\assets\\images",
-    "\\src\\assets\\images\\landing-icons"
+    "\\src\\app\\map-main",
+    "\\src\\app\\map-main\\interaction-element",
+    "\\src\\app\\map-main\\interaction-element\\add-remove-layers"
   ],
-  "SelectedNode": "\\src\\app\\landing-home\\landing-home.component.ts",
+  "SelectedNode": "\\src\\app\\map-main\\interaction-element\\add-remove-layers\\add-remove-layers.component.ts",
   "PreviewInSolutionExplorer": false
 }
