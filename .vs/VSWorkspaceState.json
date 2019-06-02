@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\map-main",
+    "\\src\\app\\map-main\\interaction-element",
+    "\\src\\app\\map-main\\interaction-element\\add-remove-layers"
+  ],
+  "SelectedNode": "\\src\\app\\map-main\\interaction-element\\add-remove-layers\\add-remove-layers.component.ts",
+  "PreviewInSolutionExplorer": false
+}

@@ -13,10 +13,11 @@ export class VideoFeedComponent implements OnInit {
   @ViewChild('videoCanvas1', { static: true }) videoCanvas1: any;
   @ViewChild('videoCanvas2', { static: true }) videoCanvas2: any;
 
-  devices: any[] = [];
-  videoArray: any[] = [];
-  canvasWidth: number;
-  canvasHeight: number;
+  private devices: any[] = [];
+  private videoArray: any[] = [];
+  private canvasWidth: number;
+  private canvasHeight: number;
+  private mapState: string;
 
   private static numberOfFeeds: number = 0;
   private static MAX_FEEDS: number = 2;
@@ -24,6 +25,7 @@ export class VideoFeedComponent implements OnInit {
   constructor(private _arservice: ArService, private _mapdataservice: MapDataService) {
     this.canvasHeight = 400;
     this.canvasWidth = 400;
+    this.mapState = this._mapdataservice.getState();
   }
 
   ngOnInit() {
@@ -32,14 +34,7 @@ export class VideoFeedComponent implements OnInit {
     this.videoCanvas2.nativeElement.width = this.canvasWidth;
     this.videoCanvas2.nativeElement.height = this.canvasHeight;
 
-    if (this._mapdataservice.getState() === 'landing') {
-      this.videoCanvas1.nativeElement.style.display = 'block';
-      this.videoCanvas2.nativeElement.style.display = 'block';
-    } else {
-      this.videoCanvas1.nativeElement.style.display = 'none';
-      this.videoCanvas2.nativeElement.style.display = 'none';
-    }
-
+    /* Video Data */
     this.videoArray = [
       {
         id: 1,
@@ -74,6 +69,7 @@ export class VideoFeedComponent implements OnInit {
       .then(this._arservice.runApplication(this.videoArray));
   }
 
+  /* When Closed, clear all video feeds so they can be reopened fresh */
   ngOnDestroy() {
     this.videoArray.forEach( videoElement => {
       videoElement.video.pause();
@@ -81,8 +77,8 @@ export class VideoFeedComponent implements OnInit {
       videoElement.video.load();
     });
 
-    this._arservice.killTick();
-    VideoFeedComponent.numberOfFeeds = 0;
+    this._arservice.killTick(); // Stop recursive tick function
+    VideoFeedComponent.numberOfFeeds = 0; // Reset feed Counter
   }
 
 
@@ -91,7 +87,7 @@ export class VideoFeedComponent implements OnInit {
   * @param vid => The html video element
   * @return true when completed.
   */
-  initCamera(feed, vid) {
+  private initCamera(feed, vid): boolean {
     navigator.mediaDevices.getUserMedia({
       video: {
         deviceId: { exact: feed }
@@ -108,7 +104,7 @@ export class VideoFeedComponent implements OnInit {
   * @param devices => a list of all devices;
   * @return an array of only videoinput devices.
   */
-  getDevices(devices): any[] {
+  private getDevices(devices): any[] {
     const videoFeeds: any[] = [];
     devices.forEach(device => {
       if (device.kind === 'videoinput') {

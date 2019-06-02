@@ -34,7 +34,7 @@ export class MapMainComponent implements OnInit {
   * on the map that is selected.
   * @return the name of the css class
   */
-  getLegendClassName(): string {
+  getIslandName(): string {
     return this.island.islandName;
   }
 
@@ -57,7 +57,15 @@ export class MapMainComponent implements OnInit {
       this._windowrefservice.closeSecondScreen();
     } else if (event.key === 'r') {
       this._mapdataservice.resetMap();
-    }
+    } else if (event.key === 'a') {
+      this._mapdataservice.incrementChart();
+    } else if (event.key === 's') {
+      this._mapdataservice.decrementChart();
+    } else if (event.key === 'q') {
+      this._mapdataservice.incrementScenario();
+    } else if (event.key === 'w') {
+      this._mapdataservice.decrementScenario();
+    } 
   }
 
   /** Handles the mouse down over elements on the screen.  These elements can be

@@ -3,10 +3,12 @@
 <app-interaction-element class="interaction-container"></app-interaction-element>
 
 <!-- This component contains the map, charts, etc that is displayed on the right side of the table -->
-<app-map-element class="map-container" cdkDrag></app-map-element>
+<app-map-element class="map-container-{{getIslandName()}}" cdkDrag></app-map-element>
 <app-legend
-            class="legend-container-{{getLegendClassName()}}"
+            class="legend-container-{{getIslandName()}}"
             cdkDrag>
 </app-legend>
-<app-title class="title-container-{{getLegendClassName()}}" cdkDrag></app-title>
+<app-title class="title-container-{{getIslandName()}}" cdkDrag></app-title>
+<app-chart-container class="chart-container-{{getIslandName()}}" cdkDrag></app-chart-container>
+<app-scenario class="scenario-container-{{getIslandName()}}" cdkDrag></app-scenario>
 <app-video-feed></app-video-feed>

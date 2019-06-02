@@ -31,6 +31,8 @@ export class LandingHomeComponent implements OnInit {
   private buttons: LandingButton[] = [];
   private panels: Panel[];
   private nativeWindow: any;
+  private help: string;
+  private changingMarkerJob: string;
 
   constructor(private _arservice: ArService, private _mapdataservice: MapDataService, private _windowrefservice: WindowRefService) {
     this.activePanel = 'maps';
@@ -39,6 +41,8 @@ export class LandingHomeComponent implements OnInit {
     this.buttons = landingButtons; // Imported from Default Data
     this.panels = panels; // Imported from default data
     this.nativeWindow = this._windowrefservice.getNativeWindow();
+    this.help = 'keyboard';
+    this.changingMarkerJob = 'none';
   }
 
   ngOnInit() {
@@ -74,6 +78,7 @@ export class LandingHomeComponent implements OnInit {
   * @param isChecked => true if checked, false if unchecked.
   */
   private handleIncludeSecondScreenCheckboxChange(island: Island, isChecked: boolean): void {
+    island.secondScreenCheck = isChecked ? 'checked' : '';
     island.includeSecondScreen = isChecked;
   }
 
@@ -94,6 +99,7 @@ export class LandingHomeComponent implements OnInit {
   */
   private handleLayerSetupCheck(layer: Layer, checked: boolean): void {
     layer.included = checked;
+    layer.checked = checked ? 'checked' : '';
     checked ? this._mapdataservice.addIncludedLayer(layer) : this._mapdataservice.removeIncludedLayer(layer);
   }
 
@@ -107,5 +113,35 @@ export class LandingHomeComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  /**
+   * This function is called when user clicks on one of the help navigation buttons.  It changes the
+   * class of the button that was clicked to active, reverts the previous to normal and swaps the view of
+   * the content container.
+   * @param event => The mouseclick event.
+   * @param tag => The string that identifies the button that was clicked.
+   */
+  private handleHelpNavClick(event: any, tag: string): void {
+    this.help = tag;
+  }
+
+  /**
+   * This function is called when user clicks on change a marker during setup.  The user will be shown a
+   * list of active markers and they can choose from those markers and assign it to this job.
+   * @param event => The click event
+   * @param tag => The job that is being changed.
+   */
+  private handleChangeMarker(event: any, tag: string): void {
+    this.changingMarkerJob = tag;
+  }
+
+  /**
+   * Confirms changes made to the markers.
+   * @param event => The click event
+   * @param tag => The job tag
+   */
+  private handleConfirmMarkerChange(event: any, tag: string): void {
+    this.changingMarkerJob = 'none';
   }
 }

@@ -21,7 +21,7 @@
       </div>
       <div class="map-selector-start-wrapper">
         <div class="map-selector-start-button">
-          <input type="checkbox" checked="checked" id="second-screen-{{island.text}}" (change)="handleIncludeSecondScreenCheckboxChange(island, $event.target.checked)"> Include 2nd Screen
+          <input type="checkbox" checked="{{island.secondScreenCheck}}" id="second-screen-{{island.text}}" (change)="handleIncludeSecondScreenCheckboxChange(island, $event.target.checked)"> Include 2nd Screen
           <h3 routerLink="/map-main" id="start-{{island.text}}" (click)="handleStartButtonClick(island)">Start</h3>
         </div>
       </div>
@@ -41,7 +41,18 @@
     <div class="marker-selector-card-info">
       <h3>{{marker.text}}</h3>
       <p>Aruco Marker ID: {{marker.markerId}}</p>
-      <div id="change-marker-button-{{marker.job}}" class="change-marker-button">Change</div>
+      <div id="change-marker-button-{{marker.job}}"
+           class="change-marker-button"
+           (click)="handleChangeMarker($event, marker.job)"
+           [style.opacity]="changingMarkerJob === marker.job ? 0 : 1">
+        Change
+      </div>
+      <div class="markers-detected"
+           [style.opacity] = "changingMarkerJob === marker.job ? 1 : 0"
+           >
+        DETECTED MARKERS GO HERE
+        <div class="change-marker-button" (click)="handleConfirmMarkerChange($event, marker.job)">Confirm</div>
+      </div>
     </div>
   </div>
 </div>
@@ -57,31 +68,32 @@
   </div>
 </div>
 
-<!-- contains the layer selector cards -->
-<div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'" id="help-selector-container" name="help-selector-container" appMapSelectionDirective>
-  <div class="help-nav" #helpNav>
+
+<!-- contains the help selector cards -->
+<div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'" id="help-selector-container" name="help-selector-container">
+  <div class="help-nav">
     <ul>
-      <li class="active">
+      <li [className]="help === 'keyboard' ? 'active' : ''" (click)="handleHelpNavClick($event, 'keyboard')" #keyboard>
         <span class="accent"></span>
         <span class="text">Keyboard Controls</span>
       </li>
-      <li>
+      <li [className]="help === 'cameras' ? 'active' : ''" (click)="handleHelpNavClick($event, 'cameras')" #cameras>
         <span class="accent"></span>
         <span class="text">Cameras</span>
       </li>
-      <li>
+      <li [className]="help === 'projector' ? 'active' : ''" (click)="handleHelpNavClick($event, 'projector')" #projector>
         <span class="accent"></span>
         <span class="text">Projector</span>
       </li>
-      <li>
+      <li [className]="help === 'pucks' ? 'active' : ''" (click)="handleHelpNavClick($event, 'pucks')" #pucks>
         <span class="accent"></span>
         <span class="text">Pucks</span>
       </li>
-      <li>
+      <li [className]="help === 'layers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'layers')" >
         <span class="accent"></span>
         <span class="text">Layers</span>
       </li>
-      <li>
+      <li [className]="help === 'markers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'markers')" >
         <span class="accent"></span>
         <span class="text">Markers</span>
       </li>
@@ -89,7 +101,9 @@
   </div>
 
   <div class="content-container">
-    <div class="keyboard-controls-container">
+
+    <!-- Keyboard Controls Help Content -->
+    <div [style.opacity]="help === 'keyboard' ? '1' : '0'">
       <table>
         <tr>
           <th>Key</th>
@@ -118,11 +132,32 @@
         <tr>
           <td>p</td>
           <td>Returns to setup screen from map screen</td>
-        </tr><tr>
+        </tr>
+        <tr>
           <td>r</td>
           <td>Resets map to initial state</td>
         </tr>
+        <tr>
+          <td>a</td>
+          <td>Cycle left through the charts</td>
+        </tr>
+        <tr>
+          <td>s</td>
+          <td>Cycle right through the charts</td>
+        </tr>
+        <tr>
+          <td>q</td>
+          <td>Cycle left through the scenarios</td>
+        </tr>
+        <tr>
+          <td>w</td>
+          <td>Cycle right through the scenarios</td>
+        </tr>
       </table>
+    </div>
+
+    <!-- Camera Setup Help content -->
+    <div [style.opacity]="help === 'camera' ? '1' : '0'">
     </div>
   </div>
 </div>

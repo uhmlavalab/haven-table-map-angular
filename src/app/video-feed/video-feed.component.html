@@ -1,8 +1,10 @@
-<div class="canvas-wrapper" id="canvas1-wrapper">
+<div class="canvas-wrapper" id="canvas1-wrapper" [style.display]="mapState === 'landing' ? 'inline-block' : 'none'">
+  <h2>Add and Remove Camera</h2>
   <video #videoElement class="intro-video"></video>
   <canvas #videoCanvas1></canvas>
 </div>
-<div class="canvas-wrapper" id="canvas2-wrapper">
+<div class="canvas-wrapper" id="canvas2-wrapper" [style.display]="mapState === 'landing' ? 'inline-block' : 'none'">
+  <h2>Main Puck Interaction Camera</h2>
   <video #videoElement1 class="intro-video"></video>
   <canvas #videoCanvas2></canvas>
 </div>

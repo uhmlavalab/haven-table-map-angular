@@ -4,6 +4,11 @@
   position: relative;
   display: inline-block;
   margin: 1%;
+  color: white;
+  text-align: center;
+}
+.canvas-wrapper> h2 {
+  margin: 0 0 4px 0;
 }
 
 .video-display-wrapper {

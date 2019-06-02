@@ -115,8 +115,50 @@ export class ProjectableMarker {
       case 'layer':
         this.changeLayer(direction, id);
         break;
+      case 'scenario':
+        this.changeScenario(direction);
+        break;
+      case 'chart':
+        this.changeChart(direction);
+        break;
       default:
         // Do nothing
+        break;
+    }
+  }
+
+  /** Changes the scenario of the map based on the direction that the marker was turned.
+  * Connects to the map data service for the function and stores all year data there.
+  * @param direction => The direction the marker was turned.
+  */
+  changeScenario(direction) {
+    switch (direction) {
+      case 'left':
+        this._mapdataservice.decrementScenario();
+        break;
+      case 'right':
+        this._mapdataservice.incrementScenario();
+        break;
+      default:
+        // do nothing
+        break;
+    }
+  }
+
+  /** Changes the Chart that is displayed on the direction that the marker was turned.
+  * Connects to the map data service for the function and stores all year data there.
+  * @param direction => The direction the marker was turned.
+  */
+  changeChart(direction) {
+    switch (direction) {
+      case 'left':
+        this._mapdataservice.decrementChart();
+        break;
+      case 'right':
+        this._mapdataservice.incrementChart();
+        break;
+      default:
+        // do nothing
         break;
     }
   }
