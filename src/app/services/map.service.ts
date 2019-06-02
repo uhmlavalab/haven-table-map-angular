@@ -1,26 +1,11 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD:src/app/services/map.service.ts
 import { Marker } from '@app/interfaces/marker';
-=======
-import { Island } from '../interfaces/island';
-import { Layer } from '../interfaces/layer';
-import { Marker } from '../interfaces/marker';
-import { Chart } from '../interfaces/chart';
-import { Scenario } from '../interfaces/scenario';
->>>>>>> origin:src/app/services/map-data.service.ts
 import { SoundsService } from './sounds.service';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
 import { markers } from '../../assets/defaultData/markers';
-<<<<<<< HEAD:src/app/services/map.service.ts
 
 import { Plan } from '@app/interfaces/plan';
-=======
-import { mapDefaults } from '../../assets/defaultData/mapDefaults';
-import { charts } from '../../assets/defaultData/chartDefaults';
-import { scenarios } from '../../assets/defaultData/scenarios';
-import { chartColors, mapLayerColors } from '../../assets/defaultData/colors';
->>>>>>> origin:src/app/services/map-data.service.ts
 
 @Injectable({
   providedIn: 'root'
@@ -64,18 +49,8 @@ export class MapService {
 
   constructor(private _soundsservice: SoundsService) {
 
-<<<<<<< HEAD:src/app/services/map.service.ts
     this.islands = islands; // Imported from default data
     this.markers = markers; // Imported from default data
-=======
-    this.islands = islands;      // Imported from default data
-    this.layers = layers;        // Imported from default data
-    this.markers = markers;      // Imported from default data
-    this.charts = charts; // Imported from default data
-    this.currentChart = 0; // Index of chart array
-    this.scenarios = scenarios // Imported from default data
-    this.currentScenario = 0; // Index of scenario array
->>>>>>> origin:src/app/services/map-data.service.ts
 
     this.setCurrentYear(this.MIN_YEAR);
     this.nextLayer = 0;
