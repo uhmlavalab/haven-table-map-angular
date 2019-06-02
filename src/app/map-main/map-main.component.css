@@ -58,8 +58,8 @@ html {
 .legend-container-maui {
   width: 22%;
   height: 18vh;
-  left: 53%;
-  top: 1%;
+  left: 47%;
+  top: 2%;
   position: absolute;
 }
 
@@ -84,8 +84,8 @@ html {
 
 .title-container-maui {
   color: white;
-  left: 43vw;
-  top: 0vh;
+  left: 34vw;
+  top: 54vh;
   position: absolute;
   text-align: center;
 }
@@ -113,7 +113,7 @@ html {
   height: 220px;
   border: 1px solid white;
   position: absolute;
-  left: 26vw;
+  left: 29vw;
   top: 68vh;
   color: white;
 }
