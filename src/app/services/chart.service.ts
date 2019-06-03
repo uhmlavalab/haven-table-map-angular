@@ -1,56 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Chart } from '@app/interfaces';
+import { Chart, Scenario } from '@app/interfaces';
 import { Subject } from 'rxjs';
+import { PlanService } from './plan.service';
+import * as d3 from 'd3/d3.min';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChartService {
 
+  private currentData: any;
 
-  private currentChart: number;
-  private charts: Chart[] = [];
-  public chartSubject = new Subject<Chart>();
+  private currentScenario: Scenario;
+  private currentYear: number;
 
-  constructor() { }
+  private generationData = {};
+  private capacityData = {};
 
-  /** Gets the currently selected chart
- * @return the current chart
- */
-  public getCurrentChart(): Chart {
-    return this.charts[this.currentChart];
+  constructor(private planService: PlanService) {
+    this.planService.planSubject.subscribe(plan => {
+      this.currentData = plan.data;
+    });
+
+    this.planService.scenarioSubject.subscribe(scenario => {
+      this.currentScenario = scenario;
+    });
+
+    this.planService.yearSubject.subscribe(year => {
+      this.currentYear = year;
+    });
   }
-
-  /** Gets the array of charts.
-   * @return the array of charts
-   */
-  public getCharts(): Chart[] {
-    return this.charts;
-  }
-
-  /** Cycles through the various optional charts
- * publishes changes to all subscribers.
- */
-  public incrementChart(): void {
-    this.currentChart = (this.currentChart + 1) % this.charts.length;
-    this.publishCurrentChart();
-  }
-
-  /** Cycles through the various optional charts
-   * publishes changes to all subscribers.
-   */
-  public decrementChart(): void {
-    if (this.currentChart === 0) {
-      this.currentChart = this.charts.length - 1;
-    } else {
-      this.currentChart--;
-    }
-    this.publishCurrentChart();
-  }
-
-    /* Publishes the current Chart to display to all subscribers */
-    private publishCurrentChart(): void {
-      this.chartSubject.next(this.charts[this.currentChart]);
-    }
 
 }

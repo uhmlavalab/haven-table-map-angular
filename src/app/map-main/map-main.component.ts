@@ -60,9 +60,9 @@ export class MapMainComponent implements OnInit {
     } else if (event.key === 'r') {
       this.mapService.resetMap();
     } else if (event.key === 'a') {
-      this.chartService.incrementChart();
+      // this.chartService.incrementChart();
     } else if (event.key === 's') {
-      this.chartService.decrementChart();
+      // this.chartService.decrementChart();
     } else if (event.key === 'q') {
       this.planService.incrementScenario();
     } else if (event.key === 'w') {

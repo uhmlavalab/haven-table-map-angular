@@ -9,20 +9,12 @@ import { ChartService } from '../services/chart.service';
 })
 export class ChartContainerComponent implements OnInit {
 
-  private chartIndex: number;
-  private chart: Chart;
-  private chartArray: Chart[] = [];
-
   constructor(private chartService: ChartService) {
-    this.chartArray = this.chartService.getCharts();
-    this.chartIndex = 0;
-    this.chart = this.chartArray[this.chartIndex];
+
   }
 
   ngOnInit() {
-    this.chartService.chartSubject.subscribe(value => {
-      console.log(value);
-    });
+
   }
 
 

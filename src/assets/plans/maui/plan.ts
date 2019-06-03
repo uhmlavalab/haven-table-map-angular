@@ -12,10 +12,12 @@ export const MauiPlan: Plan = {
   maxYear: 2045,
   scenarios: [
     {
-      title: 'Post April',
+      name: 'postapril',
+      displayName: 'Post April',
     },
     {
-      title: 'E3 Gen Mod'
+      name: 'e3',
+      displayName: 'E3'
     }
   ],
   data: {
@@ -25,10 +27,10 @@ export const MauiPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.237,
+    scale: 0.258,
     width: 3613,
     height: 2794,
-    bounds: [[-158.281, 21.710], [-157.647, 21.252]],
+    bounds: [[-156.6969, 21.03142], [-155.9788, 20.5746]],
     baseMapPath: 'assets/plans/maui/images/base-map.png',
     mapLayers: [
       {
@@ -62,16 +64,6 @@ export const MauiPlan: Plan = {
         fileUrl: 'assets/plans/maui/layers/parks.json'
       },
       {
-        name: 'existing_re',
-        displayName: 'Existing Renewables',
-        active: false,
-        included: true,
-        icon: 'existing_re-icon.png',
-        fillColor: mapLayerColors.Existing_RE.fill,
-        borderColor: mapLayerColors.Existing_RE.border,
-        fileUrl: 'assets/plans/maui/layers/existing_re_2.json'
-      },
-      {
         name: 'wind',
         displayName: 'Wind Energy',
         active: false,
@@ -90,16 +82,6 @@ export const MauiPlan: Plan = {
         fillColor: mapLayerColors.Agriculture.fill,
         borderColor: mapLayerColors.Agriculture.border,
         fileUrl: 'assets/plans/maui/layers/agriculture.json'
-      },
-      {
-        name: 'ial',
-        displayName: 'Important Ag Lands',
-        active: false,
-        included: true,
-        icon: 'ial-icon.png',
-        fillColor: mapLayerColors.Ial.fill,
-        borderColor: mapLayerColors.Ial.border,
-        fileUrl: null
       }
     ],
   }

@@ -12,10 +12,12 @@ export const BigIslandPlan: Plan = {
   maxYear: 2045,
   scenarios: [
     {
-      title: 'Post April',
+      name: 'postapril',
+      displayName: 'Post April',
     },
     {
-      title: 'E3 Gen Mod'
+      name: 'e3',
+      displayName: 'E3'
     }
   ],
   data: {
@@ -25,11 +27,11 @@ export const BigIslandPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.237,
-    width: 3613,
-    height: 2794,
-    bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: './images/base-map.png',
+    scale: 0.26,
+    width: 2179,
+    height: 2479,
+    bounds: [[-156.0618, 20.2696], [-154.8067, 18.9105]],
+    baseMapPath: 'assets/plans/bigisland/images/base-map.png',
     mapLayers: [
       {
         name: 'transmission',
@@ -62,16 +64,6 @@ export const BigIslandPlan: Plan = {
         fileUrl: 'assets/plans/bigisland/layers/parks.json'
       },
       {
-        name: 'existing_re',
-        displayName: 'Existing Renewables',
-        active: false,
-        included: true,
-        icon: 'existing_re-icon.png',
-        fillColor: mapLayerColors.Existing_RE.fill,
-        borderColor: mapLayerColors.Existing_RE.border,
-        fileUrl: 'assets/plans/bigisland/layers/existing_re_2.json'
-      },
-      {
         name: 'wind',
         displayName: 'Wind Energy',
         active: false,
@@ -90,16 +82,6 @@ export const BigIslandPlan: Plan = {
         fillColor: mapLayerColors.Agriculture.fill,
         borderColor: mapLayerColors.Agriculture.border,
         fileUrl: 'assets/plans/bigisland/layers/agriculture.json'
-      },
-      {
-        name: 'ial',
-        displayName: 'Important Ag Lands',
-        active: false,
-        included: true,
-        icon: 'ial-icon.png',
-        fillColor: mapLayerColors.Ial.fill,
-        borderColor: mapLayerColors.Ial.border,
-        fileUrl: null
       }
     ],
   }

@@ -165,10 +165,10 @@ export class ProjectableMarker {
   changeChart(direction) {
     switch (direction) {
       case 'left':
-        this.chartService.decrementChart();
+        // this.chartService.decrementChart();
         break;
       case 'right':
-        this.chartService.incrementChart();
+        // this.chartService.incrementChart();
         break;
       default:
         // do nothing

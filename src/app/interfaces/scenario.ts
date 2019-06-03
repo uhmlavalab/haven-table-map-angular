@@ -1,3 +1,4 @@
 export interface Scenario {
-  title: string;
+  name: string;
+  displayName: string;
 }

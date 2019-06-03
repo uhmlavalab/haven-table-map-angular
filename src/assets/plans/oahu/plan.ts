@@ -12,10 +12,16 @@ export const OahuPlan: Plan = {
   maxYear: 2045,
   scenarios: [
     {
-      title: 'Post April',
+      name: 'postapril',
+      displayName: 'Post April',
     },
     {
-      title: 'E3 Gen Mod'
+      name: 'e3',
+      displayName: 'E3'
+    },
+    {
+      name: 'e3genmod',
+      displayName: 'E3 Gen Mod'
     }
   ],
   data: {

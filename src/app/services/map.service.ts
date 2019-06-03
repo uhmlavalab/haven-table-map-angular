@@ -3,7 +3,7 @@ import { _ } from 'underscore';
 import { Subject } from 'rxjs';
 
 import { PlanService } from './plan.service';
-import { Map, MapLayer, Plan } from '@app/interfaces';
+import { Map, MapLayer } from '@app/interfaces';
 
 @Injectable({
   providedIn: 'root'
