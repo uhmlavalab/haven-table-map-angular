@@ -15,7 +15,9 @@ import { TitleComponent } from './map-main/title/title.component';
 import { SecondScreenComponent } from './second-screen/second-screen.component';
 import { InsideComponent } from './second-screen/inside/inside.component';
 import { InteractionElementComponent } from './map-main/interaction-element/interaction-element.component';
-import { ChartContainerComponent } from './chart-container/chart-container.component';
+import { LineChartComponent } from './charts/line-chart/line-chart.component';
+import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
+
 import { ScenarioComponent } from './scenario/scenario.component';
 
 // Directives
@@ -52,7 +54,8 @@ import { WindowRefService } from './services/window-ref.service';
     TitleComponent,
     SecondScreenComponent,
     InsideComponent,
-    ChartContainerComponent,
+    LineChartComponent,
+    PieChartComponent,
     ScenarioComponent
   ],
   imports: [

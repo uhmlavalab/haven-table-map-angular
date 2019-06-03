@@ -1,27 +1,22 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 
-// import * as Chart from 'chart.js';
-// import 'chartjs-plugin-datalabels';
-// import 'chartjs-plugin-labels';
-
 import { Scenario } from '@app/interfaces';
 
-import { chartColors } from '../../assets/plans/defaultColors';
+import { chartColors } from '../../../assets/plans/defaultColors';
 
 @Component({
-  selector: 'app-chart-container',
-  templateUrl: './chart-container.component.html',
-  styleUrls: ['./chart-container.component.css']
+  selector: 'app-line-chart',
+  templateUrl: './line-chart.component.html',
+  styleUrls: ['./line-chart.component.css']
 })
-export class ChartContainerComponent implements OnInit {
+export class LineChartComponent implements OnInit {
 
-  @ViewChild('chartDiv', { static: true }) chartDiv: ElementRef;
+  @ViewChild('lineDiv', { static: true }) chartDiv: ElementRef;
   ctx: any;
   myChart: any;
 
   capacityData: any;
-  generationData: any;
   scenario: Scenario;
   year: number;
 
@@ -29,12 +24,14 @@ export class ChartContainerComponent implements OnInit {
   labels: any;
   chartMax: number;
 
-  constructor(private planService: PlanService) {
-
-  }
+  constructor(private planService: PlanService) {}
 
   ngOnInit() {
     this.planService.planSubject.subscribe(plan => {
+      this.capacityData = {};
+      this.data = {};
+      this.ctx = null;
+      this.myChart = null;
       this.fetchData();
     });
 
