@@ -90,7 +90,7 @@ export const MauiPlan: Plan = {
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
         legendColor: mapLayerColors.Wind.fill,
-        filePath: 'assets/plans/maui/layers/wind_2.json',
+        filePath: 'assets/plans/maui/layers/wind.json',
         fillFunction: (d3: any, parcels: any[], active: boolean) => {
           parcels.forEach(el => {
             d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
