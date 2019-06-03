@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from '../interfaces/chart';
-import { MapDataService } from '../services/map-data.service';
+import { ChartService } from '../services/chart.service';
 
 @Component({
   selector: 'app-chart-container',
@@ -13,20 +13,17 @@ export class ChartContainerComponent implements OnInit {
   private chart: Chart;
   private chartArray: Chart[] = [];
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.chartArray = this._mapdataservice.getCharts();
+  constructor(private chartService: ChartService) {
+    this.chartArray = this.chartService.getCharts();
     this.chartIndex = 0;
     this.chart = this.chartArray[this.chartIndex];
   }
 
   ngOnInit() {
-    this._mapdataservice.currentChartSubject.subscribe({
-      next: value => {
-        this.chartIndex = <number>value;
-        this.chart = this.chartArray[<number>value];
-      }
+    this.chartService.chartSubject.subscribe(value => {
+      console.log(value);
     });
   }
 
-  
+
 }

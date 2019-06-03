@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ArService } from '../services/ar.service';
-import { MapDataService } from '../services/map-data.service';
+import { PlanService } from '../services/plan.service';
 
 @Component({
   selector: 'app-video-feed',
@@ -22,10 +22,10 @@ export class VideoFeedComponent implements OnInit {
   private static numberOfFeeds: number = 0;
   private static MAX_FEEDS: number = 2;
 
-  constructor(private _arservice: ArService, private _mapdataservice: MapDataService) {
+  constructor(private _arservice: ArService, private planService: PlanService) {
     this.canvasHeight = 400;
     this.canvasWidth = 400;
-    this.mapState = this._mapdataservice.getState();
+    this.mapState = this.planService.getState();
   }
 
   ngOnInit() {

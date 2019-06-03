@@ -1,4 +1,4 @@
 export interface VideoFeeds {
-  videoId: number,
-  videoSource: any
+  videoId: number;
+  videoSource: any;
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { chartColors, mapLayerColors } from '../../../../assets/defaultData/colors';
+import { chartColors, mapLayerColors } from '../../../../assets/plans/defaultColors';
 import { MapMainComponent } from '../../map-main.component';
 import { Subject } from 'rxjs';
-import { Layer } from '../../../interfaces/layer';
-import { MapDataService } from '../../../services/map-data.service';
+import { MapLayer } from '@app/interfaces/map';
+import { MapService } from '../../../services/map.service';
 import { CardStyleDirective } from '../card-style.directive';
 import { _ } from 'underscore';
 
@@ -18,20 +18,20 @@ export class AddRemoveLayersComponent implements OnInit {
   // Elements with cardStyle directive
   @ViewChildren(CardStyleDirective) cardStyle;
 
-  layers: Layer[]; // Array holding all layers
-  nextLayer: Layer; // The next layer to be added or removed.
+  layers: MapLayer[]; // Array holding all layers
+  nextLayer: MapLayer; // The next layer to be added or removed.
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.layers = this._mapdataservice.getIncludedLayers();
+  constructor(private mapService: MapService) {
+    this.layers = this.mapService.getLayers();
     this.nextLayer = this.layers[0];
   }
 
   ngOnInit() {
     // Subscribe to changes in the next layer
-    this._mapdataservice.nextLayerSubject.subscribe({
+    this.mapService.toggleLayerSubject.subscribe({
       next: value => {
-        this.nextLayer = <Layer>value;
-        this.updateBackgroundColorActive(<Layer>value);
+        this.nextLayer = value as MapLayer;
+        this.updateBackgroundColorActive(value as MapLayer);
       }
     });
   }

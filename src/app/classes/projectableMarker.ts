@@ -1,6 +1,8 @@
 import { _ } from 'underscore';
-import { MapDataService } from '../services/map-data.service';
+import { PlanService } from '../services/plan.service';
 import { SoundsService } from '../services/sounds.service';
+import { MapService } from '../services/map.service';
+import { ChartService } from '../services/chart.service';
 
 /** Represents a projectable marker.  These are the tangibles that control
 *   The user interaction with the table.  Each projectable marker is connected
@@ -27,10 +29,19 @@ export class ProjectableMarker {
   private rotation: number; // Current Rotation
   private rotationSum: number; // Combined Rotation amounts
   private rotationMax: number; // When rotation sum hits this, rotate.
-  private _mapdataservice: MapDataService;
-  private _soundsservice: SoundsService;
+  private planService: PlanService;
+  private soundsService: SoundsService;
+  private chartService: ChartService;
+  private mapService: MapService;
 
-  constructor(id: number, job: string, icon: string, rotationMax: number, _mapdataservice: MapDataService, _soundsservice: SoundsService) {
+  constructor(id: number,
+              job: string,
+              icon: string,
+              rotationMax: number,
+              planService: PlanService,
+              soundsService: SoundsService,
+              chartService: ChartService,
+              mapService: MapService) {
     this.markerId = id;
     this.job = job;
     this.icon = icon;
@@ -42,8 +53,10 @@ export class ProjectableMarker {
     this.prevCorners = null;
     this.rotation = 0;
     this.rotationMax = rotationMax;
-    this._mapdataservice = _mapdataservice;
-    this._soundsservice = _soundsservice;
+    this.planService = planService;
+    this.soundsService = soundsService;
+    this.chartService = chartService;
+    this.mapService = mapService;
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
   }
@@ -134,10 +147,10 @@ export class ProjectableMarker {
   changeScenario(direction) {
     switch (direction) {
       case 'left':
-        this._mapdataservice.decrementScenario();
+        this.planService.decrementScenario();
         break;
       case 'right':
-        this._mapdataservice.incrementScenario();
+        this.planService.incrementScenario();
         break;
       default:
         // do nothing
@@ -152,10 +165,10 @@ export class ProjectableMarker {
   changeChart(direction) {
     switch (direction) {
       case 'left':
-        this._mapdataservice.decrementChart();
+        this.chartService.decrementChart();
         break;
       case 'right':
-        this._mapdataservice.incrementChart();
+        this.chartService.incrementChart();
         break;
       default:
         // do nothing
@@ -170,10 +183,10 @@ export class ProjectableMarker {
   changeYear(direction) {
     switch (direction) {
       case 'left':
-        this._mapdataservice.decrementCurrentYear();
+        this.planService.decrementCurrentYear();
         break;
       case 'right':
-        this._mapdataservice.incrementCurrentYear();
+        this.planService.incrementCurrentYear();
         break;
       default:
         // do nothing
@@ -191,10 +204,10 @@ export class ProjectableMarker {
     if (id === 1) {
       switch (direction) {
         case 'left':
-          this._mapdataservice.decrementNextLayer();
+          this.mapService.decrementNextLayer();
           break;
         case 'right':
-          this._mapdataservice.incrementNextLayer();
+          this.mapService.incrementNextLayer();
           break;
         default:
           // do nothing
@@ -202,7 +215,7 @@ export class ProjectableMarker {
       }
     } else {
       if (this.checkaddRemoveTimer()) {
-        this._mapdataservice.addRemoveLayer();
+        this.mapService.addRemoveLayer();
         this.addRemoveStartTime = this.getCurrentTime();
       }
     }

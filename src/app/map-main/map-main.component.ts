@@ -1,9 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { MapDataService } from '../services/map-data.service';
-import { ArService } from '../services/ar.service';
+import { MapService } from '../services/map.service';
 import { WindowRefService } from '../services/window-ref.service';
-import { Island } from '../interfaces/island';
 import { Router } from '@angular/router';
+import { Plan } from '@app/interfaces';
+import { PlanService } from '@app/services/plan.service';
+import { ChartService } from '@app/services/chart.service';
 
 @Component({
   selector: 'app-map-main',
@@ -15,15 +16,16 @@ import { Router } from '@angular/router';
 * And the display components of the table. */
 export class MapMainComponent implements OnInit {
 
-  island: Island;
+  plan: Plan;
 
   constructor(
-    private _arservice: ArService,
-    private _mapdataservice: MapDataService,
+    private planService: PlanService,
+    private mapService: MapService,
+    private chartService: ChartService,
     private router: Router,
-    private _windowrefservice: WindowRefService) {
+    private windowRefService: WindowRefService) {
 
-    this.island = this._mapdataservice.getSelectedIsland();
+    this.plan = this.planService.getCurrentPlan();
   }
 
   ngOnInit() {
@@ -35,37 +37,37 @@ export class MapMainComponent implements OnInit {
   * @return the name of the css class
   */
   getIslandName(): string {
-    return this.island.islandName;
+    return this.plan.name;
   }
 
   /** KEYBOARD CONTROLS **/
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.key === 'ArrowRight') {
-      this._mapdataservice.incrementCurrentYear();
+      this.planService.incrementCurrentYear();
     } else if (event.key === 'ArrowLeft') {
-      this._mapdataservice.decrementCurrentYear();
+      this.planService.decrementCurrentYear();
     } else if (event.key === 'ArrowUp') {
-      this._mapdataservice.incrementNextLayer();
+      this.mapService.incrementNextLayer();
     } else if (event.key === 'ArrowDown') {
-      this._mapdataservice.decrementNextLayer();
+      this.mapService.decrementNextLayer();
     } else if (event.key === 'Enter') {
-      this._mapdataservice.addRemoveLayer();
+      this.mapService.addRemoveLayer();
     } else if (event.key === 'p') {
       this.router.navigateByUrl('');
-      this._mapdataservice.setState('landing');
-      this._windowrefservice.closeSecondScreen();
+      this.planService.setState('landing');
+      this.windowRefService.closeSecondScreen();
     } else if (event.key === 'r') {
-      this._mapdataservice.resetMap();
+      this.mapService.resetMap();
     } else if (event.key === 'a') {
-      this._mapdataservice.incrementChart();
+      this.chartService.incrementChart();
     } else if (event.key === 's') {
-      this._mapdataservice.decrementChart();
+      this.chartService.decrementChart();
     } else if (event.key === 'q') {
-      this._mapdataservice.incrementScenario();
+      this.planService.incrementScenario();
     } else if (event.key === 'w') {
-      this._mapdataservice.decrementScenario();
-    } 
+      this.planService.decrementScenario();
+    }
   }
 
   /** Handles the mouse down over elements on the screen.  These elements can be

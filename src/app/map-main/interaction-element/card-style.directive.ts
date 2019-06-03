@@ -1,5 +1,4 @@
 import { Directive, ElementRef } from '@angular/core';
-import { mapLayerColors } from '../../../assets/defaultData/colors';
 
 @Directive({
   selector: '[appCardStyle]'

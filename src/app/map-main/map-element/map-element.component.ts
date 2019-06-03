@@ -1,15 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
-import { MapMainComponent } from '../map-main.component';
-import { Map } from '../../classes/map';
-import { Island } from '../../interfaces/island';
-import { MapDataService } from '../../services/map-data.service';
+import { MapService } from '../../services/map.service';
+import { PlanService } from '../../services/plan.service';
 import { MapDirective } from './map.directive';
 import * as d3 from 'd3/d3.min';
-import { solarGenYearly } from '../../../assets/data/oahu/solarGenYearly';
-import { windGenYearly } from '../../../assets/data/oahu/windGenYearly';
-import { chartColors, mapLayerColors } from '../../../assets/defaultData/colors';
-
-import { Layer } from '../../interfaces/layer';
 
 @Component({
   selector: 'app-map-element',
@@ -38,14 +31,14 @@ export class MapElementComponent implements OnInit, OnDestroy {
 
   @ViewChild(MapDirective, { static: true }) mapElement;
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.scale = _mapdataservice.getMapScale();
-    this.width = _mapdataservice.getMapImageWidth() * this.scale;
-    this.height = _mapdataservice.getMapImageHeight() * this.scale;
-    this.rasterBounds = _mapdataservice.getMapBounds();
-    this.currentYear = _mapdataservice.getCurrentYear();
+  constructor(private mapService: MapService, private planService: PlanService) {
+    this.scale = mapService.getMapScale();
+    this.width = mapService.getMapImageWidth() * this.scale;
+    this.height = mapService.getMapImageHeight() * this.scale;
+    this.rasterBounds = mapService.getMapBounds();
+    this.currentYear = planService.getCurrentPlan().minYear;
     this.currentScenario = null;
-    this.mapImageUrl = `../../../assets/images/basemaps/${_mapdataservice.getMapImageName()}`;
+    this.mapImageUrl = planService.getCurrentPlan().map.baseMapPath;
 
     this.layers = {};
     this.IAL = false;
@@ -69,7 +62,7 @@ export class MapElementComponent implements OnInit, OnDestroy {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    this._mapdataservice.getLayers().forEach(layerElement => {
+    this.mapService.getLayers().forEach(layerElement => {
       if (layerElement.fileUrl === null) {
         return;
       }
@@ -88,8 +81,8 @@ export class MapElementComponent implements OnInit, OnDestroy {
         const layer = {
           enabled: true,
           parcels: [],
-          fillColor: mapLayerColors[layerElement.colorName].fill,
-          lineColor: mapLayerColors[layerElement.colorName].border,
+          fillColor: layerElement.fillColor,
+          lineColor: layerElement.borderColor,
           lineWidth: '1px',
           year: this.currentYear
         };
@@ -113,19 +106,17 @@ export class MapElementComponent implements OnInit, OnDestroy {
       });
     });
     // Subscribe to current year
-    this._mapdataservice.yearSubject.subscribe({
+    this.planService.yearSubject.subscribe({
       next: value => {
         this.currentYear = value as number;
       }
     });
 
-    this._mapdataservice.layerChangeSubject.subscribe((layer) => {
-      const active = layer['active'];
-      console.log(`${layer['name']} is ${active}`);
-      if (!active) {
-        this.map.selectAll(`.${layer['name']}`).style('opacity', 0.0);
+    this.mapService.toggleLayerSubject.subscribe((layer) => {
+      if (layer.active) {
+        this.map.selectAll(layer.name).style('opacity', 0.0);
       } else {
-        this.map.selectAll(`.${layer['name']}`).style('opacity', 0.5);
+        this.map.selectAll(layer.name).style('opacity', 0.5);
       }
     })
 

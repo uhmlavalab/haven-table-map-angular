@@ -4,6 +4,7 @@ export interface MapLayer {
   fileUrl: string;
   icon: string;
   active: boolean;
+  included: boolean;
   fillColor: string;
   borderColor: string;
 }

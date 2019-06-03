@@ -1,3 +1,3 @@
 export interface Scenario {
-  title: string
+  title: string;
 }

@@ -13,16 +13,16 @@
 
 <!-- Contains the cards for each selectable map -->
 <div class="map-selector-container" [style.left]="activePanel == 'maps' ? '25%' : '100%'" id="map-selector-container" name="map-selector-container" appMapSelectionDirective>
-  <div *ngFor="let island of islands" class="map-selector-box">
-    <img src="{{ island.imagePath }}" />
+  <div *ngFor="let plan of plans" class="map-selector-box">
+    <img src="{{ plan.landingImagePath }}" />
     <div class="map-selector-box-dark-overlay">
       <div class="map-selector-stripe-button">
-        <h3>{{ island.text }}</h3>
+        <h3>{{ plan.displayName }}</h3>
       </div>
       <div class="map-selector-start-wrapper">
         <div class="map-selector-start-button">
-          <input type="checkbox" checked="{{island.secondScreenCheck}}" id="second-screen-{{island.text}}" (change)="handleIncludeSecondScreenCheckboxChange(island, $event.target.checked)"> Include 2nd Screen
-          <h3 routerLink="/map-main" id="start-{{island.text}}" (click)="handleStartButtonClick(island)">Start</h3>
+          <input type="checkbox" checked="{{plan.includeSecondScreen}}" id="second-screen-{{plan.displayName}}" (change)="handleIncludeSecondScreenCheckboxChange(plan, $event.target.checked)"> Include 2nd Screen
+          <h3 routerLink="/map-main" id="start-{{plan.displayName}}" (click)="handleStartButtonClick(plan)">Start</h3>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@
 
 <!-- contains the layer selector cards -->
 <div class="layer-selector-container" [style.left]="activePanel == 'layers' ? '25%' : '100%'" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>
-  <div class="layer-selector-card" *ngFor="let layer of layers">
+  <div class="layer-selector-card" *ngFor="let layer of plans[0].map.mapLayers">
     <img src="../../assets/images/icons/{{layer.icon}}" />
     <div class="info">
       <h3>{{layer.displayName}}</h3>

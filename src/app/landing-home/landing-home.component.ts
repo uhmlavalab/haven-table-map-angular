@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { Panel } from '../interfaces/panel';
-import { Island } from '../interfaces/island';
-import { LandingButton } from '../interfaces/landing-button';
-import { Marker } from '../interfaces/marker';
-import { Layer } from '../interfaces/layer';
-import { VideoFeeds } from '../interfaces/video-feeds';
+
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
-import { MapDataService } from '../services/map-data.service';
-import { ArService } from '../services/ar.service';
-import { WindowRefService } from '../services/window-ref.service';
+
+
 import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
+
+import { Plan, Marker, Panel, LandingButton, MapLayer } from '@app/interfaces';
+import { ArService } from '../services/ar.service';
+import { PlanService } from '../services/plan.service';
+import { WindowRefService } from '../services/window-ref.service';
+import { MarkerService } from '@app/services/marker.service';
+
 
 @Component({
   selector: 'app-landing-home',
@@ -24,29 +24,31 @@ export class LandingHomeComponent implements OnInit {
 
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
-  private islands: Island[] = [];
-  private activePanel: string;
-  private markers: Marker[] = [];
-  private layers: Layer[] = [];
-  private buttons: LandingButton[] = [];
-  private panels: Panel[];
+
   private nativeWindow: any;
+  private markers: Marker[];
   private help: string;
   private changingMarkerJob: string;
+  private activePanel: string;
+  private panels: Panel;
+  private plans: Plan[];
+  private buttons: LandingButton;
 
-  constructor(private _arservice: ArService, private _mapdataservice: MapDataService, private _windowrefservice: WindowRefService) {
+  constructor(private arservice: ArService,
+    private planService: PlanService,
+    private windowRefservice: WindowRefService,
+    private markerService: MarkerService) {
     this.activePanel = 'maps';
-    this.markers = this._mapdataservice.getMarkers();
-    this.layers = this._mapdataservice.getLayers();
+    this.markers = this.markerService.getMarkers();
     this.buttons = landingButtons; // Imported from Default Data
     this.panels = panels; // Imported from default data
-    this.nativeWindow = this._windowrefservice.getNativeWindow();
+    this.nativeWindow = this.windowRefservice.getNativeWindow();
     this.help = 'keyboard';
     this.changingMarkerJob = 'none';
   }
 
   ngOnInit() {
-    this.islands = this._mapdataservice.getIslandData();
+    this.plans = this.planService.getPlans();
   }
 
   /**
@@ -56,19 +58,16 @@ export class LandingHomeComponent implements OnInit {
   * @param island => Contains the island that will be used for this program.
   * @return none
   */
-  handleStartButtonClick(island: Island): void {
-    this.islands.forEach(island => island.selectedIsland = false);
-    island.selectedIsland = true;
-    this._arservice.killTick();
-    if (this._mapdataservice.setSelectedIsland()) {
-      this._mapdataservice.setupSelectedIsland();
-      this._mapdataservice.setState('run');
-      if (island.includeSecondScreen) {
-        this.openSecondScreen();
-      }
-    } else {
-      // TODO: implement error handling
+  handleStartButtonClick(plan: Plan): void {
+    this.plans.forEach(el => el.selectedPlan = false);
+    plan.selectedPlan = true;
+    this.arservice.killTick();
+    this.planService.setupSelectedPlan(plan);
+    this.planService.setState('run');
+    if (plan.includeSecondScreen) {
+      this.openSecondScreen();
     }
+
   }
 
   /**
@@ -77,8 +76,7 @@ export class LandingHomeComponent implements OnInit {
   * @param island => The island that will be used to start the program.
   * @param isChecked => true if checked, false if unchecked.
   */
-  private handleIncludeSecondScreenCheckboxChange(island: Island, isChecked: boolean): void {
-    island.secondScreenCheck = isChecked ? 'checked' : '';
+  private handleIncludeSecondScreenCheckboxChange(island: Plan, isChecked: boolean): void {
     island.includeSecondScreen = isChecked;
   }
 
@@ -97,18 +95,16 @@ export class LandingHomeComponent implements OnInit {
   * @param layer => the layer that was changed.
   * @param checked => true if checked, false if not checked.
   */
-  private handleLayerSetupCheck(layer: Layer, checked: boolean): void {
+  private handleLayerSetupCheck(layer: MapLayer, checked: boolean): void {
     layer.included = checked;
-    layer.checked = checked ? 'checked' : '';
-    checked ? this._mapdataservice.addIncludedLayer(layer) : this._mapdataservice.removeIncludedLayer(layer);
   }
 
   /** Opens a second screen as long as there isnt one opened already.
   * @return true if scucessful, false if not opened
   */
   private openSecondScreen(): boolean {
-    if (!(this._windowrefservice.secondScreenIsSet())) {
-      this._windowrefservice.setSecondSceenObject(this.nativeWindow.open('second-screen'));
+    if (!(this.windowRefservice.secondScreenIsSet())) {
+      this.windowRefservice.setSecondSceenObject(this.nativeWindow.open('second-screen'));
       return true;
     } else {
       return false;

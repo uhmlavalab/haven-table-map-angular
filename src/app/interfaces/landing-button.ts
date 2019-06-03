@@ -1,4 +1,4 @@
 export interface LandingButton {
-  text: string,
-  id: string
+  text: string;
+  id: string;
 }

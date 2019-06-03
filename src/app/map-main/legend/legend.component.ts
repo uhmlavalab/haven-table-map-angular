@@ -1,8 +1,8 @@
 import { Component, ViewChildren, AfterViewInit } from '@angular/core';
-import { MapDataService } from '../../services/map-data.service';
-import { Layer } from '../../interfaces/layer';
+import { MapService } from '../../services/map.service';
+import { MapLayer } from '@app/interfaces';
 import { LegendDirective } from './legend.directive';
-import { chartColors, mapLayerColors } from '../../../assets/defaultData/colors';
+import { chartColors, mapLayerColors } from '../../../assets/plans/defaultColors';
 import { _ } from 'underscore';
 
 @Component({
@@ -12,13 +12,13 @@ import { _ } from 'underscore';
 })
 export class LegendComponent implements AfterViewInit {
 
-  layers: Layer[];
+  layers: MapLayer[];
   width: number;
 
   @ViewChildren(LegendDirective) legendElements;
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.layers = this._mapdataservice.getIncludedLayers();
+  constructor(private mapdataservice: MapService) {
+    this.layers = this.mapdataservice.getLayers();
   }
 
   ngAfterViewInit() {
@@ -30,8 +30,8 @@ export class LegendComponent implements AfterViewInit {
   * removed from the map.
   * @param layer => The layer that was added or removed.
   */
-  getBackgroundColor(layer): void {
-    return mapLayerColors[layer.colorName].legend;
+  getBackgroundColor(layer: MapLayer): string {
+    return layer.fillColor;
   }
 
 }

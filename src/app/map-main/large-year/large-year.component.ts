@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapDataService } from '../../services/map-data.service';
+import { PlanService } from '../../services/plan.service';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -11,14 +11,14 @@ export class LargeYearComponent implements OnInit {
 
   currentYear: number;
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.currentYear = _mapdataservice.getCurrentYear();
+  constructor(private planService: PlanService) {
+    this.currentYear = planService.getCurrentYear();
   }
 
   ngOnInit() {
-      this._mapdataservice.yearSubject.subscribe({
+      this.planService.yearSubject.subscribe({
         next: value => {
-          this.currentYear = <number>value;
+          this.currentYear = value;
         }
       });
   }

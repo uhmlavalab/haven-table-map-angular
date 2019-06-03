@@ -5,12 +5,12 @@ import { MapMainComponent } from './map-main/map-main.component';
 import { SecondScreenComponent } from './second-screen/second-screen.component';
 
 const routes: Routes = [
-  {path: '', component: LandingHomeComponent},
-  {path: 'map-main',component: MapMainComponent},
-  {path: 'second-screen',component: SecondScreenComponent}
+  { path: '', component: LandingHomeComponent },
+  { path: 'map-main', component: MapMainComponent },
+  { path: 'second-screen', component: SecondScreenComponent }
 ];
 
-@NgModule ({
+@NgModule({
   imports: [
     RouterModule.forRoot(routes),
   ],

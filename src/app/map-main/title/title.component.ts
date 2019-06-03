@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapDataService } from '../../services/map-data.service';
+import { PlanService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-title',
@@ -8,7 +8,7 @@ import { MapDataService } from '../../services/map-data.service';
 })
 export class TitleComponent implements OnInit {
 
-  constructor(private _mapdataservice: MapDataService) { }
+  constructor(private planService: PlanService) { }
 
   ngOnInit() {
   }
@@ -17,6 +17,6 @@ export class TitleComponent implements OnInit {
   * @return the name of the map
   */
   getTitle(): string {
-    return this._mapdataservice.getSelectedIsland().text;
+    return this.planService.getCurrentPlan().displayName;
   }
 }

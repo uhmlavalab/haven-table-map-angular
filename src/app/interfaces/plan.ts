@@ -1,4 +1,5 @@
 import { Map } from './map';
+import { Scenario } from './scenario';
 
 export interface Plan {
   name: string;
@@ -6,9 +7,10 @@ export interface Plan {
   landingImagePath: string;
   secondScreenImagePath: string;
   includeSecondScreen: boolean;
-  selectedIsland: boolean;
+  selectedPlan: boolean;
   minYear: number;
   maxYear: number;
+  scenarios: Scenario[];
   data: {
     capacityPath: string;
     generationPath: string;

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapDataService } from '../../services/map-data.service';
-import { Island } from '../../interfaces/island';
+import { PlanService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-inside',
@@ -9,18 +8,17 @@ import { Island } from '../../interfaces/island';
 })
 export class InsideComponent implements OnInit {
 
-  public island: Island;
   year: number;
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.year = this._mapdataservice.getCurrentYear();
+  constructor(private planService: PlanService) {
+    this.year = this.planService.getCurrentYear();
 
   }
 
   ngOnInit() {
-    this._mapdataservice.yearSubject.subscribe({
+    this.planService.yearSubject.subscribe({
       next: value => {
-        this.year = <number>value;
+        this.year = value;
       }
     });
   }

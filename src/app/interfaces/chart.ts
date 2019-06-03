@@ -1,3 +1,3 @@
 export interface Chart {
-  title: string
+  title: string;
 }

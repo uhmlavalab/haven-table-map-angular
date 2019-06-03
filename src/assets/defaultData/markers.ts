@@ -1,4 +1,6 @@
-export const markers = [{
+import { Marker } from '@app/interfaces';
+
+export const markers: Marker[] = [{
   markerId: 3,
   job: 'year',
   icon: 'hourglass-01.png',

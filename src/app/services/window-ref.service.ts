@@ -18,22 +18,22 @@ export class WindowRefService {
   }
 
   /** This function sets the object for a second screen.
-  * @param object => The second screen object
-  */
+   * @param object => The second screen object
+   */
   public setSecondSceenObject(object: any): void {
     this.secondScreenSet = true;
     this.secondScreenObject = object;
   }
 
   /** Checks to see if the second screen has already been created.
-  * @return true if set, false if not
-  */
+   * @return true if set, false if not
+   */
   public secondScreenIsSet(): boolean {
     return this.secondScreenSet;
   }
 
   /** Closes the second screen
-  */
+   */
   public closeSecondScreen(): void {
     if (this.secondScreenIsSet) {
       this.secondScreenSet = false;

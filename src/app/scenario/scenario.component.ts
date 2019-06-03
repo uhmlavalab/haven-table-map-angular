@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapDataService } from '../services/map-data.service';
+import { PlanService } from '../services/plan.service';
 import { Scenario } from '../interfaces/scenario';
 
 @Component({
@@ -13,17 +13,17 @@ export class ScenarioComponent implements OnInit {
   private scenario: Scenario;
   private scenarioIndex: number;
 
-  constructor(private _mapdataservice: MapDataService) {
-    this.scenarios = this._mapdataservice.getScenarios();
+  constructor(private planService: PlanService) {
+    this.scenarios = this.planService.getScenarios();
     this.scenarioIndex = 0;
     this.scenario = this.scenarios[this.scenarioIndex];
   }
 
   ngOnInit() {
-    this._mapdataservice.currentScenarioSubject.subscribe({
+    this.planService.scenarioSubject.subscribe({
       next: value => {
-        this.scenarioIndex = <number>value;
-        this.scenario = this.scenarios[<number>value];
+        this.scenario = value;
+        this.scenarioIndex = this.scenarios.indexOf(this.scenario);
       }
     });
   }
