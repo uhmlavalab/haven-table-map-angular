@@ -100,30 +100,30 @@ html {
 
 /* Holds the chart data.  Positioned for each island*/
 .chart-container-oahu {
-  width: 220px;
-  height: 220px;
-  border: 1px solid white;
+  width: 325px;
+  height: 325px;
+  /* border: 1px solid white; */
   position: absolute;
-  left: 26vw;
-  top: 68vh;
+  left: calc(100% - 325px);
+  /* top: 68vh; */
   color: white;
 }
 .chart-container-maui {
-  width: 220px;
-  height: 220px;
-  border: 1px solid white;
+  width: 325px;
+  height: 325px;
+  /* border: 1px solid white; */
   position: absolute;
-  left: 29vw;
-  top: 68vh;
+  left: calc(100% - 325px);
+  /* top: 68vh; */
   color: white;
 }
 .chart-container-bigisland {
-  width: 220px;
-  height: 220px;
-  border: 1px solid white;
+  width: 325px;
+  height: 325px;
+  /* border: 1px solid white; */
   position: absolute;
-  left: 26vw;
-  top: 68vh;
+  left: calc(100% - 325px);
+  /* top: 68vh; */
   color: white;
 }
 

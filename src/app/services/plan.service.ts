@@ -48,23 +48,9 @@ export class PlanService {
   }
 
   public loadDataFiles() {
-    this.capacityData = {};
+
     this.generationData = {};
-    d3.csv(this.currentPlan.data.capacityPath, (data) => {
-      data.forEach(element => {
-        const year = element.year;
-        const technology = element.technology;
-        const value = element.value;
-        const scenario = element.scenario;
-        if (!this.capacityData.hasOwnProperty(scenario)) {
-          this.capacityData[scenario] = {};
-        }
-        if (!this.capacityData[scenario].hasOwnProperty(technology)) {
-          this.capacityData[scenario][technology] = [];
-        }
-        this.capacityData[scenario][technology].push({ year: Number(year), value: Number(value) });
-      });
-    });
+
 
     d3.csv(this.currentPlan.data.generationPath, (data) => {
       data.forEach(element => {
@@ -83,8 +69,26 @@ export class PlanService {
     });
   }
 
-  public getCapacityData() {
-    return this.capacityData;
+  public getCapacityData(): Promise<any> {
+    return new Promise((resolve, error) => {
+      this.capacityData = {};
+      d3.csv(this.currentPlan.data.capacityPath, (data) => {
+        data.forEach(element => {
+          const year = element.year;
+          const technology = element.technology;
+          const value = element.value;
+          const scenario = element.scenario;
+          if (!this.capacityData.hasOwnProperty(scenario)) {
+            this.capacityData[scenario] = {};
+          }
+          if (!this.capacityData[scenario].hasOwnProperty(technology)) {
+            this.capacityData[scenario][technology] = [];
+          }
+          this.capacityData[scenario][technology].push({ year: Number(year), value: Number(value) });
+        });
+        return resolve(this.capacityData)
+      });
+    });
   }
 
   public getGenerationData() {
