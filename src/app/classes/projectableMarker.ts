@@ -2,7 +2,6 @@ import { _ } from 'underscore';
 import { PlanService } from '../services/plan.service';
 import { SoundsService } from '../services/sounds.service';
 import { MapService } from '../services/map.service';
-import { ChartService } from '../services/chart.service';
 
 /** Represents a projectable marker.  These are the tangibles that control
 *   The user interaction with the table.  Each projectable marker is connected
@@ -31,7 +30,6 @@ export class ProjectableMarker {
   private rotationMax: number; // When rotation sum hits this, rotate.
   private planService: PlanService;
   private soundsService: SoundsService;
-  private chartService: ChartService;
   private mapService: MapService;
 
   constructor(id: number,
@@ -40,7 +38,6 @@ export class ProjectableMarker {
               rotationMax: number,
               planService: PlanService,
               soundsService: SoundsService,
-              chartService: ChartService,
               mapService: MapService) {
     this.markerId = id;
     this.job = job;
@@ -55,7 +52,6 @@ export class ProjectableMarker {
     this.rotationMax = rotationMax;
     this.planService = planService;
     this.soundsService = soundsService;
-    this.chartService = chartService;
     this.mapService = mapService;
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);

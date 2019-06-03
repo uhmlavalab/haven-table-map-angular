@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from '../interfaces/chart';
-import { ChartService } from '../services/chart.service';
+import { PlanService } from '@app/services/plan.service';
 
 @Component({
   selector: 'app-chart-container',
@@ -9,7 +9,7 @@ import { ChartService } from '../services/chart.service';
 })
 export class ChartContainerComponent implements OnInit {
 
-  constructor(private chartService: ChartService) {
+  constructor(private planService: PlanService) {
 
   }
 

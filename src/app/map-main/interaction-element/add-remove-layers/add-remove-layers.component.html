@@ -1,10 +1,12 @@
 <div class="add-remove-wrapper">
   <h2>{{ nextLayer.displayName }}</h2>
-  <img src="../../../assets/images/icons/{{ nextLayer.name }}-icon.png">
+  <img src="{{ nextLayer.iconPath }}">
   <p>Tap puck here to add or remove the {{ nextLayer.displayName }} layer</p>
   <div class="add-remove-cards-wrapper">
-    <div *ngFor="let layer of layers" class="add-remove-mini-card" [style.border-color]="layer.active ? layer.color : 'rgba(255, 255, 255, 1)'" id="mini-card-{{layer.name}}" appCardStyle>
-      <img src="../../../assets/images/icons/{{ layer.name }}-icon.png">
+    <div *ngFor="let layer of layers" class="add-remove-mini-card"
+      [style.border-color]="layer.active ? layer.color : 'rgba(255, 255, 255, 1)'" id="mini-card-{{layer.name}}"
+      appCardStyle>
+      <img src="{{ layer.iconPath }}">
     </div>
   </div>
   <app-large-year class="add-remove-large-year"></app-large-year>

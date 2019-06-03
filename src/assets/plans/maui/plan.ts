@@ -38,50 +38,96 @@ export const MauiPlan: Plan = {
         displayName: 'Transmission Lines',
         active: false,
         included: true,
-        icon: 'transmission-icon.png',
+        iconPath: 'assets/plans/maui/images/icons/transmission-icon.png',
         fillColor: mapLayerColors.Transmission.fill,
         borderColor: mapLayerColors.Transmission.border,
-        fileUrl: 'assets/plans/maui/layers/transmission.json'
+        legendColor: mapLayerColors.Transmission.border,
+        filePath: 'assets/plans/maui/layers/transmission.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'dod',
         displayName: 'DOD Lands',
         active: false,
         included: true,
-        icon: 'dod-icon.png',
+        iconPath: 'assets/plans/maui/images/icons/dod-icon.png',
         fillColor: mapLayerColors.Dod.fill,
         borderColor: mapLayerColors.Dod.border,
-        fileUrl: 'assets/plans/maui/layers/dod.json'
+        legendColor: mapLayerColors.Dod.fill,
+        filePath: 'assets/plans/maui/layers/dod.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'parks',
         displayName: 'Park Lands',
         active: false,
         included: true,
-        icon: 'parks-icon.png',
+        iconPath: 'assets/plans/maui/images/icons/parks-icon.png',
         fillColor: mapLayerColors.Parks.fill,
         borderColor: mapLayerColors.Parks.border,
-        fileUrl: 'assets/plans/maui/layers/parks.json'
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/maui/layers/parks.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'wind',
         displayName: 'Wind Energy',
         active: false,
         included: true,
-        icon: 'wind-icon.png',
+        iconPath: 'assets/plans/maui/images/icons/wind-icon.png',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        fileUrl: 'assets/plans/maui/layers/wind_2.json'
+        legendColor: mapLayerColors.Wind.fill,
+        filePath: 'assets/plans/maui/layers/wind_2.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
+      },
+      {
+        name: 'solar',
+        displayName: 'Solar',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/maui/images/icons/solar-icon.png',
+        fillColor: mapLayerColors.Solar.fill,
+        borderColor: mapLayerColors.Solar.border,
+        legendColor: mapLayerColors.Solar.fill,
+        filePath: 'assets/plans/maui/layers/solar.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'agriculture',
         displayName: 'Ag Lands',
         active: false,
         included: true,
-        icon: 'agriculture-icon.png',
+        iconPath: 'assets/plans/maui/images/icons/agriculture-icon.png',
         fillColor: mapLayerColors.Agriculture.fill,
         borderColor: mapLayerColors.Agriculture.border,
-        fileUrl: 'assets/plans/maui/layers/agriculture.json'
+        legendColor: mapLayerColors.Agriculture.fill,
+        filePath: 'assets/plans/maui/layers/agriculture.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       }
     ],
   }

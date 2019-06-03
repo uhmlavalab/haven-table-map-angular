@@ -21,9 +21,9 @@ export const BigIslandPlan: Plan = {
     }
   ],
   data: {
-    capacityPath: 'assets/plans/maui/data/capacity.csv',
-    generationPath: 'assets/plans/maui/data/generation.csv',
-    batteryPath: 'assets/plans/maui/data/battery.csv',
+    capacityPath: 'assets/plans/bigisland/data/capacity.csv',
+    generationPath: 'assets/plans/bigisland/data/generation.csv',
+    batteryPath: 'assets/plans/bigisland/data/battery.csv',
     colors: chartColors
   },
   map: {
@@ -38,50 +38,80 @@ export const BigIslandPlan: Plan = {
         displayName: 'Transmission Lines',
         active: false,
         included: true,
-        icon: 'transmission-icon.png',
+        iconPath: 'assets/plans/bigisland/images/icons/transmission-icon.png',
         fillColor: mapLayerColors.Transmission.fill,
         borderColor: mapLayerColors.Transmission.border,
-        fileUrl: 'assets/plans/bigisland/layers/transmission.json'
+        legendColor: mapLayerColors.Transmission.border,
+        filePath: 'assets/plans/bigisland/layers/transmission.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'dod',
         displayName: 'DOD Lands',
         active: false,
         included: true,
-        icon: 'dod-icon.png',
+        iconPath: 'assets/plans/bigisland/images/icons/dod-icon.png',
         fillColor: mapLayerColors.Dod.fill,
         borderColor: mapLayerColors.Dod.border,
-        fileUrl: 'assets/plans/bigisland/layers/dod.json'
+        legendColor: mapLayerColors.Dod.fill,
+        filePath: 'assets/plans/bigisland/layers/dod.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
-        name: 'parks',
-        displayName: 'Park Lands',
+        name: 'solar',
+        displayName: 'Solar',
         active: false,
         included: true,
-        icon: 'parks-icon.png',
-        fillColor: mapLayerColors.Parks.fill,
-        borderColor: mapLayerColors.Parks.border,
-        fileUrl: 'assets/plans/bigisland/layers/parks.json'
+        iconPath: 'assets/plans/bigisland/images/icons/solar-icon.png',
+        fillColor: mapLayerColors.Solar.fill,
+        borderColor: mapLayerColors.Solar.border,
+        legendColor: mapLayerColors.Solar.fill,
+        filePath: 'assets/plans/bigisland/layers/solar.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'wind',
         displayName: 'Wind Energy',
         active: false,
         included: true,
-        icon: 'wind-icon.png',
+        iconPath: 'assets/plans/bigisland/images/icons/wind-icon.png',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        fileUrl: 'assets/plans/bigisland/layers/wind_2.json'
+        legendColor: mapLayerColors.Wind.fill,
+        filePath: 'assets/plans/bigisland/layers/wind_2.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       },
       {
         name: 'agriculture',
         displayName: 'Ag Lands',
         active: false,
         included: true,
-        icon: 'agriculture-icon.png',
+        iconPath: 'assets/plans/bigisland/images/icons/agriculture-icon.png',
         fillColor: mapLayerColors.Agriculture.fill,
         borderColor: mapLayerColors.Agriculture.border,
-        fileUrl: 'assets/plans/bigisland/layers/agriculture.json'
+        legendColor: mapLayerColors.Agriculture.fill,
+        filePath: 'assets/plans/bigisland/layers/agriculture.json',
+        fillFunction: (d3: any, parcels: any[], active: boolean) => {
+          parcels.forEach(el => {
+            d3.select(el.path).style('opacity', active ? 0.5 : 0.0);
+          });
+        }
       }
     ],
   }

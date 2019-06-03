@@ -1,7 +1,7 @@
 <div legend-card-wrapper>
   <div *ngFor="let layer of layers" class="legend-card" id="layer-card-{{layer.name}}" [style.opacity]="layer.active ? 1 : 0.3">
     <div class="legend-card-left">
-      <img src="./assets/images/icons/{{ layer.name }}-icon.png"/>
+      <img src="{{ layer.iconPath }}"/>
     </div>
     <div class="legend-card-right"
     [style.width]="layer.active ? '50%' : 0"

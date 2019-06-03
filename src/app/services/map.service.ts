@@ -15,6 +15,9 @@ export class MapService {
   private currentMap: Map;
   private layers: MapLayer[] = [];        // Array Holding All Layers
 
+  private selectedLayer: MapLayer;
+  public selectedLayerSubject = new Subject<MapLayer>();
+
   /* Subjects */
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
 
@@ -22,13 +25,12 @@ export class MapService {
     this.planService.planSubject.subscribe(plan => {
       this.currentMap = plan.map;
       this.layers = this.currentMap.mapLayers;
-      console.log('Plan change in MapService');
+      this.selectedLayer = this.layers[0];
+      this.selectedLayerSubject.next(this.selectedLayer);
     });
     this.planService.scenarioSubject.subscribe(scenario => {
-      console.log('Scenario change in MapService');
     });
     this.planService.yearSubject.subscribe(year => {
-      console.log('Year change in MapService');
     });
   }
 
@@ -83,14 +85,23 @@ export class MapService {
     return this.layers;
   }
 
-  decrementNextLayer() {
-    // TODO
+  public decrementNextLayer() {
+    let index = this.layers.indexOf(this.selectedLayer) - 1;
+    if (index === -1) {
+      index = this.layers.length - 1;
+    }
+    this.selectedLayer = this.layers[(index) % this.layers.length];
+    this.selectedLayerSubject.next(this.selectedLayer);
   }
-  incrementNextLayer() {
-    // TODO
-  }
-  addRemoveLayer() {
 
+  public incrementNextLayer() {
+    const index = this.layers.indexOf(this.selectedLayer) + 1;
+    this.selectedLayer = this.layers[(index) % this.layers.length];
+    this.selectedLayerSubject.next(this.selectedLayer);
+  }
+
+  addRemoveLayer() {
+    this.toggleLayer(this.selectedLayer);
   }
 
   resetMap() {

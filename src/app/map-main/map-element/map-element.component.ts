@@ -63,13 +63,16 @@ export class MapElementComponent implements OnInit, OnDestroy {
       .attr('height', this.height);
 
     this.mapService.getLayers().forEach(layerElement => {
-      if (layerElement.fileUrl === null) {
+      if (layerElement.filePath === null) {
         return;
       }
-      d3.json(`${layerElement.fileUrl}`, (error, geoData) => {
+      d3.json(`${layerElement.filePath}`, (error, geoData) => {
         const bounds = [this.projection(this.rasterBounds[0]), this.projection(this.rasterBounds[1])];
         const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
-        const transform = [(this.width - scale * (bounds[1][0] + bounds[0][0])) / 2, (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2];
+        const transform = [
+          (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
+          (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
+        ];
 
         const proj = d3.geo.mercator()
           .scale(scale)
@@ -96,15 +99,15 @@ export class MapElementComponent implements OnInit, OnDestroy {
             layer.parcels.push({ path: this });
             d3.select(this)
               .style('fill', layer.fillColor)
-              .style('opacity', 0.5)
+              .style('opacity', layerElement.active ? 0.5 : 0.0)
               .style('stroke', layer.lineColor)
               .style('stroke-width', layer.lineWidth);
           }).call(() => {
             this.layers[layerElement.name] = layer;
-            console.log(layerElement.name + ' ,' + layer);
           });
       });
     });
+
     // Subscribe to current year
     this.planService.yearSubject.subscribe({
       next: value => {
@@ -113,12 +116,10 @@ export class MapElementComponent implements OnInit, OnDestroy {
     });
 
     this.mapService.toggleLayerSubject.subscribe((layer) => {
-      if (layer.active) {
-        this.map.selectAll(layer.name).style('opacity', 0.0);
-      } else {
-        this.map.selectAll(layer.name).style('opacity', 0.5);
+      if (layer.filePath !== null) {
+        layer.fillFunction(d3, this.layers[layer.name].parcels, layer.active);
       }
-    })
+    });
 
   }
   ngOnDestroy(): void {

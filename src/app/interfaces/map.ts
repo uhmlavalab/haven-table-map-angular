@@ -1,12 +1,14 @@
 export interface MapLayer {
   name: string;
   displayName: string;
-  fileUrl: string;
-  icon: string;
+  filePath: string;
+  iconPath: string;
   active: boolean;
   included: boolean;
   fillColor: string;
   borderColor: string;
+  legendColor: string;
+  fillFunction(d3: any, parcels: any[], active: boolean): any;
 }
 
 export interface Map {

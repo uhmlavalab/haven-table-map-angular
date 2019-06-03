@@ -83,6 +83,14 @@ export class PlanService {
     });
   }
 
+  public getCapacityData() {
+    return this.capacityData;
+  }
+
+  public getGenerationData() {
+    return this.generationData;
+  }
+
   public getCurrentPlan(): Plan {
     return this.currentPlan;
   }

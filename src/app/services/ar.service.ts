@@ -6,7 +6,6 @@ import { SoundsService } from './sounds.service';
 import { markers } from '../../assets/defaultData/markers';
 import { _ } from 'underscore';
 import AR from 'js-aruco';
-import { ChartService } from './chart.service';
 import { MapService } from './map.service';
 
 @Injectable({
@@ -37,7 +36,6 @@ export class ArService {
 
   constructor(private planService: PlanService,
               private soundsservice: SoundsService,
-              private chartService: ChartService,
               private mapService: MapService) {
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
@@ -49,7 +47,6 @@ export class ArService {
       marker.rotationMax,
       this.planService,
       this.soundsservice,
-      this.chartService,
       this.mapService));
     this.running = false;
   }

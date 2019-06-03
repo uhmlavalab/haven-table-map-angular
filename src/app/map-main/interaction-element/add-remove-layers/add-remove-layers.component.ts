@@ -28,7 +28,7 @@ export class AddRemoveLayersComponent implements OnInit {
 
   ngOnInit() {
     // Subscribe to changes in the next layer
-    this.mapService.toggleLayerSubject.subscribe({
+    this.mapService.selectedLayerSubject.subscribe({
       next: value => {
         this.nextLayer = value as MapLayer;
         this.updateBackgroundColorActive(value as MapLayer);
@@ -41,7 +41,7 @@ export class AddRemoveLayersComponent implements OnInit {
   * already been changed so no changes are done to that element.
   * @param layer => The layer that is highlighted
   */
-  updateBackgroundColorActive(layer): void {
+  updateBackgroundColorActive(layer: MapLayer): void {
     this.cardStyle.forEach((e) => {
       const nameArray = e.element.nativeElement.id.split('-');
       const layerName = nameArray[2]; // Name of the layer associated with the element

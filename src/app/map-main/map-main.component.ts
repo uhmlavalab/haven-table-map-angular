@@ -4,7 +4,6 @@ import { WindowRefService } from '../services/window-ref.service';
 import { Router } from '@angular/router';
 import { Plan } from '@app/interfaces';
 import { PlanService } from '@app/services/plan.service';
-import { ChartService } from '@app/services/chart.service';
 
 @Component({
   selector: 'app-map-main',
@@ -21,7 +20,6 @@ export class MapMainComponent implements OnInit {
   constructor(
     private planService: PlanService,
     private mapService: MapService,
-    private chartService: ChartService,
     private router: Router,
     private windowRefService: WindowRefService) {
 

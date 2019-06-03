@@ -31,7 +31,7 @@ export class LegendComponent implements AfterViewInit {
   * @param layer => The layer that was added or removed.
   */
   getBackgroundColor(layer: MapLayer): string {
-    return layer.fillColor;
+    return layer.legendColor;
   }
 
 }
