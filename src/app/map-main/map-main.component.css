@@ -24,34 +24,38 @@ html {
   position: absolute;
   left: 27.5vw;
   text-align: center;
-  top: 0;
+  top: 3vh;
 }
+
 .map-container-maui {
   width: 75.5vw;
   height: 100vh;
   background-color: transparent;
   display: inline-block;
   position: absolute;
-  left: 25vw;
+  left: 25.4vw;
   text-align: center;
-  top: 0;
-}.map-container-bigisland {
+  top: 4vh;
+}
+
+.map-container-bigisland {
   width: 75.5vw;
   height: 100vh;
   background-color: transparent;
   display: inline-block;
   position: absolute;
-  left: 27.5vw;
+  left: 24.5vw;
   text-align: center;
-  top: 0;
+  top: 5vh;
 }
 
 /* Legends for each map.  Each is placed in a different location */
+
 .legend-container-oahu {
   width: 22%;
   height: 18vh;
-  left: 25%;
-  top: 0%;
+  left: 28%;
+  top: 2%;
   position: absolute;
 }
 
@@ -64,41 +68,43 @@ html {
 }
 
 .legend-container-bigisland {
-  width: 22%;
+  width: 23%;
   height: 18vh;
-  left: 29%;
-  top: 2%;
+  left: 75%;
+  top: 73%;
   position: absolute;
 }
 
 /* Each title is placed in a different section based on the map.  Each
   map is a different size.
 */
+
 .title-container-oahu {
   color: white;
-  left: 80vw;
-  top: 38vh;
+  left: 91vw;
+  top: 52vh;
   position: absolute;
   text-align: center;
 }
 
 .title-container-maui {
   color: white;
-  left: 34vw;
-  top: 54vh;
+  left: 49vw;
+  top: 18vh;
   position: absolute;
   text-align: center;
 }
 
 .title-container-bigisland {
   color: white;
-  left: 64vw;
-  top: 78vh;
+  left: 32vw;
+  top: 4vh;
   position: absolute;
   text-align: center;
 }
 
 /* Holds the chart data.  Positioned for each island*/
+
 .line-chart-oahu {
   width: 325px;
   height: 325px;
@@ -106,6 +112,7 @@ html {
   left: calc(100vw - 325px);
   color: white;
 }
+
 .line-chart-maui {
   width: 325px;
   height: 325px;
@@ -113,6 +120,7 @@ html {
   left: calc(100vw - 325px);
   color: white;
 }
+
 .line-chart-bigisland {
   width: 325px;
   height: 325px;
@@ -122,31 +130,34 @@ html {
 }
 
 .pie-chart-oahu {
-  width: 325px;
-  height: 325px;
+  width: 250px;
+  height: 250px;
   position: absolute;
-  left: 25vw;
-  top: 65vh;
+  left: 28vw;
+  top: 64vh;
   color: white;
 }
+
 .pie-chart-maui {
-  width: 325px;
-  height: 325px;
+  width: 250px;
+  height: 250px;
   position: absolute;
-  left: 25vw;
-  top: 65vh;
-  color: white;
-}
-.pie-chart-bigisland {
-  width: 325px;
-  height: 325px;
-  position: absolute;
-  left: 25vw;
+  left: 30vw;
   top: 65vh;
   color: white;
 }
 
+.pie-chart-bigisland {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  left: 27vw;
+  top: 57vh;
+  color: white;
+}
+
 /* Holds the scenario data.  Positioned for each island*/
+
 .scenario-container-oahu {
   width: 100px;
   height: 20px;
@@ -160,8 +171,8 @@ html {
   width: 100px;
   height: 20px;
   position: absolute;
-  left: 75vw;
-  top: 89vh;
+  left: 33vw;
+  top: 2vh;
   color: white;
 }
 
