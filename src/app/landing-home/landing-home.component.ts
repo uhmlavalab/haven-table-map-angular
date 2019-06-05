@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
-
-
 import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
-
 import { Plan, Marker, Panel, LandingButton, MapLayer } from '@app/interfaces';
 import { ArService } from '../services/ar.service';
 import { PlanService } from '../services/plan.service';

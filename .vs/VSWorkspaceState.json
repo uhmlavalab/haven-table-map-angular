@@ -3,10 +3,14 @@
     "",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\landing-home",
     "\\src\\app\\map-main",
-    "\\src\\app\\map-main\\interaction-element",
-    "\\src\\app\\map-main\\interaction-element\\add-remove-layers"
+    "\\src\\app\\map-main\\legend",
+    "\\src\\assets",
+    "\\src\\assets\\defaultData",
+    "\\src\\assets\\images",
+    "\\src\\assets\\images\\icons"
   ],
-  "SelectedNode": "\\src\\app\\map-main\\interaction-element\\add-remove-layers\\add-remove-layers.component.ts",
+  "SelectedNode": "\\src\\app\\map-main\\map-main.component.ts",
   "PreviewInSolutionExplorer": false
 }
