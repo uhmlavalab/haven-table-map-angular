@@ -48,8 +48,7 @@
         Change
       </div>
       <div class="markers-detected"
-           [style.opacity] = "changingMarkerJob === marker.job ? 1 : 0"
-           >
+           [style.opacity]="changingMarkerJob === marker.job ? 1 : 0">
         DETECTED MARKERS GO HERE
         <div class="change-marker-button" (click)="handleConfirmMarkerChange($event, marker.job)">Confirm</div>
       </div>
@@ -57,7 +56,7 @@
   </div>
 </div>
 
-<!-- contains the layer selector cards -->
+<!-- contains the layer selector cards
 <div class="layer-selector-container" [style.left]="activePanel == 'layers' ? '25%' : '100%'" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>
   <div class="layer-selector-card" *ngFor="let layer of plans[0].map.mapLayers">
     <img src="../../assets/images/icons/{{layer.icon}}" />
@@ -67,7 +66,7 @@
     </div>
   </div>
 </div>
-
+    -->
 
 <!-- contains the help selector cards -->
 <div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'" id="help-selector-container" name="help-selector-container">
@@ -89,11 +88,11 @@
         <span class="accent"></span>
         <span class="text">Pucks</span>
       </li>
-      <li [className]="help === 'layers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'layers')" >
+      <li [className]="help === 'layers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'layers')">
         <span class="accent"></span>
         <span class="text">Layers</span>
       </li>
-      <li [className]="help === 'markers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'markers')" >
+      <li [className]="help === 'markers' ? 'active' : ''" (click)="handleHelpNavClick($event, 'markers')">
         <span class="accent"></span>
         <span class="text">Markers</span>
       </li>

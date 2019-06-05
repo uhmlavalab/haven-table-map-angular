@@ -5,10 +5,15 @@ export const landingButtons = [{
 }, {
   text: 'Setup Markers',
   id: 'markers'
-}, {
+  },
+
+  /*{
   text: 'Setup Layers',
   id: 'layers'
-}, {
+},
+
+*/
+  {
   text: 'Help',
   id: 'help'
 }];
