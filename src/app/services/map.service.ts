@@ -38,35 +38,63 @@ export class MapService {
   * @return the scale of the map
   */
   public getMapScale(): number {
-    return this.currentMap.scale;
+    try {
+      return this.currentMap.scale;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
+    
   }
 
   /** Gets the map Image width
   * @return the map image width
   */
   public getMapImageWidth(): number {
-    return this.currentMap.width;
+    try {
+      return this.currentMap.width;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
   }
 
   /** Get the map Image height
   * @return the map Image height
   */
   public getMapImageHeight(): number {
-    return this.currentMap.height;
+    try {
+      return this.currentMap.height;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
+
   }
 
   /** Gets the map bounds
   * @return array of bounds.
   */
   public getMapBounds(): any[] {
-    return this.currentMap.bounds;
+    try {
+      return this.currentMap.bounds;
+    } catch (error) {
+      console.log('No Map Selected');
+      return [];
+    }
+
   }
 
   /** Gets the map image name
   * @return the path to the map Image
   */
   public getBaseMapPath(): string {
-    return this.currentMap.baseMapPath;
+    try {
+      return this.currentMap.baseMapPath;
+    } catch (error) {
+      console.log('No Map Selected');
+      return '';
+    }
   }
 
   /** Adds layer if it is inactive, removes layer if it is active */

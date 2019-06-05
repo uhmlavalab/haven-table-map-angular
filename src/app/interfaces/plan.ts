@@ -11,6 +11,16 @@ export interface Plan {
   minYear: number;
   maxYear: number;
   scenarios: Scenario[];
+  css: {
+    map: object;
+    legend: object;
+    title: object;
+    scenario: object;
+    charts: {
+      pie: object;
+      line: object;
+    }
+  }
   data: {
     capacityPath: string;
     generationPath: string;

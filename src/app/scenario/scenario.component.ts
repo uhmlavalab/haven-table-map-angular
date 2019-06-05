@@ -16,7 +16,11 @@ export class ScenarioComponent implements OnInit {
   constructor(private planService: PlanService) {
     this.scenarios = this.planService.getScenarios();
     this.scenarioIndex = 0;
-    this.scenario = this.scenarios[this.scenarioIndex];
+    try {
+      this.scenario = this.scenarios[this.scenarioIndex];
+    } catch (error) {
+      console.log('error fetching scenarios');
+    }
   }
 
   ngOnInit() {
