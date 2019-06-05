@@ -81,6 +81,9 @@ export class VideoFeedComponent implements OnInit {
     VideoFeedComponent.numberOfFeeds = 0; // Reset feed Counter
   }
 
+  private handleVideoError(error) {
+    console.log('Missing Video Feed');
+  }
 
   /** Initializes the camera
   * @param feed => The id of the video feed to connect to the video element
@@ -95,7 +98,7 @@ export class VideoFeedComponent implements OnInit {
     }).then(stream => {
       vid.srcObject = stream;
       vid.play();
-    });
+    }).catch(this.handleVideoError);
     return true;
   }
 

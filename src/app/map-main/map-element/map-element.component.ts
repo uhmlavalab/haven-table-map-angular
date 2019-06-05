@@ -32,13 +32,17 @@ export class MapElementComponent implements OnInit, OnDestroy {
   @ViewChild(MapDirective, { static: true }) mapElement;
 
   constructor(private mapService: MapService, private planService: PlanService) {
-    this.scale = mapService.getMapScale();
-    this.width = mapService.getMapImageWidth() * this.scale;
-    this.height = mapService.getMapImageHeight() * this.scale;
-    this.rasterBounds = mapService.getMapBounds();
-    this.currentYear = planService.getCurrentPlan().minYear;
-    this.currentScenario = null;
-    this.mapImageUrl = planService.getCurrentPlan().map.baseMapPath;
+    try {
+      this.currentYear = planService.getCurrentPlan().minYear;
+      this.scale = mapService.getMapScale();
+      this.width = mapService.getMapImageWidth() * this.scale;
+      this.height = mapService.getMapImageHeight() * this.scale;
+      this.rasterBounds = mapService.getMapBounds();
+      this.currentScenario = null;
+      this.mapImageUrl = planService.getCurrentPlan().map.baseMapPath;
+    } catch (errpr) {
+      console.log("No Current Plan Found");
+    }
 
     this.layers = {};
     this.IAL = false;

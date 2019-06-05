@@ -22,8 +22,15 @@ export class MapMainComponent implements OnInit {
     private mapService: MapService,
     private router: Router,
     private windowRefService: WindowRefService) {
-
     this.plan = this.planService.getCurrentPlan();
+
+    // If no plan has been selected, route back to setup
+    if (this.plan == null) {
+      this.router.navigateByUrl('');
+      this.planService.setState('landing');
+      console.log('No Plan Found --> Route to setup');
+    }
+
   }
 
   ngOnInit() {
@@ -34,7 +41,7 @@ export class MapMainComponent implements OnInit {
   * on the map that is selected.
   * @return the name of the css class
   */
-  getIslandName(): string {
+  private getIslandName(): string {
     return this.plan.name;
   }
 
@@ -66,12 +73,5 @@ export class MapMainComponent implements OnInit {
     } else if (event.key === 'w') {
       this.planService.decrementScenario();
     }
-  }
-
-  /** Handles the mouse down over elements on the screen.  These elements can be
-   * dragged and dropped to different locations on the screen (at this point).
-   */
-  private handleMouseDown(target: any) {
-    console.log(target);
   }
 }

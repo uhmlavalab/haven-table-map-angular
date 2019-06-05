@@ -26,6 +26,35 @@ export const BigIslandPlan: Plan = {
     batteryPath: 'assets/plans/bigisland/data/battery.csv',
     colors: chartColors
   },
+  css: {
+    map: {
+      left: '24.5vw',
+      top: '5vh'
+    },
+    legend: {
+      left: '78vw',
+      top: '73vh'
+    },
+    title: {
+      left: '32vw',
+      top: '4vh'
+    },
+    scenario: {
+      left: '33vw',
+      top: '26vh'
+    },
+    charts: {
+      pie: {
+        left: '27vw',
+        top: '57vh'
+      },
+      line: {
+        left: 'calc(100vw - 325px)',
+        top: 0
+      }
+
+    }
+  },
   map: {
     scale: 0.26,
     width: 2179,
