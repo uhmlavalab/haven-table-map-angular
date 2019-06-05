@@ -27,6 +27,34 @@ export const OahuPlan: Plan = {
       displayName: 'E3 Gen Mod'
     }
   ],
+  css: {
+    map: {
+      left: '27.5vw',
+      top: '3vh'
+    },
+    legend: {
+      left: '28vw',
+      top: '2vh'
+    },
+    title: {
+      left: '91vw',
+      top: '52vh'
+    },
+    scenario: {
+      left: '66vw',
+      top: '86vh'
+    },
+    charts: {
+      pie: {
+        left: '28vw',
+        top: '64vh'
+      },
+      line: {
+        left: 'calc(100vw - 325px)',
+        top: 0
+      }
+    }
+  },
   data: {
     capacityPath: 'assets/plans/oahu/data/capacity.csv',
     generationPath: 'assets/plans/oahu/data/generation.csv',

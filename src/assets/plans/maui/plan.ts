@@ -28,6 +28,34 @@ export const MauiPlan: Plan = {
     batteryPath: 'assets/plans/maui/data/battery.csv',
     colors: chartColors
   },
+  css: {
+    map: {
+      left: '24.5vw',
+      top: '4vh'
+    },
+    legend: {
+      left: '47vw',
+      top: '2vh'
+    },
+    title: {
+      left: '49vw',
+      top: '18vh'
+    },
+    scenario: {
+      left: '33vw',
+      top: '2vh'
+    },
+    charts: {
+      pie: {
+        left: '30vw',
+        top: '65vh'
+      },
+      line: {
+        left: 'calc(100vw - 325px)',
+        top: 0
+      }
+    }
+  },
   map: {
     scale: 0.258,
     width: 3613,

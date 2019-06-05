@@ -28,11 +28,29 @@ export class MapElementComponent implements OnInit {
   @ViewChild(MapDirective, { static: true }) mapElement;
 
   constructor(private mapService: MapService, private planService: PlanService) {
+<<<<<<< HEAD
     this.scale = mapService.getMapScale();
     this.width = mapService.getMapImageWidth() * this.scale;
     this.height = mapService.getMapImageHeight() * this.scale;
     this.rasterBounds = mapService.getMapBounds();
     this.baseMapImagePath = mapService.getBaseMapPath();
+=======
+    try {
+      this.currentYear = planService.getCurrentPlan().minYear;
+      this.scale = mapService.getMapScale();
+      this.width = mapService.getMapImageWidth() * this.scale;
+      this.height = mapService.getMapImageHeight() * this.scale;
+      this.rasterBounds = mapService.getMapBounds();
+      this.currentScenario = null;
+      this.mapImageUrl = planService.getCurrentPlan().map.baseMapPath;
+    } catch (errpr) {
+      console.log("No Current Plan Found");
+    }
+
+    this.layers = {};
+    this.IAL = false;
+
+>>>>>>> 155141449b6b3f268f8da5fcfaae2cfe040977ad
   }
 
   ngOnInit() {
