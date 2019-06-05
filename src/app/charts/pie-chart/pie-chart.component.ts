@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 
 import { Scenario } from '@app/interfaces';
 
 import { chartColors } from '../../../assets/plans/defaultColors';
-import { createPipe } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-pie-chart',
@@ -25,32 +24,26 @@ export class PieChartComponent implements OnInit {
   labels: any;
   chartMax: number;
 
-  constructor(private planService: PlanService) {
-
-  }
+  constructor(private planService: PlanService) { }
 
   ngOnInit() {
-    this.planService.planSubject.subscribe(plan => {
-      this.generationData = null;
-      this.data = null;
-      this.ctx = null;
-      this.myChart = null;
-      this.fetchData();
-    });
-
-    this.planService.scenarioSubject.subscribe(scenario => {
-      this.scenario = scenario;
-      this.updateScenario(this.scenario.name);
-    });
-
-    this.planService.yearSubject.subscribe(year => {
-      this.year = year;
-      this.updateYear(this.year);
-    });
 
     this.scenario = this.planService.getCurrentScenario();
     this.year = this.planService.getCurrentYear();
     this.fetchData();
+
+    this.planService.scenarioSubject.subscribe(scenario => {
+      if (scenario) {
+        this.updateScenario(scenario);
+      }
+    });
+
+    this.planService.yearSubject.subscribe(year => {
+      if (year) {
+        this.updateYear(year);
+      }
+    });
+
   }
 
   fetchData() {
@@ -108,6 +101,13 @@ export class PieChartComponent implements OnInit {
     this.myChart = new Chart(this.ctx, {
       type: 'pie',
       options: {
+        title: {
+          display: true,
+          text: 'Generation',
+          position: 'top',
+          fontColor: 'white',
+          fontSize: 18
+        },
         legend: {
           display: false,
           labels: {
@@ -140,15 +140,17 @@ export class PieChartComponent implements OnInit {
   }
 
   updateYear(year: number) {
+    this.year = year;
     const data = this.data.generation[this.scenario.name].data;
     data.datasets[0].data = this.data.generation[this.scenario.name].yearlyData[this.year];
     this.myChart.data = data;
     this.myChart.update();
   }
 
-  updateScenario(scenarioName: string) {
-    const data = this.data.generation[scenarioName].data;
-    data.datasets[0].data = this.data.generation[scenarioName].yearlyData[this.year];
+  updateScenario(scenario: Scenario) {
+    this.scenario = scenario;
+    const data = this.data.generation[scenario.name].data;
+    data.datasets[0].data = this.data.generation[scenario.name].yearlyData[this.year];
     this.myChart.data = data;
     this.myChart.update();
   }

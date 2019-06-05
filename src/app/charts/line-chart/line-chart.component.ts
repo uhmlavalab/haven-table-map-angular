@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 
 import { Scenario } from '@app/interfaces';
@@ -24,30 +24,26 @@ export class LineChartComponent implements OnInit {
   labels: any;
   chartMax: number;
 
-  constructor(private planService: PlanService) {}
+  constructor(private planService: PlanService) { }
 
   ngOnInit() {
-    this.planService.planSubject.subscribe(plan => {
-      this.capacityData = {};
-      this.data = {};
-      this.ctx = null;
-      this.myChart = null;
-      this.fetchData();
-    });
-
-    this.planService.scenarioSubject.subscribe(scenario => {
-      this.scenario = scenario;
-      this.updateScenario(scenario.name);
-    });
-
-    this.planService.yearSubject.subscribe(year => {
-      this.year = year;
-      this.updateYear(this.year);
-    });
 
     this.scenario = this.planService.getCurrentScenario();
     this.year = this.planService.getCurrentYear();
     this.fetchData();
+
+    this.planService.scenarioSubject.subscribe(scenario => {
+      if (scenario) {
+        this.updateScenario(scenario);
+      }
+    });
+
+    this.planService.yearSubject.subscribe(year => {
+      if (year) {
+        this.updateYear(year);
+      }
+    });
+
   }
 
   fetchData() {
@@ -175,16 +171,17 @@ export class LineChartComponent implements OnInit {
   }
 
   updateYear(year: number) {
-    this.myChart.options.annotation.annotations[0].value = year;
-    this.myChart.options.annotation.annotations[0].label.content = year;
+    this.year = year;
+    this.myChart.options.annotation.annotations[0].value = this.year;
+    this.myChart.options.annotation.annotations[0].label.content = this.year;
     this.myChart.update();
   }
 
-  updateScenario(scenarioName: string) {
-    this.myChart.data.datasets = this.data.capacity[scenarioName].datasets;
+  updateScenario(scenario: Scenario) {
+    this.scenario = scenario;
+    this.myChart.data.datasets = this.data.capacity[this.scenario.name].datasets;
     this.myChart.update();
   }
-
 
 }
 

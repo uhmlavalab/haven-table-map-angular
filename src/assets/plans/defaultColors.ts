@@ -9,8 +9,6 @@ export const chartColors = {
   Offshore: '#5F4690',
   Geo: '#ac346a',
   Hydro: '#5F4690',
-  battery_gen: 'transparent',
-  battery_load: 'transparent'
 };
 
 export const mapLayerColors = {

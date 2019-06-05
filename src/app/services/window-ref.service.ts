@@ -37,7 +37,7 @@ export class WindowRefService {
   public closeSecondScreen(): void {
     if (this.secondScreenIsSet) {
       this.secondScreenSet = false;
-      this.secondScreenObject.close();
+      // this.secondScreenObject.close();
     }
   }
 

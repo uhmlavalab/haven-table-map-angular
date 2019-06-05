@@ -4,7 +4,7 @@
   <p>Tap puck here to add or remove the {{ nextLayer.displayName }} layer</p>
   <div class="add-remove-cards-wrapper">
     <div *ngFor="let layer of layers" class="add-remove-mini-card"
-      [style.border-color]="layer.active ? layer.color : 'rgba(255, 255, 255, 1)'" id="mini-card-{{layer.name}}"
+      [style.border-color]="layer.active ? layer.legendColor : 'rgba(255, 255, 255, 1)'" id="mini-card-{{layer.name}}"
       appCardStyle>
       <img src="{{ layer.iconPath }}">
     </div>

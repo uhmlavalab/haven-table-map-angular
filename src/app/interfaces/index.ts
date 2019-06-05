@@ -1,4 +1,5 @@
 export * from './map';
+export * from './mapLayer';
 export * from './plan';
 export * from './marker';
 export * from './landing-button';

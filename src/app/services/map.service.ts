@@ -20,17 +20,37 @@ export class MapService {
 
   /* Subjects */
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
+  public updateLayerSubject = new Subject<MapLayer>();
 
   constructor(private planService: PlanService) {
+
     this.planService.planSubject.subscribe(plan => {
+      if (plan === null) {
+        this.layers = [];
+        this.selectedLayer = null;
+        this.currentMap = null;
+        return;
+      }
       this.currentMap = plan.map;
-      this.layers = this.currentMap.mapLayers;
+      this.currentMap.mapLayers.forEach(layer => {
+        if (layer.included) {
+          this.layers.push(layer);
+        }
+      });
       this.selectedLayer = this.layers[0];
       this.selectedLayerSubject.next(this.selectedLayer);
     });
+
     this.planService.scenarioSubject.subscribe(scenario => {
+      this.layers.forEach(layer => {
+        this.updateLayerSubject.next(layer);
+      });
     });
+
     this.planService.yearSubject.subscribe(year => {
+      this.layers.forEach(layer => {
+        this.updateLayerSubject.next(layer);
+      })
     });
   }
 

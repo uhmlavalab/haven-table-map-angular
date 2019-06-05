@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren } from '@angular/core';
 import { chartColors, mapLayerColors } from '../../../../assets/plans/defaultColors';
 import { MapMainComponent } from '../../map-main.component';
 import { Subject } from 'rxjs';
-import { MapLayer } from '@app/interfaces/map';
+import { MapLayer } from '@app/interfaces';
 import { MapService } from '../../../services/map.service';
 import { CardStyleDirective } from '../card-style.directive';
 import { _ } from 'underscore';

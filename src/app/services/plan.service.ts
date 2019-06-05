@@ -41,15 +41,35 @@ export class PlanService {
     this.currentYear = this.currentPlan.minYear;
     this.scenarios = this.currentPlan.scenarios;
     this.currentScenario = this.scenarios[0];
-    this.loadDataFiles();
     this.planSubject.next(this.currentPlan);
     this.yearSubject.next(this.currentYear);
     this.scenarioSubject.next(this.currentScenario);
+    this.getCapacityData();
+    this.getCapacityData();
   }
 
-  public loadDataFiles() {
+  public getGenerationTotalForCurrentYear(technologies: string[]): number {
+    let generationTotal = 0;
+    technologies.forEach(tech => {
+      this.generationData[this.currentScenario.name][tech].forEach(el => {
+        if (el.year === this.currentYear) {
+          generationTotal += el.value;
+        }
+      });
+    });
+    return generationTotal;
+  }
 
-
+  public getCapacityTotalForCurrentYear(technologies: string[]): number {
+    let capacityTotal = 0;
+    technologies.forEach(tech => {
+      this.capacityData[this.currentScenario.name][tech].forEach(el => {
+        if (el.year === this.currentYear) {
+          capacityTotal += el.value;
+        }
+      });
+    });
+    return capacityTotal;
   }
 
   public getGenerationData(): Promise<any> {
@@ -161,10 +181,23 @@ export class PlanService {
 
   public setState(state): void {
     this.state = state;
+    if (this.state === 'landing') {
+      this.resetPlan();
+    }
   }
 
   public getState(): string {
     return this.state;
+  }
+
+  public resetPlan() {
+    this.currentPlan = null;
+    this.currentYear = null;
+    this.scenarios = null;
+    this.currentScenario = null;
+    this.planSubject.next(this.currentPlan);
+    this.yearSubject.next(this.currentYear);
+    this.scenarioSubject.next(this.currentScenario);
   }
 
 
