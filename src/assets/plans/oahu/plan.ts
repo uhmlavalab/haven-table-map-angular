@@ -51,7 +51,7 @@ export const OahuPlan: Plan = {
       },
       line: {
         left: 'calc(100vw - 325px)',
-        top: 0
+        top: '0vh'
       }
     }
   },
