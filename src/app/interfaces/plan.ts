@@ -12,13 +12,31 @@ export interface Plan {
   maxYear: number;
   scenarios: Scenario[];
   css: {
-    map: object;
-    legend: object;
-    title: object;
-    scenario: object;
+    map: {
+      top: string;
+      left: string;
+    }
+    legend: {
+      top: string;
+      left: string;
+    }
+    title: {
+      top: string;
+      left: string;
+    }
+    scenario: {
+      top: string;
+      left: string;
+    }
     charts: {
-      pie: object;
-      line: object;
+      pie: {
+        top: string;
+        left: string;
+      }
+      line: {
+        top: string;
+        left: string;
+      }
     }
   }
   data: {
