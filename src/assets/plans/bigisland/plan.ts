@@ -52,7 +52,7 @@ export const BigIslandPlan: Plan = {
       },
       line: {
         left: 'calc(100vw - 325px)',
-        top: 0
+        top: '0vh'
       }
 
     }
