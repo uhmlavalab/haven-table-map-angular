@@ -22,6 +22,8 @@ export class MapService {
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
   public updateLayerSubject = new Subject<MapLayer>();
 
+  private timeout = null;
+
   constructor(private planService: PlanService) {
 
     this.planService.planSubject.subscribe(plan => {
@@ -48,10 +50,15 @@ export class MapService {
     });
 
     this.planService.yearSubject.subscribe(year => {
-      this.layers.forEach(layer => {
-        this.updateLayerSubject.next(layer);
-      })
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        console.log('called');
+        this.layers.forEach(layer => {
+          this.updateLayerSubject.next(layer);
+        });
+      }, 500);
     });
+
   }
 
   /** Gets the scale of the map
@@ -64,7 +71,7 @@ export class MapService {
       console.log('No Map Selected');
       return 0;
     }
-    
+
   }
 
   /** Gets the map Image width
