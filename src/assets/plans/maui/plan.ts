@@ -35,9 +35,9 @@ export const MauiPlan: Plan = {
     },
     legend: {
       grid: {
-        left: '28vw',
-        top: '2vh',
-        width: '20vw'
+        left: '47vw',
+        top: '8vh',
+        width: '23vw'
       },
       vertical: {
         left: '26vw',
@@ -46,11 +46,11 @@ export const MauiPlan: Plan = {
       }
     },
     title: {
-      left: '49vw',
-      top: '18vh'
+      left: '88vw',
+      top: '90vh'
     },
     scenario: {
-      left: '33vw',
+      left: '27vw',
       top: '2vh'
     },
     charts: {

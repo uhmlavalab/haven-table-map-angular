@@ -35,28 +35,28 @@ export const BigIslandPlan: Plan = {
     },
     legend: {
       grid: {
-        left: '28vw',
-        top: '2vh',
-        width: '20vw'
+        left: '27vw',
+        top: '15vh',
+        width: '21vw'
       },
       vertical: {
-        left: '26vw',
-        top: '3vh',
+        left: '25vw',
+        top: '11vh',
         width: '10vw'
       }
     },
     title: {
-      left: '32vw',
-      top: '4vh'
+      left: '64vw',
+      top: '82vh'
     },
     scenario: {
-      left: '33vw',
-      top: '26vh'
+      left: '27vw',
+      top: '6vh'
     },
     charts: {
       pie: {
         left: '27vw',
-        top: '57vh'
+        top: '61vh'
       },
       line: {
         left: 'calc(100vw - 325px)',

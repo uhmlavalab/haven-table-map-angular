@@ -37,8 +37,31 @@ export class LegendComponent implements AfterViewInit {
    * removed from the map.
    * @param layer => The layer that was added or removed.
    */
-  getBackgroundColor(layer: MapLayer): string {
+  private getBackgroundColor(layer: MapLayer): string {
     return layer.legendColor;
   }
 
+  /** Gets the correct width of the colored background.  Changes depending
+   * on whether the legend is vertical or grid.
+   * @param active => Is the layer card active or not
+   */
+  private getWidth(active): object {
+    if (this.legendClass === 'vertical') {
+      return active ? { width: '70px' } : { width: '0px' };
+    } else if (this.legendClass === 'grid') {
+      return active ? { width: '50%' } : { width : '0%'};
+    }
+  }
+
+  /** Gets the correct height of the colored background.  Changes on
+   * whether the legend is vertical or grid.
+   * @param active => Is the layer card active or not?
+   */
+  private getHeight(active): object {
+    if (this.legendClass === 'vertical') {
+      return active ? {height: '70px' } : { height: '0px' };
+    } else if (this.legendClass === 'grid') {
+      return active ? { height: '100%' } : { height : '0%'};
+    }
+  }
 }

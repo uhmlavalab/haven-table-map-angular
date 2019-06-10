@@ -12,7 +12,8 @@ import { PlanService } from '@app/services/plan.service';
 })
 
 /** Represents the main display of the table.  Contains the interaction components
- * And the display components of the table. */
+ * And the display components of the table.
+ */
 export class MapMainComponent implements OnInit {
 
   plan: Plan;
@@ -62,7 +63,7 @@ export class MapMainComponent implements OnInit {
     return this.plan.name;
   }
 
-  /** KEYBOARD CONTROLS **/
+  /* KEYBOARD CONTROLS */
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.key === 'ArrowRight') {

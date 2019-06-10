@@ -68,8 +68,9 @@ html {
 /* Holds the scenario data.  Positioned for each island*/
 
 .scenario-container {
-  width: 100px;
+  width: 200px;
   height: 20px;
   position: absolute;
   color: white;
+  text-align: center;
 }

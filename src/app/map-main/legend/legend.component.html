@@ -25,8 +25,8 @@
       <img src="{{ layer.iconPath }}"/>
     </div>
     <div class="legend-card-right"
-    [style.width]="layer.active ? '70px' : '0px'"
-    [style.height]="layer.active ? '70px' : '0px'"
+    [ngStyle]="getWidth(layer.active)"
+    [ngStyle]="getHeight(layer.active)"
     [style.background-color]="getBackgroundColor(layer) + '77'"
     [style.border]="layer.active ? '2px solid WHITE' : '2px solid black'"
      id="legend-card-right-{{layer.name}}"
