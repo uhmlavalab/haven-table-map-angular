@@ -28,8 +28,8 @@ html {
 /* Legends for each map.  Each is placed in a different location */
 
 .legend-container {
-  width: 22%;
-  height: 18vh;
+  width: 10vw;
+  height: 90vh;
   position: absolute;
 }
 
@@ -43,10 +43,8 @@ html {
   text-align: center;
 }
 
-.title-container-maui {
+.title-container {
   color: white;
-  left: 49vw;
-  top: 18vh;
   position: absolute;
   text-align: center;
 }

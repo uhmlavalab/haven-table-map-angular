@@ -12,10 +12,14 @@ import { PlanService } from '@app/services/plan.service';
 })
 
 /** Represents the main display of the table.  Contains the interaction components
-* And the display components of the table. */
+ * And the display components of the table. */
 export class MapMainComponent implements OnInit {
 
   plan: Plan;
+  private top: string;
+  private left: string;
+  private width: string;
+  private legendClass: string;
 
   constructor(
     private planService: PlanService,
@@ -23,6 +27,7 @@ export class MapMainComponent implements OnInit {
     private router: Router,
     private windowRefService: WindowRefService) {
     this.plan = this.planService.getCurrentPlan();
+    this.legendClass = this.planService.getCurrentLegendLayout();
 
     // If no plan has been selected, route back to setup
     if (this.plan == null) {
@@ -31,16 +36,28 @@ export class MapMainComponent implements OnInit {
       console.log('No Plan Found --> Route to setup');
     }
 
+    this.top = this.plan.css.legend[this.legendClass].top;
+    this.left = this.plan.css.legend[this.legendClass].left;
+    this.width = this.plan.css.legend[this.legendClass].width;
+
   }
 
   ngOnInit() {
+
+    this.planService.legendSubject.subscribe({
+      next: value => {
+        this.top = this.plan.css.legend[value].top;
+        this.left = this.plan.css.legend[value].left;
+        this.width = this.plan.css.legend[value].width;
+      }
+    });
   }
 
   /**
-  * This function gets the css class name to apply to the legend based
-  * on the map that is selected.
-  * @return the name of the css class
-  */
+   * This function gets the css class name to apply to the legend based
+   * on the map that is selected.
+   * @return the name of the css class
+   */
   private getIslandName(): string {
     return this.plan.name;
   }
@@ -72,6 +89,8 @@ export class MapMainComponent implements OnInit {
       this.planService.incrementScenario();
     } else if (event.key === 'w') {
       this.planService.decrementScenario();
+    } else if (event.key === 'l') {
+      this.planService.changeCurrentLegendLayout();
     }
   }
 }

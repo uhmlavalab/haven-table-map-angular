@@ -33,8 +33,16 @@ export const OahuPlan: Plan = {
       top: '3vh'
     },
     legend: {
-      left: '28vw',
-      top: '2vh'
+      grid: {
+        left: '28vw',
+        top: '2vh',
+        width: '26vw'
+      },
+      vertical: {
+        left: '24.5vw',
+        top: '3vh',
+        width: '10vw'
+      }
     },
     title: {
       left: '91vw',

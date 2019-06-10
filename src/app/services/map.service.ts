@@ -50,13 +50,13 @@ export class MapService {
     this.planService.yearSubject.subscribe(year => {
       this.layers.forEach(layer => {
         this.updateLayerSubject.next(layer);
-      })
+      });
     });
   }
 
   /** Gets the scale of the map
-  * @return the scale of the map
-  */
+   * @return the scale of the map
+   */
   public getMapScale(): number {
     try {
       return this.currentMap.scale;
@@ -64,12 +64,11 @@ export class MapService {
       console.log('No Map Selected');
       return 0;
     }
-    
   }
 
   /** Gets the map Image width
-  * @return the map image width
-  */
+   * @return the map image width
+   */
   public getMapImageWidth(): number {
     try {
       return this.currentMap.width;
@@ -80,8 +79,8 @@ export class MapService {
   }
 
   /** Get the map Image height
-  * @return the map Image height
-  */
+   * @return the map Image height
+   */
   public getMapImageHeight(): number {
     try {
       return this.currentMap.height;
@@ -93,8 +92,8 @@ export class MapService {
   }
 
   /** Gets the map bounds
-  * @return array of bounds.
-  */
+   * @return array of bounds.
+   */
   public getMapBounds(): any[] {
     try {
       return this.currentMap.bounds;
@@ -106,8 +105,8 @@ export class MapService {
   }
 
   /** Gets the map image name
-  * @return the path to the map Image
-  */
+   * @return the path to the map Image
+   */
   public getBaseMapPath(): string {
     try {
       return this.currentMap.baseMapPath;
@@ -127,8 +126,8 @@ export class MapService {
   }
 
   /** Gets the active layers
-  * @return the array of active layers.
-  */
+   * @return the array of active layers. 
+   */
   public getLayers(): MapLayer[] {
     return this.layers;
   }

@@ -31,9 +31,15 @@ export class PlanService {
   private capacityData = {};
   private generationData = {};
 
+  private legendLayouts: string[] = [];
+  private currentLegendLayout: number;
+  public legendSubject = new Subject<string>();
+
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
     this.state = 'landing';
+    this.legendLayouts = ['grid', 'vertical'];
+    this.currentLegendLayout = 0;
   }
 
   public setupSelectedPlan(plan: Plan) {
@@ -200,5 +206,19 @@ export class PlanService {
     this.scenarioSubject.next(this.currentScenario);
   }
 
+  /** Gets the class name of the correct legend css to display.
+   * @return the current legend classname
+   */
+  public getCurrentLegendLayout(): string {
+    return this.legendLayouts[this.currentLegendLayout];
+  }
+
+  /** Cycles to the next legend css classname.
+   * @return the current css class name.
+   */
+  public changeCurrentLegendLayout() {
+    this.currentLegendLayout = (this.currentLegendLayout + 1) % this.legendLayouts.length;
+    this.legendSubject.next(this.getCurrentLegendLayout());
+  }
 
 }

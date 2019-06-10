@@ -34,8 +34,16 @@ export const BigIslandPlan: Plan = {
       top: '5vh'
     },
     legend: {
-      left: '78vw',
-      top: '73vh'
+      grid: {
+        left: '28vw',
+        top: '2vh',
+        width: '20vw'
+      },
+      vertical: {
+        left: '26vw',
+        top: '3vh',
+        width: '10vw'
+      }
     },
     title: {
       left: '32vw',

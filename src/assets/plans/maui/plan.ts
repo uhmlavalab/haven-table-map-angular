@@ -34,8 +34,16 @@ export const MauiPlan: Plan = {
       top: '4vh'
     },
     legend: {
-      left: '47vw',
-      top: '2vh'
+      grid: {
+        left: '28vw',
+        top: '2vh',
+        width: '20vw'
+      },
+      vertical: {
+        left: '26vw',
+        top: '3vh',
+        width: '10vw'
+      }
     },
     title: {
       left: '49vw',

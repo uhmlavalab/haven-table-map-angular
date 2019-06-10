@@ -17,8 +17,16 @@ export interface Plan {
       left: string;
     }
     legend: {
-      top: string;
-      left: string;
+      grid: {
+        top: string;
+        left: string;
+        width: string;
+      },
+      vertical: {
+        top: string;
+        left: string;
+        width: string;
+      }
     }
     title: {
       top: string;
