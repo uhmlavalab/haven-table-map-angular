@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PlanService } from '../services/plan.service';
 import { MultiWindowService, Message } from 'ngx-multi-window';
-import { WindowRefService } from '../services/window-ref.service';
-import { _ } from 'underscore';
 
 @Component({
   selector: 'app-second-screen',
@@ -12,16 +9,32 @@ import { _ } from 'underscore';
 export class SecondScreenComponent implements OnInit {
 
   private currentYear: number;
+  private plan: string;
+  private displayName: string;
+  private secondScreenImagePath: string;
 
-  constructor(private planService: PlanService,
-              private multiWindowService: MultiWindowService,
-              private windowRefService: WindowRefService) {
-                multiWindowService.name = 'secondScreen';
+  constructor(private multiWindowService: MultiWindowService) {
+    multiWindowService.name = 'secondScreen';
   }
 
   ngOnInit() {
     this.multiWindowService.onMessage().subscribe((value: Message) => {
-      console.log(JSON.parse(value.data));
+      const data = JSON.parse(value.data);
+      if (data.type === 'setup') {
+        this.setupSecondScreen(data);
+      } else if (data.type === 'year') {
+        this.currentYear = data.year;
+      }
     });
+  }
+
+  /** Initializes the second screen when it is opened.
+   * @param data => The setup object
+   */
+  private setupSecondScreen(data: any): void {
+    this.currentYear = data.currentYear;
+    this.plan = data.name;
+    this.displayName = data.displayName;
+    this.secondScreenImagePath = data.secondScreenImagePath;
   }
 }

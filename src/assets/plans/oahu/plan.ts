@@ -8,7 +8,7 @@ export const OahuPlan: Plan = {
   name: 'oahu',
   displayName: 'Oahu',
   landingImagePath: 'assets/plans/oahu/images/landing-image.jpg',
-  secondScreenImagePath: '',
+  secondScreenImagePath: 'assets/plans/oahu/images/oahu-renewable-background.jpg',
   includeSecondScreen: false,
   selectedPlan: false,
   minYear: 2016,

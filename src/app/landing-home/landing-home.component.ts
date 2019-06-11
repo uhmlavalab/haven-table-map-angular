@@ -31,9 +31,9 @@ export class LandingHomeComponent implements OnInit {
   private buttons: LandingButton;
 
   constructor(private arservice: ArService,
-              private planService: PlanService,
-              private windowRefservice: WindowRefService,
-              private markerService: MarkerService) {
+    private planService: PlanService,
+    private windowRefservice: WindowRefService,
+    private markerService: MarkerService) {
     this.activePanel = 'maps';
     this.markers = this.markerService.getMarkers();
     this.buttons = landingButtons; // Imported from Default Data
@@ -61,9 +61,19 @@ export class LandingHomeComponent implements OnInit {
     this.planService.setupSelectedPlan(plan);
     this.planService.setState('run');
     if (plan.includeSecondScreen) {
-      this.openSecondScreen();
+      if (this.openSecondScreen()) {
+        setTimeout(() => {
+          this.windowRefservice.notifySecondScreen(JSON.stringify(
+            {
+              type: 'setup',
+              name: plan.name,
+              displayName: plan.displayName,
+              currentYear: this.planService.getCurrentYear(),
+              secondScreenImagePath: plan.secondScreenImagePath
+            }));
+        }, 7000);
+      }
     }
-
   }
 
   /**

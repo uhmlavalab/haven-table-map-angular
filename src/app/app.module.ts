@@ -14,7 +14,6 @@ import { LargeYearComponent } from './map-main/large-year/large-year.component';
 import { LegendComponent } from './map-main/legend/legend.component';
 import { TitleComponent } from './map-main/title/title.component';
 import { SecondScreenComponent } from './second-screen/second-screen.component';
-import { InsideComponent } from './second-screen/inside/inside.component';
 import { InteractionElementComponent } from './map-main/interaction-element/interaction-element.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
@@ -54,7 +53,6 @@ import { WindowRefService } from './services/window-ref.service';
     LegendDirective,
     TitleComponent,
     SecondScreenComponent,
-    InsideComponent,
     LineChartComponent,
     PieChartComponent,
     ScenarioComponent

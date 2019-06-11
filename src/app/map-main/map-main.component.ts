@@ -1,11 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { MapService } from '../services/map.service';
 import { WindowRefService } from '../services/window-ref.service';
-import { MultiWindowService, Message } from 'ngx-multi-window';
 import { Router } from '@angular/router';
 import { Plan } from '@app/interfaces';
 import { PlanService } from '@app/services/plan.service';
-import { _ } from 'underscore';
+import { AddRemoveLayersComponent } from './interaction-element/add-remove-layers/add-remove-layers.component';
 
 @Component({
   selector: 'app-map-main',
@@ -28,26 +27,24 @@ export class MapMainComponent implements OnInit {
     private planService: PlanService,
     private mapService: MapService,
     private router: Router,
-    private windowRefService: WindowRefService,
-    private multiWindowService: MultiWindowService) {
-      this.plan = this.planService.getCurrentPlan();
-      this.legendClass = this.planService.getCurrentLegendLayout();
+    private windowRefService: WindowRefService) {
+    this.plan = this.planService.getCurrentPlan();
+    this.legendClass = this.planService.getCurrentLegendLayout();
 
-      // If no plan has been selected, route back to setup
-      if (this.plan == null) {
-        this.router.navigateByUrl('');
-        this.planService.setState('landing');
-        console.log('No Plan Found --> Route to setup');
-      }
+    // If no plan has been selected, route back to setup
+    if (this.plan == null) {
+      this.router.navigateByUrl('');
+      this.planService.setState('landing');
+      console.log('No Plan Found --> Route to setup');
+    }
 
-      this.top = this.plan.css.legend[this.legendClass].top;
-      this.left = this.plan.css.legend[this.legendClass].left;
-      this.width = this.plan.css.legend[this.legendClass].width;
+    this.top = this.plan.css.legend[this.legendClass].top;
+    this.left = this.plan.css.legend[this.legendClass].left;
+    this.width = this.plan.css.legend[this.legendClass].width;
 
   }
 
   ngOnInit() {
-
     this.planService.legendSubject.subscribe({
       next: value => {
         this.top = this.plan.css.legend[value].top;
@@ -59,36 +56,28 @@ export class MapMainComponent implements OnInit {
     // Push Year Data to Second Screen
     this.planService.yearSubject.subscribe({
       next: value => {
-        const recipient = _.filter(this.multiWindowService.getKnownWindows(), window => window.name === 'secondScreen');
-        if (recipient.length === 1) {
-            this.sendMessageToSecondScreen(recipient[0].id, JSON.stringify({year: value}));
-        }
+        this.windowRefService.notifySecondScreen(JSON.stringify(
+          {
+            type: 'year',
+            year: value
+          }));
       }
     });
 
     // Push Year Data to Second Screen
     this.mapService.selectedLayerSubject.subscribe({
       next: value => {
-        const recipient = _.filter(this.multiWindowService.getKnownWindows(), window => window.name === 'secondScreen');
-        if (recipient.length === 1) {
-            this.sendMessageToSecondScreen(recipient[0].id, JSON.stringify({layer: value}));
-        }
+        this.windowRefService.notifySecondScreen(JSON.stringify(
+          {
+            type: 'layer',
+            name: value.name,
+            displayName: value.displayName
+          }));
       }
     });
   }
 
-  private sendMessageToSecondScreen(screenId, messageData) {
-      this.multiWindowService.sendMessage(screenId, 'customEvent', messageData).subscribe(
-        (messageId: string) => {
-          console.log('Message send, ID is ' + messageId);
-        },
-        (error) => {
-          console.log('Message sending failed, error: ' + error);
-        },
-        () => {
-          console.log('Message successfully delivered');
-        });
-  }
+
   /**
    * This function gets the css class name to apply to the legend based
    * on the map that is selected.
