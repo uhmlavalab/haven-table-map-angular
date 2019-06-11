@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { PlanService } from '../services/plan.service';
+import { MultiWindowService, Message } from 'ngx-multi-window';
+import { WindowRefService } from '../services/window-ref.service';
+import { _ } from 'underscore';
 
 @Component({
   selector: 'app-second-screen',
@@ -7,10 +11,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SecondScreenComponent implements OnInit {
 
-  constructor() {
+  private currentYear: number;
 
+  constructor(private planService: PlanService,
+              private multiWindowService: MultiWindowService,
+              private windowRefService: WindowRefService) {
+                multiWindowService.name = 'secondScreen';
   }
 
   ngOnInit() {
+    this.multiWindowService.onMessage().subscribe((value: Message) => {
+      console.log(JSON.parse(value.data));
+    });
   }
 }

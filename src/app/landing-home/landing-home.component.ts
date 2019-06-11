@@ -31,9 +31,9 @@ export class LandingHomeComponent implements OnInit {
   private buttons: LandingButton;
 
   constructor(private arservice: ArService,
-    private planService: PlanService,
-    private windowRefservice: WindowRefService,
-    private markerService: MarkerService) {
+              private planService: PlanService,
+              private windowRefservice: WindowRefService,
+              private markerService: MarkerService) {
     this.activePanel = 'maps';
     this.markers = this.markerService.getMarkers();
     this.buttons = landingButtons; // Imported from Default Data
@@ -48,12 +48,12 @@ export class LandingHomeComponent implements OnInit {
   }
 
   /**
-  * This function handles the clicks on the start buttons.  When the button is
-  * clicked, the state of the application is changed from setup to run.  The Data
-  * necessary to start the program correctly is passed through here.
-  * @param island => Contains the island that will be used for this program.
-  * @return none
-  */
+   * This function handles the clicks on the start buttons.  When the button is
+   * clicked, the state of the application is changed from setup to run.  The Data
+   * necessary to start the program correctly is passed through here.
+   * @param island => Contains the island that will be used for this program.
+   * @return none
+   */
   handleStartButtonClick(plan: Plan): void {
     this.plans.forEach(el => el.selectedPlan = false);
     plan.selectedPlan = true;
@@ -67,40 +67,40 @@ export class LandingHomeComponent implements OnInit {
   }
 
   /**
-  * This function handles changes to the add 2nd screen checkbox.  Updates the variable
-  * In the island object.
-  * @param island => The island that will be used to start the program.
-  * @param isChecked => true if checked, false if unchecked.
-  */
+   * This function handles changes to the add 2nd screen checkbox.  Updates the variable
+   * In the island object.
+   * @param island => The island that will be used to start the program.
+   * @param isChecked => true if checked, false if unchecked.
+   */
   private handleIncludeSecondScreenCheckboxChange(island: Plan, isChecked: boolean): void {
     island.includeSecondScreen = isChecked;
   }
 
   /**
-  * This function handles the clicks on the buttons that select which element
-  * of the table to configure/setup.  It identifies which child element of the
-  * directive slideDirective has been clicked and moves all elements accordingly.
-  * @param targetElement => The element that was clicked.
-  */
+   * This function handles the clicks on the buttons that select which element
+   * of the table to configure/setup.  It identifies which child element of the
+   * directive slideDirective has been clicked and moves all elements accordingly.
+   * @param targetElement => The element that was clicked.
+   */
   private handleSelectButtonClick(targetElement: any): void {
     this.activePanel = targetElement.id;
   }
 
   /**
-  * This function adds and removes layers during setup when the checkbox is changed.
-  * @param layer => the layer that was changed.
-  * @param checked => true if checked, false if not checked.
-  */
+   * This function adds and removes layers during setup when the checkbox is changed.
+   * @param layer => the layer that was changed.
+   * @param checked => true if checked, false if not checked.
+   */
   private handleLayerSetupCheck(layer: MapLayer, checked: boolean): void {
     layer.included = checked;
   }
 
   /** Opens a second screen as long as there isnt one opened already.
-  * @return true if scucessful, false if not opened
-  */
+   * @return true if scucessful, false if not opened
+   */
   private openSecondScreen(): boolean {
     if (!(this.windowRefservice.secondScreenIsSet())) {
-      this.windowRefservice.setSecondSceenObject(this.nativeWindow.open('second-screen'));
+      this.windowRefservice.setSecondSceenObject(this.nativeWindow.open('second-screen', 'secondScreen'));
       return true;
     } else {
       return false;

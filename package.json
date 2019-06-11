@@ -26,6 +26,7 @@
     "core-js": "^2.5.4",
     "d3": "^3.5.4",
     "js-aruco": "^0.1.0",
+    "ngx-multi-window": "^0.3.2",
     "opencv4nodejs": "^4.17.0",
     "rx": "^4.1.0",
     "rxjs": "~6.5.2",

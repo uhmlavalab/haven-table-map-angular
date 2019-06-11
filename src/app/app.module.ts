@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MultiWindowModule } from 'ngx-multi-window';
 
 // Components
 import { AppRoutingModule, routingComponents } from './app-routing.module';
@@ -61,7 +62,8 @@ import { WindowRefService } from './services/window-ref.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DragDropModule
+    DragDropModule,
+    MultiWindowModule
   ],
   providers: [
     MapService,

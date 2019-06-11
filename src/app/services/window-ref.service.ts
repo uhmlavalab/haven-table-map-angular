@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PlanService } from './plan.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ export class WindowRefService {
   private secondScreenObject: any; // Stores the object of the second window
   private secondScreenSet: boolean; // True if the screen his open, false if not.
 
-  constructor() {
+  constructor(private planService: PlanService) {
     this.secondScreenObject = null;
     this.secondScreenSet = false;
   }
@@ -37,7 +38,7 @@ export class WindowRefService {
   public closeSecondScreen(): void {
     if (this.secondScreenIsSet) {
       this.secondScreenSet = false;
-      // this.secondScreenObject.close();
+      this.secondScreenObject.close();
     }
   }
 
