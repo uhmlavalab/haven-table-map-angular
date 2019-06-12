@@ -54,7 +54,7 @@ export const OahuPlan: Plan = {
     },
     charts: {
       pie: {
-        left: '30vw',
+        left: '30.5vw',
         top: '66vh'
       },
       line: {
