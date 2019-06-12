@@ -5,6 +5,8 @@ export interface MapLayer {
   displayName: string;
   filePath: string;
   iconPath: string;
+  secondScreenImagePath: string;
+  secondScreenText: string;
   active: boolean;
   included: boolean;
   fillColor: string;

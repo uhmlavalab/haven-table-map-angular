@@ -70,8 +70,7 @@ export class MapMainComponent implements OnInit {
         this.windowRefService.notifySecondScreen(JSON.stringify(
           {
             type: 'layer',
-            name: value.name,
-            displayName: value.displayName
+            name: value.name
           }));
       }
     });

@@ -29,11 +29,12 @@ export class LandingHomeComponent implements OnInit {
   private panels: Panel;
   private plans: Plan[];
   private buttons: LandingButton;
+  private loading: boolean;
 
   constructor(private arservice: ArService,
-    private planService: PlanService,
-    private windowRefservice: WindowRefService,
-    private markerService: MarkerService) {
+              private planService: PlanService,
+              private windowRefservice: WindowRefService,
+              private markerService: MarkerService) {
     this.activePanel = 'maps';
     this.markers = this.markerService.getMarkers();
     this.buttons = landingButtons; // Imported from Default Data
@@ -41,10 +42,17 @@ export class LandingHomeComponent implements OnInit {
     this.nativeWindow = this.windowRefservice.getNativeWindow();
     this.help = 'keyboard';
     this.changingMarkerJob = 'none';
+    this.loading = this.windowRefservice.getLoadingStatus();
   }
 
   ngOnInit() {
     this.plans = this.planService.getPlans();
+
+    this.windowRefservice.loadingSubject.subscribe({
+      next: value => {
+        this.loading = value;
+      }
+    });
   }
 
   /**
@@ -62,16 +70,21 @@ export class LandingHomeComponent implements OnInit {
     this.planService.setState('run');
     if (plan.includeSecondScreen) {
       if (this.openSecondScreen()) {
+        const planLayerData = [];
+        plan.map.mapLayers.forEach(layer => planLayerData.push({
+          name: layer.name,
+          displayName: layer.displayName,
+          iconPath: layer.iconPath
+        }));
+
         setTimeout(() => {
           this.windowRefservice.notifySecondScreen(JSON.stringify(
             {
               type: 'setup',
               name: plan.name,
-              displayName: plan.displayName,
               currentYear: this.planService.getCurrentYear(),
-              secondScreenImagePath: plan.secondScreenImagePath
             }));
-        }, 7000);
+        }, 6000);
       }
     }
   }

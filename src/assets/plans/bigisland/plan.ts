@@ -7,8 +7,8 @@ export const BigIslandPlan: Plan = {
   name: 'bigisland',
   displayName: 'Big Island',
   landingImagePath: 'assets/plans/bigisland/images/landing-image.jpg',
-  secondScreenImagePath: '',
-  includeSecondScreen: true,
+  secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/backgrounds/bigIsland.jpg',
+  includeSecondScreen: false,
   selectedPlan: false,
   minYear: 2016,
   maxYear: 2045,
@@ -78,6 +78,8 @@ export const BigIslandPlan: Plan = {
         active: false,
         included: true,
         iconPath: 'assets/plans/bigisland/images/icons/transmission-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/transmission.jpg',
+        secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Transmission.fill,
         borderColor: mapLayerColors.Transmission.border,
         borderWidth: 0.04,
@@ -106,6 +108,8 @@ export const BigIslandPlan: Plan = {
         active: false,
         included: true,
         iconPath: 'assets/plans/bigisland/images/icons/dod-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',
+        secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Dod.fill,
         borderColor: mapLayerColors.Dod.border,
         borderWidth: 1,
@@ -121,6 +125,8 @@ export const BigIslandPlan: Plan = {
         active: false,
         included: true,
         iconPath: 'assets/plans/bigisland/images/icons/solar-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/solar.jpg',
+        secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Solar.fill,
         borderColor: mapLayerColors.Solar.border,
         borderWidth: 1,
@@ -170,6 +176,8 @@ export const BigIslandPlan: Plan = {
         active: false,
         included: true,
         iconPath: 'assets/plans/bigisland/images/icons/wind-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/wind.jpg',
+        secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
         borderWidth: .15,
@@ -218,6 +226,8 @@ export const BigIslandPlan: Plan = {
         active: false,
         included: true,
         iconPath: 'assets/plans/bigisland/images/icons/agriculture-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/agriculture.jpg',
+        secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Agriculture.fill,
         borderColor: mapLayerColors.Agriculture.border,
         borderWidth: 1,
@@ -237,7 +247,7 @@ export const BigIslandPlan: Plan = {
               .style('fill', colors[parcel.properties.type])
               .style('opacity', this.active ? 0.85 : 0.0)
               .style('stroke', this.borderColor)
-              .style('stroke-width', this.borderWidth  + 'px');
+              .style('stroke-width', this.borderWidth + 'px');
           });
         },
         updateFunction(planService: PlanService) {

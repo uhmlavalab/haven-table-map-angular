@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MultiWindowService, Message } from 'ngx-multi-window';
+import { Plan } from '../interfaces/plan';
+import { OahuPlan } from '../../assets/plans/oahu/plan';
+import { MauiPlan } from '../../assets/plans/maui/plan';
+import { BigIslandPlan } from '../../assets/plans/bigisland/plan';
+
 
 @Component({
   selector: 'app-second-screen',
@@ -9,9 +14,10 @@ import { MultiWindowService, Message } from 'ngx-multi-window';
 export class SecondScreenComponent implements OnInit {
 
   private currentYear: number;
-  private plan: string;
   private displayName: string;
   private secondScreenImagePath: string;
+  private nextLayer: string;
+  private plan: Plan;
 
   constructor(private multiWindowService: MultiWindowService) {
     multiWindowService.name = 'secondScreen';
@@ -24,8 +30,11 @@ export class SecondScreenComponent implements OnInit {
         this.setupSecondScreen(data);
       } else if (data.type === 'year') {
         this.currentYear = data.year;
+      } else if (data.type === 'layer') {
+        this.nextLayer = data.name;
       }
     });
+
   }
 
   /** Initializes the second screen when it is opened.
@@ -33,8 +42,20 @@ export class SecondScreenComponent implements OnInit {
    */
   private setupSecondScreen(data: any): void {
     this.currentYear = data.currentYear;
-    this.plan = data.name;
-    this.displayName = data.displayName;
-    this.secondScreenImagePath = data.secondScreenImagePath;
+    switch (data.name) {
+      case 'oahu':
+        this.plan = OahuPlan;
+        break;
+      case 'maui':
+        this.plan = MauiPlan;
+        break;
+      case 'bigisland':
+        this.plan = BigIslandPlan;
+        break;
+      default:
+        this.plan = OahuPlan;
+        break;
+    }
+    this.nextLayer = this.plan.map.mapLayers[0].name;
   }
 }

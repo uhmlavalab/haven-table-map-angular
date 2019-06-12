@@ -2,6 +2,8 @@ import { Injectable, ɵbypassSanitizationTrustStyle } from '@angular/core';
 import { PlanService } from './plan.service';
 import { MultiWindowService } from 'ngx-multi-window';
 import { _ } from 'underscore';
+import { Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,8 @@ export class WindowRefService {
 
   private secondScreenObject: any; // Stores the object of the second window
   private secondScreenSet: boolean; // True if the screen his open, false if not.
+  private loadingStatus: boolean; // True if loading, false if not (for loading-screen after close window)
+  public loadingSubject = new Subject<boolean>();
 
   constructor(private planService: PlanService, private multiWindowService: MultiWindowService) {
     this.secondScreenObject = null;
@@ -41,6 +45,7 @@ export class WindowRefService {
     if (this.secondScreenIsSet) {
       this.secondScreenSet = false;
       this.secondScreenObject.close();
+      this.toggleLoading();
     }
   }
 
@@ -62,7 +67,6 @@ export class WindowRefService {
    */
   private getSecondScreenId(): string {
     const recipient = _.filter(this.multiWindowService.getKnownWindows(), window => window.name === 'secondScreen');
-
     return recipient[0].id;
   }
 
@@ -71,17 +75,38 @@ export class WindowRefService {
    * @param messageData => The data
    */
   private sendMessageToSecondScreen(screenId, messageData): void {
+    console.log(screenId);
     this.multiWindowService.sendMessage(screenId, 'customEvent', messageData).subscribe(
       (messageId: string) => {
         console.log('Message send, ID is ' + messageId);
       },
       (error) => {
         console.log('Message sending failed, error: ' + error);
-        this.sendMessageToSecondScreen(screenId, messageData);
+        this.closeSecondScreen();
       },
       () => {
         console.log('Message successfully delivered');
       });
   }
 
+  /** When the second screen is closed, it takes 15 seconds for chrome to clear the
+   * local storage of the window data.  No new windows can be opened until then so we
+   * have to wait for it to clear.  For 15 seconds, the loader is displayed on the landing page.
+   */
+  private toggleLoading(): void {
+    this.loadingStatus = true;
+    this.loadingSubject.next(this.loadingStatus);
+
+    setTimeout(() => {
+      this.loadingStatus = false;
+      this.loadingSubject.next(this.loadingStatus);
+    }, 15000);
+  }
+
+  /** Called by landing page when the landing page initializes.
+   * @return the current landing page loading status.
+   */
+  public getLoadingStatus(): boolean {
+    return this.loadingStatus;
+  }
 }
