@@ -76,7 +76,6 @@ export class MapMainComponent implements OnInit {
     });
   }
 
-
   /**
    * This function gets the css class name to apply to the legend based
    * on the map that is selected.
@@ -115,6 +114,8 @@ export class MapMainComponent implements OnInit {
       this.planService.decrementScenario();
     } else if (event.key === 'l') {
       this.planService.changeCurrentLegendLayout();
+    } else if (event.key === 'f') {
+      console.log('second => ' + this.windowRefService.secondScreenExists());
     }
   }
 }

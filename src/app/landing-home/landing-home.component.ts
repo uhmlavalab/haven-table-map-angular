@@ -77,15 +77,23 @@ export class LandingHomeComponent implements OnInit {
           iconPath: layer.iconPath
         }));
 
-        setTimeout(() => {
-          this.windowRefservice.notifySecondScreen(JSON.stringify(
-            {
-              type: 'setup',
-              name: plan.name,
-              currentYear: this.planService.getCurrentYear(),
-            }));
-        }, 6000);
+        this.startSecondScreen(plan);
       }
+    }
+  }
+
+  private startSecondScreen(plan: Plan): void {
+    if (this.windowRefservice.secondScreenExists()) {
+      this.windowRefservice.notifySecondScreen(JSON.stringify(
+        {
+          type: 'setup',
+          name: plan.name,
+          currentYear: this.planService.getCurrentYear(),
+        }));
+    } else {
+      setTimeout(() => {
+        this.startSecondScreen(plan);
+      }, 1000);
     }
   }
 

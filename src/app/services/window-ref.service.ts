@@ -3,17 +3,18 @@ import { PlanService } from './plan.service';
 import { MultiWindowService } from 'ngx-multi-window';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
+import { SecondScreenComponent } from '@app/second-screen/second-screen.component';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class WindowRefService {
-
   private secondScreenObject: any; // Stores the object of the second window
   private secondScreenSet: boolean; // True if the screen his open, false if not.
   private loadingStatus: boolean; // True if loading, false if not (for loading-screen after close window)
   public loadingSubject = new Subject<boolean>();
+
 
   constructor(private planService: PlanService, private multiWindowService: MultiWindowService) {
     this.secondScreenObject = null;
@@ -45,7 +46,7 @@ export class WindowRefService {
     if (this.secondScreenIsSet) {
       this.secondScreenSet = false;
       this.secondScreenObject.close();
-      this.toggleLoading();
+
     }
   }
 
@@ -66,15 +67,30 @@ export class WindowRefService {
    * @return the id of the window
    */
   private getSecondScreenId(): string {
-    const recipient = _.filter(this.multiWindowService.getKnownWindows(), window => window.name === 'secondScreen');
-    return recipient[0].id;
+    try {
+      const recipient = _.filter(this.multiWindowService.getKnownWindows(), window => window.name === 'secondScreen');
+      return recipient[0].id;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /** Checks to see if the second screen can be found.
+   * @return true if second screen is found, false otherwise.
+   */
+  public secondScreenExists(): boolean {
+    if (this.getSecondScreenId()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /** Sends data to the second screen component when changes are made to the main application
    * @param screenId => The multi window screen id of second screen
    * @param messageData => The data
    */
-  private sendMessageToSecondScreen(screenId, messageData): void {
+  private sendMessageToSecondScreen(screenId: string, messageData: string): void {
     console.log(screenId);
     this.multiWindowService.sendMessage(screenId, 'customEvent', messageData).subscribe(
       (messageId: string) => {
@@ -82,25 +98,15 @@ export class WindowRefService {
       },
       (error) => {
         console.log('Message sending failed, error: ' + error);
-        this.closeSecondScreen();
+        /* If the message fails due to timeout because of an error with the windows 
+         * not closed yet.  Keep trying until it works */
+        if (JSON.parse(messageData).type === 'setup') {
+          this.notifySecondScreen(messageData);
+        }
       },
       () => {
         console.log('Message successfully delivered');
       });
-  }
-
-  /** When the second screen is closed, it takes 15 seconds for chrome to clear the
-   * local storage of the window data.  No new windows can be opened until then so we
-   * have to wait for it to clear.  For 15 seconds, the loader is displayed on the landing page.
-   */
-  private toggleLoading(): void {
-    this.loadingStatus = true;
-    this.loadingSubject.next(this.loadingStatus);
-
-    setTimeout(() => {
-      this.loadingStatus = false;
-      this.loadingSubject.next(this.loadingStatus);
-    }, 15000);
   }
 
   /** Called by landing page when the landing page initializes.

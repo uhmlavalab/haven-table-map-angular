@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MultiWindowService, Message } from 'ngx-multi-window';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MultiWindowService, Message} from 'ngx-multi-window';
 import { Plan } from '../interfaces/plan';
 import { OahuPlan } from '../../assets/plans/oahu/plan';
 import { MauiPlan } from '../../assets/plans/maui/plan';
@@ -34,7 +34,12 @@ export class SecondScreenComponent implements OnInit {
         this.nextLayer = data.name;
       }
     });
+  }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.multiWindowService.name = 'dead';
   }
 
   /** Initializes the second screen when it is opened.
