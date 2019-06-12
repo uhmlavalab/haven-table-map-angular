@@ -39,7 +39,7 @@ export const OahuPlan: Plan = {
         width: '26vw'
       },
       vertical: {
-        left: '24.5vw',
+        left: '26vw',
         top: '3vh',
         width: '10vw'
       }
@@ -54,8 +54,8 @@ export const OahuPlan: Plan = {
     },
     charts: {
       pie: {
-        left: '29vw',
-        top: '64vh'
+        left: '30vw',
+        top: '66vh'
       },
       line: {
         left: 'calc(100vw - 325px)',
