@@ -105,11 +105,12 @@ export const MauiPlan: Plan = {
         filePath: 'assets/plans/maui/layers/dod.json',
         setupFunction(planService: PlanService) {
           const colors = {
-            'Public-Federal': this.fillColor,
-            'Public-State': 'white',
-            'Public-State DHHL': 'black',
-            'Public-County': 'gray',
-          }
+            'Public-Federal': `${this.fillColor}ff`,
+            'Public-State': `${this.fillColor}aa`,
+            'Public-State DHHL': `${this.fillColor}77`,
+            'Public-County': `${this.fillColor}33`,
+          };
+
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.type])
@@ -148,7 +149,7 @@ export const MauiPlan: Plan = {
         iconPath: 'assets/plans/maui/images/icons/wind-icon.png',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        borderWidth: 0.5,
+        borderWidth: 0.05,
         legendColor: mapLayerColors.Wind.fill,
         filePath: 'assets/plans/maui/layers/wind.json',
         parcels: [],
@@ -251,11 +252,11 @@ export const MauiPlan: Plan = {
         parcels: [],
         setupFunction(planService: PlanService) {
           const colors = {
-            A: this.fillColor,
-            B: 'black',
-            C: 'darkgray',
-            D: 'gray',
-            E: 'lightgray'
+            A: `${this.fillColor}ff`,
+            B: `${this.fillColor}bb`,
+            C: `${this.fillColor}99`,
+            D: `${this.fillColor}66`,
+            E: `${this.fillColor}33`
           }
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)

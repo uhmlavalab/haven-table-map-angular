@@ -166,7 +166,7 @@ export const BigIslandPlan: Plan = {
         borderColor: mapLayerColors.Wind.border,
         borderWidth: .15,
         legendColor: mapLayerColors.Wind.fill,
-        filePath: 'assets/plans/bigisland/layers/wind_2.json',
+        filePath: 'assets/plans/bigisland/layers/wind.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']);
@@ -218,11 +218,11 @@ export const BigIslandPlan: Plan = {
         parcels: [],
         setupFunction(planService: PlanService) {
           const colors = {
-            A: this.fillColor,
-            B: 'black',
-            C: 'darkgray',
-            D: 'gray',
-            E: 'lightgray'
+            A: `${this.fillColor}ff`,
+            B: `${this.fillColor}bb`,
+            C: `${this.fillColor}99`,
+            D: `${this.fillColor}66`,
+            E: `${this.fillColor}33`
           }
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
