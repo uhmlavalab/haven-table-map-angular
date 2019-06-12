@@ -80,17 +80,21 @@
 
 .legend-card-vertical-wrapper .legend-card-right {
   position: absolute;
-  width: 70px;
+  width: 0px;
   height: 70px;
   border-radius: 50%;
   z-index: -1;
-  transition: background-color 0.4s ease-out, width 0.4s ease-out, height 0.4s ease-out, border 0.4s ease-out;
+  transition: margin-top 0.6s ease-out, left 0.6s ease-out, background-color 0.6s ease-out, width 0.6s ease-out, height 0.6s ease-out, border 0.6s ease-out;
 }
 .legend-card-vertical-wrapper .legend-card-text {
   color: white;
-  font-size: 8px;
   top: 42px;
   position: relative;
   padding: 4px;
   left: 2px;
+  height: calc(70px - 4px - 8px - 32px);
+}
+.legend-card-vertical-wrapper .legend-card-text p {
+ transform: translateY(-50%);
+ font-size: 7.2px;
 }

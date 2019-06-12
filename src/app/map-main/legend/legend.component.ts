@@ -45,23 +45,16 @@ export class LegendComponent implements AfterViewInit {
    * on whether the legend is vertical or grid.
    * @param active => Is the layer card active or not
    */
-  private getWidth(active): object {
+  private getStyle(active: boolean): object {
     if (this.legendClass === 'vertical') {
-      return active ? { width: '70px' } : { width: '0px' };
+      return active ? {
+        width: '70px',
+        height: '70px',
+        left: '9px',
+        marginTop: '0px'
+      } : { width: '0px', height: '0px', left: '35px', marginTop: '35px' };
     } else if (this.legendClass === 'grid') {
-      return active ? { width: '50%' } : { width : '0%'};
-    }
-  }
-
-  /** Gets the correct height of the colored background.  Changes on
-   * whether the legend is vertical or grid.
-   * @param active => Is the layer card active or not?
-   */
-  private getHeight(active): object {
-    if (this.legendClass === 'vertical') {
-      return active ? {height: '70px' } : { height: '0px' };
-    } else if (this.legendClass === 'grid') {
-      return active ? { height: '100%' } : { height : '0%'};
+      return active ? { width: '50%', height: '100%', left: '0px' } : { width: '0%', height: '0%', left: '0px' };
     }
   }
 }
