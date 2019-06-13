@@ -117,10 +117,10 @@ export const MauiPlan: Plan = {
         filePath: 'assets/plans/maui/layers/dod.json',
         setupFunction(planService: PlanService) {
           const colors = {
-            'Public-Federal': this.fillColor,
-            'Public-State': 'white',
-            'Public-State DHHL': 'black',
-            'Public-County': 'gray',
+            'Public-Federal': '#e60000',
+            'Public-State': '#ff7f7f',
+            'Public-State DHHL': '#895a44',
+            'Public-County': '#00c5ff',
           }
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
@@ -164,13 +164,18 @@ export const MauiPlan: Plan = {
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        borderWidth: 0.5,
+        borderWidth: 0.3,
         legendColor: mapLayerColors.Wind.fill,
         filePath: 'assets/plans/maui/layers/wind.json',
         parcels: [],
         setupFunction(planService: PlanService) {
-          let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']);
-          this.parcels.sort((a, b) => parseFloat(b.properties.MWac) - parseFloat(a.properties.MWac));
+          let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']) / 3 - 72;
+          const dictSort = {
+            '8.5+': 0,
+            '7.5-8.5': 1,
+            '6.5-7.5': 2
+          }
+          this.parcels.sort((a, b) => parseFloat(dictSort[a.properties.SPD_CLS]) - parseFloat(dictSort[b.properties.SPD_CLS]));
           this.parcels.forEach(parcel => {
             if (windTotal > 0) {
               d3.select(parcel.path)
@@ -178,7 +183,7 @@ export const MauiPlan: Plan = {
                 .style('opacity', (this.active) ? 0.85 : 0.0)
                 .style('stroke', this.borderColor)
                 .style('stroke-width', this.borderWidth + 'px');
-              windTotal -= (parcel.properties.MWac * 0.2283 * 8760);
+              windTotal -= (parcel.properties.MWac);
             } else {
               d3.select(parcel.path)
                 .style('fill', 'transparent')
@@ -189,13 +194,13 @@ export const MauiPlan: Plan = {
           });
         },
         updateFunction(planService: PlanService) {
-          let windTotal = planService.getGenerationTotalForCurrentYear(['Wind']);
+          let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']) / 3 - 72;
           this.parcels.forEach(parcel => {
             if (windTotal > 0) {
               d3.select(parcel.path)
                 .style('fill', this.fillColor)
                 .style('opacity', (this.active) ? 0.85 : 0.0);
-              windTotal -= (parcel.properties.MWac * 0.2283 * 8760);
+              windTotal -= (parcel.properties.MWac);
             } else {
               d3.select(parcel.path)
                 .style('fill', 'transparent')
@@ -214,7 +219,7 @@ export const MauiPlan: Plan = {
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Solar.fill,
         borderColor: mapLayerColors.Solar.border,
-        borderWidth: 1,
+        borderWidth: 0.3,
         legendColor: mapLayerColors.Solar.fill,
         filePath: 'assets/plans/maui/layers/solar.json',
         parcels: [],
@@ -263,7 +268,7 @@ export const MauiPlan: Plan = {
         iconPath: 'assets/plans/maui/images/icons/agriculture-icon.png',
         secondScreenImagePath: 'assets/plans/maui/images/second-screen-images/layer-images/agriculture.jpg',
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        fillColor: mapLayerColors.Agriculture.fill,
+        fillColor: chartColors.Battery,
         borderColor: mapLayerColors.Agriculture.border,
         borderWidth: 1,
         legendColor: mapLayerColors.Agriculture.fill,
@@ -271,11 +276,11 @@ export const MauiPlan: Plan = {
         parcels: [],
         setupFunction(planService: PlanService) {
           const colors = {
-            A: this.fillColor,
-            B: 'black',
-            C: 'darkgray',
-            D: 'gray',
-            E: 'lightgray'
+            A: '#267300' + 'aa',
+            B: '#4ce600' + 'aa',
+            C: '#ffaa00' + 'aa',
+            D: '#a87000' + 'aa',
+            E: '#895a44' + 'aa',
           }
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)

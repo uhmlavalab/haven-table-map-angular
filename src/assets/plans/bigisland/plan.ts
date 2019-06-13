@@ -104,7 +104,7 @@ export const BigIslandPlan: Plan = {
       },
       {
         name: 'dod',
-        displayName: 'DOD Lands',
+        displayName: 'Government Lands',
         active: false,
         included: true,
         iconPath: 'assets/plans/bigisland/images/icons/dod-icon.png',
@@ -114,10 +114,29 @@ export const BigIslandPlan: Plan = {
         borderColor: mapLayerColors.Dod.border,
         borderWidth: 1,
         legendColor: mapLayerColors.Dod.fill,
-        filePath: 'assets/plans/bigisland/layers/dod.json',
+        filePath: 'assets/plans/bigisland/layers/government.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        setupFunction(planService: PlanService) {
+          const colors = {
+            'Public-Federal': '#e60000',
+            'Public-State': '#ff7f7f',
+            'Public-State DHHL': '#895a44',
+            'Public-County': '#00c5ff',
+          }
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.type])
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', this.borderWidth + 'px');
+          });
+        },
+        updateFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('opacity', this.active ? 0.85 : 0.0);
+          });
+        },
       },
       {
         name: 'solar',
@@ -129,7 +148,7 @@ export const BigIslandPlan: Plan = {
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Solar.fill,
         borderColor: mapLayerColors.Solar.border,
-        borderWidth: 1,
+        borderWidth: 0.5,
         legendColor: mapLayerColors.Solar.fill,
         filePath: 'assets/plans/bigisland/layers/solar.json',
         parcels: [],
@@ -180,9 +199,9 @@ export const BigIslandPlan: Plan = {
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        borderWidth: .15,
+        borderWidth: .05,
         legendColor: mapLayerColors.Wind.fill,
-        filePath: 'assets/plans/bigisland/layers/wind_2.json',
+        filePath: 'assets/plans/bigisland/layers/wind.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']);
@@ -236,11 +255,11 @@ export const BigIslandPlan: Plan = {
         parcels: [],
         setupFunction(planService: PlanService) {
           const colors = {
-            A: this.fillColor,
-            B: 'black',
-            C: 'darkgray',
-            D: 'gray',
-            E: 'lightgray'
+            A: '#267300' + 'aa',
+            B: '#4ce600' + 'aa',
+            C: '#ffaa00' + 'aa',
+            D: '#a87000' + 'aa',
+            E: '#895a44' + 'aa',
           }
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)

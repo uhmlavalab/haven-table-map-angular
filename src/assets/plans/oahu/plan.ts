@@ -108,7 +108,7 @@ export const OahuPlan: Plan = {
       },
       {
         name: 'dod',
-        displayName: 'DOD Lands',
+        displayName: 'Government Lands',
         active: false,
         included: true,
         iconPath: 'assets/plans/oahu/images/icons/dod-icon.png',
@@ -118,11 +118,29 @@ export const OahuPlan: Plan = {
         borderColor: mapLayerColors.Dod.border,
         borderWidth: 1,
         legendColor: mapLayerColors.Dod.fill,
-        filePath: 'assets/plans/oahu/layers/dod.json',
+        filePath: 'assets/plans/oahu/layers/government1.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
-      },
+        setupFunction(planService: PlanService) {
+          const colors = {
+            'Public-Federal': '#e60000',
+            'Public-State': '#ff7f7f',
+            'Public-State DHHL': '#895a44',
+            'Public-County': '#00c5ff',
+          }
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.type])
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', this.borderWidth + 'px');
+          });
+        },
+        updateFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('opacity', this.active ? 0.85 : 0.0);
+          });
+        },      },
       {
         name: 'parks',
         displayName: 'Park Lands',
@@ -167,12 +185,18 @@ export const OahuPlan: Plan = {
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        borderWidth: 0.5,
+        borderWidth: 0.2,
         legendColor: mapLayerColors.Wind.fill,
         filePath: 'assets/plans/oahu/layers/wind.json',
         parcels: [],
         setupFunction(planService: PlanService) {
-          let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']);
+          let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']) - 99;
+          const dictSort = {
+            '8.5+': 0,
+            '7.5-8.5': 1,
+            '6.5-7.5': 2
+          }
+          this.parcels.sort((a, b) => parseFloat(dictSort[a.properties.SPD_CLS]) - parseFloat(dictSort[b.properties.SPD_CLS]));
           this.parcels.sort((a, b) => parseFloat(b.properties.MWac) - parseFloat(a.properties.MWac));
           this.parcels.forEach(parcel => {
             if (windTotal > 0) {
@@ -192,7 +216,7 @@ export const OahuPlan: Plan = {
           });
         },
         updateFunction(planService: PlanService) {
-          let windTotal = planService.getGenerationTotalForCurrentYear(['Wind']);
+          let windTotal = planService.getCapacityTotalForCurrentYear(['Wind']) - 99;
           this.parcels.forEach(parcel => {
             if (windTotal > 0) {
               d3.select(parcel.path)
@@ -217,7 +241,7 @@ export const OahuPlan: Plan = {
         secondScreenText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         fillColor: mapLayerColors.Solar.fill,
         borderColor: mapLayerColors.Solar.border,
-        borderWidth: 0.35,
+        borderWidth: 0.2,
         legendColor: mapLayerColors.Solar.fill,
         filePath: 'assets/plans/oahu/layers/solar.json',
         parcels: [],

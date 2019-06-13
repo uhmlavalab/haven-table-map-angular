@@ -103,10 +103,10 @@ export class PlanService {
   }
 
   public getCapacityData(): Promise<any> {
-    this.capacityData = {};
     return new Promise((resolve, error) => {
       this.capacityData = {};
       d3.csv(this.currentPlan.data.capacityPath, (data) => {
+        console.log(data);
         data.forEach(element => {
           const year = element.year;
           const technology = element.technology;
@@ -121,6 +121,7 @@ export class PlanService {
           this.capacityData[scenario][technology].push({ year: Number(year), value: Number(value) });
         });
         return resolve(this.capacityData);
+
       });
     });
   }
