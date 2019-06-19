@@ -64,7 +64,9 @@
           Change
         </div>
         <div class="markers-detected" [style.opacity]="changingMarkerJob === marker.job ? 1 : 0">
-          DETECTED MARKERS GO HERE
+          <ul>
+            <li></li>
+          </ul>
           <div class="change-marker-button" (click)="handleConfirmMarkerChange($event, marker.job)">Confirm</div>
         </div>
       </div>

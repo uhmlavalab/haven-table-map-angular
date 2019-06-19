@@ -73,6 +73,15 @@ export class ProjectableMarker {
     return ProjectableMarker.projectableMarkers[`${id}`];
   }
 
+  /** Returns a single projectable marker object
+  * @param id => The id of the marker to return
+  * @return the marker whose id matches
+  */
+ public static getProjectableMarkerByJob(job: string) {
+    const marker = _.filter(ProjectableMarker.projectableMarkers, marker => marker.job === job);
+    return marker[0];
+}
+
   /** Gets all projectable markers.  Key is the marker id
   * @return all markers
   */
