@@ -7,6 +7,7 @@ import { ArService } from '../services/ar.service';
 import { PlanService } from '../services/plan.service';
 import { WindowRefService } from '../services/window-ref.service';
 import { MarkerService } from '@app/services/marker.service';
+import { ProjectableMarker } from '../classes/projectableMarker';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class LandingHomeComponent implements OnInit {
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
 
   private nativeWindow: any;
-  private markers: Marker[];
+  private markers: ProjectableMarker[];
   private help: string;
   private changingMarkerJob: string;
   private activePanel: string;
@@ -30,19 +31,36 @@ export class LandingHomeComponent implements OnInit {
   private plans: Plan[];
   private buttons: LandingButton;
   private loading: boolean;
+  private settingMarkers: boolean;
+  private liveMarkers: ProjectableMarker[] = [];
+  private tempMarkerChange: { id: number, job: string };
+  private markerIcons: { year: string, chart: string, scenario: string, layer: string, unassigned: string };
+  private jobs: any[];
 
   constructor(private arservice: ArService,
-              private planService: PlanService,
-              private windowRefservice: WindowRefService,
-              private markerService: MarkerService) {
+    private planService: PlanService,
+    private windowRefservice: WindowRefService,
+    private markerService: MarkerService) {
     this.activePanel = 'maps';
-    this.markers = this.markerService.getMarkers();
     this.buttons = landingButtons; // Imported from Default Data
     this.panels = panels; // Imported from default data
     this.nativeWindow = this.windowRefservice.getNativeWindow();
     this.help = 'keyboard';
     this.changingMarkerJob = 'none';
     this.loading = this.windowRefservice.getLoadingStatus();
+    this.settingMarkers = false;
+    this.tempMarkerChange = {
+      id: -1,
+      job: ''
+    }
+    this.markerIcons = {
+      year: 'layers-01.png',
+      chart: 'pie-01.png',
+      layer: 'layers-01.png',
+      scenario: 'scenario-01.png',
+      unassigned: ''
+    }
+    this.jobs = this.setJobsArray();
   }
 
   ngOnInit() {
@@ -53,6 +71,25 @@ export class LandingHomeComponent implements OnInit {
         this.loading = value;
       }
     });
+
+    this.arservice.markerSubject.subscribe({
+      next: value => {
+        this.liveMarkers = value;
+      }
+    });
+  }
+  
+
+  private setJobsArray(): any[] {
+    const jobsList = ['year', 'layer', 'chart', 'scenario'];
+    const resultsArray = [];
+    jobsList.forEach(jobText => {
+      const marker = ProjectableMarker.getProjectableMarkerByJob(jobText);
+      const iconText = marker ? marker.icon : null;
+      const id = marker ? marker.markerId : null;
+      resultsArray.push({job: jobText, icon: this.markerIcons[jobText], markerId: id});
+    });
+    return resultsArray;
   }
 
   /**
@@ -165,6 +202,35 @@ export class LandingHomeComponent implements OnInit {
    * @param tag => The job tag
    */
   private handleConfirmMarkerChange(event: any, tag: string): void {
+
+    const newId = this.tempMarkerChange.id;
+    const newJob = this.tempMarkerChange.job;
+    const markers = ProjectableMarker.getAllProjectableMarkers();
+
+    if (ProjectableMarker.getProjectableMarkerByJob(newJob) === undefined) {
+      markers[newId].setJob(newJob);
+      markers[newId].setIcon(this.markerIcons[newJob]);
+    } else {
+      const oldMarker = ProjectableMarker.getProjectableMarkerByJob(newJob);
+      const oldId = oldMarker.markerId;
+      oldMarker.setJob('unassigned');
+      oldMarker.setIcon(this.markerIcons['unassigned']);
+      markers[newId].setJob(newJob);
+      markers[newId].setIcon(this.markerIcons[newJob]);
+    }
     this.changingMarkerJob = 'none';
+    this.jobs = this.setJobsArray();
+    console.log(ProjectableMarker.getAllProjectableMarkers());
+  }
+
+  private handleCancelMarkerChange(): void {
+    this.tempMarkerChange.id = -1;
+    this.tempMarkerChange.job = '';
+    this.changingMarkerJob = 'none';
+  }
+
+  private reassignMarker(job: string, id: number) {
+    this.tempMarkerChange.id = id;
+    this.tempMarkerChange.job = job;
   }
 }

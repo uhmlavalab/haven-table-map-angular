@@ -56,11 +56,13 @@ export class WindowRefService {
    * @return true if successful, false if failed.
    */
   public notifySecondScreen(message: string): boolean {
-    try {
-      this.sendMessageToSecondScreen(this.getSecondScreenId(), message);
-      return true;
-    } catch (error) {
-      return false;
+    if (this.secondScreenIsSet()) {
+      try {
+        this.sendMessageToSecondScreen(this.getSecondScreenId(), message);
+        return true;
+      } catch (error) {
+        return false;
+      }
     }
   }
   /** Searches through the known windows and finds the second screen window.

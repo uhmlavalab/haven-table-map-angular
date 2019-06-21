@@ -7,6 +7,7 @@ import { markers } from '../../assets/defaultData/markers';
 import { _ } from 'underscore';
 import AR from 'js-aruco';
 import { MapService } from './map.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class ArService {
   width: number;
   height: number;
   running: boolean;
+  public markerSubject = new Subject<ProjectableMarker[]>();
 
   /* If an active marker has not been detected for this many milliseconds,
   * it is officially inactive. */
@@ -77,6 +79,8 @@ export class ArService {
         ProjectableMarker.getLiveProjectableMarkers().forEach(marker =>
           marker.analyzeMarkerData() // Run normal operations on each live marker
         );
+
+        this.markerSubject.next(ProjectableMarker.getLiveProjectableMarkers());
       }
     });
   }

@@ -54,24 +54,29 @@
   <!-- Contains the marker selection cards -->
   <div class="marker-selector-container" [style.left]="activePanel == 'markers' ? '25%' : '100%'"
     id="marker-selector-container" name="marker-selector-container" appMapSelectionDirective>
-    <div class="marker-selector-card" *ngFor="let marker of markers">
-      <img src="../../assets/images/icons/{{marker.icon}}" />
+    <div class="marker-selector-card" *ngFor="let job of jobs">
+      <img src="../../assets/images/icons/{{job.icon}}" />
       <div class="marker-selector-card-info">
-        <h3>{{marker.text}}</h3>
-        <p>Aruco Marker ID: {{marker.markerId}}</p>
-        <div id="change-marker-button-{{marker.job}}" class="change-marker-button"
-          (click)="handleChangeMarker($event, marker.job)" [style.opacity]="changingMarkerJob === marker.job ? 0 : 1">
+        <h3>{{job.job}}</h3>
+        <p>Aruco Marker ID: {{job.markerId}}</p>
+        <div id="change-marker-button-{{job.job}}" class="change-marker-button"
+          (click)="handleChangeMarker($event, job.job)" [style.display]="changingMarkerJob === job.job ? 'none' : 'block'">
           Change
         </div>
-        <div class="markers-detected" [style.opacity]="changingMarkerJob === marker.job ? 1 : 0">
+        <div class="markers-detected" [style.display]="changingMarkerJob === job.job ? 'block' : 'none'">
           <ul>
-            <li></li>
+            <li *ngFor="let liveMarker of liveMarkers">
+              <input name="changeMarkerGroup" type="radio" (change)="reassignMarker(job.job, liveMarker.markerId)" />
+              <label for="changeMarkerGroup">{{ liveMarker.markerId }} </label>
+            </li>
           </ul>
-          <div class="change-marker-button" (click)="handleConfirmMarkerChange($event, marker.job)">Confirm</div>
+          <div class="change-marker-button" (click)="handleConfirmMarkerChange($event, job.job)">Confirm</div>
+          <div class="change-marker-button" (click)="handleCancelMarkerChange($event, job.job)">Cancel</div>
+        </div>
+
         </div>
       </div>
     </div>
-  </div>
 
   <!-- contains the layer selector cards
 <div class="layer-selector-container" [style.left]="activePanel == 'layers' ? '25%' : '100%'" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>

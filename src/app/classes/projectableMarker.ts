@@ -65,6 +65,10 @@ export class ProjectableMarker {
     return _.filter(ProjectableMarker.projectableMarkerArray, marker => marker.live === true);
   }
 
+  public static getAllProjectableMarkersArray(): any[] {
+    return ProjectableMarker.projectableMarkerArray;
+  }
+
   /** Returns a single projectable marker object
   * @param id => The id of the marker to return
   * @return the marker whose id matches
@@ -108,6 +112,14 @@ export class ProjectableMarker {
       // Wasnt moved, dont do shit.
     }
     return true;
+  }
+
+  public setIcon(icon: string): void {
+    this.icon = icon;
+  }
+
+  public setJob(job: string): void {
+    this.job = job;
   }
 
   /** This function analyzes each of the live markers with each tick.
@@ -260,11 +272,11 @@ export class ProjectableMarker {
     return difference > ProjectableMarker.MAX_ACTIVE_TIMER;
   }
 
-  /** Gets the markerId number
+  /** Sets the markerId number
   * @param id => the new Id number
   * @return the markerId number
   */
-  public getMarkerId(id) {
+  public setMarkerId(id) {
     this.markerId = id;
   }
 
