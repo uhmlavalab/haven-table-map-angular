@@ -12,11 +12,24 @@
 
   <app-bouncing-title></app-bouncing-title>
 
+  <div class="calibration-overlay" [style.display]="calibrating ? 'block' : 'none'">
+    <div *ngFor="let point of trackingPoints; index as i" class="tracking-point">
+      <img src="../../assets/images/config-images/aruco-1.svg" class="tracking-point"
+      [style.opacity]="calibrationIndex === i ? '1': '0'"
+      [style.borderColor]="point.detected ? 'green' : 'white'">
+    </div>
+  </div>
+
   <!-- Selection Buttons -->
   <div class="landing-buttons-container">
     <div *ngFor="let button of buttons" class="selection-button" id="{{ button.id }}"
       (click)="handleSelectButtonClick($event.target)">
       {{ button.text }}
+    </div>
+    <!-- back button is only displayed when the map selection panel is not in view -->
+    <div class="selection-button" [style.display]="activePanel == 'cams' ? 'block' : 'none'" id="maps"
+      (click)="startCalibration()">
+      Configure
     </div>
     <!-- back button is only displayed when the map selection panel is not in view -->
     <div class="selection-button" [style.opacity]="activePanel == 'maps' ? '0' : '1'" id="maps"
@@ -77,18 +90,6 @@
         </div>
       </div>
     </div>
-
-  <!-- contains the layer selector cards
-<div class="layer-selector-container" [style.left]="activePanel == 'layers' ? '25%' : '100%'" id="layer-selector-container" name="layer-selector-container" appMapSelectionDirective>
-  <div class="layer-selector-card" *ngFor="let layer of plans[0].map.mapLayers">
-    <img src="../../assets/images/icons/{{layer.icon}}" />
-    <div class="info">
-      <h3>{{layer.displayName}}</h3>
-      <input type="checkbox" checked="checked" id="include-{{layer.name}}" (change)="handleLayerSetupCheck(layer, $event.target.checked)">Include Layer
-    </div>
-  </div>
-</div>
-    -->
 
   <!-- contains the help selector cards -->
   <div class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'"

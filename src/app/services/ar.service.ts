@@ -22,7 +22,9 @@ export class ArService {
   width: number;
   height: number;
   running: boolean;
+  calibrating: boolean;
   public markerSubject = new Subject<ProjectableMarker[]>();
+  public calibrationSubject = new Subject<any>();
 
   /* If an active marker has not been detected for this many milliseconds,
   * it is officially inactive. */
@@ -70,6 +72,9 @@ export class ArService {
         // Run detect marker for each one
 
         arucoMarkers.forEach(marker => {
+          if (this.calibrating) {
+            this.calibrationSubject.next(marker);
+          }
           const pm = ProjectableMarker.getProjectableMarkerById(marker.id);
           if (pm) {
             pm.detectMarker(marker.corners, videoFeed.id);
@@ -118,5 +123,13 @@ export class ArService {
   */
   public killTick(): void {
     this.running = false;
+  }
+
+  public createPoint(): void {
+    console.log('configure');
+  }
+
+  public startCalibration(): void {
+    this.calibrating = true;
   }
 }

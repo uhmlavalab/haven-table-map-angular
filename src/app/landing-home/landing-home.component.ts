@@ -8,6 +8,7 @@ import { PlanService } from '../services/plan.service';
 import { WindowRefService } from '../services/window-ref.service';
 import { MarkerService } from '@app/services/marker.service';
 import { ProjectableMarker } from '../classes/projectableMarker';
+import { TrackingPoint } from '../classes/trackingPoint';
 
 
 @Component({
@@ -36,6 +37,12 @@ export class LandingHomeComponent implements OnInit {
   private tempMarkerChange: { id: number, job: string };
   private markerIcons: { year: string, chart: string, scenario: string, layer: string, unassigned: string };
   private jobs: any[];
+  private calibrating: boolean;
+  private activeCalibrationMarker: number;
+  private trackingPoints: TrackingPoint[] = [];
+  private calibrationDetectedMarker: any;
+  private numberOfCalibrationMarkers: number;
+  private calibrationIndex: number;
 
   constructor(private arservice: ArService,
     private planService: PlanService,
@@ -61,6 +68,11 @@ export class LandingHomeComponent implements OnInit {
       unassigned: ''
     }
     this.jobs = this.setJobsArray();
+    this.calibrating = false;
+    this.numberOfCalibrationMarkers = 105;
+    for (let i = 0; i < this.numberOfCalibrationMarkers; i++) {
+      this.trackingPoints.push(new TrackingPoint());
+    }
   }
 
   ngOnInit() {
@@ -77,8 +89,40 @@ export class LandingHomeComponent implements OnInit {
         this.liveMarkers = value;
       }
     });
+
+    this.arservice.calibrationSubject.subscribe({
+      next: value => {
+        this.calibrationDetected(value);
+      }
+    });
   }
   
+  private startCalibration(): void {
+    this.calibrating = true;
+    this.arservice.startCalibration();
+    this.calibrationIndex = 0;
+    this.recursiveCalibrate(0);
+  }
+
+  private recursiveCalibrate(index: number) {
+    console.log(index);
+    if (index >= this.numberOfCalibrationMarkers) {
+      return;
+    } else {
+      this.calibrationIndex = index;
+      setTimeout(() => {
+        this.calibrationIndex = -1;
+      }, 300);
+      setTimeout(() => {
+        this.recursiveCalibrate(index + 1);
+      }, 350);
+    }
+
+  }
+
+  private calibrationDetected(marker: any) {
+    this.trackingPoints[this.calibrationIndex].detect();
+  }
 
   private setJobsArray(): any[] {
     const jobsList = ['year', 'layer', 'chart', 'scenario'];
@@ -220,7 +264,6 @@ export class LandingHomeComponent implements OnInit {
     }
     this.changingMarkerJob = 'none';
     this.jobs = this.setJobsArray();
-    console.log(ProjectableMarker.getAllProjectableMarkers());
   }
 
   private handleCancelMarkerChange(): void {
