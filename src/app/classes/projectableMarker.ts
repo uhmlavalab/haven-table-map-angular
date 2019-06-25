@@ -311,7 +311,7 @@ export class ProjectableMarker {
  * Gets the center X position of the marker.
  * @return x center.
  */
-  private getCenterX() {
+  public getCenterX() {
     const corners = this.corners;
     return (corners[0].x + corners[2].x) * 0.5;
   }
@@ -321,7 +321,7 @@ export class ProjectableMarker {
    * Gets the center Y position of the marker.
    * @return y center.
    */
-  private getCenterY() {
+  public getCenterY() {
     const corners = this.corners;
     return (corners[0].y + corners[2].y) * 0.5;
   }

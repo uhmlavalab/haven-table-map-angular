@@ -141,19 +141,28 @@ export class PlanService {
   }
 
   public incrementCurrentYear(): void {
-    if (this.currentYear < this.currentPlan.maxYear) {
-      this.currentYear++;
-      this.soundsService.click();
+    try {
+      if (this.currentYear < this.currentPlan.maxYear) {
+        this.currentYear++;
+        this.soundsService.click();
+      }
+      this.yearSubject.next(this.currentYear);
+    } catch(error) {
+      // Catch error when setting up
     }
-    this.yearSubject.next(this.currentYear);
   }
 
   public decrementCurrentYear(): void {
-    if (this.currentYear > this.currentPlan.minYear) {
-      this.currentYear--;
-      this.soundsService.click();
+    try {
+      if (this.currentYear > this.currentPlan.minYear) {
+        this.currentYear--;
+        this.soundsService.click();
+      }
+      this.yearSubject.next(this.currentYear);
+    } catch (error) {
+      // catch error when setting up
     }
-    this.yearSubject.next(this.currentYear);
+
   }
 
   public setCurrentYear(year): void {

@@ -8,6 +8,7 @@ import { _ } from 'underscore';
 import AR from 'js-aruco';
 import { MapService } from './map.service';
 import { Subject } from 'rxjs';
+import { TrackingPoint } from '../classes/trackingPoint';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,7 @@ export class ArService {
   calibrating: boolean;
   public markerSubject = new Subject<ProjectableMarker[]>();
   public calibrationSubject = new Subject<any>();
+  private trackingPoints: TrackingPoint[] = [];
 
   /* If an active marker has not been detected for this many milliseconds,
   * it is officially inactive. */
@@ -39,8 +41,8 @@ export class ArService {
   videoFeedArray: any[] = [];
 
   constructor(private planService: PlanService,
-              private soundsservice: SoundsService,
-              private mapService: MapService) {
+    private soundsservice: SoundsService,
+    private mapService: MapService) {
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
@@ -72,9 +74,6 @@ export class ArService {
         // Run detect marker for each one
 
         arucoMarkers.forEach(marker => {
-          if (this.calibrating) {
-            this.calibrationSubject.next(marker);
-          }
           const pm = ProjectableMarker.getProjectableMarkerById(marker.id);
           if (pm) {
             pm.detectMarker(marker.corners, videoFeed.id);
@@ -86,6 +85,9 @@ export class ArService {
         );
 
         this.markerSubject.next(ProjectableMarker.getLiveProjectableMarkers());
+        if (this.calibrating) {
+          this.calibrationSubject.next(ProjectableMarker.getLiveProjectableMarkers());
+        }
       }
     });
   }
@@ -132,4 +134,42 @@ export class ArService {
   public startCalibration(): void {
     this.calibrating = true;
   }
+
+  public createTrackingPoint(camX: number, camY: number, mapX: number, mapY: number) {
+    this.trackingPoints.push(new TrackingPoint(camX, camY, mapX, mapY));
+    console.log(this.trackingPoints);
+  }
+
+  public track(x: number, y: number) {
+   let minPointX = null;
+   let minPointY = null;
+   let maxPointX = null;
+   let maxPointY = null;
+
+   this.trackingPoints.forEach(point => {
+      if (x > point.getCamX()) {
+        minPointX = point;
+      } 
+
+     if (maxPointX === null) {
+      if (x < point.getCamX()) {
+        maxPointX = point;
+      } 
+     }
+
+      if (y > point.getCamY()) {
+        minPointY = point;
+      } 
+  
+
+     if (maxPointY === null) {
+      if (y < point.getCamY()) {
+        maxPointY = point;
+      } 
+     }
+   });
+
+   console.log(minPointX.getCamX() + ' ' + minPointY.getCamY() + ' ' + maxPointX.getCamX() + ' ' + maxPointY.getCamY());
+  }
+
 }

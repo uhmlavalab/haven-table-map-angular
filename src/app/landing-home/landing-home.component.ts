@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren, ViewChild } from '@angular/core';
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
 import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
@@ -22,6 +22,8 @@ export class LandingHomeComponent implements OnInit {
 
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
+  @ViewChild('manualPoint', {static: false}) manualPoint;
+  @ViewChild('trackingPoint', {static: false}) TrackingPoint;
 
   private nativeWindow: any;
   private markers: ProjectableMarker[];
@@ -43,6 +45,13 @@ export class LandingHomeComponent implements OnInit {
   private calibrationDetectedMarker: any;
   private numberOfCalibrationMarkers: number;
   private calibrationIndex: number;
+  private manualPosition: number;
+  private displayLandmarks: boolean;
+  private markerDetected: boolean;
+  private currentMarker: any;
+  private centerX: number;
+  private centerY: number;
+  private tracking: boolean;
 
   constructor(private arservice: ArService,
     private planService: PlanService,
@@ -69,10 +78,17 @@ export class LandingHomeComponent implements OnInit {
     }
     this.jobs = this.setJobsArray();
     this.calibrating = false;
+    /*
     this.numberOfCalibrationMarkers = 105;
     for (let i = 0; i < this.numberOfCalibrationMarkers; i++) {
       this.trackingPoints.push(new TrackingPoint());
-    }
+    } */
+    this.manualPosition = -1;
+    this.displayLandmarks = false;
+    this.markerDetected = false;
+    this.centerX = 0;
+    this.centerY = 0;
+    this.tracking = false;
   }
 
   ngOnInit() {
@@ -93,15 +109,63 @@ export class LandingHomeComponent implements OnInit {
     this.arservice.calibrationSubject.subscribe({
       next: value => {
         this.calibrationDetected(value);
+        if (this.tracking) {
+          this.track(value[0]);
+        }
       }
     });
+  }
+
+  private toggleLandmarks() {
+    this.displayLandmarks = !this.displayLandmarks;
   }
   
   private startCalibration(): void {
     this.calibrating = true;
     this.arservice.startCalibration();
-    this.calibrationIndex = 0;
-    this.recursiveCalibrate(0);
+    this.manualPosition = 0;
+    this.manualCalibration(this.manualPosition);
+    //this.calibrationIndex = 0;
+    //this.recursiveCalibrate(0);
+  }
+
+  private manualCalibration(position: number) {
+    switch (position) {
+      case 0: {
+        this.manualPoint.nativeElement.style.left = 0;
+        this.manualPoint.nativeElement.style.top = '40vh';
+        break;
+      }
+      case 1: {
+        this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
+        this.manualPoint.nativeElement.style.top = '40vh';
+        break;
+      }
+      case 2: {
+        this.manualPoint.nativeElement.style.left = 0;
+        this.manualPoint.nativeElement.style.top = '70vh';
+        break;
+      }
+      case 3: {
+        this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
+        this.manualPoint.nativeElement.style.top = '70vh';
+        break;
+      }
+      case 4: {
+        this.manualPoint.nativeElement.style.left = 0;
+        this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
+        break;
+      }
+      case 5: {
+        this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
+        this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
+        break;
+      } 
+      default: {
+        this.calibrating = false;
+        break;
+      }
+    }
   }
 
   private recursiveCalibrate(index: number) {
@@ -120,8 +184,27 @@ export class LandingHomeComponent implements OnInit {
 
   }
 
-  private calibrationDetected(marker: any) {
-    this.trackingPoints[this.calibrationIndex].detect();
+  private confirmPosition() {
+    const element = this.manualPoint.nativeElement.getBoundingClientRect();
+    const mapX = (element.right + element.left) / 2;
+    const mapY = (element.top + element.bottom) / 2;
+    this.arservice.createTrackingPoint(this.centerX, this.centerY, mapX, mapY);
+    this.manualPosition++;
+    this.manualCalibration(this.manualPosition);
+  }
+
+  private calibrationDetected(liveMarkerArray: any) {
+   // this.trackingPoints[this.calibrationIndex].detect();
+   //console.log(marker.id);
+  if (liveMarkerArray.length > 0) {
+    this.markerDetected = true;
+    this.centerX = liveMarkerArray[0].getCenterX();
+    this.centerY = liveMarkerArray[0].getCenterY();
+  } else {
+    this.markerDetected = false;
+    this.centerX = 0;
+    this.centerY = 0;
+  }
   }
 
   private setJobsArray(): any[] {
@@ -275,5 +358,17 @@ export class LandingHomeComponent implements OnInit {
   private reassignMarker(job: string, id: number) {
     this.tempMarkerChange.id = id;
     this.tempMarkerChange.job = job;
+  }
+
+  private testTracking() {
+    this.tracking = true;
+  }
+
+  private track(marker: ProjectableMarker) {
+    try {
+      this.arservice.track(marker.getCenterX(), marker.getCenterY());
+    } catch(error) {
+      //undefined marker
+    }
   }
 }

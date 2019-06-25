@@ -6,12 +6,11 @@ export class TrackingPoint {
     private camY: number;
     public detected: boolean;
 
-    constructor() {
-        this.mapX = 0;
-        this.mapY = 0
-        this.camX = 0;
-        this.camY = 0;
-        this.detected = false;
+    constructor(camX: number, camY: number, mapX: number, mapY: number) {
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.camX = camX;
+        this.camY = camY;
     }
 
     public setCamPoint(x: number, y: number): void {
@@ -22,6 +21,22 @@ export class TrackingPoint {
     public setMapPoint(x: number, y: number): void {
         this.mapX = x;
         this.mapY = y;
+    }
+
+    public getCamX() {
+        return this.camX;
+    }
+
+    public getCamY() {
+        return this.camY;
+    }
+
+    public getMapX() {
+        return this.mapX;
+    }
+
+    public getMapY() {
+        return this.mapY;
     }
 
     public detect() {

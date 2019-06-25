@@ -196,7 +196,39 @@
   top: 0;
   width: 24vw;
   height: 100vh;
+  background-color:black;
+}
+.manual-point-detection-container{
+  color: white;
+}
+.manual-point {
+  width: 58px;
+  height: 58px;
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+}
+
+.tracking-dot {
+  width: 58px;
+  height: 58px;
+  position: absolute;
   background-color: black;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+}
+
+.tracking-test-overlay {
+  position: absolute;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 24vw;
+  height: 100vh;
+  background-color:white;
 }
 
 .tracking-point {
@@ -210,6 +242,42 @@
   width: 100%;
   height: 100%;
   border: 10px solid white;
+}
+
+.cam-box-container {
+  width: 24vw;
+  height: 100%;
+  z-index: 200;
+  position: absolute;
+  background-color: white;
+}
+
+.cam-box {
+  background-color: green;
+  border: 10px solid black;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+}
+
+#cam-box-1 {
+  left: 0;
+  top: 40vh;
+}
+
+#cam-box-2 {
+  left: 0;
+  bottom: 0;
+}
+
+#cam-box-3 {
+  left: calc(22vw - 50px);
+  bottom: 0;
+}
+
+#cam-box-4 {
+  left: calc(22vw - 50px);
+  top: 40vh;
 }
 /* Styles for the camera selection */
 .camera-selector-container {
