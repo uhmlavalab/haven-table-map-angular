@@ -23,7 +23,8 @@ export class LandingHomeComponent implements OnInit {
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
   @ViewChild('manualPoint', {static: false}) manualPoint;
-  @ViewChild('trackingPoint', {static: false}) TrackingPoint;
+  @ViewChild('trackingPoint', {static: false}) trackingPoint;
+  @ViewChild('trackingDot', {static: false}) trackingDot;
 
   private nativeWindow: any;
   private markers: ProjectableMarker[];
@@ -366,7 +367,10 @@ export class LandingHomeComponent implements OnInit {
 
   private track(marker: ProjectableMarker) {
     try {
-      this.arservice.track(marker.getCenterX(), marker.getCenterY());
+      const dataPoint = this.arservice.track(marker.getCenterX(), marker.getCenterY());
+      console.log(dataPoint);
+      this.trackingDot.nativeElement.style.left = dataPoint.x + 'px';
+      this.trackingDot.nativeElement.style.top = dataPoint.y + 'px';
     } catch(error) {
       //undefined marker
     }

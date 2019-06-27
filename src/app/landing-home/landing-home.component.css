@@ -205,7 +205,7 @@
   width: 58px;
   height: 58px;
   position: absolute;
-  background-color: white;
+  background-color: rgb(4, 25, 58);
   border-radius: 50%;
   top: 0;
   left: 0;
@@ -228,7 +228,7 @@
   top: 0;
   width: 24vw;
   height: 100vh;
-  background-color:white;
+  background-color:white
 }
 
 .tracking-point {

@@ -140,7 +140,7 @@ export class ArService {
     console.log(this.trackingPoints);
   }
 
-  public track(x: number, y: number) {
+  public track(x: number, y: number): {x: number, y: number} {
    let minPointX = null;
    let minPointY = null;
    let maxPointX = null;
@@ -169,7 +169,23 @@ export class ArService {
      }
    });
 
-   console.log(minPointX.getCamX() + ' ' + minPointY.getCamY() + ' ' + maxPointX.getCamX() + ' ' + maxPointY.getCamY());
+
+   //console.log(minPointX);
+   //console.log(maxPointX);
+
+   const camDistanceX = maxPointX.getCamX() - minPointX.getCamX();
+   const camPercentageX = camDistanceX / (x - minPointX.getCamX());
+
+   const actualX = camPercentageX * (maxPointX.getMapX());
+
+   const camDistanceY = maxPointY.getCamY() - minPointY.getCamY();
+   const camPercentageY = camDistanceY / (y - minPointY.getCamY());
+
+   const actualY = (camPercentageY * (maxPointY.getMapY() - minPointY.getMapY())) + minPointY.getMapY();
+   
+   console.log(x + 'x' + y + 'y' + minPointX.getCamX() + ' ' + minPointY.getMapY() + ' ' + maxPointX.getCamX() + ' ' + maxPointY.getMapY());
+  // console.log(`x: ${actualX}, y: ${actualY}`);
+   return {x: actualX, y: actualY};
   }
 
 }
