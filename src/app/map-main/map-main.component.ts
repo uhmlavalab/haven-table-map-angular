@@ -59,6 +59,7 @@ export class MapMainComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario];
+    console.log(this.trackingDots);
     this.planService.legendSubject.subscribe({
       next: value => {
         this.top = this.plan.css.legend[value].top;
