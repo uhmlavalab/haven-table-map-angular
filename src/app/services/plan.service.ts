@@ -147,7 +147,7 @@ export class PlanService {
         this.soundsService.click();
       }
       this.yearSubject.next(this.currentYear);
-    } catch(error) {
+    } catch (error) {
       // Catch error when setting up
     }
   }
