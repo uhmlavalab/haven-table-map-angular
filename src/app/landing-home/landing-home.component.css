@@ -202,23 +202,31 @@
   color: white;
 }
 .manual-point {
-  width: 58px;
-  height: 58px;
+  width: 75px;
+  height: 75px;
   position: absolute;
-  background-color: rgb(4, 25, 58);
+  background-color: white;
   border-radius: 50%;
   top: 0;
   left: 0;
 }
 
 .tracking-dot {
-  width: 58px;
-  height: 58px;
+  width: 110px;
+  height: 110px;
   position: absolute;
-  background-color: black;
+  background-color:white;
   border-radius: 50%;
   top: 0;
   left: 0;
+}
+
+.tracking-dot .main-icon img {
+  width: 40%;
+  top: 30%;
+  left: 30%;
+  position: absolute;
+  vertical-align: middle;
 }
 
 .tracking-test-overlay {
@@ -228,7 +236,7 @@
   top: 0;
   width: 24vw;
   height: 100vh;
-  background-color:white
+  background-color:black;
 }
 
 .tracking-point {

@@ -17,3 +17,34 @@
 <app-scenario class="scenario-container" [style.top]="plan.css.scenario.top" [style.left]="plan.css.scenario.left"
   cdkDrag></app-scenario>
 <app-video-feed></app-video-feed>
+<div class="tracking-dot year" #trackingDotYear>
+  <div class="display">
+    <img src="../../assets/images/tracking-icons/left-chevron.png">
+    <p> -  {{ currentYear}}  + </p>
+    <img src="../../assets/images/tracking-icons/right-chevron.png">
+  </div>
+  <div class="main-icon">
+      <img src="../../assets/images/tracking-icons/year.png">
+    </div>
+</div>
+<div class="tracking-dot layer" #trackingDotLayer>
+    <div class="display">
+      <img src="../../assets/images/tracking-icons/left-chevron.png">
+      <p> {{ nextLayer }} </p>
+      <img src="../../assets/images/tracking-icons/right-chevron.png">
+    </div>
+    <div class="main-icon">
+      <img src="../../assets/images/tracking-icons/layers.png">
+    </div>
+  </div>
+
+  <div class="tracking-dot scenario" #trackingDotScenario>
+      <div class="display">
+        <img src="../../assets/images/tracking-icons/left-chevron.png">
+        <p> {{ currentScenario }} </p>
+        <img src="../../assets/images/tracking-icons/right-chevron.png">
+      </div>
+      <div class="main-icon">
+        <img src="../../assets/images/tracking-icons/scenario.png">
+      </div>
+    </div>

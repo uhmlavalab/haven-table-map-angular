@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
 import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
@@ -22,9 +22,9 @@ export class LandingHomeComponent implements OnInit {
 
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChildren(MapSelectionDirectiveDirective) slideDirective;
-  @ViewChild('manualPoint', {static: false}) manualPoint;
-  @ViewChild('trackingPoint', {static: false}) trackingPoint;
-  @ViewChild('trackingDot', {static: false}) trackingDot;
+  @ViewChild('manualPoint', { static: false }) manualPoint;
+  @ViewChild('trackingPoint', { static: false }) trackingPoint;
+  @ViewChild('trackingDot', { static: false }) trackingDot;
 
   private nativeWindow: any;
   private markers: ProjectableMarker[];
@@ -120,7 +120,7 @@ export class LandingHomeComponent implements OnInit {
   private toggleLandmarks() {
     this.displayLandmarks = !this.displayLandmarks;
   }
-  
+
   private startCalibration(): void {
     this.calibrating = true;
     this.arservice.startCalibration();
@@ -144,26 +144,18 @@ export class LandingHomeComponent implements OnInit {
       }
       case 2: {
         this.manualPoint.nativeElement.style.left = 0;
-        this.manualPoint.nativeElement.style.top = '70vh';
+        this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
         break;
       }
       case 3: {
         this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
-        this.manualPoint.nativeElement.style.top = '70vh';
-        break;
-      }
-      case 4: {
-        this.manualPoint.nativeElement.style.left = 0;
         this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
         break;
       }
-      case 5: {
-        this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
-        this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
-        break;
-      } 
       default: {
         this.calibrating = false;
+        this.arservice.completeCalibration();
+        this.testTracking();
         break;
       }
     }
@@ -182,7 +174,12 @@ export class LandingHomeComponent implements OnInit {
         this.recursiveCalibrate(index + 1);
       }, 350);
     }
+  }
 
+  private completeTrackTesting(): void {
+    this.tracking = false;
+    this.arservice.stopCalibration();
+    this.arservice.setTracking(true);
   }
 
   private confirmPosition() {
@@ -195,17 +192,17 @@ export class LandingHomeComponent implements OnInit {
   }
 
   private calibrationDetected(liveMarkerArray: any) {
-   // this.trackingPoints[this.calibrationIndex].detect();
-   //console.log(marker.id);
-  if (liveMarkerArray.length > 0) {
-    this.markerDetected = true;
-    this.centerX = liveMarkerArray[0].getCenterX();
-    this.centerY = liveMarkerArray[0].getCenterY();
-  } else {
-    this.markerDetected = false;
-    this.centerX = 0;
-    this.centerY = 0;
-  }
+    // this.trackingPoints[this.calibrationIndex].detect();
+    //console.log(marker.id);
+    if (liveMarkerArray.length > 0) {
+      this.markerDetected = true;
+      this.centerX = liveMarkerArray[0].getCenterX();
+      this.centerY = liveMarkerArray[0].getCenterY();
+    } else {
+      this.markerDetected = false;
+      this.centerX = 0;
+      this.centerY = 0;
+    }
   }
 
   private setJobsArray(): any[] {
@@ -215,7 +212,7 @@ export class LandingHomeComponent implements OnInit {
       const marker = ProjectableMarker.getProjectableMarkerByJob(jobText);
       const iconText = marker ? marker.icon : null;
       const id = marker ? marker.markerId : null;
-      resultsArray.push({job: jobText, icon: this.markerIcons[jobText], markerId: id});
+      resultsArray.push({ job: jobText, icon: this.markerIcons[jobText], markerId: id });
     });
     return resultsArray;
   }
@@ -368,11 +365,24 @@ export class LandingHomeComponent implements OnInit {
   private track(marker: ProjectableMarker) {
     try {
       const dataPoint = this.arservice.track(marker.getCenterX(), marker.getCenterY());
-      console.log(dataPoint);
-      this.trackingDot.nativeElement.style.left = dataPoint.x + 'px';
-      this.trackingDot.nativeElement.style.top = dataPoint.y + 'px';
-    } catch(error) {
+      this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
+      this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';
+    } catch (error) {
       //undefined marker
+    }
+  }
+
+  /* KEYBOARD CONTROLS */
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'ArrowUp') {
+      this.arservice.incrementYOffset();
+    } else if (event.key === 'ArrowDown') {
+      this.arservice.decrementYOffset();
+    } else if (event.key === 'ArrowRight') {
+      this.arservice.incrementXOffset();
+    } else if (event.key === 'ArrowLeft') {
+      this.arservice.decrementXOffset();
     }
   }
 }

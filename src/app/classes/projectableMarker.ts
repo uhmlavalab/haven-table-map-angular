@@ -122,6 +122,10 @@ export class ProjectableMarker {
     this.job = job;
   }
 
+  public getJob(): string {
+    return this.job;
+  }
+
   /** This function analyzes each of the live markers with each tick.
   * @return true if successful, false if did not work
   */

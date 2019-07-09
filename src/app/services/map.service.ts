@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
-
 import { PlanService } from './plan.service';
 import { Map, MapLayer } from '@app/interfaces';
+import { SoundsService } from './sounds.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class MapService {
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
   public updateLayerSubject = new Subject<MapLayer>();
 
-  constructor(private planService: PlanService) {
+  constructor(private planService: PlanService, private soundsService: SoundsService) {
 
     this.planService.planSubject.subscribe(plan => {
       if (plan === null) {
@@ -122,6 +122,11 @@ export class MapService {
     if (index !== -1) {
       this.layers[index].active = !this.layers[index].active;
       this.toggleLayerSubject.next(this.layers[index]);
+      if (this.layers[index].active) {
+        this.soundsService.dropUp();
+      } else {
+        this.soundsService.dropDown();
+      }
     }
   }
 
@@ -139,12 +144,14 @@ export class MapService {
     }
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
+    this.soundsService.tick();
   }
 
   public incrementNextLayer() {
     const index = this.layers.indexOf(this.selectedLayer) + 1;
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
+    this.soundsService.tick();
   }
 
   addRemoveLayer() {
