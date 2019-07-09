@@ -1,0 +1,24 @@
+.year-box-wrapper {
+    width: 150px;
+    height: 150px;
+}
+.year-box {
+    width: 10%;
+    height: 7%;
+    border-radius: 2px;
+    position: absolute;
+    background-color: transparent;
+    border: 0.2px dashed black;
+    left: 45%;
+    top: 46.5%;
+    transition: background-color 0.2s linear;
+}
+
+.current-year {
+    position: absolute;
+    width: 100%;
+    font-size: 28px;
+    text-align: center;
+    top: calc(50% - 14px);
+    font-weight: bolder;
+}

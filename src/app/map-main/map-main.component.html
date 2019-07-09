@@ -18,14 +18,7 @@
   cdkDrag></app-scenario>
 <app-video-feed></app-video-feed>
 <div class="tracking-dot year" #trackingDotYear>
-  <div class="display">
-    <img src="../../assets/images/tracking-icons/left-chevron.png">
-    <p> -  {{ currentYear}}  + </p>
-    <img src="../../assets/images/tracking-icons/right-chevron.png">
-  </div>
-  <div class="main-icon">
-      <img src="../../assets/images/tracking-icons/year.png">
-    </div>
+  <app-year-puck></app-year-puck>
 </div>
 <app-layer-puck class="tracking-dot layer" #trackingDotLayer></app-layer-puck>
 
