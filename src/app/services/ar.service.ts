@@ -50,8 +50,8 @@ export class ArService {
   videoFeedArray: any[] = [];
 
   constructor(private planService: PlanService,
-    private soundsservice: SoundsService,
-    private mapService: MapService) {
+              private soundsservice: SoundsService,
+              private mapService: MapService) {
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
@@ -107,26 +107,26 @@ export class ArService {
   }
 
   /**
-  * Creates an image from the video feed so that the app can look for markers.
-  * @param videoElement Object containing the video and the canvas for each video input.
-  * @return Returns the image data to be analyzed by the AR library
-  */
+   * Creates an image from the video feed so that the app can look for markers.
+   * @param videoElement Object containing the video and the canvas for each video input.
+   * @return Returns the image data to be analyzed by the AR library
+   */
   private snapshot(videoElement): any {
     videoElement.canvas.ctx.drawImage(videoElement.video, 0, 0, videoElement.canvas.width, videoElement.canvas.height);
     return videoElement.canvas.ctx.getImageData(0, 0, videoElement.canvas.width, videoElement.canvas.height);
   }
 
   /**
-  * Starts the recursive animation loop that feeds the arucojs Detector
-  * with images from the cameras.  Only starts if at least one videoFeed
-  * component has been created.
-  * @param videoFeeds => An array holding all instantiated video feeds.  They
-  *                      contain a video element and a canavas element.
-  */
+   * Starts the recursive animation loop that feeds the arucojs Detector
+   * with images from the cameras.  Only starts if at least one videoFeed
+   * component has been created.
+   * @param videoFeeds => An array holding all instantiated video feeds.  They
+   *                      contain a video element and a canavas element.
+   */
   public runApplication(videoFeeds: any): any {
     this.videoFeedArray = videoFeeds;
     if (this.videoFeedArray.length === 0) {
-      console.log("Video Elements Not Instantiated");
+      console.log('Video Elements Not Instantiated');
       this.running = false;
     } else {
       requestAnimationFrame(this.tickFunction);
@@ -135,8 +135,8 @@ export class ArService {
   }
 
   /** Kills the tick recursion.  This is called when we move from the landing
-  * screen to the main application to prevent the function from running twice.
-  */
+   * screen to the main application to prevent the function from running twice.
+   */
   public killTick(): void {
     this.running = false;
   }

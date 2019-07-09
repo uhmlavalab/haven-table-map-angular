@@ -17,6 +17,7 @@ import { SecondScreenComponent } from './second-screen/second-screen.component';
 import { InteractionElementComponent } from './map-main/interaction-element/interaction-element.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
+import { LayerPuckComponent } from './map-main/layer-puck/layer-puck.component';
 
 import { ScenarioComponent } from './scenario/scenario.component';
 
@@ -55,7 +56,8 @@ import { WindowRefService } from './services/window-ref.service';
     SecondScreenComponent,
     LineChartComponent,
     PieChartComponent,
-    ScenarioComponent
+    ScenarioComponent,
+    LayerPuckComponent
   ],
   imports: [
     BrowserModule,

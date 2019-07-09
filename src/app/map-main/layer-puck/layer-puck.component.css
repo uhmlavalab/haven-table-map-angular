@@ -1,0 +1,68 @@
+.layer-puck-container {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+}
+
+.center-container {
+  z-index: 0;
+  width: 70%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  left: 15%;
+  top: 15%;
+  border-radius: 50%;
+}
+
+.center-container .center-icon {
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  left: 25%;
+  text-align: center;
+  position: absolute;
+}
+
+.icon-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease-out;
+}
+
+.center-container .center-icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.circle-icon {
+    position: absolute;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    left: calc(50% - 10px);
+    top: calc(50% - 10px);
+}
+
+.circle-icon img { 
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.pointer {
+    width: 30px;
+    left: calc(50% - 15px);
+    top: -20px;
+    position: absolute;
+}
+
+.display-text {
+    position: absolute;
+    text-align: center;
+    width: 50%;
+    left: 25%;
+    top: -18%;
+    
+}

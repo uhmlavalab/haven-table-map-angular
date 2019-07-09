@@ -21,6 +21,7 @@ export class MapService {
   /* Subjects */
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
   public updateLayerSubject = new Subject<MapLayer>();
+  public layerChangeSubject = new Subject<string>();
 
   constructor(private planService: PlanService, private soundsService: SoundsService) {
 
@@ -144,6 +145,7 @@ export class MapService {
     }
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
+    this.layerChangeSubject.next('decrement');
     this.soundsService.tick();
   }
 
@@ -151,6 +153,7 @@ export class MapService {
     const index = this.layers.indexOf(this.selectedLayer) + 1;
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
+    this.layerChangeSubject.next('increment');
     this.soundsService.tick();
   }
 
