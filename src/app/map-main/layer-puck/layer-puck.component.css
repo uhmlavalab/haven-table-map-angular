@@ -10,7 +10,7 @@
   height: 70%;
   text-align: center;
   position: relative;
-  left: 15%;
+  left: 16%;
   top: 15%;
   border-radius: 50%;
 }
@@ -43,9 +43,12 @@
     height: 30px;
     left: calc(50% - 16px);
     top: calc(50% - 16px);
-    border: 2px solid black;
+    border: 2px solid gray;
     border-radius: 50%;
-}
+    background-color: black;
+  }
+
+
 
 .circle-icon img { 
     width: 70%;

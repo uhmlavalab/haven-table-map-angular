@@ -1,13 +1,14 @@
 <div class="layer-puck-container" #layerPuckContainer>
   <div class="icon-container" #iconContainer>
-    <div class="circle-icon" *ngFor="let icon of iconImages">
+    <div class="circle-icon" *ngFor="let icon of iconImages" 
+    [style.opacity]="currentIcon.text === icon.text ? '1' : '0.7'">
       <img src="{{icon.icon}}">
     </div>
   </div>
   <div class="center-container" #centerContainer>
     <img src="../../../assets/images/tracking-icons/arrow.png" class="pointer">
     <div class="center-icon" #centerIcon>
-      <img src="../../../assets/images/tracking-icons/layers.png">
+      <img src="{{currentIcon.image}}">
     </div>
   </div>
   <div class="display-text">

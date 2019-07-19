@@ -21,16 +21,11 @@
   <app-year-puck></app-year-puck>
 </div>
 <div class="tracking-dot layer" #trackingDotLayer>
-<app-layer-puck ></app-layer-puck>
+  <app-layer-puck></app-layer-puck>
 </div>
 
-  <div class="tracking-dot scenario" #trackingDotScenario>
-      <div class="display">
-        <img src="../../assets/images/tracking-icons/left-chevron.png">
-        <p> {{ currentScenario }} </p>
-        <img src="../../assets/images/tracking-icons/right-chevron.png">
-      </div>
-      <div class="main-icon">
-        <img src="../../assets/images/tracking-icons/scenario.png">
-      </div>
-    </div>
+<div class="tracking-dot scenario" #trackingDotScenario>
+  <div class="display">
+    <p><span class="purple">Scenario</span><br/>{{ currentScenario }}</p>
+  </div>
+</div>

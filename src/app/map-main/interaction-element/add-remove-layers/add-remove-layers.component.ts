@@ -4,6 +4,7 @@ import { MapMainComponent } from '../../map-main.component';
 import { Subject } from 'rxjs';
 import { MapLayer } from '@app/interfaces';
 import { MapService } from '../../../services/map.service';
+import { ArService } from '../../../services/ar.service';
 import { CardStyleDirective } from '../card-style.directive';
 import { _ } from 'underscore';
 
@@ -20,10 +21,12 @@ export class AddRemoveLayersComponent implements OnInit {
 
   layers: MapLayer[]; // Array holding all layers
   nextLayer: MapLayer; // The next layer to be added or removed.
+  private tracking: boolean;
 
-  constructor(private mapService: MapService) {
+  constructor(private mapService: MapService, private arService: ArService) {
     this.layers = this.mapService.getLayers();
     this.nextLayer = this.layers[0];
+    this.tracking = this.arService.isTrackingSet();
   }
 
   ngOnInit() {

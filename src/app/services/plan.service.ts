@@ -184,6 +184,7 @@ export class PlanService {
     const index = this.scenarios.indexOf(this.currentScenario) + 1;
     this.currentScenario = this.scenarios[(index) % this.scenarios.length];
     this.scenarioSubject.next(this.currentScenario);
+    this.soundsService.tick();
   }
 
   public decrementScenario(): void {
@@ -193,6 +194,7 @@ export class PlanService {
     }
     this.currentScenario = this.scenarios[(index) % this.scenarios.length];
     this.scenarioSubject.next(this.currentScenario);
+    this.soundsService.tick();
   }
 
   public setState(state): void {

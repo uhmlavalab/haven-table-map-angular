@@ -1,4 +1,5 @@
 import { Component, HostListener, AfterViewInit, ViewChildren, ViewChild } from '@angular/core';
+import { PlanService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-year-puck',
@@ -17,7 +18,7 @@ export class YearPuckComponent implements AfterViewInit {
   private yearBoxElements: any[];
   private currentPosition: number;
 
-  constructor() {
+  constructor(private planService: PlanService) {
     this.currentPosition = 0;
     this.currentYear = 2016;
     this.numberOfYears = 30;
@@ -30,12 +31,17 @@ export class YearPuckComponent implements AfterViewInit {
     this.yearBoxElements = this.yearBoxes.first.nativeElement.children;
     this.positionElements(this.yearBoxElements);
     this.colorNodes();
+
+    this.planService.yearSubject.subscribe(year => {
+      this.currentYear = year;
+      this.colorNodes();
+    })
   }
 
   private colorNodes() {
     for (let index = 0; index < 30; index++) {
       if (index <= this.currentYear - 2016) {
-        this.yearBoxElements[index].style.backgroundColor = 'rgb(104, 10, 112)';
+        this.yearBoxElements[index].style.backgroundColor = 'rgb(72, 217, 250)';
       } else {
         this.yearBoxElements[index].style.backgroundColor = 'transparent';
       }
@@ -47,33 +53,10 @@ export class YearPuckComponent implements AfterViewInit {
     this.currentPosition = 0;
 
     for (const e of elements) {
-      e.style.transform = `rotate(${this.currentPosition}deg) translate(65px)`;
+      e.style.transform = `rotate(${this.currentPosition}deg) translate(55px)`;
       this.currentPosition += this.angle;
     }
 
     this.yearBoxWrapper.nativeElement.style.transform = 'rotate(-90deg)';
-  }
-
-
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowRight') {
-      this.incrementYear();
-      this.colorNodes();
-    } else if (event.key === 'ArrowLeft') {
-      this.decrementYear();
-      this.colorNodes();
-    }
-  }
-
-  private incrementYear() {
-    if (this.currentYear >= 2016 && this.currentYear < 2045) {
-      this.currentYear++;
-    }
-  }
-  private decrementYear() {
-    if (this.currentYear <= 2045 && this.currentYear > 2016) {
-      this.currentYear--;
-    }
   }
 }

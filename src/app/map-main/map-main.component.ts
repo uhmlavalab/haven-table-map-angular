@@ -43,6 +43,7 @@ export class MapMainComponent implements AfterViewInit {
     this.plan = this.planService.getCurrentPlan();
     this.legendClass = this.planService.getCurrentLegendLayout();
     this.currentYear = 2016;
+    this.currentScenario = this.planService.getCurrentScenario().displayName;
 
     // If no plan has been selected, route back to setup
     if (this.plan == null) {
@@ -128,7 +129,6 @@ export class MapMainComponent implements AfterViewInit {
     } catch (error) {
       //undefined marker
     }
-    console.log('tracking');
   }
   /**
    * This function gets the css class name to apply to the legend based

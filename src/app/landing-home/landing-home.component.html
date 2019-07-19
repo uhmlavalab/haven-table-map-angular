@@ -19,7 +19,7 @@
       </div>
     <div class="tracking-dot" #trackingDot>
         <div class="main-icon">
-            <img src="../../assets/images/tracking-icons/year.png">
+            <div class="center"></div>
           </div>
     </div>
   </div>
@@ -29,7 +29,9 @@
       <img src="../../assets/images/config-images/aruco-1.svg" class="tracking-point"
         [style.opacity]="calibrationIndex === i ? '1': '0'" [style.borderColor]="point.detected ? 'green' : 'white'">
     </div>-->
-    <div class="manual-point" #manualPoint></div>
+    <div class="manual-point" #manualPoint>\
+      <div class="center"></div>
+    </div>
     <div class="manual-point-detection-container">
       <div class="marker-detected-details">
         Marker Currently Detected: {{ markerDetected }} <br/>
@@ -38,6 +40,9 @@
       </div>
       <div class="selection-button" (click)="confirmPosition()">
         Confirm Position
+      </div>
+      <div class="warning" [style.opacity]="detectionWarning ? '1' : '0'">
+        Oops!  Lost track of the marker, try again.
       </div>
     </div>
   </div>

@@ -206,4 +206,8 @@ export class ArService {
     this.calibrating = false;
   }
 
+  public isTrackingSet(): boolean {
+    return this.trackingIsSet;
+  }
+
 }

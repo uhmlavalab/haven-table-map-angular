@@ -53,6 +53,7 @@ export class LandingHomeComponent implements OnInit {
   private centerX: number;
   private centerY: number;
   private tracking: boolean;
+  private detectionWarning: boolean;
 
   constructor(private arservice: ArService,
     private planService: PlanService,
@@ -79,17 +80,13 @@ export class LandingHomeComponent implements OnInit {
     }
     this.jobs = this.setJobsArray();
     this.calibrating = false;
-    /*
-    this.numberOfCalibrationMarkers = 105;
-    for (let i = 0; i < this.numberOfCalibrationMarkers; i++) {
-      this.trackingPoints.push(new TrackingPoint());
-    } */
     this.manualPosition = -1;
     this.displayLandmarks = false;
     this.markerDetected = false;
     this.centerX = 0;
     this.centerY = 0;
     this.tracking = false;
+    this.detectionWarning = false;
   }
 
   ngOnInit() {
@@ -144,12 +141,12 @@ export class LandingHomeComponent implements OnInit {
       }
       case 2: {
         this.manualPoint.nativeElement.style.left = 0;
-        this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
+        this.manualPoint.nativeElement.style.top = 'calc(96% - 50px)';
         break;
       }
       case 3: {
         this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
-        this.manualPoint.nativeElement.style.top = 'calc(98% - 50px)';
+        this.manualPoint.nativeElement.style.top = 'calc(96% - 50px)';
         break;
       }
       default: {
@@ -183,6 +180,13 @@ export class LandingHomeComponent implements OnInit {
   }
 
   private confirmPosition() {
+    if (!this.markerDetected) {
+      this.detectionWarning = true;
+      setTimeout(() => {
+        this.detectionWarning = false;
+      }, 2000);
+      return;
+    }
     const element = this.manualPoint.nativeElement.getBoundingClientRect();
     const mapX = (element.right + element.left) / 2;
     const mapY = (element.top + element.bottom) / 2;
@@ -379,9 +383,9 @@ export class LandingHomeComponent implements OnInit {
       this.arservice.incrementYOffset();
     } else if (event.key === 'ArrowDown') {
       this.arservice.decrementYOffset();
-    } else if (event.key === 'ArrowRight') {
-      this.arservice.incrementXOffset();
     } else if (event.key === 'ArrowLeft') {
+      this.arservice.incrementXOffset();
+    } else if (event.key === 'ArrowRight') {
       this.arservice.decrementXOffset();
     }
   }
