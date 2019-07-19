@@ -11,7 +11,8 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 7
+  rotationMax: 7,
+  slideEvents: false
 }, {
   markerId: 6,
   job: 'scenario',
@@ -23,7 +24,8 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 20
+  rotationMax: 20,
+  slideEvents: false
 }, {
   markerId: 11,
   job: 'chart',
@@ -35,7 +37,8 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 20
+  rotationMax: 20,
+  slideEvents: false
 }, {
   markerId: 5,
   job: 'layer',
@@ -47,5 +50,6 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 20
+  rotationMax: 20,
+  slideEvents: true
 }];

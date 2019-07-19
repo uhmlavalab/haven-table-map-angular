@@ -15,6 +15,7 @@ export class ProjectableMarker {
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = []
 
+
   /* private member variables */
   private markerId: number; // Id that cooresponds to arucojs marker
   private job: string; // Job that cooresponds to job objects
@@ -31,6 +32,7 @@ export class ProjectableMarker {
   private planService: PlanService;
   private soundsService: SoundsService;
   private mapService: MapService;
+  private slideEvents: boolean;  // Does this marker have a slide event?
 
   constructor(id: number,
               job: string,
@@ -38,11 +40,13 @@ export class ProjectableMarker {
               rotationMax: number,
               planService: PlanService,
               soundsService: SoundsService,
-              mapService: MapService) {
+              mapService: MapService,
+              slideEvents: boolean) {
     this.markerId = id;
     this.job = job;
     this.icon = icon;
     this.live = false;
+    this.slideEvents = slideEvents;
     this.detectionStartTime = this.getCurrentTime();
     this.rotationStartTime = this.getCurrentTime();
     this.addRemoveStartTime = this.getCurrentTime();
@@ -107,11 +111,43 @@ export class ProjectableMarker {
     }
     // Has the marker moved at all?
     if (this.wasMoved(corners)) {
-      this.doJob(videoId);
+      if (this.wasSlid(corners)) {
+        this.doJob(0);
+      }
+      this.updatePrevPosition(this.corners);
+      this.updatePosition(corners);
+      this.doJob(1);
     } else {
       // Wasnt moved, dont do shit.
     }
     return true;
+  }
+
+  /** Checks to see if the marker was slid up or down by seeing if the y distance was moved 
+   * within a certain threshold and if the x remained within a certain threshold.
+   * @param corners => the current position.
+   */
+  private wasSlid(corners: any): boolean {
+    let slid = false;
+    const yThreshold = 6; // Maximum distance the marker can move left or right and still be considered
+                           // as a slide.
+    const xMinimum = 20;   // Marker must move at least this distance to be a slide.
+    const xMaximum = 60;  // Maximum y distance.  Anything greater is considered something other than a slide.
+
+    const previousX = this.corners[0].x;
+    const previousY = this.corners[0].y;
+    const currentX = corners[0].x;
+    const currentY = corners[0].y;
+
+    const xDifference = Math.abs(previousX - currentX);
+    const yDifference = Math.abs(previousY - currentY);
+
+    console.log(`yD -> ${yDifference} : xD -> ${xDifference} : prevX -> ${previousX} : prevY : -> ${previousY} : curX -> ${currentX} : curY -> ${currentY}`);
+
+    if ((yDifference <= yThreshold) && (xDifference > xMinimum) && (xDifference <= xMaximum )) {
+      slid = true;
+    }
+    return slid;
   }
 
   public setIcon(icon: string): void {
@@ -251,8 +287,6 @@ export class ProjectableMarker {
     let moved = false;
     if (this.corners[0].x != corners[0].x) {
       moved = true;
-      this.updatePrevPosition(this.corners);
-      this.updatePosition(corners);
     }
     return moved;
   }

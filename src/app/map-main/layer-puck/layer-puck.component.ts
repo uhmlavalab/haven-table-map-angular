@@ -35,12 +35,27 @@ export class LayerPuckComponent implements AfterViewInit {
       });
     });
 
+  // Subscribe to layer toggling
+  this.mapService.toggleLayerSubject.subscribe((layer) => {
+    if (!layer.active) {
+      setTimeout(() => {
+        this.iconElements[this.currentIconIndex].style.opacity = 1;
+        this.slideIconElements[this.currentIconIndex].style.opacity = 0;
+      }, 600);
+      this.repositionSlideIcon();
+    } else {
+      this.repositionSlideIcon();
+      this.slideUp();
+    }
+  });
+
     this.currentIconIndex = 0;
     this.currentIcon = this.iconImages[this.currentIconIndex];
    }
 
   ngAfterViewInit() {
     this.iconElements = this.icons.first.nativeElement.children;
+    this.slideIconElements = this.slideIcons.first.nativeElement.children;
     this.positionElements(this.iconElements);
 
     this.mapService.layerChangeSubject.subscribe(direction => {
@@ -98,20 +113,21 @@ export class LayerPuckComponent implements AfterViewInit {
     const offsetTop = viewPortOffset.top;
 
     const puckViewPortOffset = this.puckContainer.nativeElement.getBoundingClientRect();
-    slideIcon.style.left = `${offsetLeft}px`;
-    slideIcon.style.top = `${offsetTop - 80}px`;
+    slideIcon.style.left = `${offsetLeft - puckViewPortOffset.left}px`;
+    slideIcon.style.top = `${offsetTop - puckViewPortOffset.top}px`;
   }
 
 
 
   private slideUp() {
+    this.repositionSlideIcon();
     const puckIcon = this.iconElements[this.currentIconIndex];
     const slideIcon = this.slideIconElements[this.currentIconIndex];
 
     this.currentIcon.active = true;
     puckIcon.style.opacity = 0;
     slideIcon.style.opacity = 1;
-    slideIcon.style.top = '-200px';
+    slideIcon.style.top = '-1000px';
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -122,7 +138,7 @@ export class LayerPuckComponent implements AfterViewInit {
         setTimeout(() => {
           this.iconElements[this.currentIconIndex].style.opacity = 1;
           this.slideIconElements[this.currentIconIndex].style.opacity = 0;
-        }, 200);
+        }, 600);
         this.repositionSlideIcon();
       } else {
         this.repositionSlideIcon();

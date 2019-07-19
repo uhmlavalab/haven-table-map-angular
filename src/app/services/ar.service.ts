@@ -62,7 +62,8 @@ export class ArService {
       marker.rotationMax,
       this.planService,
       this.soundsservice,
-      this.mapService));
+      this.mapService,
+      marker.slideEvents));
     this.running = false;
     this.xOffset = 15;
     this.yOffset = 20;

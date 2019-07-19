@@ -12,4 +12,5 @@ export interface Marker {
   rotation: number;
   rotationSum: number;
   rotationMax: number;
+  slideEvents: boolean;
 }

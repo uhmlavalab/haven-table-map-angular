@@ -5,8 +5,7 @@
 </div>
 <div class="layer-puck-container" #layerPuckContainer>
   <div class="icon-container" #iconContainer>
-    <div class="circle-icon" *ngFor="let icon of iconImages" 
-    [style.opacity]="currentIcon.text === icon.text ? '1' : '0.7'">
+    <div class="circle-icon" *ngFor="let icon of iconImages">
       <img src="{{icon.icon}}">
     </div>
   </div>
