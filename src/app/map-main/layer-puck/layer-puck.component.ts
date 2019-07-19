@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChildren, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
 import { PlanService } from '../../services/plan.service';
 import { MapService } from '../../services/map.service';
 
@@ -10,15 +10,19 @@ import { MapService } from '../../services/map.service';
 export class LayerPuckComponent implements AfterViewInit {
 
   @ViewChildren('iconContainer') icons;
+  @ViewChildren('slideIconContainer') slideIcons;
   @ViewChild('iconContainer', { static: false }) iconContainer;
+  @ViewChild('layerPuckContainer', { static: false }) puckContainer;
 
   private numberOfIcons: number;
-  private iconImages: { icon: string, text: string, image: string}[] = [];
-  private currentIcon: {icon: string, text: string, image: string};
+  private iconImages: { icon: string, text: string, image: string, active: boolean}[] = [];
+  private currentIcon: { icon: string, text: string, image: string, active: boolean};
   private currentIconIndex: number;
   private iconElements: any[] = [];
   private currentPosition: number;
   private angle: number;
+  private slideImages: { icon: string, text: string, active: boolean }[] = [];
+  private slideIconElements: any[] = [];
 
   constructor(private planService: PlanService, private mapService: MapService) {
 
@@ -26,7 +30,8 @@ export class LayerPuckComponent implements AfterViewInit {
       this.iconImages.push({
         icon: layer.iconPath,
         text: layer.displayName,
-        image: layer.iconPath
+        image: layer.iconPath,
+        active: false
       });
     });
 
@@ -41,6 +46,7 @@ export class LayerPuckComponent implements AfterViewInit {
     this.mapService.layerChangeSubject.subscribe(direction => {
       this.cycle(direction);
     });
+    this.repositionSlideIcon();
   }
 
   private positionElements(elements) {
@@ -81,5 +87,47 @@ export class LayerPuckComponent implements AfterViewInit {
   private incrementCurrentIconIndex() {
     this.currentIconIndex = (this.currentIconIndex + 1) % this.iconImages.length;
     this.currentIcon = this.iconImages[this.currentIconIndex];
+  }
+
+  private repositionSlideIcon() {
+    const puckIcon = this.iconElements[this.currentIconIndex];
+    const slideIcon = this.slideIconElements[this.currentIconIndex];
+
+    const viewPortOffset = puckIcon.getBoundingClientRect();
+    const offsetLeft = viewPortOffset.left;
+    const offsetTop = viewPortOffset.top;
+
+    const puckViewPortOffset = this.puckContainer.nativeElement.getBoundingClientRect();
+    slideIcon.style.left = `${offsetLeft}px`;
+    slideIcon.style.top = `${offsetTop - 80}px`;
+  }
+
+
+
+  private slideUp() {
+    const puckIcon = this.iconElements[this.currentIconIndex];
+    const slideIcon = this.slideIconElements[this.currentIconIndex];
+
+    this.currentIcon.active = true;
+    puckIcon.style.opacity = 0;
+    slideIcon.style.opacity = 1;
+    slideIcon.style.top = '-200px';
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'u') {
+      if (this.currentIcon.active) {
+        this.currentIcon.active = false;
+        setTimeout(() => {
+          this.iconElements[this.currentIconIndex].style.opacity = 1;
+          this.slideIconElements[this.currentIconIndex].style.opacity = 0;
+        }, 200);
+        this.repositionSlideIcon();
+      } else {
+        this.repositionSlideIcon();
+        this.slideUp();
+      }
+    }
   }
 }

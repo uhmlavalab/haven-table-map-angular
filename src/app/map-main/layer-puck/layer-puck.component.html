@@ -1,3 +1,8 @@
+<div class="slide-icon-container" #slideIconContainer>
+  <div class="slide-icon" *ngFor="let icon of iconImages">
+    <img src="{{icon.icon}}">
+  </div>
+</div>
 <div class="layer-puck-container" #layerPuckContainer>
   <div class="icon-container" #iconContainer>
     <div class="circle-icon" *ngFor="let icon of iconImages" 
