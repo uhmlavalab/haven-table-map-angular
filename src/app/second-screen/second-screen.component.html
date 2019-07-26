@@ -7,6 +7,11 @@
       <p>{{ layer.secondScreenText }}</p>
     </div>
     <div class="right-card">
+      <div class="second-screen-legend-container" #SecondScreenLegendContainer>
+        <div class="node-container" *ngFor="let node of mapLayers">
+          <div class="node" [style.backgroundColor]="node.color"></div>
+        </div>
+      </div>
       <div class="year-display-container">
         <hr>
         <h1>{{ currentYear }}</h1>

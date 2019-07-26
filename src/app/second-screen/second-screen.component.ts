@@ -18,6 +18,7 @@ export class SecondScreenComponent implements OnInit {
   private secondScreenImagePath: string;
   private nextLayer: string;
   private plan: Plan;
+  private mapLayers: {text: string, color: string, active: boolean}[] = [];
 
   constructor(private multiWindowService: MultiWindowService) {
     multiWindowService.name = 'secondScreen';
@@ -37,8 +38,6 @@ export class SecondScreenComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     this.multiWindowService.name = 'dead';
   }
 
@@ -62,5 +61,9 @@ export class SecondScreenComponent implements OnInit {
         break;
     }
     this.nextLayer = this.plan.map.mapLayers[0].name;
+    this.plan.map.mapLayers.forEach(layer => {
+      this.mapLayers.push({text: layer.displayName, color: layer.fillColor, active: false});
+    });
+    console.log(this.mapLayers);
   }
 }
