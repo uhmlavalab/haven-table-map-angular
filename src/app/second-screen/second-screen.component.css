@@ -129,3 +129,24 @@
     height: 26px;
   }
 }
+
+.second-screen-legend-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.second-screen-legend-container .node-container {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+}
+.second-screen-legend-container .node-container .node {
+  width: 100%;
+  height: 100%;
+  border: 2px solid gray;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
