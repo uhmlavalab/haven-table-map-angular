@@ -20,11 +20,14 @@ export class ProjectableMarker {
   private markerId: number; // Id that cooresponds to arucojs marker
   private job: string; // Job that cooresponds to job objects
   private icon: string; // Icon file name
-  private live: boolean; // Live when marker is detected on the table
+  private live: boolean; // Live when marker is detected on the table on camera 1 -- bottom camera
+  private live2: boolean; // Live when marker is detected in camera 2. -- top camera
   private detectionStartTime: number; // Time when marker was detected on table
+  private detectionStartTimeCam2: number;
   private rotationStartTime: number; // Last time rotation was checked
   private addRemoveStartTime: number; // Last time add and remove executed
   private corners: object; // Holds x and y positions of the tangible
+  private cornersCam2: object; // Holds x and y positions of the tangible when in camera 2
   private prevCorners: number[]; // Holds x and y of previous position.
   private rotation: number; // Current Rotation
   private rotationSum: number; // Combined Rotation amounts
@@ -105,6 +108,10 @@ export class ProjectableMarker {
     this.setDetectionStartTime(); // Reset detection timer
     this.goLive();
 
+    // Video id 2 = top camera
+    // Video id 1 = bottom camera
+
+
     if (this.corners === null) {
       this.updatePosition(corners);
       this.updatePrevPosition(corners);
@@ -129,15 +136,16 @@ export class ProjectableMarker {
    */
   private wasSlid(corners: any): boolean {
     let slid = false;
-    const yThreshold = 6; // Maximum distance the marker can move left or right and still be considered
+    const yThreshold = 12; // Maximum distance the marker can move left or right and still be considered
                            // as a slide.
     const xMinimum = 20;   // Marker must move at least this distance to be a slide.
-    const xMaximum = 60;  // Maximum y distance.  Anything greater is considered something other than a slide.
+    const xMaximum = 80;  // Maximum y distance.  Anything greater is considered something other than a slide.
 
     const previousX = this.corners[0].x;
     const previousY = this.corners[0].y;
     const currentX = corners[0].x;
     const currentY = corners[0].y;
+    const up = (previousX - currentX) > 0 ? true : false;
 
     const xDifference = Math.abs(previousX - currentX);
     const yDifference = Math.abs(previousY - currentY);
@@ -145,7 +153,11 @@ export class ProjectableMarker {
     console.log(`yD -> ${yDifference} : xD -> ${xDifference} : prevX -> ${previousX} : prevY : -> ${previousY} : curX -> ${currentX} : curY -> ${currentY}`);
 
     if ((yDifference <= yThreshold) && (xDifference > xMinimum) && (xDifference <= xMaximum )) {
-      slid = true;
+      if (up && !this.mapService.getSelectedLayer().active) {
+        slid = true;
+      } else if (!up && this.mapService.getSelectedLayer().active) {
+        slid = true;
+      }
     }
     return slid;
   }

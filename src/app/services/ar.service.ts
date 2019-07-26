@@ -166,8 +166,18 @@ export class ArService {
     return true;
   }
 
-  public createTrackingPoint(camX: number, camY: number, mapX: number, mapY: number) {
-    this.trackingPoints.push(new TrackingPoint(camX, camY, mapX, mapY));
+  /** Creates a new tracking point based
+   * @param camX -> cam 1 x position
+   * @param camY -> cam 1 y position
+   * @param cam2X -> cam 2 x position
+   * @param cam2Y -> cam 2 y position.
+   * Only points that overlap the two cameras will have data for both camX and cam2X.  Otherwise
+   * One set of cam points will be 0.
+   * @param mapX -> The x position on the map
+   * @param mapY -> the y position on the map
+   */
+  public createTrackingPoint(camX: number, camY: number, cam2X: number, cam2Y: number, mapX: number, mapY: number) {
+    this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
   }
 
   public track(x: number, y: number): { x: number, y: number } {

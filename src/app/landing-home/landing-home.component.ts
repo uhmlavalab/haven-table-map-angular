@@ -190,7 +190,7 @@ export class LandingHomeComponent implements OnInit {
     const element = this.manualPoint.nativeElement.getBoundingClientRect();
     const mapX = (element.right + element.left) / 2;
     const mapY = (element.top + element.bottom) / 2;
-    this.arservice.createTrackingPoint(this.centerX, this.centerY, mapX, mapY);
+    this.arservice.createTrackingPoint(this.centerX, this.centerY, 0, 0, mapX, mapY);
     this.manualPosition++;
     this.manualCalibration(this.manualPosition);
   }

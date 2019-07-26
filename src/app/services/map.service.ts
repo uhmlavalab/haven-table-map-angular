@@ -161,6 +161,9 @@ export class MapService {
     this.toggleLayer(this.selectedLayer);
   }
 
+  public getSelectedLayer(): MapLayer  {
+    return this.selectedLayer;
+  }
   resetMap() {
 
   }

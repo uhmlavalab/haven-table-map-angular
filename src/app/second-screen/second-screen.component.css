@@ -34,18 +34,33 @@
 }
 
 .left-card p {
-  text-align: left;
-  padding: 10px;
+  text-align: center;
+    padding: 50px;
+    font-size: 20px;
 }
 
 .right-card {
   position: absolute;
-  left: 52vw;
+  left: 50vw;
   top: 2vw;
   height: calc(96vh - 20px);
-  width: calc(46vw - 20px);
+  width: calc(48vw - 20px);
   padding: 10px;
   text-align: center;
+}
+
+.right-card .chart-title {
+  position: absolute;
+  width: 100%;
+  font-size: 28px;
+  top: -1%;
+}
+.right-card img {
+  opacity: 0.9;
+  width: 100%;
+  border-radius: 3px;
+  top: 9%;
+  position: relative;
 }
 
 .right-card .year-display-container {
