@@ -35,8 +35,10 @@
     <div class="manual-point-detection-container">
       <div class="marker-detected-details">
         Marker Currently Detected: {{ markerDetected }} <br/>
-        x: {{ centerX }} <br/>
-        y: {{ centerY }} <br/>
+        Bottom Cam X: {{ centerX }} <br/>
+        Bottom Cam Y: {{ centerY }} <br/>
+        Top Cam X: {{ centerX2 }} <br/>
+        Top Cam Y: {{ centerY2 }}
       </div>
       <div class="selection-button" (click)="confirmPosition()">
         Confirm Position

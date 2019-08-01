@@ -28,7 +28,7 @@ export class TrackingPoint {
     }
 
     public getCam2X() {
-        return this.getCam2X
+        return this.cam2X
     }
 
     public getCamX() {
@@ -37,6 +37,10 @@ export class TrackingPoint {
 
     public getCamY() {
         return this.camY;
+    }
+
+    public getCam2Y() {
+        return this.cam2Y;
     }
 
     public getMapX() {

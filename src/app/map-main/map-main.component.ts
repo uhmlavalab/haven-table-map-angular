@@ -60,7 +60,6 @@ export class MapMainComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario];
-    console.log(this.trackingDots);
     this.planService.legendSubject.subscribe({
       next: value => {
         this.top = this.plan.css.legend[value].top;
@@ -105,8 +104,15 @@ export class MapMainComponent implements AfterViewInit {
 
   private track(marker: ProjectableMarker) {
     try {
-      const dataPoint = this.arService.track(marker.getCenterX(), marker.getCenterY());
+      let dataPoint = null;
 
+      if (marker.liveIn() === 1) {
+        dataPoint = this.arService.track(marker.getCenterX(), marker.getCenterY(), 1);
+      } else {
+        dataPoint = this.arService.track(marker.getCenterX2(), marker.getCenterY2(), 2);
+      }
+     
+      
       switch (marker.getJob()) {
         case 'year':
           this.trackingDotYear.nativeElement.style.opacity = 1;
@@ -128,6 +134,7 @@ export class MapMainComponent implements AfterViewInit {
 
     } catch (error) {
       //undefined marker
+      console.log(error);
     }
   }
   /**

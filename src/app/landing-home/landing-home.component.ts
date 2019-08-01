@@ -52,6 +52,8 @@ export class LandingHomeComponent implements OnInit {
   private currentMarker: any;
   private centerX: number;
   private centerY: number;
+  private centerX2: number;
+  private centerY2: number;
   private tracking: boolean;
   private detectionWarning: boolean;
 
@@ -85,6 +87,8 @@ export class LandingHomeComponent implements OnInit {
     this.markerDetected = false;
     this.centerX = 0;
     this.centerY = 0;
+    this.centerX2 = 0;
+    this.centerY2 = 0;
     this.tracking = false;
     this.detectionWarning = false;
   }
@@ -128,23 +132,35 @@ export class LandingHomeComponent implements OnInit {
   }
 
   private manualCalibration(position: number) {
+    
+  /*
     switch (position) {
       case 0: {
         this.manualPoint.nativeElement.style.left = 0;
-        this.manualPoint.nativeElement.style.top = '40vh';
+        this.manualPoint.nativeElement.style.top = 0;
         break;
       }
       case 1: {
         this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
-        this.manualPoint.nativeElement.style.top = '40vh';
+        this.manualPoint.nativeElement.style.top = 0;
         break;
       }
       case 2: {
         this.manualPoint.nativeElement.style.left = 0;
-        this.manualPoint.nativeElement.style.top = 'calc(96% - 50px)';
+        this.manualPoint.nativeElement.style.top = '50vh';
         break;
       }
       case 3: {
+        this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
+        this.manualPoint.nativeElement.style.top = '50vh';
+        break;
+      }
+      case 4: {
+        this.manualPoint.nativeElement.style.left = 0;
+        this.manualPoint.nativeElement.style.top = 'calc(96% - 50px)';
+        break;
+      }
+      case 5: {
         this.manualPoint.nativeElement.style.left = 'calc(22vw - 50px)';
         this.manualPoint.nativeElement.style.top = 'calc(96% - 50px)';
         break;
@@ -156,6 +172,12 @@ export class LandingHomeComponent implements OnInit {
         break;
       }
     }
+  */
+
+  this.calibrating = false;
+  this.arservice.completeCalibration();
+  this.testTracking();
+    
   }
 
   private recursiveCalibrate(index: number) {
@@ -190,7 +212,7 @@ export class LandingHomeComponent implements OnInit {
     const element = this.manualPoint.nativeElement.getBoundingClientRect();
     const mapX = (element.right + element.left) / 2;
     const mapY = (element.top + element.bottom) / 2;
-    this.arservice.createTrackingPoint(this.centerX, this.centerY, 0, 0, mapX, mapY);
+    this.arservice.createTrackingPoint(this.centerX, this.centerY, this.centerX2, this.centerY2, mapX, mapY);
     this.manualPosition++;
     this.manualCalibration(this.manualPosition);
   }
@@ -202,6 +224,8 @@ export class LandingHomeComponent implements OnInit {
       this.markerDetected = true;
       this.centerX = liveMarkerArray[0].getCenterX();
       this.centerY = liveMarkerArray[0].getCenterY();
+      this.centerX2 = liveMarkerArray[0].getCenterX2();
+      this.centerY2 = liveMarkerArray[0].getCenterY2();
     } else {
       this.markerDetected = false;
       this.centerX = 0;
@@ -368,7 +392,14 @@ export class LandingHomeComponent implements OnInit {
 
   private track(marker: ProjectableMarker) {
     try {
-      const dataPoint = this.arservice.track(marker.getCenterX(), marker.getCenterY());
+      let dataPoint = null;
+
+      if (marker.liveIn() === 1) {
+        dataPoint = this.arservice.track(marker.getCenterX(), marker.getCenterY(), 1);
+      } else {
+        dataPoint = this.arservice.track(marker.getCenterX2(), marker.getCenterY2(), 2);
+      }
+     
       this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
       this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';
     } catch (error) {
@@ -387,6 +418,14 @@ export class LandingHomeComponent implements OnInit {
       this.arservice.incrementXOffset();
     } else if (event.key === 'ArrowRight') {
       this.arservice.decrementXOffset();
+    } else if (event.key === 'w') {
+      this.arservice.incrementYOffset2();
+    } else if (event.key === 's') {
+      this.arservice.decrementYOffset2();
+    } else if (event.key === 'a') {
+      this.arservice.incrementXOffset2();
+    } else if (event.key === 'd') {
+      this.arservice.decrementXOffset2();
     }
   }
 }

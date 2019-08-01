@@ -297,6 +297,23 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
+      },
+      {
+        name: 'der',
+        displayName: 'DER',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/oahu/images/icons/skull.png',
+        secondScreenImagePath: 'assets/plans/oahu/images/second-screen-images/layer-images/agriculture.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: 'orange',
+        borderColor: 'orange',
+        borderWidth: .1,
+        legendColor: 'orange',
+        filePath: 'assets/plans/oahu/layers/HECODER.json',
+        parcels: [],
+        setupFunction: null,
+        updateFunction: null,
       }
     ],
   }
