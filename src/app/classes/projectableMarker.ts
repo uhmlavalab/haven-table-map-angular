@@ -344,25 +344,24 @@ export class ProjectableMarker {
   }
 
   /** checks to see if the marker has been moved at all or if it was stationary
-  * on the table between detections.
-  * @param corners => The current location of the marker
-  * @return true if moved, false if stationary.
-  */
+* on the table between detections.
+* @param corners => The current location of the marker
+* @return true if moved, false if stationary.
+*/
   private wasMoved(corners: object): boolean {
     let moved = false;
-    let previous = this.corners;
-    if (this.live2) {
-      previous = this.cornersCam2;
-    }
-
-    try {
-      if (previous[0].x != corners[0].x) {
-          moved = true;
+    if (this.live) {
+      if (this.corners[0].x != corners[0].x) {
+        moved = true;
       }
-    } catch (error) {
+    } else if (this.live2) {
+      if (this.cornersCam2[0].x != corners[0].x) {
+        moved = true;
+      }
     }
     return moved;
   }
+
 
   /** Kills marker.  ie no longer active */
   private die(): void {
@@ -608,26 +607,23 @@ export class ProjectableMarker {
   }
 
   /** Calculate the direction that the marker was turned.
-  * @return the direction that it was turned
-  */
+      * @return the direction that it was turned
+      */
   private calcDirection() {
-    if (!this.checkRotationTimer) {
-      return;
-    }
+
     let direction = 'none'; // initialize direction
     const oldRotation = this.rotation;
     const newRotation = this.calcRotation();
-   // console.log(oldRotation + ' : ' + newRotation);
     this.rotation = newRotation; // Update rotation
     let diff = oldRotation - newRotation; // Change in rotation
-  
-    /* Minimum change is 4 degrees */
-    if (Math.abs(diff) < 5) {
+
+    /* Minimum change is 2 degrees */
+    if (Math.abs(diff) < 2) {
       diff = 0;
     }
 
     /* A change of more than 100 degrees means somethign went wrong.*/
-    if (Math.abs(diff) <= 40 && Math.abs(diff) > 0) {
+    if (Math.abs(diff) <= 100 && Math.abs(diff) > 0) {
       this.rotationSum += diff;
     } else {
       this.rotationSum = 0;
