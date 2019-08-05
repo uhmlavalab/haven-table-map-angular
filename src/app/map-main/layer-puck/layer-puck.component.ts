@@ -23,8 +23,11 @@ export class LayerPuckComponent implements AfterViewInit {
   private angle: number;
   private slideImages: { icon: string, text: string, active: boolean }[] = [];
   private slideIconElements: any[] = [];
+  private arrowImage: string;
 
   constructor(private planService: PlanService, private mapService: MapService) {
+
+    this.arrowImage = '../../assets/images/tracking-icons/greenArrow.png';
 
     this.planService.getCurrentPlan().map.mapLayers.forEach(layer => {
       this.iconImages.push({
@@ -42,7 +45,9 @@ export class LayerPuckComponent implements AfterViewInit {
         this.iconElements[this.currentIconIndex].style.opacity = 1;
         this.slideIconElements[this.currentIconIndex].style.opacity = 0;
       }, 600);
+      this.currentIcon.active = false;
       this.repositionSlideIcon();
+      this.toggleArrow(this.currentIcon.active);
     } else {
       this.repositionSlideIcon();
       this.slideUp();
@@ -62,6 +67,7 @@ export class LayerPuckComponent implements AfterViewInit {
       this.cycle(direction);
     });
     this.repositionSlideIcon();
+    this.toggleArrow(this.currentIcon.active);
   }
 
   private positionElements(elements) {
@@ -88,6 +94,7 @@ export class LayerPuckComponent implements AfterViewInit {
       this.currentPosition -= this.angle;
       this.decrementCurrentIconIndex();
     }
+    this.toggleArrow(this.currentIcon.active);
   }
 
   private decrementCurrentIconIndex() {
@@ -117,15 +124,22 @@ export class LayerPuckComponent implements AfterViewInit {
     slideIcon.style.top = `${offsetTop - puckViewPortOffset.top}px`;
   }
 
+  private toggleArrow(onOff: boolean) {
+    if (onOff) {
+      this.arrowImage = '../../assets/images/tracking-icons/redArrow.png';
+    } else {
+      this.arrowImage = '../../assets/images/tracking-icons/greenArrow.png';
+    }
+  }
 
-
-  private slideUp() {
+  private slideUp():void {
     this.repositionSlideIcon();
     const puckIcon = this.iconElements[this.currentIconIndex];
     const slideIcon = this.slideIconElements[this.currentIconIndex];
 
     this.currentIcon.active = true;
-    puckIcon.style.opacity = 0;
+    this.toggleArrow(this.currentIcon.active);
+    puckIcon.style.opacity = 0.4;
     slideIcon.style.opacity = 1;
     slideIcon.style.top = '-1000px';
   }

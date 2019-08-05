@@ -622,7 +622,7 @@ export class ProjectableMarker {
     let diff = oldRotation - newRotation; // Change in rotation
   
     /* Minimum change is 4 degrees */
-    if (Math.abs(diff) < 3) {
+    if (Math.abs(diff) < 5) {
       diff = 0;
     }
 

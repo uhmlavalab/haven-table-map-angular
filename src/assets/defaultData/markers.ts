@@ -50,6 +50,6 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 20,
+  rotationMax: 22,
   slideEvents: true
 }];
