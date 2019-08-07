@@ -51,6 +51,7 @@ export interface Plan {
     capacityPath: string;
     generationPath: string;
     batteryPath: string;
+    curtailmentPath: string;
     colors: object;
   };
   map: Map;

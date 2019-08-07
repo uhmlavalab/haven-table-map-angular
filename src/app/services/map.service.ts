@@ -24,6 +24,8 @@ export class MapService {
   public updateLayerSubject = new Subject<MapLayer>();
   public layerChangeSubject = new Subject<string>();
 
+  private updateTimeout: any;
+
   constructor(private planService: PlanService, private soundsService: SoundsService) {
 
     this.planService.planSubject.subscribe(plan => {
@@ -50,9 +52,14 @@ export class MapService {
     });
 
     this.planService.yearSubject.subscribe(year => {
+      clearTimeout(this.updateTimeout);
+      this.updateTimeout = setTimeout(() => {
+
+
       this.layers.forEach(layer => {
         this.updateLayerSubject.next(layer);
       });
+    }, 500);
     });
   }
 
@@ -133,7 +140,7 @@ export class MapService {
   }
 
   /** Gets the active layers
-   * @return the array of active layers. 
+   * @return the array of active layers.
    */
   public getLayers(): MapLayer[] {
     return this.layers;
