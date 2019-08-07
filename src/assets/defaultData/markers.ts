@@ -11,7 +11,7 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 10,
+  rotationMax: 7,
   slideEvents: false
 }, {
   markerId: 6,

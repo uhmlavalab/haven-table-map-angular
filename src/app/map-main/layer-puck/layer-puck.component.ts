@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
 import { PlanService } from '../../services/plan.service';
 import { MapService } from '../../services/map.service';
+import { ProjectableMarker } from '../../classes/projectableMarker';
 
 @Component({
   selector: 'app-layer-puck',
@@ -41,10 +42,12 @@ export class LayerPuckComponent implements AfterViewInit {
 
   // Subscribe to layer toggling
   this.mapService.toggleLayerSubject.subscribe((layer) => {
+    ProjectableMarker.toggleGoodToRotateLayer(false);
     if (!layer.active) {
       setTimeout(() => {
         this.iconElements[this.currentIconIndex].style.opacity = 1;
         this.slideIconElements[this.currentIconIndex].style.opacity = 0;
+        ProjectableMarker.toggleGoodToRotateLayer(true);
       }, 600);
       this.currentIcon.active = false;
       this.repositionSlideIcon();
@@ -145,6 +148,7 @@ export class LayerPuckComponent implements AfterViewInit {
   }
 
   private slideUp():void {
+    ProjectableMarker.toggleGoodToRotateLayer(false);
     this.repositionSlideIcon();
     const puckIcon = this.iconElements[this.currentIconIndex];
     const slideIcon = this.slideIconElements[this.currentIconIndex];
@@ -155,6 +159,9 @@ export class LayerPuckComponent implements AfterViewInit {
     puckIcon.style.opacity = 0.4;
     slideIcon.style.opacity = 1;
     slideIcon.style.top = '-1000px';
+    setTimeout(() => {
+      ProjectableMarker.toggleGoodToRotateLayer(true);
+    }, 700);
   }
 
   @HostListener('window:keydown', ['$event'])

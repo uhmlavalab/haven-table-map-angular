@@ -13,13 +13,14 @@ export class ProjectableMarker {
   /* private static variables */
   private static MAX_ACTIVE_TIMER = 600;
   private static MAX_ADD_REMOVE_TIMER = 1000;
-  private static MAX_TIME_ROTATION = 40;
+  private static MAX_TIME_ROTATION = 100;
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = [];
   private static maxMovement: number;
   private static resetRotationMax = 500;
-
-
+  private static goodToRotateLayer = true;
+  private static goodToRotateLayerNormal = true;
+  private static goodToRotateYearValue = true;
 
   /* private member variables */
   private markerId: number; // Id that cooresponds to arucojs marker
@@ -73,7 +74,7 @@ export class ProjectableMarker {
     this.lastRotation = this.getCurrentTime();
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
-    ProjectableMarker.maxMovement = 4;
+    ProjectableMarker.maxMovement = 7;
   }
 
 
@@ -186,7 +187,7 @@ export class ProjectableMarker {
     let slid = false;
     const yThreshold = 15; // Maximum distance the marker can move left or right and still be considered
     // as a slide.
-    const xMinimum = 10;   // Marker must move at least this distance to be a slide.
+    const xMinimum = 20;   // Marker must move at least this distance to be a slide.
     const xMaximum = 120;  // Maximum y distance.  Anything greater is considered something other than a slide.
     let prevCorners = this.prevCorners;
     if (this.live2) {
@@ -318,17 +319,22 @@ export class ProjectableMarker {
   * Connects to the map data service for the function and stores all year data there.
   * @param direction => The direction the marker was turned.
   */
-  changeYear(direction) {
-    switch (direction) {
-      case 'left':
-        this.planService.decrementCurrentYear();
-        break;
-      case 'right':
-        this.planService.incrementCurrentYear();
-        break;
-      default:
-        // do nothing
-        break;
+  changeYear(direction): void {
+
+    if (this.goodToRotateYear()) {
+
+      switch (direction) {
+        case 'left':
+          this.planService.decrementCurrentYear();
+          break;
+        case 'right':
+          this.planService.incrementCurrentYear();
+          break;
+        default:
+          // do nothing
+          break;
+      }
+
     }
   }
 
@@ -339,24 +345,29 @@ export class ProjectableMarker {
   * @param direction => The direction the marker was turned.
   */
   changeLayer(direction, id) {
-    if (id === 1) {
-      if (this.checkaddRemoveTimer()) {
-        switch (direction) {
-          case 'left':
-            this.mapService.decrementNextLayer();
-            break;
-          case 'right':
-            this.mapService.incrementNextLayer();
-            break;
-          default:
-            // do nothing
-            break;
+    if (this.goodToRotateLayer2()) {
+      if (id === 1) {
+        if (this.goodToRotateLayer()) {
+          switch (direction) {
+            case 'left':
+              this.mapService.decrementNextLayer();
+              this.rotationSum = 0;
+              break;
+            case 'right':
+              this.mapService.incrementNextLayer();
+              this.rotationSum = 0;
+              break;
+            default:
+              // do nothing
+              break;
+          }
         }
-      }
-    } else {
-      if (this.checkaddRemoveTimer()) {
-        this.mapService.addRemoveLayer();
-        this.addRemoveStartTime = this.getCurrentTime();
+      } else {
+        if (this.checkaddRemoveTimer()) {
+          this.mapService.addRemoveLayer();
+          this.addRemoveStartTime = this.getCurrentTime();
+          this.rotationSum = 0;
+        }
       }
     }
   }
@@ -380,8 +391,16 @@ export class ProjectableMarker {
     return moved;
   }
 
-  private goodToRotate(): boolean {
-    return true;
+  private goodToRotateLayer(): boolean {
+    return ProjectableMarker.goodToRotateLayer;
+  }
+
+  private goodToRotateLayer2(): boolean {
+    return ProjectableMarker.goodToRotateLayerNormal;
+  }
+
+  private goodToRotateYear(): boolean {
+    return ProjectableMarker.goodToRotateYearValue;
   }
 
   /** Kills marker.  ie no longer active */
@@ -612,13 +631,13 @@ export class ProjectableMarker {
 
   /** Resets the rotation timer to the current system time
   */
- private resetClearRotation() {
-  this.lastRotation = this.getCurrentTime();
-}
+  private resetClearRotation() {
+    this.lastRotation = this.getCurrentTime();
+  }
 
-private checkClearRotation() {
-  return this.getCurrentTime() - this.lastRotation > ProjectableMarker.resetRotationMax;
-}
+  private checkClearRotation() {
+    return this.getCurrentTime() - this.lastRotation > ProjectableMarker.resetRotationMax;
+  }
 
 
   /** gets the current time of the system in milliseconds
@@ -674,5 +693,17 @@ private checkClearRotation() {
       this.rotationSum = 0;  // Reset rotationSum if there was a rotation
     }
     return direction;
+  }
+
+  public static toggleGoodToRotateLayer(onOff: boolean): void {
+    ProjectableMarker.goodToRotateLayer = onOff;
+  }
+
+  public static toggleGoodToRotateLayer2(onOff: boolean): void {
+    ProjectableMarker.goodToRotateLayerNormal = onOff;
+  }
+
+  public static toggleGoodToRotateYear(onOff: boolean): void {
+    ProjectableMarker.goodToRotateLayer = onOff;
   }
 }

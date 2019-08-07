@@ -85,7 +85,7 @@ export class ArService {
   /* Detects the Markers and makes the changes in the program */
   private tick(): void {
     if (this.running) {
-      setTimeout(() => requestAnimationFrame(this.tickFunction), 130);
+      setTimeout(() => requestAnimationFrame(this.tickFunction), 90);
     }
 
     this.videoFeedArray.forEach(videoFeed => {
