@@ -96,7 +96,7 @@ export class WindowRefService {
     console.log(screenId);
     this.multiWindowService.sendMessage(screenId, 'customEvent', messageData).subscribe(
       (messageId: string) => {
-        console.log('Message send, ID is ' + messageId);
+       // console.log('Message send, ID is ' + messageId);
       },
       (error) => {
         console.log('Message sending failed, error: ' + error);
@@ -107,7 +107,7 @@ export class WindowRefService {
         }
       },
       () => {
-        console.log('Message successfully delivered');
+        //console.log('Message successfully delivered');
       });
   }
 

@@ -43,7 +43,12 @@ export class MapMainComponent implements AfterViewInit {
     this.plan = this.planService.getCurrentPlan();
     this.legendClass = this.planService.getCurrentLegendLayout();
     this.currentYear = 2016;
-    this.currentScenario = this.planService.getCurrentScenario().displayName;
+    try {
+      this.currentScenario = this.planService.getCurrentScenario().displayName;
+    } catch(error) {
+      console.log("No Plan Set");
+    }
+
 
     // If no plan has been selected, route back to setup
     if (this.plan == null) {

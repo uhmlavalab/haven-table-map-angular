@@ -24,9 +24,10 @@ export class LayerPuckComponent implements AfterViewInit {
   private slideImages: { icon: string, text: string, active: boolean }[] = [];
   private slideIconElements: any[] = [];
   private arrowImage: string;
+  private addRemove: string;
 
   constructor(private planService: PlanService, private mapService: MapService) {
-
+    this.addRemove = 'Up';
     this.arrowImage = '../../assets/images/tracking-icons/greenArrow.png';
 
     this.planService.getCurrentPlan().map.mapLayers.forEach(layer => {
@@ -48,6 +49,7 @@ export class LayerPuckComponent implements AfterViewInit {
       this.currentIcon.active = false;
       this.repositionSlideIcon();
       this.toggleArrow(this.currentIcon.active);
+      this.toggleAddRemoveText(this.currentIcon.active);
     } else {
       this.repositionSlideIcon();
       this.slideUp();
@@ -68,6 +70,7 @@ export class LayerPuckComponent implements AfterViewInit {
     });
     this.repositionSlideIcon();
     this.toggleArrow(this.currentIcon.active);
+    this.toggleAddRemoveText(this.currentIcon.active);
   }
 
   private positionElements(elements) {
@@ -84,6 +87,14 @@ export class LayerPuckComponent implements AfterViewInit {
     this.currentPosition = -90;
   }
 
+  private toggleAddRemoveText(active: boolean): void {
+    if (active) {
+      this.addRemove = 'Down';
+    } else {
+      this.addRemove = 'Up';
+    }
+  }
+
   private cycle(direction: string) {
     if (direction === 'increment') {
       this.iconContainer.nativeElement.style.transform = `rotate(${this.currentPosition + this.angle}deg)`;
@@ -95,6 +106,7 @@ export class LayerPuckComponent implements AfterViewInit {
       this.decrementCurrentIconIndex();
     }
     this.toggleArrow(this.currentIcon.active);
+    this.toggleAddRemoveText(this.currentIcon.active);
   }
 
   private decrementCurrentIconIndex() {
@@ -139,6 +151,7 @@ export class LayerPuckComponent implements AfterViewInit {
 
     this.currentIcon.active = true;
     this.toggleArrow(this.currentIcon.active);
+    this.toggleAddRemoveText(this.currentIcon.active);
     puckIcon.style.opacity = 0.4;
     slideIcon.style.opacity = 1;
     slideIcon.style.top = '-1000px';

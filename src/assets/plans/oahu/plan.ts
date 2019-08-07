@@ -297,7 +297,7 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
-      },
+      }/*
       {
         name: 'der',
         displayName: 'DER',
@@ -314,7 +314,7 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
-      }
+      }*/
     ],
   }
 };

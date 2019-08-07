@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { _ } from 'underscore';
-
 import { Plan } from '@app/interfaces/plan';
-
 import { Plans } from '../../assets/plans/plans';
 import { Scenario } from '@app/interfaces';
 import { SoundsService } from './sounds.service';
@@ -51,7 +49,7 @@ export class PlanService {
     this.yearSubject.next(this.currentYear);
     this.scenarioSubject.next(this.currentScenario);
     this.getCapacityData();
-    this.getCapacityData();
+
   }
 
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
@@ -106,7 +104,7 @@ export class PlanService {
     return new Promise((resolve, error) => {
       this.capacityData = {};
       d3.csv(this.currentPlan.data.capacityPath, (data) => {
-        console.log(data);
+        //console.log(data);
         data.forEach(element => {
           const year = element.year;
           const technology = element.technology;

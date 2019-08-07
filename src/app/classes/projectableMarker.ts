@@ -2,6 +2,7 @@ import { _ } from 'underscore';
 import { PlanService } from '../services/plan.service';
 import { SoundsService } from '../services/sounds.service';
 import { MapService } from '../services/map.service';
+import { Numeric } from 'd3';
 
 
 /** Represents a projectable marker.  These are the tangibles that control
@@ -12,9 +13,12 @@ export class ProjectableMarker {
   /* private static variables */
   private static MAX_ACTIVE_TIMER = 600;
   private static MAX_ADD_REMOVE_TIMER = 1000;
-  private static MAX_TIME_ROTATION = 100;
+  private static MAX_TIME_ROTATION = 40;
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = [];
+  private static maxMovement: number;
+  private static resetRotationMax = 500;
+
 
 
   /* private member variables */
@@ -38,6 +42,7 @@ export class ProjectableMarker {
   private soundsService: SoundsService;
   private mapService: MapService;
   private slideEvents: boolean;  // Does this marker have a slide event?
+  private lastRotation: number;
 
   constructor(id: number,
     job: string,
@@ -65,8 +70,10 @@ export class ProjectableMarker {
     this.planService = planService;
     this.soundsService = soundsService;
     this.mapService = mapService;
+    this.lastRotation = this.getCurrentTime();
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
+    ProjectableMarker.maxMovement = 4;
   }
 
 
@@ -112,7 +119,13 @@ export class ProjectableMarker {
   public detectMarker(corners: object, videoId: number): boolean {
     // Video id 2 = top camera
     // Video id 1 = bottom camera
+    if (videoId === 2 && this.live) {
+      return;
+    }
 
+    if (this.checkClearRotation()) {
+      this.resetClearRotation();
+    }
 
     switch (videoId) {
       case 1:
@@ -125,15 +138,17 @@ export class ProjectableMarker {
         }
         // Has the marker moved at all?
         if (this.wasMoved(corners)) {
-          if (this.wasSlid(corners)) {
+          if (this.slideEvents && this.wasSlid(corners)) {
             this.doJob(0);
+          } else {
+            if ((this.distanceMovedY(this.corners, corners) < ProjectableMarker.maxMovement) && (this.distanceMovedX(this.corners, corners) < ProjectableMarker.maxMovement)) {
+              this.doJob(1);
+            }
           }
           this.updatePrevPosition(this.corners);
           this.updatePosition(corners);
-          this.doJob(1);
         } else {
           // Wasnt moved, dont do shit.
-
         }
         break;
       case 2:
@@ -146,12 +161,15 @@ export class ProjectableMarker {
         }
         // Has the marker moved at all?
         if (this.wasMoved(corners)) {
-          if (this.wasSlid(corners)) {
+          if (this.slideEvents && this.wasSlid(corners)) {
             this.doJob(0);
+          } else {
+            if ((this.distanceMovedY(this.cornersCam2, corners) < ProjectableMarker.maxMovement) && (this.distanceMovedX(this.cornersCam2, corners) < ProjectableMarker.maxMovement)) {
+              this.doJob(1);
+            }
           }
           this.updatePrevPosition2(this.cornersCam2);
           this.updatePosition2(corners);
-          this.doJob(1);
         } else {
           // Wasnt moved, dont do shit.
         }
@@ -166,10 +184,10 @@ export class ProjectableMarker {
    */
   private wasSlid(corners: any): boolean {
     let slid = false;
-    const yThreshold = 12; // Maximum distance the marker can move left or right and still be considered
+    const yThreshold = 15; // Maximum distance the marker can move left or right and still be considered
     // as a slide.
-    const xMinimum = 20;   // Marker must move at least this distance to be a slide.
-    const xMaximum = 80;  // Maximum y distance.  Anything greater is considered something other than a slide.
+    const xMinimum = 10;   // Marker must move at least this distance to be a slide.
+    const xMaximum = 120;  // Maximum y distance.  Anything greater is considered something other than a slide.
     let prevCorners = this.prevCorners;
     if (this.live2) {
       prevCorners = this.prevCornersCam2;
@@ -183,9 +201,6 @@ export class ProjectableMarker {
 
     const xDifference = Math.abs(previousX - currentX);
     const yDifference = Math.abs(previousY - currentY);
-
-    //console.log(`yD -> ${yDifference} : xD -> ${xDifference} : prevX -> ${previousX} : prevY : -> ${previousY} : curX -> ${currentX} : curY -> ${currentY}`);
-
     if ((yDifference <= yThreshold) && (xDifference > xMinimum) && (xDifference <= xMaximum)) {
       if (up && !this.mapService.getSelectedLayer().active) {
         slid = true;
@@ -193,7 +208,6 @@ export class ProjectableMarker {
         slid = true;
       }
     }
-    //console.log(slid);
     return slid;
   }
 
@@ -242,23 +256,25 @@ export class ProjectableMarker {
   * associated with it.  This function is called from here.
   */
   private doJob(id: number) {
-    const direction = this.calcDirection();
-    switch (this.job) {
-      case 'year':
-        this.changeYear(direction);
-        break;
-      case 'layer':
-        this.changeLayer(direction, id);
-        break;
-      case 'scenario':
-        this.changeScenario(direction);
-        break;
-      case 'chart':
-        this.changeChart(direction);
-        break;
-      default:
-        // Do nothing
-        break;
+    if (this.checkDetectionTimer) {
+      const direction = this.calcDirection();
+      switch (this.job) {
+        case 'year':
+          this.changeYear(direction);
+          break;
+        case 'layer':
+          this.changeLayer(direction, id);
+          break;
+        case 'scenario':
+          this.changeScenario(direction);
+          break;
+        case 'chart':
+          this.changeChart(direction);
+          break;
+        default:
+          // Do nothing
+          break;
+      }
     }
   }
 
@@ -324,16 +340,18 @@ export class ProjectableMarker {
   */
   changeLayer(direction, id) {
     if (id === 1) {
-      switch (direction) {
-        case 'left':
-          this.mapService.decrementNextLayer();
-          break;
-        case 'right':
-          this.mapService.incrementNextLayer();
-          break;
-        default:
-          // do nothing
-          break;
+      if (this.checkaddRemoveTimer()) {
+        switch (direction) {
+          case 'left':
+            this.mapService.decrementNextLayer();
+            break;
+          case 'right':
+            this.mapService.incrementNextLayer();
+            break;
+          default:
+            // do nothing
+            break;
+        }
       }
     } else {
       if (this.checkaddRemoveTimer()) {
@@ -362,6 +380,9 @@ export class ProjectableMarker {
     return moved;
   }
 
+  private goodToRotate(): boolean {
+    return true;
+  }
 
   /** Kills marker.  ie no longer active */
   private die(): void {
@@ -585,9 +606,19 @@ export class ProjectableMarker {
 
   /** Resets the rotation timer to the current system time
   */
-  private resetRotationTimer(marker) {
+  private resetRotationTimer() {
     this.rotationStartTime = this.getCurrentTime();
   }
+
+  /** Resets the rotation timer to the current system time
+  */
+ private resetClearRotation() {
+  this.lastRotation = this.getCurrentTime();
+}
+
+private checkClearRotation() {
+  return this.getCurrentTime() - this.lastRotation > ProjectableMarker.resetRotationMax;
+}
 
 
   /** gets the current time of the system in milliseconds
@@ -598,12 +629,12 @@ export class ProjectableMarker {
     return date.getTime();
   }
 
-  private distanceMovedX(previous: {}): number {
-    return Math.abs(previous[0].x - this.corners[0].x);
+  private distanceMovedX(prev: {}, current: {}): number {
+    return Math.abs(prev[0].x - current[0].x);
   }
 
-  private distanceMovedY(previous: {}): number {
-    return Math.abs(previous[0].y - this.corners[0].y);
+  private distanceMovedY(prev: {}, current: {}): number {
+    return Math.abs(prev[0].y - current[0].y);
   }
 
   /** Calculate the direction that the marker was turned.
@@ -616,14 +647,13 @@ export class ProjectableMarker {
     const newRotation = this.calcRotation();
     this.rotation = newRotation; // Update rotation
     let diff = oldRotation - newRotation; // Change in rotation
-
     /* Minimum change is 2 degrees */
     if (Math.abs(diff) < 2) {
       diff = 0;
     }
 
-    /* A change of more than 100 degrees means somethign went wrong.*/
-    if (Math.abs(diff) <= 100 && Math.abs(diff) > 0) {
+    /* A change of more than 70 degrees means somethign went wrong.*/
+    if (Math.abs(diff) <= 70 && Math.abs(diff) > 0) {
       this.rotationSum += diff;
     } else {
       this.rotationSum = 0;
@@ -634,8 +664,10 @@ export class ProjectableMarker {
     if (Math.abs(this.rotationSum) > this.rotationMax) {
       if (this.rotationSum < 0) {
         direction = 'left';
+        this.resetRotationTimer();
       } else if (this.rotationSum > 0) {
         direction = 'right';
+        this.resetRotationTimer();
       } else {
         direction = 'none';
       }

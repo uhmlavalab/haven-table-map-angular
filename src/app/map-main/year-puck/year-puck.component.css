@@ -2,7 +2,7 @@
     width: 110px;
     height: 110px;
     position: absolute;
-    left: 5px;
+    left: -6px;
 }
 .year-box {
     width: 10%;
@@ -24,6 +24,6 @@
     top: calc(50% - 5px);
     font-weight: bolder;
     color:rgb(72, 217, 250);
-    left: 7px;
+    left: -1px;
     padding-top: 3px;
 }

@@ -85,7 +85,7 @@ export class ArService {
   /* Detects the Markers and makes the changes in the program */
   private tick(): void {
     if (this.running) {
-      setTimeout(() => requestAnimationFrame(this.tickFunction), 100);
+      setTimeout(() => requestAnimationFrame(this.tickFunction), 130);
     }
 
     this.videoFeedArray.forEach(videoFeed => {
@@ -204,7 +204,7 @@ export class ArService {
    */
   public createTrackingPoint(camX: number, camY: number, cam2X: number, cam2Y: number, mapX: number, mapY: number) {
     this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
-    console.log(this.trackingPoints);
+    //console.log(this.trackingPoints);
   }
 
   public track(x: number, y: number, camId: number): { x: number, y: number } {

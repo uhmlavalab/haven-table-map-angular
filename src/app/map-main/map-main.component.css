@@ -141,14 +141,16 @@ html {
 .scenario {
   border: 6px solid rgb(66, 245, 99);
   border-top: transparent;
-  left: 30px;
+  left: -10px;
   top: -30px;
+  position: absolute;
 }
 
 .scenario .display {
   width: 100%;
   text-align: center;
   top: -30%;
+  left: -5px;
 }
 .scenario .display p {
   font-size: 10px;

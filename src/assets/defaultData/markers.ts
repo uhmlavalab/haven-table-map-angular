@@ -11,7 +11,7 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 14,
+  rotationMax: 10,
   slideEvents: false
 }, {
   markerId: 6,
@@ -50,6 +50,6 @@ export const markers: Marker[] = [{
   prevCorners: null,
   rotation: 0,
   rotationSum: 0,
-  rotationMax: 22,
+  rotationMax: 20,
   slideEvents: true
 }];
