@@ -21,6 +21,7 @@ export class ProjectableMarker {
   private static goodToRotateLayer = true;
   private static goodToRotateLayerNormal = true;
   private static goodToRotateYearValue = true;
+  
 
   /* private member variables */
   private markerId: number; // Id that cooresponds to arucojs marker
@@ -44,6 +45,7 @@ export class ProjectableMarker {
   private mapService: MapService;
   private slideEvents: boolean;  // Does this marker have a slide event?
   private lastRotation: number;
+  private dataPoints = [];
 
   constructor(id: number,
     job: string,
@@ -695,6 +697,18 @@ export class ProjectableMarker {
     return direction;
   }
 
+  public addDataPoint(point) {
+    if (!(point === undefined)) {
+      this.dataPoints.push(point);
+    } else {
+      this.dataPoints.push(null);
+    }
+
+    if (this.dataPoints.length > 300) {
+      this.dataPoints.pop();
+    }
+  }
+
   public static toggleGoodToRotateLayer(onOff: boolean): void {
     ProjectableMarker.goodToRotateLayer = onOff;
   }
@@ -706,4 +720,5 @@ export class ProjectableMarker {
   public static toggleGoodToRotateYear(onOff: boolean): void {
     ProjectableMarker.goodToRotateLayer = onOff;
   }
+
 }

@@ -84,9 +84,9 @@ export class ArService {
 
   /* Detects the Markers and makes the changes in the program */
   private tick(): void {
-    if (this.running) {
-      setTimeout(() => requestAnimationFrame(this.tickFunction), 90);
-    }
+
+    /* Holds the raw aruco marker data from each camera */
+    const tempMarkerData = [];
 
     this.videoFeedArray.forEach(videoFeed => {
       if (videoFeed.video.readyState === videoFeed.video.HAVE_ENOUGH_DATA) {
@@ -99,26 +99,30 @@ export class ArService {
         // Run detect marker for each one
 
         arucoMarkers.forEach(marker => {
-          const pm = ProjectableMarker.getProjectableMarkerById(marker.id);
-          if (pm) {
-            pm.detectMarker(marker.corners, videoFeed.id);
-          }
+          tempMarkerData.push({
+            marker: ProjectableMarker.getProjectableMarkerById(marker.id),
+            corners: marker.corners,
+            camera: videoFeed.id
+          });
         });
-
-        //console.log(ProjectableMarker.getLiveProjectableMarkers());
-        ProjectableMarker.getLiveProjectableMarkers().forEach(marker =>
-          marker.analyzeMarkerData() // Run normal operations on each live marker
-        );
-
-        this.markerSubject.next(ProjectableMarker.getLiveProjectableMarkers());
-        if (this.calibrating) {
-          this.calibrationSubject.next(ProjectableMarker.getLiveProjectableMarkers());
-        } else if (this.trackingIsSet) {
-          this.trackingSubject.next(ProjectableMarker.getLiveProjectableMarkers());
-        }
       }
     });
+
+    this.unpackData(tempMarkerData);
+
   }
+
+  private unpackData(markerData) {
+
+    ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
+      const dataPoint = _.find(markerData, m => m.marker.markerId === pm.markerId);
+        pm.addDataPoint(dataPoint);
+    });
+
+    /* Get Next Frame */
+    requestAnimationFrame(this.tickFunction);
+  }
+
 
   /**
    * Creates an image from the video feed so that the app can look for markers.
@@ -204,8 +208,29 @@ export class ArService {
    */
   public createTrackingPoint(camX: number, camY: number, cam2X: number, cam2Y: number, mapX: number, mapY: number) {
     this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
-    //console.log(this.trackingPoints);
   }
+
+  private convertCamCoordinatesToMapCoordinates(dataPoint) {
+    return this.track(this.getCenterX(dataPoint.corners), this.getCenterY(dataPoint.corners), dataPoint.camera);
+  }
+
+  /**
+* Gets the center X position of the marker.
+* @return x center.
+*/
+  private getCenterX(corners) {
+    return (corners[0].x + corners[2].x) * 0.5;
+  }
+
+
+  /**
+   * Gets the center Y position of the marker.
+   * @return y center.
+   */
+  private getCenterY(corners) {
+    return (corners[0].y + corners[2].y) * 0.5;
+  }
+
 
   public track(x: number, y: number, camId: number): { x: number, y: number } {
     if (camId === 1) {
