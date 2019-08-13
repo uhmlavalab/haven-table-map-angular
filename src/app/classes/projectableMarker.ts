@@ -14,7 +14,8 @@ export class ProjectableMarker {
   /* private static variables */
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = [];
-
+  private static MAX_HISTORY = 80;
+  private static MAX_ROTATION_DEGREES = 120;
 
   /* private member variables */
   private markerId: number; // Id that cooresponds to arucojs marker
@@ -106,19 +107,33 @@ export class ProjectableMarker {
     return movementData;
   }
 
+  
+  /** Checks to see if the maker has been rotated. 
+   * @return true if rotated, false if not.
+  */
   public wasRotated(): boolean {
+    const data = this.getMovementData();
 
-    const movementData = this.getMovementData();
-
-    if (movementData.length < 2) {
+    if (data.length < 2) {
       return false;
     } else {
-      this.doJob(this.calcDirection(movementData[0].corners, movementData[1].corners));
-    }
+      const movementData = this.getDistanceMoved(data);
+      const y = movementData.y;
+      const x = movementData.x;
 
+      if (y > 1 && x > 1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
-  private doJob(direction: string) {
+  /** Each marker has a job that it does based on the direction of the rotation.
+   */
+  public doJob() {
+    const movementData = this.getMovementData();
+    const direction = this.calcDirection(movementData[0].corners, movementData[1].corners);
     if (this.job === 'year' && this.enabled) {
       if (direction === 'right') {
         this.planService.incrementCurrentYear();
@@ -143,30 +158,66 @@ export class ProjectableMarker {
         this.mapService.decrementNextLayer();
         this.disable();
       }
+    } else if (this.job === 'add' && this.enabled) {
+      if (direction === 'right') {
+        this.mapService.addLayer();;
+        this.disable();
+      } else if (direction === 'left') {
+        this.mapService.removeLayer();
+        this.disable();
+      }
     }
   }
 
-  private disable() {
+
+  /** Disables the rotation function for a psecified amount of time to prevent mutiple
+   * actions in a row.
+   */
+  private disable(): void {
     this.enabled = false;
     setTimeout(() => {
       this.enabled = true;
     }, this.delay);
   }
 
+  /** Checks to see if a marker has been moved since the last check
+   * @return true if the marker was moved, false if not.
+   */
   public wasMoved(): boolean {
     const movementData = this.getMovementData();
 
-
+    // Check to see if there is a previous to compare data with.  If not, couldn't have moved.
     if (movementData.length < 2) {
       return false;
     } else {
       if (movementData[0].corners[0].x !== movementData[1].corners[0].x) {
-        if (movementData)
+        if (!this.wasRepositioned(movementData)) {
           return true;
+        }
       }
     }
   }
 
+  /** Checks to see if the marker was repositioned. Max movement of 4 is allowed. 
+   * @param data The movement data in map coordinates.
+   * @return false if not repositioned, true if repositioned.
+   */
+  private wasRepositioned(data: any[]): boolean {
+    const movementData = this.getDistanceMoved(data);
+    const y = movementData.y;
+    const x = movementData.x;
+
+    if ((x > 1 && x < 4) || (y > 1 && y < 4)) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+  private getDistanceMoved(data: any[]): {x: number, y: number} {
+    return {x: Math.abs(data[0].corners[0].y - data[1].corners[0].y), y: Math.abs(data[0].corners[0].y - data[1].corners[0].y)};
+  }
 
 
   /** Sets the markerId number
@@ -248,14 +299,6 @@ export class ProjectableMarker {
     return date.getTime();
   }
 
-  private distanceMovedX(prev: {}, current: {}): number {
-    return Math.abs(prev[0].x - current[0].x);
-  }
-
-  private distanceMovedY(prev: {}, current: {}): number {
-    return Math.abs(prev[0].y - current[0].y);
-  }
-
   /** Calculate the direction that the marker was turned.
       * @return the direction that it was turned
   */
@@ -265,16 +308,18 @@ export class ProjectableMarker {
     const newRotation = this.calcRotation(corners);
     let diff = oldRotation - newRotation; // Change in rotation
 
-    if (diff > this.minRotation) {
+    if (diff > this.minRotation && Math.abs(diff) < ProjectableMarker.MAX_ROTATION_DEGREES) {
       return 'left';
-    } else if (diff < -this.minRotation) {
+    } else if (diff < -this.minRotation&& Math.abs(diff) < ProjectableMarker.MAX_ROTATION_DEGREES) {
       return 'right';
     } else {
       return 'none;'
     }
   }
 
-
+  /** Adds a data point to the array of data.  If the marker was not detected, a null is added.
+   * @param point The location and camera data for the marker.
+   */
   public addDataPoint(point) {
     if (!(point === undefined)) {
       this.dataPoints.unshift(this.convertPointToMap(point));
@@ -282,12 +327,17 @@ export class ProjectableMarker {
       this.dataPoints.unshift(null);
     }
 
-    if (this.dataPoints.length > 300) {
+    // Remove the last point when you fill the array.
+    if (this.dataPoints.length > ProjectableMarker.MAX_HISTORY) {
       this.dataPoints.pop();
     }
 
   }
 
+  /** Converts data points from the camera location coordinates to the map coordinates
+   * @param point the data in cam coordinates
+   * @return the converted coordinates.
+   */
   private convertPointToMap(point) {
     const convertedPoints = [];
     point.corners.forEach(corner => {
@@ -296,11 +346,17 @@ export class ProjectableMarker {
     return convertedPoints;
   }
 
+  /**  Finds the most recent location coordinates and returns the x position of the center of the marker.
+   * @return the x coordinate of the marker.
+  */
   public getMostRecentCenterX() {
     const corners = _.find(this.dataPoints, point => point !== null);
     return this.getCenterX(corners);
   }
 
+  /**Finds the most recent location coordinates and returns the center y position
+   * @return the y position of the marker in map coordinates.
+   */
   public getMostRecentCenterY() {
     const corners = _.find(this.dataPoints, point => point !== null);
     return this.getCenterY(corners);

@@ -125,19 +125,6 @@ export class MapService {
     }
   }
 
-  /** Adds layer if it is inactive, removes layer if it is active */
-  public toggleLayer(layer: MapLayer): void {
-    const index = this.layers.indexOf(layer);
-    if (index !== -1) {
-      this.layers[index].active = !this.layers[index].active;
-      this.toggleLayerSubject.next(this.layers[index]);
-      if (this.layers[index].active) {
-        this.soundsService.dropUp();
-      } else {
-        this.soundsService.dropDown();
-      }
-    }
-  }
 
   /** Gets the active layers
    * @return the array of active layers.
@@ -166,8 +153,28 @@ export class MapService {
     this.soundsService.tick();
   }
 
-  addRemoveLayer() {
-    this.toggleLayer(this.selectedLayer);
+  public addLayer(): boolean {
+    const layer = this.selectedLayer;
+    if (!layer.active) {
+      layer.active = true;
+      this.toggleLayerSubject.next(layer);
+      this.soundsService.dropUp();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public removeLayer(): boolean {
+    const layer = this.selectedLayer;
+    if (layer.active) {
+      layer.active = false;
+      this.toggleLayerSubject.next(layer);
+      this.soundsService.dropDown();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public getSelectedLayer(): MapLayer  {

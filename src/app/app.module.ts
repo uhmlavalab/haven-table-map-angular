@@ -19,7 +19,7 @@ import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
 import { LayerPuckComponent } from './map-main/layer-puck/layer-puck.component';
 import { YearPuckComponent } from './map-main/year-puck/year-puck.component';
-
+import { AddPuckComponent } from './map-main/add-puck/add-puck.component';
 import { ScenarioComponent } from './scenario/scenario.component';
 
 // Directives
@@ -36,6 +36,7 @@ import { PlanService } from './services/plan.service';
 import { MapService } from './services/map.service';
 import { SoundsService } from './services/sounds.service';
 import { WindowRefService } from './services/window-ref.service';
+
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { WindowRefService } from './services/window-ref.service';
     PieChartComponent,
     ScenarioComponent,
     LayerPuckComponent,
-    YearPuckComponent
+    YearPuckComponent,
+    AddPuckComponent
   ],
   imports: [
     BrowserModule,

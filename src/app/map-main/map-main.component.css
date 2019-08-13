@@ -146,6 +146,14 @@ html {
   position: absolute;
 }
 
+.add {
+  border: 6px solid orange;
+  border-top: transparent;
+  left: -10px;
+  top: -30px;
+  position: absolute;
+}
+
 .scenario .display {
   width: 100%;
   text-align: center;
@@ -160,4 +168,22 @@ html {
 .purple {
   color: rgb(66, 245, 99);
   font-size: 16px;
+}
+
+.center-container {
+  z-index: 0;
+  width: 45%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  left: 22%;
+  top: 36%;
+  border-radius: 50%;
+  color: white;
+}
+
+.center-container p {
+  width: 100%;
+  text-align: center;
+  font-size: 9px;
 }

@@ -1,19 +1,16 @@
 <div class="slide-icon-container" #slideIconContainer>
-  <div class="slide-icon" *ngFor="let icon of iconImages">
+  <div class="slide-icon" [style.borderColor]="icon.color" *ngFor="let icon of iconImages">
     <img src="{{icon.icon}}">
   </div>
 </div>
 <div class="layer-puck-container" #layerPuckContainer>
   <div class="icon-container" #iconContainer>
-    <div class="circle-icon" *ngFor="let icon of iconImages">
+    <div class="circle-icon" [style.borderColor]="icon.color" *ngFor="let icon of iconImages">
       <img src="{{icon.icon}}">
     </div>
   </div>
   <div class="center-container" #centerContainer>
-    <p>Slide {{ addRemove }}</p>
-    <div class="center-icon" #centerIcon>
-      <img src="{{arrowImage}}">
-    </div>
+    <p>Rotate Puck to Select a Layer</p>
   </div>
   <div class="display-text">
     {{ currentIcon.text }}

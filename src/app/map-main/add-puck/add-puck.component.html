@@ -1,0 +1,20 @@
+<div class="add-puck-wrapper"
+#addPuckWrapper>
+  <div 
+  class="add circle" 
+  [style.backgroundColor]="selectedLayer.active ? 'red' : 'green'"
+  [style.opacity]="selectedLayer.active ? 0.2 : 1"
+  >
+    <p>Add</p>
+  </div>
+  <div 
+  class="remove circle"   
+  [style.backgroundColor]="selectedLayer.active ? 'green' : 'red'"
+  [style.opacity]="selectedLayer.active ? 1 : 0.2"
+  >
+    <p>Remove</p>
+  </div>
+  <div class="icon">
+    <img src="{{selectedLayer.icon}}">
+  </div>
+</div>

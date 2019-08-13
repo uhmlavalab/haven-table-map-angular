@@ -23,6 +23,7 @@ export class MapMainComponent implements AfterViewInit {
   @ViewChild('trackingDotYear', { static: false }) trackingDotYear;
   @ViewChild('trackingDotLayer', { static: false }) trackingDotLayer;
   @ViewChild('trackingDotScenario', { static: false }) trackingDotScenario;
+  @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
 
   plan: Plan;
   private top: string;
@@ -31,6 +32,7 @@ export class MapMainComponent implements AfterViewInit {
   private legendClass: string;
   private currentYear: number;
   private nextLayer: string;
+  private addColor: string;
   trackingDots: any[] = [];
   private currentScenario: string;
 
@@ -43,6 +45,7 @@ export class MapMainComponent implements AfterViewInit {
     this.plan = this.planService.getCurrentPlan();
     this.legendClass = this.planService.getCurrentLegendLayout();
     this.currentYear = 2016;
+    this.addColor = this.mapService.getSelectedLayer().legendColor;
     try {
       this.currentScenario = this.planService.getCurrentScenario().displayName;
     } catch(error) {
@@ -64,7 +67,7 @@ export class MapMainComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario];
+    this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario, this.trackingDotAdd];
     this.planService.legendSubject.subscribe({
       next: value => {
         this.top = this.plan.css.legend[value].top;
@@ -94,6 +97,7 @@ export class MapMainComponent implements AfterViewInit {
             name: value.name
           }));
           this.nextLayer = value.displayName;
+          this.addColor = value.legendColor;
       }
     });
 
@@ -114,6 +118,7 @@ export class MapMainComponent implements AfterViewInit {
       dataPoint.x = marker.getMostRecentCenterX();
       dataPoint.y = marker.getMostRecentCenterY();
       
+      if (dataPoint.x !== null) {
       switch (marker.getJob()) {
         case 'year':
           this.trackingDotYear.nativeElement.style.opacity = 1;
@@ -130,10 +135,15 @@ export class MapMainComponent implements AfterViewInit {
           this.trackingDotScenario.nativeElement.style.left = dataPoint.x + 25 + 'px';
           this.trackingDotScenario.nativeElement.style.top = dataPoint.y + 25 + 'px';
           break;
-
+          case 'add':
+          this.trackingDotAdd.nativeElement.style.opacity = 1;
+          this.trackingDotAdd.nativeElement.style.left = dataPoint.x + 25 + 'px';
+          this.trackingDotAdd.nativeElement.style.top = dataPoint.y + 25 + 'px';
+          break;
       }
+    }
 
-    } catch (error) {
+    } catch (error) {;
       //undefined marker
       console.log(error);
     }
@@ -159,8 +169,10 @@ export class MapMainComponent implements AfterViewInit {
     } else if (event.key === 'ArrowDown') {
       this.mapService.decrementNextLayer();
     } else if (event.key === 'Enter') {
-      this.mapService.addRemoveLayer();
-    } else if (event.key === 'p') {
+      this.mapService.addLayer();
+    } else if (event.key === 'k') {
+      this.mapService.removeLayer();
+    }else if (event.key === 'p') {
       this.router.navigateByUrl('');
       this.planService.setState('landing');
       this.windowRefService.closeSecondScreen();
