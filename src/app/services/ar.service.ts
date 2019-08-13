@@ -66,13 +66,12 @@ export class ArService {
     markers.forEach(marker => new ProjectableMarker(
       marker.markerId,
       marker.job,
-      marker.icon,
-      marker.rotationMax,
+      marker.minRotation,
+      marker.delay,
       this.planService,
       this.soundsservice,
       this,
-      this.mapService,
-      marker.slideEvents));
+      this.mapService));
     this.running = false;
     this.xOffset = 119;
     this.yOffset = 131;
@@ -128,9 +127,7 @@ export class ArService {
     
     ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
       if (pm.wasMoved()) {
-        if (pm.wasRotated()) {
-          console.log('rotate');
-        }
+        pm.wasRotated();
       }
     });
     /* Get Next Frame */

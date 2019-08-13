@@ -3,53 +3,21 @@ import { Marker } from '@app/interfaces';
 export const markers: Marker[] = [{
   markerId: 3,
   job: 'year',
-  icon: 'hourglass-01.png',
-  live: false,
-  startTime: null,
-  rotationStartTime: null,
-  corners: null,
-  prevCorners: null,
-  rotation: 0,
-  rotationSum: 0,
-  rotationMax: 7,
-  slideEvents: false
+  delay: 50, 
+  minRotation: 3
 }, {
   markerId: 6,
+  job: 'layer',
+  delay: 250, 
+  minRotation: 5
+}, {
+  markerId: 5,
   job: 'scenario',
-  icon: 'scenario-01.png',
-  live: false,
-  startTime: null,
-  rotationStartTime: null,
-  corners: null,
-  prevCorners: null,
-  rotation: 0,
-  rotationSum: 0,
-  rotationMax: 20,
-  slideEvents: false
+  delay: 250, 
+  minRotation: 5
 }, {
   markerId: 11,
   job: 'chart',
-  icon: 'pie-01.png',
-  live: false,
-  startTime: null,
-  rotationStartTime: null,
-  corners: null,
-  prevCorners: null,
-  rotation: 0,
-  rotationSum: 0,
-  rotationMax: 20,
-  slideEvents: false
-}, {
-  markerId: 5,
-  job: 'layer',
-  icon: 'layers-01.png',
-  live: false,
-  startTime: null,
-  rotationStartTime: null,
-  corners: null,
-  prevCorners: null,
-  rotation: 0,
-  rotationSum: 0,
-  rotationMax: 20,
-  slideEvents: true
+  delay: 250, 
+  minRotation: 5
 }];

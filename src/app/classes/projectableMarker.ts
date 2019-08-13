@@ -14,53 +14,39 @@ export class ProjectableMarker {
   /* private static variables */
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = [];
-  
+
 
   /* private member variables */
   private markerId: number; // Id that cooresponds to arucojs marker
   private job: string; // Job that cooresponds to job objects
-  private icon: string; // Icon file name
-  private live: boolean; // Live when marker is detected on the table on camera 1 -- bottom camera
-  private live2: boolean; // Live when marker is detected in camera 2. -- top camera
-  private detectionStartTime: number; // Time when marker was detected on table
-  private detectionStartTimeCam2: number;
-  private rotationStartTime: number; // Last time rotation was checked
-  private addRemoveStartTime: number; // Last time add and remove executed
-  private corners: object; // Holds x and y positions of the tangible
-  private cornersCam2: object; // Holds x and y positions of the tangible when in camera 2
-  private prevCorners: object; // Holds x and y of previous position.
-  private prevCornersCam2: object; // Holds x and y of previous position.
-  private rotation: number; // Current Rotation
-  private rotationSum: number; // Combined Rotation amounts
-  private rotationMax: number; // When rotation sum hits this, rotate.
+  private delay: number;
+  private minRotation: number;
   private planService: PlanService;
   private soundsService: SoundsService;
   private mapService: MapService;
   private arService: ArService;
-  private slideEvents: boolean;  // Does this marker have a slide event?
-  private lastRotation: number;
   private dataPoints = [];
+  private enabled: boolean;
 
   constructor(id: number,
     job: string,
-    icon: string,
-    rotationMax: number,
+    minRotation: number,
+    delay: number,
     planService: PlanService,
     soundsService: SoundsService,
     arService: ArService,
-    mapService: MapService,
-    slideEvents: boolean) {
+    mapService: MapService) {
     this.markerId = id;
     this.job = job;
-    this.rotation = 0;
-    this.rotationMax = rotationMax;
+    this.minRotation = minRotation;
+    this.delay = delay;
     this.planService = planService;
     this.soundsService = soundsService;
     this.mapService = mapService;
     this.arService = arService;
-    this.lastRotation = this.getCurrentTime();
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
+    this.enabled = true;
   }
 
 
@@ -99,21 +85,6 @@ export class ProjectableMarker {
     return ProjectableMarker.projectableMarkers;
   }
 
-
-  public liveIn(): number {
-    if (this.live) {
-      return 1;
-    } else if (this.live2) {
-      return 2;
-    } else {
-      return 0;
-    }
-  }
-
-  public setIcon(icon: string): void {
-    this.icon = icon;
-  }
-
   public setJob(job: string): void {
     this.job = job;
   }
@@ -142,26 +113,62 @@ export class ProjectableMarker {
     if (movementData.length < 2) {
       return false;
     } else {
-     this.calcDirection(movementData[0].corners, movementData[1].corners);
+      this.doJob(this.calcDirection(movementData[0].corners, movementData[1].corners));
     }
 
   }
 
+  private doJob(direction: string) {
+    if (this.job === 'year' && this.enabled) {
+      if (direction === 'right') {
+        this.planService.incrementCurrentYear();
+        this.disable();
+      } else if (direction === 'left') {
+        this.planService.decrementCurrentYear();
+        this.disable();
+      }
+    } else if (this.job === 'scenario' && this.enabled) {
+      if (direction === 'right') {
+        this.planService.incrementScenario();
+        this.disable();
+      } else if (direction === 'left') {
+        this.planService.decrementScenario();
+        this.disable();
+      }
+    } else if (this.job === 'layer' && this.enabled) {
+      if (direction === 'right') {
+        this.mapService.incrementNextLayer();;
+        this.disable();
+      } else if (direction === 'left') {
+        this.mapService.decrementNextLayer();
+        this.disable();
+      }
+    }
+  }
+
+  private disable() {
+    this.enabled = false;
+    setTimeout(() => {
+      this.enabled = true;
+    }, this.delay);
+  }
+
   public wasMoved(): boolean {
     const movementData = this.getMovementData();
+
 
     if (movementData.length < 2) {
       return false;
     } else {
       if (movementData[0].corners[0].x !== movementData[1].corners[0].x) {
         if (movementData)
-        return true;
+          return true;
       }
     }
   }
 
 
-  
+
   /** Sets the markerId number
   * @param id => the new Id number
   * @return the markerId number
@@ -199,10 +206,13 @@ export class ProjectableMarker {
   /** Calculates the rotation of the marker
   * @return the rotation in degrees
   */
-  private calcRotation(corners, previousCorners) {
+  private calcRotation(corners) {
 
     let cX = this.getCenterX(corners);
     let cY = this.getCenterY(corners);
+
+    const x = corners[0].x;
+    const y = corners[0].y;
 
     let rotation = Math.atan((cY - y) / (x - cX));
 
@@ -251,36 +261,17 @@ export class ProjectableMarker {
   */
   private calcDirection(corners, previousCorners) {
 
-    let direction = 'none'; // initialize direction
-    const oldRotation = this.rotation;
-    const newRotation = this.calcRotation();
-    this.rotation = newRotation; // Update rotation
+    const oldRotation = this.calcRotation(previousCorners);
+    const newRotation = this.calcRotation(corners);
     let diff = oldRotation - newRotation; // Change in rotation
-    // Minimum change is 2 degrees 
-    if (Math.abs(diff) < 2) {
-      diff = 0;
-    }
 
-    // A change of more than 70 degrees means somethign went wrong.
-    if (Math.abs(diff) <= 70 && Math.abs(diff) > 0) {
-      this.rotationSum += diff;
+    if (diff > this.minRotation) {
+      return 'left';
+    } else if (diff < -this.minRotation) {
+      return 'right';
     } else {
-      this.rotationSum = 0;
+      return 'none;'
     }
-
-    // Check rotation sum.  If it is positive, rotation is right.  If it is
-    //  negative, rotation is left.  Otherwise no rotation 
-    if (Math.abs(this.rotationSum) > this.rotationMax) {
-      if (this.rotationSum < 0) {
-        direction = 'left';
-      } else if (this.rotationSum > 0) {
-        direction = 'right';
-      } else {
-        direction = 'none';
-      }
-      this.rotationSum = 0;  // Reset rotationSum if there was a rotation
-    }
-    return direction;
   }
 
 
