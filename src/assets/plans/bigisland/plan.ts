@@ -26,6 +26,7 @@ export const BigIslandPlan: Plan = {
     capacityPath: 'assets/plans/bigisland/data/capacity.csv',
     generationPath: 'assets/plans/bigisland/data/generation.csv',
     batteryPath: 'assets/plans/bigisland/data/battery.csv',
+    curtailmentPath: 'assets/plans/oahu/data/curtailment.csv',
     colors: chartColors
   },
   css: {

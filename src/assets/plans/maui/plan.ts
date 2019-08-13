@@ -26,6 +26,7 @@ export const MauiPlan: Plan = {
     capacityPath: 'assets/plans/maui/data/capacity.csv',
     generationPath: 'assets/plans/maui/data/generation.csv',
     batteryPath: 'assets/plans/maui/data/battery.csv',
+    curtailmentPath: 'assets/plans/oahu/data/curtailment.csv',
     colors: chartColors
   },
   css: {

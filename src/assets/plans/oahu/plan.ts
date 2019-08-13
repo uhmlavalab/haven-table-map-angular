@@ -67,6 +67,7 @@ export const OahuPlan: Plan = {
     capacityPath: 'assets/plans/oahu/data/capacity.csv',
     generationPath: 'assets/plans/oahu/data/generation.csv',
     batteryPath: 'assets/plans/oahu/data/battery.csv',
+    curtailmentPath: 'assets/plans/oahu/data/curtailment.csv',
     colors: chartColors
   },
   map: {
@@ -247,6 +248,8 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction(planService: PlanService) {
           let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
+          const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
+          solarTotal += curtailmentTotal;
           this.parcels.sort((a, b) => parseFloat(b.properties.cf_1) - parseFloat(a.properties.cf_1));
           this.parcels.forEach(parcel => {
             if (solarTotal > 0) {
@@ -267,6 +270,8 @@ export const OahuPlan: Plan = {
         },
         updateFunction(planService: PlanService) {
           let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
+          const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
+          solarTotal += curtailmentTotal;
           this.parcels.forEach(parcel => {
             if (solarTotal > 0) {
               d3.select(parcel.path)

@@ -29,6 +29,7 @@ export class PlanService {
 
   private capacityData = {};
   private generationData = {};
+  private curtailmentData = {};
 
   private legendLayouts: string[] = [];
   private currentLegendLayout: number;
@@ -50,6 +51,8 @@ export class PlanService {
     this.yearSubject.next(this.currentYear);
     this.scenarioSubject.next(this.currentScenario);
     this.getCapacityData();
+    this.getGenerationData();
+    this.getCurtailmentData();
 
   }
 
@@ -77,6 +80,18 @@ export class PlanService {
     return capacityTotal;
   }
 
+  public getCurtailmentTotalForCurrentYear(technologies: string[]): number {
+    let curtailmentTotal = 0;
+    technologies.forEach(tech => {
+      this.curtailmentData[this.currentScenario.name][tech].forEach(el => {
+        if (el.year === this.currentYear) {
+          curtailmentTotal += el.value;
+        }
+      });
+    });
+    return curtailmentTotal;
+  }
+
   public getGenerationData(): Promise<any> {
     this.generationData = {};
     return new Promise((resolve, error) => {
@@ -98,14 +113,37 @@ export class PlanService {
       });
 
     });
-
   }
+
+
+  public getCurtailmentData(): Promise<any> {
+    this.curtailmentData = {};
+    return new Promise((resolve, error) => {
+      d3.csv(this.currentPlan.data.curtailmentPath, (data) => {
+        data.forEach(element => {
+          const year = element.year;
+          const technology = element.technology;
+          const value = element.value;
+          const scenario = element.scenario;
+          if (!this.curtailmentData.hasOwnProperty(scenario)) {
+            this.curtailmentData[scenario] = {};
+          }
+          if (!this.curtailmentData[scenario].hasOwnProperty(technology)) {
+            this.curtailmentData[scenario][technology] = [];
+          }
+          this.curtailmentData[scenario][technology].push({ year: Number(year), value: Number(value) });
+        });
+        return resolve(this.curtailmentData);
+      });
+
+    });
+  }
+
 
   public getCapacityData(): Promise<any> {
     return new Promise((resolve, error) => {
       this.capacityData = {};
       d3.csv(this.currentPlan.data.capacityPath, (data) => {
-        //console.log(data);
         data.forEach(element => {
           const year = element.year;
           const technology = element.technology;
