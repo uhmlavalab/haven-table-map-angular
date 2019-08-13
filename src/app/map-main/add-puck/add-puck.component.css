@@ -1,0 +1,43 @@
+.add-puck-wrapper {
+    color: white;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.circle {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: 2px solid black;
+    position: absolute;
+    transition: background-color 0.5s linear, opacity 0.5s linear;
+}
+
+.remove {
+    left: 0;
+    top: -40px;
+}
+
+.add {
+    right: 0;
+    top: -40px;
+}
+
+p {
+    width: 100%;
+    text-align: center;
+    top: 3px;
+}
+
+.icon {
+    width: 40%;
+    height: 40%;
+    position: absolute;
+    top: 36%;
+    left: 28%;
+}
+
+.icon img{ 
+    width: 100%;
+    height: 100%;
+}

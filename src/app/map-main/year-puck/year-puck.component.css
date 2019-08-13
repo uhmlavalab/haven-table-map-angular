@@ -2,7 +2,8 @@
     width: 110px;
     height: 110px;
     position: absolute;
-    left: -6px;
+    left: 4px;
+    top: 2px;
 }
 .year-box {
     width: 10%;
@@ -19,11 +20,11 @@
 .current-year {
     position: absolute;
     width: 100%;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     top: calc(50% - 5px);
     font-weight: bolder;
     color:rgb(72, 217, 250);
-    left: -1px;
+    left: 3px;
     padding-top: 3px;
 }

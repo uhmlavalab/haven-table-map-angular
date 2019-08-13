@@ -16,13 +16,13 @@ export class LayerPuckComponent implements AfterViewInit {
   @ViewChild('layerPuckContainer', { static: false }) puckContainer;
 
   private numberOfIcons: number;
-  private iconImages: { icon: string, text: string, image: string, active: boolean}[] = [];
-  private currentIcon: { icon: string, text: string, image: string, active: boolean};
+  private iconImages: { icon: string, text: string, image: string, active: boolean, color: string}[] = [];
+  private currentIcon: { icon: string, text: string, image: string, active: boolean, color: string};
   private currentIconIndex: number;
   private iconElements: any[] = [];
   private currentPosition: number;
   private angle: number;
-  private slideImages: { icon: string, text: string, active: boolean }[] = [];
+  private slideImages: { icon: string, text: string, active: boolean, color: string }[] = [];
   private slideIconElements: any[] = [];
   private arrowImage: string;
   private addRemove: string;
@@ -36,7 +36,8 @@ export class LayerPuckComponent implements AfterViewInit {
         icon: layer.iconPath,
         text: layer.displayName,
         image: layer.iconPath,
-        active: false
+        active: false,
+        color: layer.legendColor
       });
     });
 
