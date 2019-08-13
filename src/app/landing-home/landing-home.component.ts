@@ -393,12 +393,6 @@ export class LandingHomeComponent implements OnInit {
   private track(marker: ProjectableMarker) {
     try {
       let dataPoint = null;
-
-      if (marker.liveIn() === 1) {
-        dataPoint = this.arservice.track(marker.getCenterX(), marker.getCenterY(), 1);
-      } else {
-        dataPoint = this.arservice.track(marker.getCenterX2(), marker.getCenterY2(), 2);
-      }
      
       this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
       this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';

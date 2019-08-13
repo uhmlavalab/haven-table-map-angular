@@ -70,6 +70,7 @@ export class ArService {
       marker.rotationMax,
       this.planService,
       this.soundsservice,
+      this,
       this.mapService,
       marker.slideEvents));
     this.running = false;
@@ -119,10 +120,22 @@ export class ArService {
         pm.addDataPoint(dataPoint);
     });
 
+    this.trackingSubject.next(ProjectableMarker.getAllProjectableMarkersArray());
+    this.runMarkers();
+  }
+
+  private runMarkers() {
+    
+    ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
+      if (pm.wasMoved()) {
+        if (pm.wasRotated()) {
+          console.log('rotate');
+        }
+      }
+    });
     /* Get Next Frame */
     requestAnimationFrame(this.tickFunction);
   }
-
 
   /**
    * Creates an image from the video feed so that the app can look for markers.
@@ -210,7 +223,7 @@ export class ArService {
     this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
   }
 
-  private convertCamCoordinatesToMapCoordinates(dataPoint) {
+  public convertCamCoordinatesToMapCoordinates(dataPoint) {
     return this.track(this.getCenterX(dataPoint.corners), this.getCenterY(dataPoint.corners), dataPoint.camera);
   }
 

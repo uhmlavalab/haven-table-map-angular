@@ -109,14 +109,10 @@ export class MapMainComponent implements AfterViewInit {
 
   private track(marker: ProjectableMarker) {
     try {
-      let dataPoint = null;
+      const dataPoint = {x: null, y: null};
 
-      if (marker.liveIn() === 1) {
-        dataPoint = this.arService.track(marker.getCenterX(), marker.getCenterY(), 1);
-      } else {
-        dataPoint = this.arService.track(marker.getCenterX2(), marker.getCenterY2(), 2);
-      }
-     
+      dataPoint.x = marker.getMostRecentCenterX();
+      dataPoint.y = marker.getMostRecentCenterY();
       
       switch (marker.getJob()) {
         case 'year':

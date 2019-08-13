@@ -141,15 +141,11 @@ export class PlanService {
 
   public incrementCurrentYear(): void {
     try {
-      ProjectableMarker.toggleGoodToRotateYear(false);
       if (this.currentYear < this.currentPlan.maxYear) {
         this.currentYear++;
         this.soundsService.click();
       }
       this.yearSubject.next(this.currentYear);
-      setTimeout(() => {
-        ProjectableMarker.toggleGoodToRotateYear(true);
-      }, 100);
     } catch (error) {
       // Catch error when setting up
     }
@@ -157,15 +153,11 @@ export class PlanService {
 
   public decrementCurrentYear(): void {
     try {
-      ProjectableMarker.toggleGoodToRotateYear(false);
       if (this.currentYear > this.currentPlan.minYear) {
         this.currentYear--;
         this.soundsService.click();
       }
       this.yearSubject.next(this.currentYear);
-      setTimeout(() => {
-        ProjectableMarker.toggleGoodToRotateYear(true);
-      }, 100);
     } catch (error) {
       // catch error when setting up
     }

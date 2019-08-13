@@ -140,7 +140,6 @@ export class MapService {
   }
 
   public decrementNextLayer() {
-    ProjectableMarker.toggleGoodToRotateLayer2(false);
     let index = this.layers.indexOf(this.selectedLayer) - 1;
     if (index === -1) {
       index = this.layers.length - 1;
@@ -149,21 +148,15 @@ export class MapService {
     this.selectedLayerSubject.next(this.selectedLayer);
     this.layerChangeSubject.next('decrement');
     this.soundsService.tick();
-    setTimeout(() => {
-      ProjectableMarker.toggleGoodToRotateLayer2(true);
-    }, 100);
+
   }
 
   public incrementNextLayer() {
-    ProjectableMarker.toggleGoodToRotateLayer2(false);
     const index = this.layers.indexOf(this.selectedLayer) + 1;
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
     this.layerChangeSubject.next('increment');
     this.soundsService.tick();
-    setTimeout(() => {
-      ProjectableMarker.toggleGoodToRotateLayer2(true);
-    }, 100);
   }
 
   addRemoveLayer() {
