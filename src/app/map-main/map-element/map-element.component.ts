@@ -52,6 +52,10 @@ export class MapElementComponent implements OnInit {
       .attr('width', this.width)
       .attr('height', this.height);
 
+    const aa = [-158.00, 21.42];
+
+
+
     this.mapService.getLayers().forEach(layer => {
       if (layer.filePath === null) {
         return;
@@ -70,6 +74,14 @@ export class MapElementComponent implements OnInit {
 
         const path = d3.geo.path()
           .projection(proj);
+
+        this.map.selectAll('circle')
+          .data([aa as [number, number]]).enter()
+          .append('circle')
+          .attr('cx', (d) => proj(d)[0])
+          .attr('cy', (d) => proj(d)[1])
+          .attr('r', '8px')
+          .attr('fill', 'red');
 
         this.map.selectAll(layer.name)
           .data(geoData.features)

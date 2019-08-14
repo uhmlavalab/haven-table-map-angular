@@ -21,6 +21,8 @@ import { LayerPuckComponent } from './map-main/layer-puck/layer-puck.component';
 import { YearPuckComponent } from './map-main/year-puck/year-puck.component';
 import { AddPuckComponent } from './map-main/add-puck/add-puck.component';
 import { ScenarioComponent } from './scenario/scenario.component';
+import { MapMiniComponent } from './map-main/map-mini/map-mini.component';
+
 
 // Directives
 import { MapSelectionDirectiveDirective } from './landing-home/map-selection-directive.directive';
@@ -61,7 +63,8 @@ import { WindowRefService } from './services/window-ref.service';
     ScenarioComponent,
     LayerPuckComponent,
     YearPuckComponent,
-    AddPuckComponent
+    AddPuckComponent,
+    MapMiniComponent
   ],
   imports: [
     BrowserModule,

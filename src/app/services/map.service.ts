@@ -19,6 +19,9 @@ export class MapService {
   private selectedLayer: MapLayer;
   public selectedLayerSubject = new Subject<MapLayer>();
 
+  private circlePosition: [number, number];
+  public circlePositionSub = new Subject<[number, number]>();
+
   /* Subjects */
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
   public updateLayerSubject = new Subject<MapLayer>();
@@ -182,6 +185,11 @@ export class MapService {
   }
   resetMap() {
 
+  }
+
+  public updateCirclePosition(position: [number, number]) {
+    this.circlePosition = position;
+    this.circlePositionSub.next(this.circlePosition);
   }
 
 }
