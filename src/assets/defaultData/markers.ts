@@ -3,7 +3,7 @@ import { Marker } from '@app/interfaces';
 export const markers: Marker[] = [{
   markerId: 3,
   job: 'year',
-  delay: 30, 
+  delay: 40, 
   minRotation: 3
 }, {
   markerId: 6,

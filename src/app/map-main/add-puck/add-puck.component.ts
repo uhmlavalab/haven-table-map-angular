@@ -16,6 +16,8 @@ export class AddPuckComponent implements OnInit {
     color: string;
   }
 
+  private addRemoveText: string;
+
   constructor(private mapService: MapService) {
     this.selectedLayer = {
       icon: this.mapService.getSelectedLayer().iconPath,
@@ -23,6 +25,8 @@ export class AddPuckComponent implements OnInit {
       text: this.mapService.getSelectedLayer().displayName,
       color: this.mapService.getSelectedLayer().legendColor
     }
+
+    this.setAddRemoveText();
    }
 
   ngOnInit() {
@@ -35,6 +39,7 @@ export class AddPuckComponent implements OnInit {
         text: layer.displayName,
         color: layer.legendColor
       }
+      this.setAddRemoveText();
     });
 
     // Subscribe to layer toggling
@@ -45,8 +50,12 @@ export class AddPuckComponent implements OnInit {
         text: layer.displayName,
         color: layer.legendColor
       }
+      this.setAddRemoveText();
     });
     
   }
 
+  private setAddRemoveText(): void {
+    this.addRemoveText = this.selectedLayer.active ? 'Remove' : 'Add';
+  }
 }

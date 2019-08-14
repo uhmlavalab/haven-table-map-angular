@@ -51,11 +51,10 @@ export class PlanService {
     this.yearSubject.next(this.currentYear);
     this.scenarioSubject.next(this.currentScenario);
     this.getCapacityData();
-    this.getGenerationData();
+    //this.getGenerationData();
     this.getCurtailmentData();
 
   }
-
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
     let generationTotal = 0;
     technologies.forEach(tech => {

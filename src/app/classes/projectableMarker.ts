@@ -14,7 +14,7 @@ export class ProjectableMarker {
   /* private static variables */
   private static projectableMarkers: object = {};
   private static projectableMarkerArray: ProjectableMarker[] = [];
-  private static MAX_HISTORY = 80;
+  private static MAX_HISTORY = 40;
   private static MAX_ROTATION_DEGREES = 120;
 
   /* private member variables */
