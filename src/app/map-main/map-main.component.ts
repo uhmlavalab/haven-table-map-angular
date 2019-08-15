@@ -7,7 +7,6 @@ import { Plan } from '@app/interfaces';
 import { PlanService } from '@app/services/plan.service';
 import { AddRemoveLayersComponent } from './interaction-element/add-remove-layers/add-remove-layers.component';
 import { ProjectableMarker } from '@app/classes/projectableMarker';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-map-main',
@@ -24,6 +23,7 @@ export class MapMainComponent implements AfterViewInit {
   @ViewChild('trackingDotLayer', { static: false }) trackingDotLayer;
   @ViewChild('trackingDotScenario', { static: false }) trackingDotScenario;
   @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
+  @ViewChild('connectingLine', { static: false }) connectingLine;
 
   plan: Plan;
   private top: string;
@@ -105,9 +105,10 @@ export class MapMainComponent implements AfterViewInit {
       next: value => {
         this.trackingDots.forEach(dot => dot.nativeElement.style.opacity = 0);
         value.forEach(marker => this.track(marker));
+        this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
       }
     });
-
+    
     this.planService.scenarioSubject.subscribe(scenario => this.currentScenario = scenario.displayName);
   }
 
@@ -148,6 +149,93 @@ export class MapMainComponent implements AfterViewInit {
       console.log(error);
     }
   }
+
+  /** Draws a line between the layer puck element and the add puck element.
+   * Both of the pucks have to be detected and live for the line to be drawn.
+   * @param layer the native element of the layer puck
+   * @param add the native element of the add puck.
+   */
+  private connectLayerAndAdd(layer, add) {
+    
+    const layerMarker = ProjectableMarker.getProjectableMarkerByJob('layer');
+    const addMarker = ProjectableMarker.getProjectableMarkerByJob('add');
+
+    const layerRect = layer.getBoundingClientRect();
+    const xOffset = layerRect.width / 2;
+    const yOffset = layerRect.height / 2;
+
+    const layerPosition = {x: layerMarker.getMostRecentCenterX(), y: layerMarker.getMostRecentCenterY()};
+    const addPosition = {x: addMarker.getMostRecentCenterX(), y: addMarker.getMostRecentCenterY()};
+
+    if (layerPosition.x === null || addPosition.x === null) {
+      this.connectingLine.nativeElement.style.opacity = 0;
+    } else {
+      const adjacent = this.getAdjacent(addPosition.x, layerPosition.x);
+      const opposite = this.getOpposite(addPosition.y, layerPosition.y);
+      const hypotenuse = this.getHypotenuse(adjacent, opposite); // This is the width of the div
+      let theta = this.getTheta(opposite, adjacent);
+      theta = this.convertRadsToDegrees(theta);
+      const quadrant = this.getQuadrant(addPosition.x - layerPosition.x, addPosition.y - layerPosition.y);
+      theta = this.adjustTheta(theta, quadrant);
+      this.moveLine(this.connectingLine.nativeElement, theta, hypotenuse, layerPosition.x + xOffset + 25, layerPosition.y + 25);
+    }
+  }
+
+  private moveLine(element, theta, width, x, y) {
+    element.style.opacity = 1;
+    element.style.width = `${width}px`;
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+    element.style.transform = `rotate(-${theta}deg)`;
+    element.style.backgroundColor = this.mapService.getSelectedLayer().legendColor;
+  }
+
+  private adjustTheta(theta, quadrant) {
+    theta = theta;
+    if (quadrant === 2) {
+      theta = 180 - theta;
+    } else if (quadrant === 3) {
+      theta = 180 + theta;
+    } else if (quadrant === 4) {
+      theta = 360 - theta;
+    }
+    return theta;
+  }
+
+  private getQuadrant(x: number, y: number) {
+    let quadrant = 0;
+    if (x <= 0 && y <= 0) {
+      quadrant = 2;
+    } else if (x > 0 && y <= 0) {
+      quadrant = 1;
+    } else if (x >= 0 && y > 0) {
+      quadrant = 4;
+    } else {
+      quadrant = 3;
+    }
+    return quadrant;
+  }
+  private convertRadsToDegrees(theta): number {
+    return theta * (180/Math.PI);
+  }
+
+  private getTheta(opposite: number, adjacent: number): number {
+    return Math.atan(opposite/adjacent);
+  } 
+
+  private getAdjacent(a: number, b: number): number {
+    return Math.abs(a - b);
+  }
+
+  private getOpposite(a: number, b: number): number {
+    return Math.abs(a - b);
+  }
+
+  private getHypotenuse(a: number, b: number): number {
+    return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+  }
+
+
   /**
    * This function gets the css class name to apply to the legend based
    * on the map that is selected.
@@ -157,7 +245,9 @@ export class MapMainComponent implements AfterViewInit {
     return this.plan.name;
   }
 
-  /* KEYBOARD CONTROLS */
+  /*
+
+  //KEYBOARD CONTROLS 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.key === 'ArrowRight') {
@@ -191,5 +281,27 @@ export class MapMainComponent implements AfterViewInit {
     } else if (event.key === 'f') {
       console.log('second => ' + this.windowRefService.secondScreenExists());
     }
+  }
+  */
+ //KEYBOARD CONTROLS 
+ @HostListener('window:keydown', ['$event'])
+ keyEvent(event: KeyboardEvent) {
+   if (event.key === 'ArrowUp') {
+     this.arService.incrementYOffset();
+   } else if (event.key === 'ArrowDown') {
+     this.arService.decrementYOffset();
+   } else if (event.key === 'ArrowLeft') {
+     this.arService.incrementXOffset();
+   } else if (event.key === 'ArrowRight') {
+     this.arService.decrementXOffset();
+   } else if (event.key === 'w') {
+     this.arService.incrementYOffset2();
+   } else if (event.key === 's') {
+     this.arService.decrementYOffset2();
+   } else if (event.key === 'a') {
+     this.arService.incrementXOffset2();
+   } else if (event.key === 'd') {
+     this.arService.decrementXOffset2();
+   }
   }
 }

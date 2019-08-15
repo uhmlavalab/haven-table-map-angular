@@ -41,7 +41,7 @@ export class YearPuckComponent implements AfterViewInit {
   private colorNodes() {
     for (let index = 0; index < 30; index++) {
       if (index <= this.currentYear - 2016) {
-        this.yearBoxElements[index].style.backgroundColor = 'rgb(72, 217, 250)';
+        this.yearBoxElements[index].style.backgroundColor = 'rgba(147, 93, 201)';
       } else {
         this.yearBoxElements[index].style.backgroundColor = 'transparent';
       }

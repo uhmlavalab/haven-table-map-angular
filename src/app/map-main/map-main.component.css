@@ -128,11 +128,17 @@ html {
 .year {
   width: 100px;
   height: 100px;
+  background-color: black;
 }
 
 .year .display p {
   font-size: 20px;
 }
+
+.layer {
+  background-color: black;
+}
+
 
 .layer .display p {
   font-size: 12px;
@@ -144,6 +150,7 @@ html {
   left: -10px;
   top: -30px;
   position: absolute;
+  background-color: black;
 }
 
 .add {
@@ -152,13 +159,14 @@ html {
   left: -10px;
   top: -30px;
   position: absolute;
+  background-color: black;
 }
 
 .scenario .display {
   width: 100%;
   text-align: center;
   top: -36%;
-  left: -5px;
+  left: 0px;
 }
 .scenario .display p {
   font-size: 10px;
@@ -195,4 +203,12 @@ html {
   width: 100%;
   text-align: center;
   font-size: 9px;
+}
+
+.connecting-line {
+  height: 5px;
+  background-color: transparent;
+  position: absolute;
+  transform-origin: bottom left;
+  z-index: -1;
 }

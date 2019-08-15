@@ -127,13 +127,11 @@ export class LandingHomeComponent implements OnInit {
     this.arservice.startCalibration();
     this.manualPosition = 0;
     this.manualCalibration(this.manualPosition);
-    //this.calibrationIndex = 0;
-    //this.recursiveCalibrate(0);
+    this.calibrationIndex = 0;
   }
 
   private manualCalibration(position: number) {
-    
-  /*
+
     switch (position) {
       case 0: {
         this.manualPoint.nativeElement.style.left = 0;
@@ -172,28 +170,13 @@ export class LandingHomeComponent implements OnInit {
         break;
       }
     }
-  */
-
-  this.calibrating = false;
-  this.arservice.completeCalibration();
-  this.testTracking();
-    
+    /*
+    this.calibrating = false;
+    this.arservice.completeCalibration();
+    this.testTracking();
+    */
   }
 
-  private recursiveCalibrate(index: number) {
-    console.log(index);
-    if (index >= this.numberOfCalibrationMarkers) {
-      return;
-    } else {
-      this.calibrationIndex = index;
-      setTimeout(() => {
-        this.calibrationIndex = -1;
-      }, 300);
-      setTimeout(() => {
-        this.recursiveCalibrate(index + 1);
-      }, 350);
-    }
-  }
 
   private completeTrackTesting(): void {
     this.tracking = false;
@@ -217,15 +200,19 @@ export class LandingHomeComponent implements OnInit {
     this.manualCalibration(this.manualPosition);
   }
 
-  private calibrationDetected(liveMarkerArray: any) {
-    // this.trackingPoints[this.calibrationIndex].detect();
-    //console.log(marker.id);
-    if (liveMarkerArray.length > 0) {
+  private calibrationDetected(calibrationData: any) {
+
+    if (calibrationData.length > 0) {
       this.markerDetected = true;
-      this.centerX = liveMarkerArray[0].getCenterX();
-      this.centerY = liveMarkerArray[0].getCenterY();
-      this.centerX2 = liveMarkerArray[0].getCenterX2();
-      this.centerY2 = liveMarkerArray[0].getCenterY2();
+      calibrationData.forEach(pm => {
+        if (pm.camera === 1) {
+          this.centerX = pm.marker.getCenterX(pm.corners);
+          this.centerY = pm.marker.getCenterY(pm.corners);
+        } else if (pm.camera === 2) { 
+          this.centerX2 = pm.marker.getCenterX(pm.corners);
+          this.centerY2 = pm.marker.getCenterY(pm.corners);
+        }
+      });
     } else {
       this.markerDetected = false;
       this.centerX = 0;
@@ -390,13 +377,17 @@ export class LandingHomeComponent implements OnInit {
     this.tracking = true;
   }
 
-  private track(marker: ProjectableMarker) {
+  private track(data) {
+  
     try {
-      let dataPoint = null;
-     
+      if (data != undefined) {
+      const dataPoint = {x: data.marker.getMostRecentCenterX(), y: data.marker.getMostRecentCenterY()};
       this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
       this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';
+      }
+      
     } catch (error) {
+     console.log(error)
       //undefined marker
     }
   }

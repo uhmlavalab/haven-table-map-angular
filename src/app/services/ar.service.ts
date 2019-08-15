@@ -44,6 +44,7 @@ export class ArService {
   private yOffset2: number;
   private xOffset2: number;
   private trackingIsSet: boolean;
+  public testTracking: boolean;
 
   /* The array holding the video feeds is created by the video feed components.
   * The tick cannot be started until there is at least one video element */
@@ -65,10 +66,10 @@ export class ArService {
       this,
       this.mapService));
     this.running = false;
-    this.xOffset = 119;
-    this.yOffset = 131;
-    this.xOffset2 = 49;
-    this.yOffset2 = 146;
+    this.xOffset = 119; // Bottom Camera
+    this.yOffset = 131; // Bottom Camera ARROW
+    this.xOffset2 = 49; // Top Camera
+    this.yOffset2 = 146; // Top Camera WASD
     this.trackingIsSet = true;
     this.createDefaultTrackingPoints();
     this.completeCalibration();
@@ -100,7 +101,21 @@ export class ArService {
       }
     });
 
-    this.unpackData(tempMarkerData);
+    if (this.calibrating) {
+      this.decodeCalibrationData(tempMarkerData);
+    } else {
+      this.unpackData(tempMarkerData);
+    }
+  }
+
+  /** Takes the raw data for the markers and runs the calibration loop
+   * @param data marker detected data 
+   */
+  private decodeCalibrationData(data) {
+
+    this.calibrationSubject.next(data);
+    /* Get Next Frame */
+    requestAnimationFrame(this.tickFunction);
   }
 
   /** Takes all captured marker data that was collected by arucojs detector object.  All marker location
@@ -112,7 +127,7 @@ export class ArService {
 
     ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
       const dataPoint = _.find(markerData, m => m.marker.markerId === pm.markerId);
-        pm.addDataPoint(dataPoint);
+      pm.addDataPoint(dataPoint);
     });
 
     // Publish the locations for tracking.
@@ -193,6 +208,7 @@ export class ArService {
 
   public startCalibration(): void {
     this.calibrating = true;
+    this.trackingPoints = [];
   }
 
   private createDefaultTrackingPoints(): void {
@@ -236,6 +252,7 @@ export class ArService {
    */
   public createTrackingPoint(camX: number, camY: number, cam2X: number, cam2Y: number, mapX: number, mapY: number) {
     this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
+    console.log(this.trackingPoints);
   }
 
   public convertCamCoordinatesToMapCoordinates(dataPoint) {

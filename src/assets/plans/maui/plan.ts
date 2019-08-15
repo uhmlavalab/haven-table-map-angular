@@ -165,7 +165,7 @@ export const MauiPlan: Plan = {
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        borderWidth: 0.3,
+        borderWidth: 0.15,
         legendColor: mapLayerColors.Wind.fill,
         filePath: 'assets/plans/maui/layers/wind.json',
         parcels: [],
