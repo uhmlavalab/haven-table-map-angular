@@ -1,50 +1,50 @@
 export const defaultTrackingPoints = [
-    { // 1
-        cam2X: 47.5,
-        cam2Y: 62.5,
-        camX: -1,
-        camY: -1,
-        mapX: 40.5,
-        mapY: 40.5
-    },
-    { //2
-        cam2X: 39.5,
-        cam2Y: 329,
-        camX: -1,
-        camY: -1,
-        mapX: 272.1,
-        mapY: 40.5
-    },
-    { //3
-        cam2X: 359,
-        cam2Y: 65,
-        camX: 118,
-        camY: 72.5,
-        mapX: 40.5,
-        mapY: 400.5
-    },
-    { //4
-        cam2X: 365,
-        cam2Y: 331,
-        camX: 116,
-        camY: 339.5,
-        mapX: 272.1,
-        mapY: 400.5
-    },
-    { //5
-        cam2X: -1, 
-        cam2Y: -1, 
-        camX: 364,
-        camY: 67.5,
-        mapX: 40.5,
-        mapY: 681.7
-    },
-    { //6
-        cam2X: -1,
-        cam2Y: -1,
-        camX: 373.5,
-        camY: 338.5,
-        mapX: 272.1,
-        mapY: 681.7
-    }
+{
+cam2X: 82,
+cam2Y: 54,
+camX: 0,
+camY: 0,
+mapX: 40.5,
+mapY: 40.5,
+},
+{
+cam2X: 70.5,
+cam2Y: 315.5,
+camX: 0,
+camY: 0,
+mapX: 272.09375,
+mapY: 40.5,
+},
+{
+cam2X: 71,
+cam2Y: 315.5,
+camX: 120.5,
+camY: 70,
+mapX: 40.5,
+mapY: 400.5,
+},
+{
+cam2X: 71,
+cam2Y: 315.5,
+camX: 28.5,
+camY: 285.5,
+mapX: 272.09375,
+mapY: 400.5,
+},
+{
+cam2X: 71,
+cam2Y: 315.5,
+camX: 286,
+camY: 27.5,
+mapX: 40.5,
+mapY: 681.6979370117188,
+},
+{
+cam2X: 71,
+cam2Y: 315.5,
+camX: 290.5,
+camY: 310,
+mapX: 272.09375,
+mapY: 681.6979370117188,
+},
 ];

@@ -10,6 +10,7 @@ import { MapService } from './map.service';
 import { Subject } from 'rxjs';
 import { TrackingPoint } from '../classes/trackingPoint';
 import { defaultTrackingPoints } from '../../assets/defaultData/defaultTrackingPoints.js'
+import { text } from 'd3';
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +73,7 @@ export class ArService {
     this.yOffset2 = 146; // Top Camera WASD
     this.trackingIsSet = true;
     this.createDefaultTrackingPoints();
-    this.completeCalibration();
+    this.completeCalibration(false);
   }
 
   /* Detects the Markers and makes the changes in the program */
@@ -92,11 +93,15 @@ export class ArService {
         // Run detect marker for each one
 
         arucoMarkers.forEach(marker => {
-          tempMarkerData.push({
-            marker: ProjectableMarker.getProjectableMarkerById(marker.id),
-            corners: marker.corners,
-            camera: videoFeed.id
-          });
+          if (ProjectableMarker.isValidMarker(marker.id)) {
+            tempMarkerData.push({
+              marker: ProjectableMarker.getProjectableMarkerById(marker.id),
+              corners: marker.corners,
+              camera: videoFeed.id
+            });
+          } else {
+            console.log(`Undefined Marker: ID -> ${marker.id}`);
+          }
         });
       }
     });
@@ -217,7 +222,7 @@ export class ArService {
     });
   }
 
-  public completeCalibration(): boolean {
+  public completeCalibration(createFile: boolean): boolean {
 
     // TODO: Verify that all 4 points are set and that none of them are equal to 0
 
@@ -236,7 +241,9 @@ export class ArService {
 
     this.camHeight2 = this.trackingPoints[2].getCam2X() - this.trackingPoints[1].getCam2X();
     this.camWidth2 = this.trackingPoints[3].getCam2Y() - this.trackingPoints[2].getCam2Y();
-
+    if (createFile) {
+      this.generateFile();
+    }
     return true;
   }
 
@@ -353,4 +360,34 @@ export class ArService {
     return this.trackingIsSet;
   }
 
+  private generateFile(): void {
+    const filename = 'defaultTrackingPoints.js';
+    const text = this.getText();
+    console.log(text);
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  private getText(): any {
+    let text = '';
+    text += `export const defaultTrackingPoints = [\r\n`;
+    this.trackingPoints.forEach(point => {
+      text += `{\r\n`;
+      text += `cam2X: ${point.getCam2X()},\r\n`;
+      text += `cam2Y: ${point.getCam2Y()},\r\n`;
+      text += `camX: ${point.getCamX()},\r\n`;
+      text += `camY: ${point.getCamY()},\r\n`;
+      text += `mapX: ${point.getMapX()},\r\n`;
+      text += `mapY: ${point.getMapY()},\r\n`;
+      text += `},\r\n`;
+    });
+    text += `];`;
+    return text;
+  }
 }
+

@@ -362,4 +362,12 @@ export class ProjectableMarker {
     return this.getCenterY(corners);
   }
 
+  public static isValidMarker(idNumber: number): boolean {
+    if (ProjectableMarker.projectableMarkers[idNumber] === undefined) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 }

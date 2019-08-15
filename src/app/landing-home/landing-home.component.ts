@@ -165,16 +165,12 @@ export class LandingHomeComponent implements OnInit {
       }
       default: {
         this.calibrating = false;
-        this.arservice.completeCalibration();
+        this.arservice.completeCalibration(true);
         this.testTracking();
         break;
       }
     }
-    /*
-    this.calibrating = false;
-    this.arservice.completeCalibration();
-    this.testTracking();
-    */
+
   }
 
 
