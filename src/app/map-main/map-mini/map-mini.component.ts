@@ -77,17 +77,37 @@ export class MapMiniComponent implements OnInit {
         .attr('r', '4px')
         .attr('fill', 'red');
       const x = 5;
-     //  d3.select('svg').on('mousemove', this.fuckme(x, this));
     });
     this.mapService.circlePositionSub.subscribe(pos => {
       console.log(pos);
     });
 
+
   }
 
-  fuckme(x: number, y) {
-    console.log(x);
-    console.log(d3.mouse(y));
+  update(point: any) {
+    const x = point.layerX;
+    const y = point.layerY;
+    const projection = d3.geo.mercator();
+
+    const bounds = [projection(this.rasterBounds[0]), projection(this.rasterBounds[1])];
+    const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
+    const transform = [
+      (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
+      (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
+    ] as [number, number];
+
+
+    const proj = d3.geo.mercator()
+      .scale(scale)
+      .translate(transform);
+
+    const inversion = projection.invert([x, y]);
+
+    console.log(x, y);
+    console.log(inversion);
+    console.log(proj([x, y]));
+
   }
 
 
