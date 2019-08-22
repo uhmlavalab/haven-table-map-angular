@@ -112,6 +112,9 @@ export class MapMainComponent implements AfterViewInit {
     this.planService.scenarioSubject.subscribe(scenario => this.currentScenario = scenario.displayName);
   }
 
+  /** Tracks the marker on the table
+   * @param marker The marker to be tracked.
+   */
   private track(marker: ProjectableMarker) {
     try {
       const dataPoint = {x: null, y: null};
@@ -181,6 +184,13 @@ export class MapMainComponent implements AfterViewInit {
     }
   }
 
+  /** Moves the line that connects the layer select and activate pucks.
+   * @param element The line element
+   * @param theta The theta angle of the triangle.
+   * @param width the length of the line (width of the triangle)
+   * @param x starting point x position
+   * @param y starting point y position
+   */
   private moveLine(element, theta, width, x, y) {
     element.style.opacity = 1;
     element.style.width = `${width}px`;
@@ -190,6 +200,10 @@ export class MapMainComponent implements AfterViewInit {
     element.style.backgroundColor = this.mapService.getSelectedLayer().legendColor;
   }
 
+  /** Adjusts the angle calculation depending on quadrant
+   * @theta the angle as calculated by the arc tan function
+   * @quadrant the quadrant of the unit circle
+   */
   private adjustTheta(theta, quadrant) {
     theta = theta;
     if (quadrant === 2) {
@@ -202,6 +216,10 @@ export class MapMainComponent implements AfterViewInit {
     return theta;
   }
 
+  /** Get the quadrant of the unit circle
+   * @param x the distance from the origin along x axis
+   * @param y the distance from the origin along the y axis
+   */
   private getQuadrant(x: number, y: number) {
     let quadrant = 0;
     if (x <= 0 && y <= 0) {
@@ -245,8 +263,6 @@ export class MapMainComponent implements AfterViewInit {
     return this.plan.name;
   }
 
-  /*
-
   //KEYBOARD CONTROLS 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -282,26 +298,5 @@ export class MapMainComponent implements AfterViewInit {
       console.log('second => ' + this.windowRefService.secondScreenExists());
     }
   }
-  */
- //KEYBOARD CONTROLS 
- @HostListener('window:keydown', ['$event'])
- keyEvent(event: KeyboardEvent) {
-   if (event.key === 'ArrowUp') {
-     this.arService.incrementYOffset();
-   } else if (event.key === 'ArrowDown') {
-     this.arService.decrementYOffset();
-   } else if (event.key === 'ArrowLeft') {
-     this.arService.incrementXOffset();
-   } else if (event.key === 'ArrowRight') {
-     this.arService.decrementXOffset();
-   } else if (event.key === 'w') {
-     this.arService.incrementYOffset2();
-   } else if (event.key === 's') {
-     this.arService.decrementYOffset2();
-   } else if (event.key === 'a') {
-     this.arService.incrementXOffset2();
-   } else if (event.key === 'd') {
-     this.arService.decrementXOffset2();
-   }
-  }
+
 }

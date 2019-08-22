@@ -12,7 +12,7 @@
 
   <app-bouncing-title></app-bouncing-title>
 
-  <div class="tracking-test-overlay" [style.display]="tracking ? 'block' : 'none'">
+  <div class="tracking-test-overlay" [style.display]="testTrack ? 'block' : 'none'">
     <p>Align the white circle with the arrow keys to complete calibration.  Press button to confirm.</p>
     <div class="selection-button" (click)="completeTrackTesting()">
         Complete Calibration
