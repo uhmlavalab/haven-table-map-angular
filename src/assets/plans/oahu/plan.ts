@@ -71,11 +71,15 @@ export const OahuPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.237,
+    scale: 0.245,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
+<<<<<<< Updated upstream
     baseMapPath: 'assets/plans/oahu/images/base-map.png',
+=======
+    baseMapPath: 'assets/plans/oahu/images/oahu-satellite1.jpg',
+>>>>>>> Stashed changes
     mapLayers: [
       {
         name: 'transmission',
@@ -89,7 +93,7 @@ export const OahuPlan: Plan = {
         borderColor: mapLayerColors.Transmission.border,
         borderWidth: 0.02,
         legendColor: mapLayerColors.Transmission.border,
-        filePath: 'assets/plans/oahu/layers/transmission.json',
+        filePath: 'assets/plans/oahu/layers/transmissionb.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
