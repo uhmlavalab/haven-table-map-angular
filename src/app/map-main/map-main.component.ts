@@ -263,6 +263,7 @@ export class MapMainComponent implements AfterViewInit {
     return this.plan.name;
   }
 
+  /*
   //KEYBOARD CONTROLS 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -296,6 +297,28 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.changeCurrentLegendLayout();
     } else if (event.key === 'f') {
       console.log('second => ' + this.windowRefService.secondScreenExists());
+    }
+  }
+  */
+  /* KEYBOARD CONTROLS */
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'ArrowUp') {
+      this.arService.incrementYOffset();
+    } else if (event.key === 'ArrowDown') {
+      this.arService.decrementYOffset();
+    } else if (event.key === 'ArrowLeft') {
+      this.arService.incrementXOffset();
+    } else if (event.key === 'ArrowRight') {
+      this.arService.decrementXOffset();
+    } else if (event.key === 'w') {
+      this.arService.incrementYOffset2();
+    } else if (event.key === 's') {
+      this.arService.decrementYOffset2();
+    } else if (event.key === 'a') {
+      this.arService.incrementXOffset2();
+    } else if (event.key === 'd') {
+      this.arService.decrementXOffset2();
     }
   }
 
