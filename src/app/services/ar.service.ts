@@ -10,7 +10,6 @@ import { MapService } from './map.service';
 import { Subject } from 'rxjs';
 import { TrackingPoint } from '../classes/trackingPoint';
 import { defaultTrackingPoints } from '../../assets/defaultData/defaultTrackingPoints.js'
-import { text } from 'd3';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +44,6 @@ export class ArService {
   private yOffset2: number;
   private xOffset2: number;
   private trackingIsSet: boolean;
-  public testTracking: boolean;
 
   /* The array holding the video feeds is created by the video feed components.
   * The tick cannot be started until there is at least one video element */
@@ -67,10 +65,10 @@ export class ArService {
       this,
       this.mapService));
     this.running = false;
-    this.xOffset = 119; // Bottom Camera
-    this.yOffset = 131; // Bottom Camera ARROW
-    this.xOffset2 = 49; // Top Camera
-    this.yOffset2 = 146; // Top Camera WASD
+    this.xOffset = 117; // Bottom Camera
+    this.yOffset = 105 // Bottom Camera ARROW
+    this.xOffset2 = 17; // Top Camera
+    this.yOffset2 = 152; // Top Camera WASD
     this.trackingIsSet = true;
     this.createDefaultTrackingPoints();
     this.completeCalibration(false);
@@ -217,11 +215,20 @@ export class ArService {
   }
 
   private createDefaultTrackingPoints(): void {
-    defaultTrackingPoints.forEach(point => {
+    defaultTrackingPoints.trackingPoints.forEach(point => {
       this.createTrackingPoint(point.camX, point.camY, point.cam2X, point.cam2Y, point.mapX, point.mapY);
     });
+    this.xOffset = defaultTrackingPoints.offsets.xOffset;
+    this.yOffset = defaultTrackingPoints.offsets.yOffset;
+    this.xOffset2 = defaultTrackingPoints.offsets.xOffset2;
+    this.yOffset2 = defaultTrackingPoints.offsets.yOffset2;
   }
 
+  /** Finishes the calibration process
+   * @param createFile If true, it means that a manual calibration of the table was done and all data needs to be stored
+   *                   in a file for future use.
+   * @return true when finished calibrating.
+   */
   public completeCalibration(createFile: boolean): boolean {
 
     // TODO: Verify that all 4 points are set and that none of them are equal to 0
@@ -241,9 +248,6 @@ export class ArService {
 
     this.camHeight2 = this.trackingPoints[2].getCam2X() - this.trackingPoints[1].getCam2X();
     this.camWidth2 = this.trackingPoints[3].getCam2Y() - this.trackingPoints[2].getCam2Y();
-    if (createFile) {
-      this.generateFile();
-    }
     return true;
   }
 
@@ -259,7 +263,6 @@ export class ArService {
    */
   public createTrackingPoint(camX: number, camY: number, cam2X: number, cam2Y: number, mapX: number, mapY: number) {
     this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
-    console.log(this.trackingPoints);
   }
 
   public convertCamCoordinatesToMapCoordinates(dataPoint) {
@@ -348,10 +351,6 @@ export class ArService {
     console.log('y' + this.yOffset2);
   }
 
-  public setTracking(onOff: boolean): void {
-    this.trackingIsSet = onOff;
-  }
-
   public stopCalibration(): void {
     this.calibrating = false;
   }
@@ -360,10 +359,12 @@ export class ArService {
     return this.trackingIsSet;
   }
 
-  private generateFile(): void {
+  /** Generates a configuration file after the table is calibrated manually.
+   * File needs to go into the assets folder.
+   */
+  public generateFile(): void {
     const filename = 'defaultTrackingPoints.js';
     const text = this.getText();
-    console.log(text);
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
@@ -373,9 +374,19 @@ export class ArService {
     document.body.removeChild(element);
   }
 
+  /** Generates text for the calibration config file from the tracking point array
+   * @return the string to print to the file
+   */
   private getText(): any {
     let text = '';
-    text += `export const defaultTrackingPoints = [\r\n`;
+    text += `export const defaultTrackingPoints = {\r\n`;
+    text += `offsets: {\r\n`;
+    text += `xOffset: ${this.xOffset},\r\n`;
+    text += `yOffset: ${this.yOffset},\r\n`;
+    text += `xOffset2: ${this.xOffset2},\r\n`;
+    text += `yOffset2: ${this.yOffset2},\r\n`;
+    text += `},\r\n`;
+    text += `trackingPoints: [\r\n`;
     this.trackingPoints.forEach(point => {
       text += `{\r\n`;
       text += `cam2X: ${point.getCam2X()},\r\n`;
@@ -386,8 +397,17 @@ export class ArService {
       text += `mapY: ${point.getMapY()},\r\n`;
       text += `},\r\n`;
     });
-    text += `];`;
+    text += `]\r\n`;
+    text += `};`;
     return text;
+  }
+
+  /**
+   * Returns the current tracking point that is being set up.
+   * @return The current tracking point index.
+   */
+  public getTrackingPointId(): number {
+    return this.trackingPoints.length;
   }
 }
 

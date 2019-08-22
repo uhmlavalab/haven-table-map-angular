@@ -9,6 +9,7 @@ import { WindowRefService } from '../services/window-ref.service';
 import { MarkerService } from '@app/services/marker.service';
 import { ProjectableMarker } from '../classes/projectableMarker';
 import { TrackingPoint } from '../classes/trackingPoint';
+import { _ } from 'underscore';
 
 
 @Component({
@@ -54,7 +55,7 @@ export class LandingHomeComponent implements OnInit {
   private centerY: number;
   private centerX2: number;
   private centerY2: number;
-  private tracking: boolean;
+  private testTrack: boolean;
   private detectionWarning: boolean;
 
   constructor(private arservice: ArService,
@@ -89,7 +90,7 @@ export class LandingHomeComponent implements OnInit {
     this.centerY = 0;
     this.centerX2 = 0;
     this.centerY2 = 0;
-    this.tracking = false;
+    this.testTrack = false;
     this.detectionWarning = false;
   }
 
@@ -111,8 +112,8 @@ export class LandingHomeComponent implements OnInit {
     this.arservice.calibrationSubject.subscribe({
       next: value => {
         this.calibrationDetected(value);
-        if (this.tracking) {
-          this.track(value[0]);
+        if (this.testTrack) {
+          this.track(value);
         }
       }
     });
@@ -131,7 +132,6 @@ export class LandingHomeComponent implements OnInit {
   }
 
   private manualCalibration(position: number) {
-
     switch (position) {
       case 0: {
         this.manualPoint.nativeElement.style.left = 0;
@@ -170,24 +170,46 @@ export class LandingHomeComponent implements OnInit {
         break;
       }
     }
-
   }
 
 
   private completeTrackTesting(): void {
-    this.tracking = false;
+    this.testTrack = false;
     this.arservice.stopCalibration();
-    this.arservice.setTracking(true);
+    this.arservice.generateFile();
+  }
+
+  private displayCalibrationWarning(): void {
+    this.detectionWarning = true;
+    setTimeout(() => {
+      this.detectionWarning = false;
+    }, 2000);
   }
 
   private confirmPosition() {
+
     if (!this.markerDetected) {
-      this.detectionWarning = true;
-      setTimeout(() => {
-        this.detectionWarning = false;
-      }, 2000);
+      this.displayCalibrationWarning();
       return;
     }
+
+    if (this.arservice.getTrackingPointId() === 0 || this.arservice.getTrackingPointId() === 1) {
+      if (this.centerX2 === 0 || this.centerY2 === 0) {
+        alert('Top Camera did not capture any location Data.  Please try again.');
+        return;
+      }
+    } else if (this.arservice.getTrackingPointId() === 2 || this.arservice.getTrackingPointId() === 3) {
+      if (this.centerX2 === 0 || this.centerY2 === 0 || this.centerX === 0 || this.centerY === 0) {
+        alert('At least one data point was not captured.  Please Try Again');
+        return;
+      }
+    } else {
+      if (this.centerX === 0 || this.centerY === 0) {
+        alert('Bottom Camera did not capture any location Data.  Please Try Again.');
+        return;
+      }
+    }
+
     const element = this.manualPoint.nativeElement.getBoundingClientRect();
     const mapX = (element.right + element.left) / 2;
     const mapY = (element.top + element.bottom) / 2;
@@ -204,7 +226,9 @@ export class LandingHomeComponent implements OnInit {
         if (pm.camera === 1) {
           this.centerX = pm.marker.getCenterX(pm.corners);
           this.centerY = pm.marker.getCenterY(pm.corners);
-        } else if (pm.camera === 2) { 
+        } 
+        
+        if (pm.camera === 2) {
           this.centerX2 = pm.marker.getCenterX(pm.corners);
           this.centerY2 = pm.marker.getCenterY(pm.corners);
         }
@@ -213,6 +237,8 @@ export class LandingHomeComponent implements OnInit {
       this.markerDetected = false;
       this.centerX = 0;
       this.centerY = 0;
+      this.centerX2 = 0;
+      this.centerY2 = 0;
     }
   }
 
@@ -370,20 +396,27 @@ export class LandingHomeComponent implements OnInit {
   }
 
   private testTracking() {
-    this.tracking = true;
+    this.testTrack = true;
   }
 
   private track(data) {
-  
+
     try {
       if (data != undefined) {
-      const dataPoint = {x: data.marker.getMostRecentCenterX(), y: data.marker.getMostRecentCenterY()};
-      this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
-      this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';
+
+        ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
+          const dataPoint = _.find(data, m => m.marker.markerId === pm.markerId);
+          pm.addDataPoint(dataPoint);
+        });
+
+        const dataPoint = { x: data[0].marker.getMostRecentCenterX(), y: data[0].marker.getMostRecentCenterY() };
+        console.log(dataPoint.x + ' ' + dataPoint.y);
+        this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
+        this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';
       }
-      
+
     } catch (error) {
-     console.log(error)
+      console.log(error)
       //undefined marker
     }
   }
