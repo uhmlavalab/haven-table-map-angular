@@ -43,10 +43,10 @@ export class MapMainComponent implements AfterViewInit {
     private router: Router,
     private windowRefService: WindowRefService) {
     this.plan = this.planService.getCurrentPlan();
-    this.legendClass = this.planService.getCurrentLegendLayout();
-    this.currentYear = 2016;
-    this.addColor = this.mapService.getSelectedLayer().legendColor;
     try {
+      this.legendClass = this.planService.getCurrentLegendLayout();
+      this.currentYear = 2016;
+      this.addColor = this.mapService.getSelectedLayer().legendColor;
       this.currentScenario = this.planService.getCurrentScenario().displayName;
     } catch(error) {
       console.log("No Plan Set");

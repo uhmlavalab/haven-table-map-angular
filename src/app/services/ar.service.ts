@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Marker } from '../interfaces/marker';
 import { ProjectableMarker } from '../classes/projectableMarker';
 import { PlanService } from './plan.service';
 import { SoundsService } from './sounds.service';
@@ -61,7 +60,6 @@ export class ArService {
       marker.minRotation,
       marker.delay,
       this.planService,
-      this.soundsservice,
       this,
       this.mapService));
     this.running = false;

@@ -89,7 +89,7 @@ export const OahuPlan: Plan = {
         borderColor: mapLayerColors.Transmission.border,
         borderWidth: 0.02,
         legendColor: mapLayerColors.Transmission.border,
-        filePath: 'assets/plans/oahu/layers/transmissionb.json',
+        filePath: 'assets/plans/oahu/layers/transmissionbc.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
