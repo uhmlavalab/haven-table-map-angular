@@ -6,7 +6,6 @@ import { Plan, Marker, Panel, LandingButton, MapLayer } from '@app/interfaces';
 import { ArService } from '../services/ar.service';
 import { PlanService } from '../services/plan.service';
 import { WindowRefService } from '../services/window-ref.service';
-import { MarkerService } from '@app/services/marker.service';
 import { ProjectableMarker } from '../classes/projectableMarker';
 import { _ } from 'underscore';
 
@@ -61,8 +60,7 @@ export class LandingHomeComponent implements OnInit {
 
   constructor(private arservice: ArService,
     private planService: PlanService,
-    private windowRefservice: WindowRefService,
-    private markerService: MarkerService) {
+    private windowRefservice: WindowRefService) {
 
     /* Initialize all State and HTML content (for *ngFor routines) */
     this.setupUIContent();

@@ -104,6 +104,16 @@ export class MapElementComponent implements OnInit {
       }
     });
 
+    this.planService.yearSubject.subscribe((year) => {
+      const layers = this.planService.getLayers();
+      layers.forEach(layer => {
+        if (layer.updateFunction !== null) {
+          layer.updateFunction(this.planService);
+        } else {
+          this.defaultFill(layer);
+        }
+      });
+    });
   }
 
   defaultFill(layer: MapLayer) {

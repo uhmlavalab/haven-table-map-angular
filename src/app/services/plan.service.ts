@@ -44,7 +44,6 @@ export class PlanService {
   private generationData = {};
   private curtailmentData = {};
 
-
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
     this.state = 'landing'; // Initial state is landing
@@ -331,6 +330,14 @@ export class PlanService {
     this.soundsService.tick();
   }
 
+  /** Adds or removes the selected layer after checking it's active state. */
+  public toggleLayer(): void {
+    this.selectedLayer.active ? this.removeLayer() : this.addLayer();
+  }
+
+  /** Adds a layer to the map
+   * @return true if successful, false if not.
+   */
   public addLayer(): boolean {
     const layer = this.selectedLayer;
     if (!layer.active) {
@@ -343,6 +350,9 @@ export class PlanService {
     }
   }
 
+  /** Removes a layer from the table
+   * @return true if successful, false if not
+   */
   public removeLayer(): boolean {
     const layer = this.selectedLayer;
     if (layer.active) {
@@ -355,6 +365,9 @@ export class PlanService {
     }
   }
 
+  /** Gets the currently selected layer
+   * @return the currently selected layer.
+   *    */
   public getSelectedLayer(): MapLayer {
     return this.selectedLayer;
   }

@@ -44,9 +44,9 @@ export const markers: Marker[] = [{
   delay: 600, 
   minRotation: 5,
   rotateLeft(planService: PlanService) {
-    planService.addLayer();
+    planService.toggleLayer();
    },
    rotateRight(planService: PlanService) {
-    planService.removeLayer();
+    planService.toggleLayer();
    }
 }];

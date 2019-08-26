@@ -317,7 +317,6 @@ export class ProjectableMarker {
     const oldRotation = this.calcRotation(previousCorners);
     const newRotation = this.calcRotation(corners);
     let diff = oldRotation - newRotation; // Change in rotation
-
     if (diff > this.minRotation && Math.abs(diff) < ProjectableMarker.MAX_ROTATION_DEGREES) {
       return 'left';
     } else if (diff < -this.minRotation && Math.abs(diff) < ProjectableMarker.MAX_ROTATION_DEGREES) {
