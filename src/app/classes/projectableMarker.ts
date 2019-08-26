@@ -1,7 +1,5 @@
 import { _ } from 'underscore';
 import { PlanService } from '../services/plan.service';
-import { SoundsService } from '../services/sounds.service';
-import { MapService } from '../services/map.service';
 import { ArService } from '@app/services/ar.service';
 
 
@@ -22,25 +20,28 @@ export class ProjectableMarker {
   private delay: number;              // Time delay that that stops excessive rotation.
   private minRotation: number;        // Minimum rotation allowed before a job is done.
   private planService: PlanService;
-  private mapService: MapService;
   private arService: ArService;
   private dataPoints = [];            // All movement data is stored in this array.
   private enabled: boolean;           // True, ready to do job, false, wait for delay to elapse.
+  private rotateLeft: any;            // Function called when rotated left
+  private rotateRight: any;           // Function called when rotated right
 
   constructor(id: number,
     job: string,
     minRotation: number,
     delay: number,
+    rotateLeft: any,
+    rotateRight: any,
     planService: PlanService,
-    arService: ArService,
-    mapService: MapService) {
+    arService: ArService) {
 
     this.markerId = id;
     this.job = job;
     this.minRotation = minRotation;
     this.delay = delay;
+    this.rotateLeft = rotateLeft;
+    this.rotateRight = rotateRight;
     this.planService = planService;
-    this.mapService = mapService;
     this.arService = arService;
     ProjectableMarker.projectableMarkers[`${id}`] = this;
     ProjectableMarker.projectableMarkerArray.push(this);
@@ -144,6 +145,7 @@ export class ProjectableMarker {
 
   /**
   * Gets the center X position of the marker.
+  * @param corners The corners of the marker.
   * @return x center.
   */
   public getCenterX(corners) {
@@ -155,7 +157,8 @@ export class ProjectableMarker {
   }
 
   /**
-   * Gets the center Y position of the marker.
+   * Gets the center Y position of the marker
+   * @param corners The corners of the marker.
    * @return y center.
    */
   public getCenterY(corners) {
@@ -193,23 +196,27 @@ export class ProjectableMarker {
   /** Checks to see if the maker has been rotated. 
    * @return true if rotated, false if not.
   */
-  public wasRotated(): boolean {
-    const data = this.getMovementData();
+  public wasRotated(): void {
+    if (this.enabled) {
+      const data = this.getMovementData();
 
-    // If there are not at least 2 datapoints, then the marker was not moved or just placed.
-    if (data.length < 2) {
-      return false;
+      // If there are not at least 2 datapoints, then the marker was not moved or just placed.
+      if (data.length > 2) {
+        const movementData = this.getDistanceMoved(data);
+        const y = movementData.y;
+        const x = movementData.x;
 
-    } else {
-      const movementData = this.getDistanceMoved(data);
-      const y = movementData.y;
-      const x = movementData.x;
-
-      // Check to see if the x and y positions are at least 1 pixel different than the previous position.
-      if (y > 1 && x > 1) {
-        return true;
-      } else {
-        return false;
+        // Check to see if the x and y positions are at least 1 pixel different than the previous position.
+        if (y > 1 && x > 1) {
+          const direction = this.calcDirection(data[0].corners, data[1].corners);
+          if (direction === 'left') {
+            this.rotateLeft(this.planService);
+            this.disable();
+          } else if (direction === 'right') {
+            this.rotateRight(this.planService);
+            this.disable();
+          }
+        }
       }
     }
   }
@@ -327,47 +334,6 @@ export class ProjectableMarker {
    * *****************************************************************************************************
    */
 
-
-  /** Each marker has a job that it does based on the direction of the rotation.
-   */
-  public doJob() {
-    const movementData = this.getMovementData();
-    const direction = this.calcDirection(movementData[0].corners, movementData[1].corners);
-    if (this.job === 'year' && this.enabled) {
-      if (direction === 'right') {
-        this.planService.incrementCurrentYear();
-        this.disable();
-      } else if (direction === 'left') {
-        this.planService.decrementCurrentYear();
-        this.disable();
-      }
-    } else if (this.job === 'scenario' && this.enabled) {
-      if (direction === 'right') {
-        this.planService.incrementScenario();
-        this.disable();
-      } else if (direction === 'left') {
-        this.planService.decrementScenario();
-        this.disable();
-      }
-    } else if (this.job === 'layer' && this.enabled) {
-      if (direction === 'right') {
-        this.mapService.incrementNextLayer();;
-        this.disable();
-      } else if (direction === 'left') {
-        this.mapService.decrementNextLayer();
-        this.disable();
-      }
-    } else if (this.job === 'add' && this.enabled) {
-      if (direction === 'right') {
-        this.mapService.addLayer();;
-        this.disable();
-      } else if (direction === 'left') {
-        this.mapService.removeLayer();
-        this.disable();
-      }
-    }
-  }
-
   /** Disables the rotation function for a psecified amount of time to prevent mutiple
    * actions in a row.
    */
@@ -406,5 +372,4 @@ export class ProjectableMarker {
     });
     return convertedPoints;
   }
-
 }

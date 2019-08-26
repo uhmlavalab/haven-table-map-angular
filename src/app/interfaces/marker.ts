@@ -1,4 +1,4 @@
-import { NumberSymbol } from '@angular/common';
+import { PlanService } from '@app/services/plan.service';
 
 export interface Marker {
   markerId: number;
@@ -6,4 +6,6 @@ export interface Marker {
   job: string;
   delay: number;
   minRotation: number;
+  rotateLeft(service: any): void;
+  rotateRight(service: any): void;
 }

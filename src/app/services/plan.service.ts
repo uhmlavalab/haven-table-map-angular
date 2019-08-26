@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { _ } from 'underscore';
 import { Plan } from '@app/interfaces/plan';
 import { Plans } from '../../assets/plans/plans';
-import { Scenario } from '@app/interfaces';
+import { Scenario, Map, MapLayer } from '@app/interfaces';
 import { SoundsService } from './sounds.service';
 import { Subject } from 'rxjs';
-import { ProjectableMarker } from '../classes/projectableMarker';
 
 import * as d3 from 'd3/d3.min';
 
@@ -16,34 +15,58 @@ export class PlanService {
 
   private state: string;  // Current state of the machine
 
-  private plans: Plan[];
-  private currentPlan: Plan;
-  public planSubject = new Subject<Plan>();
+  private currentMap: Map;                      // Current Map
 
-  private scenarios: Scenario[];
-  private currentScenario: Scenario;
-  public scenarioSubject = new Subject<Scenario>();
+  private layers: MapLayer[] = [];              // Array Holding All Layers
+  private selectedLayer: MapLayer;              // Currently Selected Layer
+  public selectedLayerSubject = new Subject<MapLayer>(); // layer publisher
+  public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
+  public updateLayerSubject = new Subject<MapLayer>();
+  public layerChangeSubject = new Subject<string>();
 
-  private currentYear: number;
-  public yearSubject = new Subject<number>();
+  private plans: Plan[];                        // Array Holding All Plans
+  private currentPlan: Plan;                    // Currently Active Plan
+  public planSubject = new Subject<Plan>();     // Plan Publisher
 
+  private scenarios: Scenario[];                // Array Holding All Scenarios
+  private currentScenario: Scenario;            // Currently active scenario
+  public scenarioSubject = new Subject<Scenario>(); // Scenario publisher
+
+  private currentYear: number;                  // Current year
+  public yearSubject = new Subject<number>();   // Year Publisher
+
+  private legendLayouts: string[] = [];         // Array holding possible layouts (grid / vertical)
+  private currentLegendLayout: number;          // Currently selected legend layout
+  public legendSubject = new Subject<string>(); // Legend Publisher
+
+  /* Data Objects */
   private capacityData = {};
   private generationData = {};
   private curtailmentData = {};
 
-  private legendLayouts: string[] = [];
-  private currentLegendLayout: number;
-  public legendSubject = new Subject<string>();
 
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
-    this.state = 'landing';
+    this.state = 'landing'; // Initial state is landing
     this.legendLayouts = ['grid', 'vertical'];
     this.currentLegendLayout = 0;
   }
 
   public setupSelectedPlan(plan: Plan) {
     this.currentPlan = plan;
+    this.currentMap = plan.map;
+    this.currentMap.mapLayers.forEach(layer => {
+      if (layer.included) {
+        this.layers.push(layer);
+      }
+    });
+    this.selectedLayer = this.layers[0];
+    this.selectedLayerSubject.next(this.selectedLayer);
+    this.scenarioSubject.subscribe(scenario => {
+      this.layers.forEach(layer => {
+        this.updateLayerSubject.next(layer);
+      });
+    });
     this.currentYear = this.currentPlan.minYear;
     this.scenarios = this.currentPlan.scenarios;
     this.currentScenario = this.scenarios[0];
@@ -53,8 +76,11 @@ export class PlanService {
     this.getCapacityData();
     //this.getGenerationData();
     this.getCurtailmentData();
-
+    if (this.currentPlan.css.legend.defaultLayout === 'vertical') {
+      this.changeCurrentLegendLayout();
+    }
   }
+
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
     let generationTotal = 0;
     technologies.forEach(tech => {
@@ -163,19 +189,71 @@ export class PlanService {
   }
 
 
+  /******************* GETTERS AND SETTERS **************/
 
+  /** Gets the currently active plan
+   * @return the current plan
+   */
   public getCurrentPlan(): Plan {
     return this.currentPlan;
   }
 
+  /** Gets all plans
+   * @return array of all plans
+   */
   public getPlans(): Plan[] {
     return this.plans;
   }
 
+  /** Gets the current Year
+   * @return the current year
+   */
   public getCurrentYear(): number {
     return this.currentYear;
   }
 
+  /** Gets the current scenario
+   * @return the current scenario
+   */
+  public getCurrentScenario(): Scenario {
+    return this.currentScenario;
+  }
+
+  /** Gets all scenarios
+   * @return array holding all scenarios
+   */
+  public getScenarios(): Scenario[] {
+    return this.scenarios;
+  }
+
+  /** Gets the active layers
+   * @return the array of active layers.
+   */
+  public getLayers(): MapLayer[] {
+    return this.layers;
+  }
+
+  /** Sets the state of the machine.  Resets the plan when returning to landing.
+ * @param state the new machine state.
+ */
+  public setState(state): void {
+    this.state = state;
+    if (this.state === 'landing') {
+      this.resetPlan();
+    }
+  }
+
+  /** Gets the state of the machine
+   * @return the current state.
+   */
+  public getState(): string {
+    return this.state;
+  }
+
+  /************** Data Manipulation Functions *****************
+   ************************************************************/
+
+  /** Increments the current year by 1 and plays a sound */
   public incrementCurrentYear(): void {
     try {
       if (this.currentYear < this.currentPlan.maxYear) {
@@ -188,6 +266,7 @@ export class PlanService {
     }
   }
 
+  /** Decrements the current year by 1 and plays a sound */
   public decrementCurrentYear(): void {
     try {
       if (this.currentYear > this.currentPlan.minYear) {
@@ -201,6 +280,9 @@ export class PlanService {
 
   }
 
+  /** Sets the year to a specific value
+   * @param year the year to set
+   */
   public setCurrentYear(year): void {
     if (year >= this.currentPlan.minYear && year <= this.currentPlan.maxYear) {
       this.currentYear = year;
@@ -208,14 +290,7 @@ export class PlanService {
     this.yearSubject.next(this.currentYear);
   }
 
-  public getCurrentScenario(): Scenario {
-    return this.currentScenario;
-  }
-
-  public getScenarios(): Scenario[] {
-    return this.scenarios;
-  }
-
+  /** Advances to the next scenario */
   public incrementScenario(): void {
     const index = this.scenarios.indexOf(this.currentScenario) + 1;
     this.currentScenario = this.scenarios[(index) % this.scenarios.length];
@@ -223,6 +298,7 @@ export class PlanService {
     this.soundsService.tick();
   }
 
+  /** Goes to the previous scenario */
   public decrementScenario(): void {
     let index = this.scenarios.indexOf(this.currentScenario) - 1;
     if (index === -1) {
@@ -233,17 +309,59 @@ export class PlanService {
     this.soundsService.tick();
   }
 
-  public setState(state): void {
-    this.state = state;
-    if (this.state === 'landing') {
-      this.resetPlan();
+  /** Cycles backwards through layers */
+  public decrementNextLayer() {
+    let index = this.layers.indexOf(this.selectedLayer) - 1;
+    if (index === -1) {
+      index = this.layers.length - 1;
+    }
+    this.selectedLayer = this.layers[(index) % this.layers.length];
+    this.selectedLayerSubject.next(this.selectedLayer);
+    this.layerChangeSubject.next('decrement');
+    this.soundsService.tick();
+
+  }
+
+  /** Cycles forwards through layers */
+  public incrementNextLayer() {
+    const index = this.layers.indexOf(this.selectedLayer) + 1;
+    this.selectedLayer = this.layers[(index) % this.layers.length];
+    this.selectedLayerSubject.next(this.selectedLayer);
+    this.layerChangeSubject.next('increment');
+    this.soundsService.tick();
+  }
+
+  public addLayer(): boolean {
+    const layer = this.selectedLayer;
+    if (!layer.active) {
+      layer.active = true;
+      this.toggleLayerSubject.next(layer);
+      this.soundsService.dropUp();
+      return true;
+    } else {
+      return false;
     }
   }
 
-  public getState(): string {
-    return this.state;
+  public removeLayer(): boolean {
+    const layer = this.selectedLayer;
+    if (layer.active) {
+      layer.active = false;
+      this.toggleLayerSubject.next(layer);
+      this.soundsService.dropDown();
+      return true;
+    } else {
+      return false;
+    }
   }
 
+  public getSelectedLayer(): MapLayer {
+    return this.selectedLayer;
+  }
+
+  /** When returning from the main map to the landing, all data for the plan 
+   * needs to be reset.
+   */
   public resetPlan() {
     this.currentPlan = null;
     this.currentYear = null;
@@ -269,4 +387,66 @@ export class PlanService {
     this.legendSubject.next(this.getCurrentLegendLayout());
   }
 
+  /** Map Construction Functions */
+  /** Gets the scale of the map
+   * @return the scale of the map
+   */
+  public getMapScale(): number {
+    try {
+      return this.currentMap.scale;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
+  }
+
+  /** Gets the map Image width
+   * @return the map image width
+   */
+  public getMapImageWidth(): number {
+    try {
+      return this.currentMap.width;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
+  }
+
+  /** Get the map Image height
+   * @return the map Image height
+   */
+  public getMapImageHeight(): number {
+    try {
+      return this.currentMap.height;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
+
+  }
+
+  /** Gets the map bounds
+   * @return array of bounds.
+   */
+  public getMapBounds(): any[] {
+    try {
+      return this.currentMap.bounds;
+    } catch (error) {
+      console.log('No Map Selected');
+      return [];
+    }
+
+  }
+
+  /** Gets the map image name
+   * @return the path to the map Image
+   */
+  public getBaseMapPath(): string {
+    try {
+      return this.currentMap.baseMapPath;
+    } catch (error) {
+      console.log('No Map Selected');
+      return '';
+    }
+  }
 }

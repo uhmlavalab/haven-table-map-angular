@@ -33,6 +33,7 @@ export const OahuPlan: Plan = {
       top: '3vh'
     },
     legend: {
+      defaultLayout: 'vertical',
       grid: {
         left: '28vw',
         top: '2vh',
@@ -71,7 +72,7 @@ export const OahuPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.245,
+    scale: 0.235,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],

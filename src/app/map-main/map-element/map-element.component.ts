@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MapService } from '../../services/map.service';
 import { PlanService } from '../../services/plan.service';
 import { MapDirective } from './map.directive';
 import * as d3 from 'd3';
@@ -27,12 +26,12 @@ export class MapElementComponent implements OnInit {
 
   @ViewChild(MapDirective, { static: true }) mapElement;
 
-  constructor(private mapService: MapService, private planService: PlanService) {
-    this.scale = mapService.getMapScale();
-    this.width = mapService.getMapImageWidth() * this.scale;
-    this.height = mapService.getMapImageHeight() * this.scale;
-    this.rasterBounds = mapService.getMapBounds();
-    this.baseMapImagePath = mapService.getBaseMapPath();
+  constructor(private planService: PlanService) {
+    this.scale = planService.getMapScale();
+    this.width = planService.getMapImageWidth() * this.scale;
+    this.height = planService.getMapImageHeight() * this.scale;
+    this.rasterBounds = planService.getMapBounds();
+    this.baseMapImagePath = planService.getBaseMapPath();
   }
 
   ngOnInit() {
@@ -52,7 +51,7 @@ export class MapElementComponent implements OnInit {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    this.mapService.getLayers().forEach(layer => {
+    this.planService.getLayers().forEach(layer => {
       if (layer.filePath === null) {
         return;
       }
@@ -89,7 +88,7 @@ export class MapElementComponent implements OnInit {
     });
 
     // Subscribe to layer toggling
-    this.mapService.toggleLayerSubject.subscribe((layer) => {
+    this.planService.toggleLayerSubject.subscribe((layer) => {
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {
@@ -97,7 +96,7 @@ export class MapElementComponent implements OnInit {
       }
     });
 
-    this.mapService.updateLayerSubject.subscribe((layer) => {
+    this.planService.updateLayerSubject.subscribe((layer) => {
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {

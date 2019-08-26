@@ -1,7 +1,5 @@
 import { Component, AfterViewInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
 import { PlanService } from '../../services/plan.service';
-import { MapService } from '../../services/map.service';
-import { ProjectableMarker } from '../../classes/projectableMarker';
 
 @Component({
   selector: 'app-layer-puck',
@@ -27,7 +25,7 @@ export class LayerPuckComponent implements AfterViewInit {
   private arrowImage: string;
   private addRemove: string;
 
-  constructor(private planService: PlanService, private mapService: MapService) {
+  constructor(private planService: PlanService) {
     this.addRemove = 'Up';
     this.arrowImage = '../../assets/images/tracking-icons/greenArrow.png';
 
@@ -42,7 +40,7 @@ export class LayerPuckComponent implements AfterViewInit {
     });
 
   // Subscribe to layer toggling
-  this.mapService.toggleLayerSubject.subscribe((layer) => {
+  this.planService.toggleLayerSubject.subscribe((layer) => {
     if (!layer.active) {
       setTimeout(() => {
         this.iconElements[this.currentIconIndex].style.opacity = 1;
@@ -67,7 +65,7 @@ export class LayerPuckComponent implements AfterViewInit {
     this.slideIconElements = this.slideIcons.first.nativeElement.children;
     this.positionElements(this.iconElements);
 
-    this.mapService.layerChangeSubject.subscribe(direction => {
+    this.planService.layerChangeSubject.subscribe(direction => {
       this.cycle(direction);
     });
     this.repositionSlideIcon();

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapService } from '../../services/map.service';
-import { LayerPuckComponent } from '../layer-puck/layer-puck.component';
+import { PlanService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-add-puck',
@@ -18,12 +17,12 @@ export class AddPuckComponent implements OnInit {
 
   private addRemoveText: string;
 
-  constructor(private mapService: MapService) {
+  constructor(private planService: PlanService) {
     this.selectedLayer = {
-      icon: this.mapService.getSelectedLayer().iconPath,
-      active: this.mapService.getSelectedLayer().active,
-      text: this.mapService.getSelectedLayer().displayName,
-      color: this.mapService.getSelectedLayer().legendColor
+      icon: this.planService.getSelectedLayer().iconPath,
+      active: this.planService.getSelectedLayer().active,
+      text: this.planService.getSelectedLayer().displayName,
+      color: this.planService.getSelectedLayer().legendColor
     }
 
     this.setAddRemoveText();
@@ -32,7 +31,7 @@ export class AddPuckComponent implements OnInit {
   ngOnInit() {
 
     // Subscribe to layer toggling
-    this.mapService.selectedLayerSubject.subscribe((layer) => {
+    this.planService.selectedLayerSubject.subscribe((layer) => {
       this.selectedLayer = {
         icon: layer.iconPath,
         active: layer.active,
@@ -43,7 +42,7 @@ export class AddPuckComponent implements OnInit {
     });
 
     // Subscribe to layer toggling
-    this.mapService.toggleLayerSubject.subscribe((layer) => {
+    this.planService.toggleLayerSubject.subscribe((layer) => {
       this.selectedLayer = {
         icon: layer.iconPath,
         active: layer.active,

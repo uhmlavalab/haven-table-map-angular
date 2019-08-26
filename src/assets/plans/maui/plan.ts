@@ -35,6 +35,7 @@ export const MauiPlan: Plan = {
       top: '4vh'
     },
     legend: {
+      defaultLayout: 'grid',
       grid: {
         left: '47vw',
         top: '8vh',

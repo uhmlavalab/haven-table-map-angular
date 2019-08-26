@@ -206,9 +206,10 @@ html {
 }
 
 .connecting-line {
-  height: 5px;
+  height: 30px;
   background-color: transparent;
   position: absolute;
   transform-origin: bottom left;
   z-index: -1;
+  transition: width 0.5s linear;
 }
