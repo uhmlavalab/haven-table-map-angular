@@ -51,30 +51,43 @@ export class PlanService {
     this.currentLegendLayout = 0;
   }
 
+  /** Sets Up the Current Plan
+   * @param plan The plan to set up
+   */
   public setupSelectedPlan(plan: Plan) {
     this.currentPlan = plan;
     this.currentMap = plan.map;
+
+    // Load layers array with each layer associated with the current map.
     this.currentMap.mapLayers.forEach(layer => {
       if (layer.included) {
         this.layers.push(layer);
       }
     });
-    this.selectedLayer = this.layers[0];
-    this.selectedLayerSubject.next(this.selectedLayer);
+
+    this.selectedLayer = this.layers[0];  // This is the layer that can currently be added/removed.
+    this.selectedLayerSubject.next(this.selectedLayer); // Publish current selected layer
+
+    // Publish data for each layer.
     this.scenarioSubject.subscribe(scenario => {
       this.layers.forEach(layer => {
         this.updateLayerSubject.next(layer);
       });
     });
-    this.currentYear = this.currentPlan.minYear;
-    this.scenarios = this.currentPlan.scenarios;
-    this.currentScenario = this.scenarios[0];
-    this.planSubject.next(this.currentPlan);
-    this.yearSubject.next(this.currentYear);
-    this.scenarioSubject.next(this.currentScenario);
+
+    this.currentYear = this.currentPlan.minYear;  // Begin with the lowest allowed year.
+    this.scenarios = this.currentPlan.scenarios;  // Load array with all scenarios associated with this plan
+    this.currentScenario = this.scenarios[0];     // Always start with index 0.
+    this.planSubject.next(this.currentPlan);      // Publish plan
+    this.yearSubject.next(this.currentYear);      // Publish current year
+    this.scenarioSubject.next(this.currentScenario); // Publist current scenario
+
+    // Load All Plan Data
     this.getCapacityData();
     //this.getGenerationData();
     this.getCurtailmentData();
+
+    // Change Legend Layout if it is not 'grid'.
     if (this.currentPlan.css.legend.defaultLayout === 'vertical') {
       this.changeCurrentLegendLayout();
     }
