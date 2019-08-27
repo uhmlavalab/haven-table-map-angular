@@ -50,7 +50,7 @@ export class MapMainComponent implements AfterViewInit {
     // if the plan is undefined, then the application will go back to the landing page.
     try {
       this.legendClass = this.planService.getCurrentLegendLayout();
-      this.currentYear = 2016;
+      this.currentYear = this.planService.getMinimumYear();
       this.addColor = this.planService.getSelectedLayer().legendColor;
       this.currentScenario = this.planService.getCurrentScenario().displayName;
     } catch (error) {
@@ -150,7 +150,6 @@ export class MapMainComponent implements AfterViewInit {
       }
 
     } catch (error) {
-      ;
       //undefined marker
       console.log(error);
     }

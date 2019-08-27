@@ -9,6 +9,8 @@ import { SecondScreenComponent } from '@app/second-screen/second-screen.componen
 @Injectable({
   providedIn: 'root'
 })
+
+/** Contains the functions and data for controlling the second monitor */
 export class WindowRefService {
   private secondScreenObject: any; // Stores the object of the second window
   private secondScreenSet: boolean; // True if the screen his open, false if not.
@@ -21,7 +23,10 @@ export class WindowRefService {
     this.secondScreenSet = false;
   }
 
-  getNativeWindow() {
+  /** Gets the native window object
+   * @return the native window object
+   */
+  public getNativeWindow() {
     return window;
   }
 

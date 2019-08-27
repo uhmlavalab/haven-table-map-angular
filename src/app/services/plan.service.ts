@@ -93,6 +93,13 @@ export class PlanService {
     }
   }
 
+  /****************************************************************************************
+   * **************************************************************************************
+   * ********************* DATA FUNCTIONS *************************************************
+   * **************************************************************************************
+   * **************************************************************************************
+   */
+
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
     let generationTotal = 0;
     technologies.forEach(tech => {
@@ -129,6 +136,9 @@ export class PlanService {
     return curtailmentTotal;
   }
 
+  /** Gets Generation Data
+   * 
+   */
   public getGenerationData(): Promise<any> {
     this.generationData = {};
     return new Promise((resolve, error) => {
@@ -152,7 +162,9 @@ export class PlanService {
     });
   }
 
-
+  /** Gets Curtailment Data
+   * 
+   */
   public getCurtailmentData(): Promise<any> {
     this.curtailmentData = {};
     return new Promise((resolve, error) => {
@@ -176,7 +188,7 @@ export class PlanService {
     });
   }
 
-
+  /** Gets Capacity Data */
   public getCapacityData(): Promise<any> {
     return new Promise((resolve, error) => {
       this.capacityData = {};
@@ -474,5 +486,19 @@ export class PlanService {
       console.log('No Map Selected');
       return '';
     }
+  }
+
+  /** Gets the minimum Year
+   * @return the minimum year for the plan
+   */
+  public getMinimumYear(): number {
+    return this.currentPlan.minYear;
+  }
+
+  /** Gets the maximum Year
+   * @return the maximum year for the plan
+   */
+  public getMaximumYear(): number {
+    return this.currentPlan.maxYear;
   }
 }
