@@ -22,6 +22,7 @@ export class MapElementComponent implements OnInit {
   path: d3.geo.Path;
   map: d3.Selection<any>;
 
+
   @ViewChild('mapDiv', { static: true }) mapDiv: ElementRef;
 
   @ViewChild(MapDirective, { static: true }) mapElement;
@@ -107,8 +108,8 @@ export class MapElementComponent implements OnInit {
     this.planService.yearSubject.subscribe((year) => {
       const layers = this.planService.getLayers();
       layers.forEach(layer => {
-        if (layer.updateFunction !== null) {
-          layer.updateFunction(this.planService);
+        if (layer.updateFunction !== null && layer.active) {
+            layer.updateFunction(this.planService);
         } else {
           this.defaultFill(layer);
         }
