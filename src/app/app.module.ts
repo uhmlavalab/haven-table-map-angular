@@ -17,7 +17,10 @@ import { SecondScreenComponent } from './second-screen/second-screen.component';
 import { InteractionElementComponent } from './map-main/interaction-element/interaction-element.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
-import { LayerPuckComponent } from './map-main/layer-puck/layer-puck.component';
+import { LayerPuckComponent_0 } from './map-main/layer-puck_0/layer-puck_0.component';
+import { LayerPuckComponent_1 } from './map-main/layer-puck_1/layer-puck_1.component';
+import { LayerPuckComponent_2 } from './map-main/layer-puck_2/layer-puck_2.component';
+import { LayerPuckComponent_3 } from './map-main/layer-puck_3/layer-puck_3.component';
 import { YearPuckComponent } from './map-main/year-puck/year-puck.component';
 import { AddPuckComponent } from './map-main/add-puck/add-puck.component';
 import { ScenarioComponent } from './scenario/scenario.component';
@@ -57,7 +60,10 @@ import { WindowRefService } from './services/window-ref.service';
     LineChartComponent,
     PieChartComponent,
     ScenarioComponent,
-    LayerPuckComponent,
+    LayerPuckComponent_0,
+    LayerPuckComponent_1,
+    LayerPuckComponent_2,
+    LayerPuckComponent_3,
     YearPuckComponent,
     AddPuckComponent
   ],

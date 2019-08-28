@@ -7,6 +7,8 @@
 </app-map-element>
 <app-legend class="legend-container" [ngStyle]="{'top': top, 'left': left, 'width': width}" cdkDrag>
 </app-legend>
+
+<!--
 <app-title class="title-container" [style.top]="plan.css.title.top" [style.left]="plan.css.title.left" cdkDrag>
 </app-title>
 <app-line-chart class="line-chart" [style.top]="plan.css.charts.line.top" [style.left]="plan.css.charts.line.left"
@@ -20,15 +22,7 @@
 <div class="tracking-dot year" #trackingDotYear>
   <app-year-puck></app-year-puck>
 </div>
-<div class="tracking-dot layer" #trackingDotLayer>
-  <app-layer-puck></app-layer-puck>
-</div>
-<div class="tracking-dot add" 
-[style.borderColor]="addColor" #trackingDotAdd>
-  <app-add-puck></app-add-puck>
-</div>
-<div class="connecting-line" #connectingLine>
-</div>
+
 
 
 <div class="tracking-dot scenario" #trackingDotScenario>
@@ -39,4 +33,18 @@
     <p>Rotate Puck to Change Scenario</p>
   </div>
   <div class="scenario-text">{{ currentScenario }}</div>
+</div>
+
+-->
+<div class="tracking-dot layer" #trackingDotLayer>
+  <app-layer-puck_0></app-layer-puck_0>
+</div>
+<div class="tracking-dot layer" #trackingDotScenario>
+  <app-layer-puck_0></app-layer-puck_0>
+</div>
+<div class="tracking-dot layer" #trackingDotYear>
+  <app-layer-puck_0></app-layer-puck_0>
+</div>
+<div class="tracking-dot layer" #trackingDotAdd>
+  <app-layer-puck_0></app-layer-puck_0>
 </div>

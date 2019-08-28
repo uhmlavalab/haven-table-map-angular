@@ -2,11 +2,11 @@ import { Component, AfterViewInit, ViewChildren, ViewChild, HostListener } from 
 import { PlanService } from '../../services/plan.service';
 
 @Component({
-  selector: 'app-layer-puck',
-  templateUrl: './layer-puck.component.html',
-  styleUrls: ['./layer-puck.component.css']
+  selector: 'app-layer-puck_0',
+  templateUrl: './layer-puck_0.component.html',
+  styleUrls: ['./layer-puck_0.component.css']
 })
-export class LayerPuckComponent implements AfterViewInit {
+export class LayerPuckComponent_0 implements AfterViewInit {
 
   @ViewChildren('iconContainer') icons;
   @ViewChildren('slideIconContainer') slideIcons;

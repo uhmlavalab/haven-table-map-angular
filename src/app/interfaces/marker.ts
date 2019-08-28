@@ -6,6 +6,7 @@ export interface Marker {
   job: string;
   delay: number;
   minRotation: number;
+  layerIndex: number;
   rotateLeft(service: any): void;
   rotateRight(service: any): void;
 }
