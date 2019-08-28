@@ -8,7 +8,7 @@ export const MauiPlan: Plan = {
   displayName: 'Maui',
   landingImagePath: 'assets/plans/maui/images/landing-image.jpg',
   secondScreenImagePath: 'assets/plans/maui/images/second-screen-images/backgrounds/maui.jpg',
-  includeSecondScreen: true,
+  includeSecondScreen: false,
   selectedPlan: false,
   minYear: 2016,
   maxYear: 2045,
