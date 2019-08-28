@@ -52,7 +52,7 @@ export class PlanService {
     this.state = 'landing'; // Initial state is landing
     this.legendLayouts = ['grid', 'vertical'];
     this.currentLegendLayout = 0;
-    this.activeLayers = [0, 0, 0, 0]
+    this.activeLayers = [-1, -1, -1, -1]
   }
 
   /** Sets Up the Current Plan

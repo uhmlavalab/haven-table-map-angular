@@ -91,7 +91,6 @@ export class ArService {
     const tempMarkerData = [];
 
     this.videoFeedArray.forEach(videoFeed => {
-      console.log(videoFeed.video.HAVE_ENOUGH_DATA);
       if (videoFeed.video.readyState === videoFeed.video.HAVE_ENOUGH_DATA) {
 
         // Collect the Image data for the detector
@@ -100,8 +99,6 @@ export class ArService {
         // Returns an array of active arucojs markers.
         const arucoMarkers = this.detector.detect(imageData);
         // Run detect marker for each one
-
-        console.log(videoFeed.id);
 
         arucoMarkers.forEach(marker => {
           if (ProjectableMarker.isValidMarker(marker.id)) {
