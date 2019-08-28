@@ -307,9 +307,9 @@ export class MapMainComponent implements AfterViewInit {
     } else if (event.key === 'a') {
       this.planService.decrementCurrentYear();
     } else if (event.key === 'x') {
-      this.planService.incrementNextLayer();
+      this.planService.incrementNextLayer(4);
     } else if (event.key === 'z') {
-      this.planService.decrementNextLayer();
+      this.planService.decrementNextLayer(4);
     } else if (event.key === 'Enter') {
       this.planService.addLayer();
     } else if (event.key === 'k') {

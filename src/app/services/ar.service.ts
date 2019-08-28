@@ -62,6 +62,8 @@ export class ArService {
       marker.job,
       marker.minRotation,
       marker.delay,
+      marker.layerIndex,
+      marker.layerId,
       marker.rotateLeft,
       marker.rotateRight,
       this.planService,

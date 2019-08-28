@@ -8,10 +8,10 @@ import { PlanService } from '../../services/plan.service';
 })
 export class LayerPuckComponent_0 implements AfterViewInit {
 
-  @ViewChildren('iconContainer') icons;
-  @ViewChildren('slideIconContainer') slideIcons;
-  @ViewChild('iconContainer', { static: false }) iconContainer;
-  @ViewChild('layerPuckContainer', { static: false }) puckContainer;
+  @ViewChildren('iconContainer_0') icons;
+  @ViewChildren('slideIconContainer_0') slideIcons;
+  @ViewChild('iconContainer_0', { static: false }) iconContainer;
+  @ViewChild('layerPuckContainer_0', { static: false }) puckContainer;
 
   private numberOfIcons: number;
   private iconImages: { icon: string, text: string, image: string, active: boolean, color: string}[] = [];
@@ -60,8 +60,11 @@ export class LayerPuckComponent_0 implements AfterViewInit {
     this.slideIconElements = this.slideIcons.first.nativeElement.children;
     this.positionElements(this.iconElements);
 
-    this.planService.layerChangeSubject.subscribe(direction => {
-      this.cycle(direction);
+    this.planService.layerChangeSubject.subscribe(value => {
+      console.log(value);
+      if (value.layerId === 0) {
+      this.cycle(value.direction);
+      }
     });
     this.repositionSlideIcon();
   }

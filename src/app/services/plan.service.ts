@@ -7,6 +7,7 @@ import { SoundsService } from './sounds.service';
 import { Subject } from 'rxjs';
 
 import * as d3 from 'd3/d3.min';
+import { ProjectableMarker } from '@app/classes/projectableMarker';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,10 @@ export class PlanService {
 
   private layers: MapLayer[] = [];              // Array Holding All Layers
   private selectedLayer: MapLayer;              // Currently Selected Layer
-  public selectedLayerSubject = new Subject<MapLayer>(); // layer publisher
-  public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
+  public selectedLayerSubject = new Subject<any>(); // layer publisher
+  public toggleLayerSubject = new Subject<any>();      // Pubisher for when a layer is toggled
   public updateLayerSubject = new Subject<MapLayer>();
-  public layerChangeSubject = new Subject<string>();
+  public layerChangeSubject = new Subject<any>();
 
   private plans: Plan[];                        // Array Holding All Plans
   private currentPlan: Plan;                    // Currently Active Plan
@@ -334,24 +335,43 @@ export class PlanService {
   }
 
   /** Cycles backwards through layers */
-  public decrementNextLayer() {
-    let index = this.layers.indexOf(this.selectedLayer) - 1;
-    if (index === -1) {
-      index = this.layers.length - 1;
+  public decrementNextLayer(id: number) {
+    const marker = ProjectableMarker.getProjectableMarkerByLayerId(id);
+    let currentIndex = marker.layerIndex;
+    currentIndex = currentIndex - 1;
+    if (currentIndex === -1) {
+      currentIndex = this.layers.length - 1;
     }
-    this.selectedLayer = this.layers[(index) % this.layers.length];
-    this.selectedLayerSubject.next(this.selectedLayer);
-    this.layerChangeSubject.next('decrement');
+    marker.layerIndex = currentIndex;
+    this.selectedLayerSubject.next({
+      puck: id,
+      layer: this.layers[currentIndex]
+    });
+    this.layerChangeSubject.next({
+      layerId: id,
+      direction: 'decrement'
+    });
     this.soundsService.tick();
 
   }
 
   /** Cycles forwards through layers */
-  public incrementNextLayer() {
-    const index = this.layers.indexOf(this.selectedLayer) + 1;
-    this.selectedLayer = this.layers[(index) % this.layers.length];
-    this.selectedLayerSubject.next(this.selectedLayer);
-    this.layerChangeSubject.next('increment');
+  public incrementNextLayer(id: number) {
+    const marker = ProjectableMarker.getProjectableMarkerByLayerId(id);
+    let currentIndex = marker.layerIndex;
+    currentIndex = (currentIndex + 1) % this.layers.length;
+    marker.layerIndex = currentIndex;
+    
+    this.selectedLayerSubject.next({
+      puck: id,
+      layer: this.layers[currentIndex]
+    });
+
+    this.layerChangeSubject.next({
+      layerId: id,
+      direction: 'increment'
+    });
+
     this.soundsService.tick();
   }
 

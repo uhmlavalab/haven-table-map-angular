@@ -8,12 +8,13 @@ export const markers: Marker[] = [{
   delay: 40, 
   minRotation: 3,
   layerIndex: 0,
+  layerId: 0,
   rotateLeft(planService: PlanService) {
-   planService.decrementCurrentYear();
-  },
-  rotateRight(planService: PlanService) {
-    planService.incrementCurrentYear();
-  }
+    planService.decrementNextLayer(0);
+   },
+   rotateRight(planService: PlanService) {
+    planService.incrementNextLayer(0);
+   }
 }, {
   markerId: 7,
   secondId: 6,
@@ -21,11 +22,12 @@ export const markers: Marker[] = [{
   delay: 250, 
   minRotation: 5,
   layerIndex: 0,
+  layerId: 1,
   rotateLeft(planService: PlanService) {
-    planService.decrementNextLayer();
+    planService.decrementNextLayer(1);
    },
    rotateRight(planService: PlanService) {
-    planService.incrementNextLayer();
+    planService.incrementNextLayer(1);
    }
 }, {
   markerId: 9,
@@ -34,11 +36,12 @@ export const markers: Marker[] = [{
   delay: 250, 
   minRotation: 5,
   layerIndex: 0,
+  layerId: 2,
   rotateLeft(planService: PlanService) {
-    this.planService.decrementScenario();
+    planService.decrementNextLayer(2);
    },
    rotateRight(planService: PlanService) {
-    this.planService.incrementScenario();
+    planService.incrementNextLayer(2);
    }
 }, {
   markerId: 11,
@@ -47,10 +50,11 @@ export const markers: Marker[] = [{
   delay: 600, 
   minRotation: 5,
   layerIndex: 0,
+  layerId: 3,
   rotateLeft(planService: PlanService) {
-    planService.toggleLayer();
+    planService.decrementNextLayer(3);
    },
    rotateRight(planService: PlanService) {
-    planService.toggleLayer();
+    planService.incrementNextLayer(3);
    }
 }];

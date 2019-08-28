@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MultiWindowService, Message} from 'ngx-multi-window';
 import { Plan } from '../interfaces/plan';
-import { OahuPlan } from '../../assets/plans/oahu/plan';
-import { MauiPlan } from '../../assets/plans/maui/plan';
-import { BigIslandPlan } from '../../assets/plans/bigisland/plan';
+import { AlphaPlan } from '../../assets/plans/alpha/plan';
+import { BetaPlan } from '../../assets/plans/beta/plan';
 
 
 @Component({
@@ -53,17 +52,14 @@ export class SecondScreenComponent implements OnInit {
   private setupSecondScreen(data: any): void {
     this.currentYear = data.currentYear;
     switch (data.name) {
-      case 'oahu':
-        this.plan = OahuPlan;
+      case 'alpha':
+        this.plan = AlphaPlan;
         break;
-      case 'maui':
-        this.plan = MauiPlan;
-        break;
-      case 'bigisland':
-        this.plan = BigIslandPlan;
+      case 'beta':
+        this.plan = BetaPlan;
         break;
       default:
-        this.plan = OahuPlan;
+        this.plan = AlphaPlan;
         break;
     }
     this.nextLayer = this.plan.map.mapLayers[0].name;

@@ -26,10 +26,15 @@ export class ProjectableMarker {
   private rotateLeft: any;            // Function called when rotated left
   private rotateRight: any;           // Function called when rotated right
 
+  private layerIndex: number;
+  private layerId: number;
+
   constructor(id: number,
     job: string,
     minRotation: number,
     delay: number,
+    layerIndex: number,
+    layerId: number,
     rotateLeft: any,
     rotateRight: any,
     planService: PlanService,
@@ -39,6 +44,8 @@ export class ProjectableMarker {
     this.job = job;
     this.minRotation = minRotation;
     this.delay = delay;
+    this.layerId = layerId;
+    this.layerIndex = layerIndex;
     this.rotateLeft = rotateLeft;
     this.rotateRight = rotateRight;
     this.planService = planService;
@@ -69,6 +76,11 @@ export class ProjectableMarker {
   */
   public static getProjectableMarkerById(id: number) {
     return ProjectableMarker.projectableMarkers[`${id}`];
+  }
+
+  public static getProjectableMarkerByLayerId(id: number) {
+    const markers = _.filter(ProjectableMarker.projectableMarkers, marker => marker.layerId === id);
+    return markers[0];
   }
 
   /** Returns a single projectable marker object
