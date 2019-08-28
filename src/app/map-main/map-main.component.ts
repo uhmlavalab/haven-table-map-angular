@@ -22,7 +22,7 @@ export class MapMainComponent implements AfterViewInit {
   @ViewChild('trackingDotLayer', { static: false }) trackingDotLayer;
   @ViewChild('trackingDotScenario', { static: false }) trackingDotScenario;
   @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
-  @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
+ // @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
 
   private plan: Plan;                   // The current Plan
 
@@ -100,7 +100,7 @@ export class MapMainComponent implements AfterViewInit {
           }));
         this.nextLayer = value.displayName;
         this.addColor = value.legendColor;
-        this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
+        //this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
       }
     });
 
@@ -155,55 +155,7 @@ export class MapMainComponent implements AfterViewInit {
     }
   }
 
-  /** Draws a line between the layer puck element and the add puck element.
-   * Both of the pucks have to be detected and live for the line to be drawn.
-   * @param layer the native element of the layer puck
-   * @param add the native element of the add puck.
-   */
-  private connectLayerAndAdd(layer, add) {
-
-    const layerMarker = ProjectableMarker.getProjectableMarkerByJob('layer');
-    const addMarker = ProjectableMarker.getProjectableMarkerByJob('add');
-
-    const layerRect = layer.getBoundingClientRect();
-    const xOffset = layerRect.width / 2;
-    const yOffset = layerRect.height / 2;
-
-    const layerPosition = { x: layerMarker.getMostRecentCenterX(), y: layerMarker.getMostRecentCenterY() };
-    const addPosition = { x: addMarker.getMostRecentCenterX(), y: addMarker.getMostRecentCenterY() };
-
-    if (layerPosition.x === null || addPosition.x === null) {
-      this.connectingLine.nativeElement.style.opacity = 0;
-    } else {
-      const adjacent = this.getAdjacent(addPosition.x, layerPosition.x);
-      const opposite = this.getOpposite(addPosition.y, layerPosition.y);
-      const hypotenuse = this.getHypotenuse(adjacent, opposite); // This is the width of the div
-      let theta = this.getTheta(opposite, adjacent);
-      theta = this.convertRadsToDegrees(theta);
-      const quadrant = this.getQuadrant(addPosition.x - layerPosition.x, addPosition.y - layerPosition.y);
-      theta = this.adjustTheta(theta, quadrant);
-      this.moveLine(this.connectingLine.nativeElement, theta, hypotenuse, layerPosition.x + xOffset + 25, layerPosition.y + 25);
-    }
-  }
-
-  /** Moves the line that connects the layer select and activate pucks.
-   * @param element The line element
-   * @param theta The theta angle of the triangle.
-   * @param width the length of the line (width of the triangle)
-   * @param x starting point x position
-   * @param y starting point y position
-   */
-  private moveLine(element, theta, width, x, y) {
-    element.style.opacity = 1;
-    element.style.width = `${width}px`;
-    element.style.left = `${x + 15}px`;
-    element.style.top = `${y}px`;
-    element.style.transform = `rotate(-${theta}deg)`;
-    element.style.backgroundColor = this.planService.getSelectedLayer().legendColor;
-    setTimeout(() => {
-      element.style.opacity = 0;
-    }, 500);
-  }
+ 
 
   /** Adjusts the angle calculation depending on quadrant
    * @theta the angle as calculated by the arc tan function
@@ -310,10 +262,6 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.incrementNextLayer(4);
     } else if (event.key === 'z') {
       this.planService.decrementNextLayer(4);
-    } else if (event.key === 'Enter') {
-      this.planService.addLayer();
-    } else if (event.key === 'k') {
-      this.planService.removeLayer();
     }else if (event.key === 'p') {
       this.router.navigateByUrl('');
       this.planService.setState('landing');

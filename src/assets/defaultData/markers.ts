@@ -5,8 +5,8 @@ export const markers: Marker[] = [{
   markerId: 320,
   secondId: 3,
   job: 'year',
-  delay: 40, 
-  minRotation: 3,
+  delay: 250, 
+  minRotation: 5,
   layerIndex: 0,
   layerId: 0,
   rotateLeft(planService: PlanService) {

@@ -44,10 +44,10 @@ export class LayerPuckComponent_0 implements AfterViewInit {
         this.slideIconElements[this.currentIconIndex].style.opacity = 0;
       }, 600);
       this.currentIcon.active = false;
-      this.repositionSlideIcon();
+     // this.repositionSlideIcon();
     } else {
-      this.repositionSlideIcon();
-      this.slideUp();
+     // this.repositionSlideIcon();
+     // this.slideUp();
     }
   });
 
@@ -61,12 +61,11 @@ export class LayerPuckComponent_0 implements AfterViewInit {
     this.positionElements(this.iconElements);
 
     this.planService.layerChangeSubject.subscribe(value => {
-      console.log(value);
       if (value.layerId === 0) {
       this.cycle(value.direction);
       }
     });
-    this.repositionSlideIcon();
+    //this.repositionSlideIcon();
   }
 
   private positionElements(elements) {

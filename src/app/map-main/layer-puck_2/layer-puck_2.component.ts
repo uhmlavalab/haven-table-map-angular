@@ -44,10 +44,10 @@ export class LayerPuckComponent_2 implements AfterViewInit {
         this.slideIconElements[this.currentIconIndex].style.opacity = 0;
       }, 600);
       this.currentIcon.active = false;
-      this.repositionSlideIcon();
+      //this.repositionSlideIcon();
     } else {
-      this.repositionSlideIcon();
-      this.slideUp();
+      //this.repositionSlideIcon();
+      //this.slideUp();
     }
   });
 
@@ -66,7 +66,7 @@ export class LayerPuckComponent_2 implements AfterViewInit {
       }
     });
 
-    this.repositionSlideIcon();
+    //this.repositionSlideIcon();
   }
 
   private positionElements(elements) {

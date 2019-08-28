@@ -45,11 +45,14 @@ export class PlanService {
   private generationData = {};
   private curtailmentData = {};
 
+  private activeLayers: number[] = []
+
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
     this.state = 'landing'; // Initial state is landing
     this.legendLayouts = ['grid', 'vertical'];
     this.currentLegendLayout = 0;
+    this.activeLayers = [0, 0, 0, 0]
   }
 
   /** Sets Up the Current Plan
@@ -337,12 +340,21 @@ export class PlanService {
   /** Cycles backwards through layers */
   public decrementNextLayer(id: number) {
     const marker = ProjectableMarker.getProjectableMarkerByLayerId(id);
-    let currentIndex = marker.layerIndex;
-    currentIndex = currentIndex - 1;
+    const oldIndex = marker.layerIndex;
+    let currentIndex = oldIndex - 1;
     if (currentIndex === -1) {
       currentIndex = this.layers.length - 1;
     }
-    marker.layerIndex = currentIndex;
+    
+    
+    if (!(_.contains(this.activeLayers, currentIndex))) {
+      this.addLayer(currentIndex);
+    }
+    this.activeLayers[id] = currentIndex;
+    if (!(_.contains(this.activeLayers, oldIndex))) {
+      this.removeLayer(oldIndex);
+    }   
+
     this.selectedLayerSubject.next({
       puck: id,
       layer: this.layers[currentIndex]
@@ -358,8 +370,16 @@ export class PlanService {
   /** Cycles forwards through layers */
   public incrementNextLayer(id: number) {
     const marker = ProjectableMarker.getProjectableMarkerByLayerId(id);
-    let currentIndex = marker.layerIndex;
-    currentIndex = (currentIndex + 1) % this.layers.length;
+    const oldIndex = marker.layerIndex;
+    const currentIndex = (oldIndex + 1) % this.layers.length;
+    if (!(_.contains(this.activeLayers, currentIndex))) {
+      this.addLayer(currentIndex);
+    }
+    this.activeLayers[id] = currentIndex;
+    if (!(_.contains(this.activeLayers, oldIndex))) {
+      this.removeLayer(oldIndex);
+    }    
+
     marker.layerIndex = currentIndex;
     
     this.selectedLayerSubject.next({
@@ -376,19 +396,18 @@ export class PlanService {
   }
 
   /** Adds or removes the selected layer after checking it's active state. */
-  public toggleLayer(): void {
-    this.selectedLayer.active ? this.removeLayer() : this.addLayer();
+  public toggleLayer(index: number): void {
+    this.selectedLayer.active ? this.removeLayer(index) : this.addLayer(index);
   }
 
   /** Adds a layer to the map
    * @return true if successful, false if not.
    */
-  public addLayer(): boolean {
-    const layer = this.selectedLayer;
+  public addLayer(index: number): boolean {
+    const layer = this.layers[index];
     if (!layer.active) {
       layer.active = true;
       this.toggleLayerSubject.next(layer);
-      this.soundsService.dropUp();
       return true;
     } else {
       return false;
@@ -398,12 +417,11 @@ export class PlanService {
   /** Removes a layer from the table
    * @return true if successful, false if not
    */
-  public removeLayer(): boolean {
-    const layer = this.selectedLayer;
+  public removeLayer(index: number): boolean {
+    const layer = this.layers[index];
     if (layer.active) {
       layer.active = false;
       this.toggleLayerSubject.next(layer);
-      this.soundsService.dropDown();
       return true;
     } else {
       return false;
