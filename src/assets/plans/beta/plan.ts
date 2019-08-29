@@ -72,7 +72,7 @@ export const BetaPlan: Plan = {
     width: 2179,
     height: 2479,
     bounds: [[-156.0618, 20.2696], [-154.8067, 18.9105]],
-    baseMapPath: 'assets/plans/beta/images/base-map.png',
+    baseMapPath: 'assets/plans/beta/images/base-1991.png',
     mapLayers: [
       {
         name: 'transmission',
