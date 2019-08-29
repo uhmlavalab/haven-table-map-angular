@@ -71,11 +71,11 @@ export const AlphaPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.235,
+    scale: 0.335,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: 'assets/plans/alpha/images/base-map.png',
+    baseMapPath: 'assets/plans/alpha/images/base-1991.png',
     mapLayers: [
       {
         name: 'parks',
