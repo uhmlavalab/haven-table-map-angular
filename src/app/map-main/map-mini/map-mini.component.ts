@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { MapService } from '../../services/map.service';
 import { PlanService } from '../../services/plan.service';
 import * as d3 from 'd3';
@@ -9,7 +9,7 @@ import { MapLayer, Parcel } from '@app/interfaces';
   templateUrl: './map-mini.component.html',
   styleUrls: ['./map-mini.component.css']
 })
-export class MapMiniComponent implements OnInit {
+export class MapMiniComponent implements AfterViewInit {
 
   scale: number;
   width: number;
@@ -17,26 +17,29 @@ export class MapMiniComponent implements OnInit {
   rasterBounds: any[];
   baseMapImagePath: string;
 
-  projection: d3.geo.Projection;
+  projection: any;
   path: d3.geo.Path;
   map: d3.Selection<any>;
 
-  circlePos = [-158.00, 21.42];
+  circlePos = [-158.00, 21.42] as [number, number];
 
   @ViewChild('miniMapDiv', { static: true }) mapDiv: ElementRef;
 
   constructor(private mapService: MapService, private planService: PlanService) {
-    this.scale = mapService.getMapScale();
-    this.width = 1400 * this.scale;
-    this.height = 1400 * this.scale;
-    this.rasterBounds = mapService.getMapBounds();
-    this.baseMapImagePath = mapService.getBaseMapPath();
+
   }
 
-  ngOnInit() {
-    const projection = d3.geo.mercator()
-      .scale(1)
-      .translate([0, 0]);
+  ngAfterViewInit() {
+    this.scale = this.planService.getCurrentPlan().map.scale;
+    this.width = 1400 * this.scale;
+    this.height = 1400 * this.scale;
+    this.rasterBounds = this.planService.getCurrentPlan().map.bounds;
+    this.baseMapImagePath = this.planService.getCurrentPlan().map.baseMapPath;
+
+    this.projection = d3.geo.mercator()
+      .scale(25000)
+      .center(this.circlePos)
+      .translate([this.width / 2, this.height / 2]) as any;
 
     const path = d3.geo.path()
       .projection(this.projection);
@@ -45,32 +48,28 @@ export class MapMiniComponent implements OnInit {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    const bounds = [projection(this.rasterBounds[0]), projection(this.rasterBounds[1])];
-    const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
-    const transform = [
-      (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-      (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
-    ] as [number, number];
-
-
-    this.projection = d3.geo.mercator()
-      .scale(scale)
-      .translate(transform);
-
-
     this.path = d3.geo.path()
       .projection(this.projection);
-
     d3.json(`assets/plans/oahu/layers/coastline.json`, (error, geoData) => {
+
+      var that = this;
       this.map.selectAll('outline')
         .data(geoData.features)
         .enter().append('path')
         .attr('d', this.path)
         .attr('class', 'coastline')
         .attr('stroke', 'white')
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1)
+        .on('mousemove', function () {
+          const pos = d3.mouse(this);
+          const px = pos[0];
+          const py = pos[1];
+          const coords = that.projection.invert([px, py]);
+          that.mapService.updateCirclePosition(coords);
+        });
+
       this.map.selectAll('circle')
-        .data([this.circlePos as [number, number]]).enter()
+        .data([this.circlePos]).enter()
         .append('circle')
         .attr('cx', (d) => this.projection(d)[0])
         .attr('cy', (d) => this.projection(d)[1])
@@ -78,37 +77,30 @@ export class MapMiniComponent implements OnInit {
         .attr('fill', 'red');
       const x = 5;
     });
+
+
     this.mapService.circlePositionSub.subscribe(pos => {
+      this.circlePos = pos;
       console.log(pos);
+      this.map.selectAll('circle')
+        .data([this.circlePos])
+        .attr('cx', (d) => this.projection(d)[0])
+        .attr('cy', (d) => this.projection(d)[1])
+        .attr('r', '4px')
+        .attr('fill', 'red');
     });
 
 
   }
 
-  update(point: any) {
-    const x = point.layerX;
-    const y = point.layerY;
-    const projection = d3.geo.mercator();
+  clicked(d) {
+    // Compute centroid of the selected path
 
-    const bounds = [projection(this.rasterBounds[0]), projection(this.rasterBounds[1])];
-    const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
-    const transform = [
-      (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-      (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
-    ] as [number, number];
-
-
-    const proj = d3.geo.mercator()
-      .scale(scale)
-      .translate(transform);
-
-    const inversion = projection.invert([x, y]);
-
-    console.log(x, y);
-    console.log(inversion);
-    console.log(proj([x, y]));
+    // const centroid = this.path.centroid(d);
+    console.log(d);
 
   }
+
 
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlanService } from '../../services/plan.service';
+import { MapService } from '../../services/map.service';
 import { MapDirective } from './map.directive';
 import * as d3 from 'd3';
 import { MapLayer, Parcel } from '@app/interfaces';
@@ -22,12 +23,14 @@ export class MapElementComponent implements OnInit {
   path: d3.geo.Path;
   map: d3.Selection<any>;
 
+  circlePos = [-158.00, 21.42] as [number, number];
+
 
   @ViewChild('mapDiv', { static: true }) mapDiv: ElementRef;
 
   @ViewChild(MapDirective, { static: true }) mapElement;
 
-  constructor(private planService: PlanService) {
+  constructor(private planService: PlanService, private mapService: MapService) {
     this.scale = planService.getMapScale();
     this.width = planService.getMapImageWidth() * this.scale;
     this.height = planService.getMapImageHeight() * this.scale;
@@ -52,43 +55,41 @@ export class MapElementComponent implements OnInit {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    const aa = [-158.00, 21.42];
+    const bounds = [this.projection(this.rasterBounds[0]), this.projection(this.rasterBounds[1])];
+    const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
+    const transform = [
+      (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
+      (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
+    ] as [number, number];
 
 
+
+    this.projection = d3.geo.mercator()
+      .scale(scale)
+      .translate(transform);
+
+    this.path = d3.geo.path()
+      .projection(this.projection);
+
+    this.map.selectAll('circle')
+      .data([this.circlePos]).enter()
+      .append('circle')
+      .attr('cx', (d) => this.projection(d)[0])
+      .attr('cy', (d) => this.projection(d)[1])
+      .attr('r', '8px')
+      .attr('fill', 'red');
 
     this.planService.getLayers().forEach(layer => {
       if (layer.filePath === null) {
         return;
       }
       d3.json(`${layer.filePath}`, (error, geoData) => {
-        const bounds = [this.projection(this.rasterBounds[0]), this.projection(this.rasterBounds[1])];
-        const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
-        const transform = [
-          (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-          (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
-        ] as [number, number];
-
-        const proj = d3.geo.mercator()
-          .scale(scale)
-          .translate(transform);
-
-        const path = d3.geo.path()
-          .projection(proj);
-
-        this.map.selectAll('circle')
-          .data([aa as [number, number]]).enter()
-          .append('circle')
-          .attr('cx', (d) => proj(d)[0])
-          .attr('cy', (d) => proj(d)[1])
-          .attr('r', '8px')
-          .attr('fill', 'red');
-
         this.map.selectAll(layer.name)
           .data(geoData.features)
           .enter().append('path')
-          .attr('d', path)
+          .attr('d', this.path)
           .attr('class', layer.name)
-          .each(function(d) {
+          .each(function (d) {
             layer.parcels.push({ path: this, properties: (d.hasOwnProperty(`properties`)) ? d[`properties`] : null } as Parcel);
           }).call(() => {
             if (layer.setupFunction !== null) {
@@ -99,6 +100,18 @@ export class MapElementComponent implements OnInit {
           });
       });
     });
+
+    this.mapService.circlePositionSub.subscribe(pos => {
+      this.circlePos = pos;
+      console.log(pos);
+      this.map.selectAll('circle')
+        .data([this.circlePos])
+        .attr('cx', (d) => this.projection(d)[0])
+        .attr('cy', (d) => this.projection(d)[1])
+        .attr('r', '8px')
+        .attr('fill', 'red');
+    });
+
 
     // Subscribe to layer toggling
     this.planService.toggleLayerSubject.subscribe((layer) => {
@@ -121,12 +134,15 @@ export class MapElementComponent implements OnInit {
       const layers = this.planService.getLayers();
       layers.forEach(layer => {
         if (layer.updateFunction !== null && layer.active) {
-            layer.updateFunction(this.planService);
+          layer.updateFunction(this.planService);
         } else {
           this.defaultFill(layer);
         }
       });
     });
+
+
+
   }
 
   defaultFill(layer: MapLayer) {
@@ -138,4 +154,6 @@ export class MapElementComponent implements OnInit {
         .style('stroke-width', layer.borderWidth + 'px');
     });
   }
+
+
 }

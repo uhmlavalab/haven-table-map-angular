@@ -142,24 +142,25 @@ export const OahuPlan: Plan = {
             d3.select(parcel.path)
               .style('opacity', this.active ? 0.85 : 0.0);
           });
-        },      },
-      {
-        name: 'parks',
-        displayName: 'Park Lands',
-        active: false,
-        included: true,
-        iconPath: 'assets/plans/oahu/images/icons/parks-icon.png',
-        secondScreenImagePath: 'assets/plans/oahu/images/second-screen-images/layer-images/parks.jpg',
-        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
-        fillColor: mapLayerColors.Parks.fill,
-        borderColor: mapLayerColors.Parks.border,
-        borderWidth: 1,
-        legendColor: mapLayerColors.Parks.fill,
-        filePath: 'assets/plans/oahu/layers/parks.json',
-        parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        },
       },
+      // {
+      //   name: 'parks',
+      //   displayName: 'Park Lands',
+      //   active: false,
+      //   included: true,
+      //   iconPath: 'assets/plans/oahu/images/icons/parks-icon.png',
+      //   secondScreenImagePath: 'assets/plans/oahu/images/second-screen-images/layer-images/parks.jpg',
+      //   secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+      //   fillColor: mapLayerColors.Parks.fill,
+      //   borderColor: mapLayerColors.Parks.border,
+      //   borderWidth: 1,
+      //   legendColor: mapLayerColors.Parks.fill,
+      //   filePath: 'assets/plans/oahu/layers/parks.json',
+      //   parcels: [],
+      //   setupFunction: null,
+      //   updateFunction: null,
+      // },
       {
         name: 'existing_re',
         displayName: 'Existing Renewables',
@@ -304,7 +305,7 @@ export const OahuPlan: Plan = {
         setupFunction: null,
         updateFunction: null,
       }
-      /*,
+      ,
       {
         name: 'der',
         displayName: 'DER',
@@ -317,12 +318,119 @@ export const OahuPlan: Plan = {
         borderColor: 'orange',
         borderWidth: .1,
         legendColor: 'orange',
-        filePath: 'assets/plans/oahu/layers/HECODER.json',
+        filePath: 'assets/plans/oahu/layers/DER_map.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        setupFunction(planService: PlanService) {
+          this.derColors = [
+            {
+              minValue:0.75,
+              color: "#f4f43d",
+            },
+                        {
+              minValue:0.675,
+              color: "#ecd937",
+            },
+                        {
+              minValue:0.6,
+              color: "#e5bd31",
+            },
+                        {
+              minValue:0.525,
+              color: "#dfa22b",
+            },
+                        {
+              minValue:0.45,
+              color: "#db8826",
+            },
+                        {
+              minValue:0.375,
+              color: "#d76f21",
+            },
+                        {
+              minValue:0.3,
+              color: "#d4561d",
+            },
+                        {
+              minValue:0.15,
+              color: "#d23f19",
+            },
+                        {
+              minValue:0.05,
+              color: "#d12b17",
+            },
+                        {
+              minValue:0.00,
+              color: "#d01e16",
+            },
+          ]
+            
+          this.capData = {};
+          d3.csv('assets/plans/oahu/data/DER_Group_Cap.csv', (data) => {
+            data.forEach(element => {
+              const id = element.GroupId.toString();
+              const year = element.Year.toString();
+              const value  = Number(element.Value);
+              if (!this.capData.hasOwnProperty(id)) {
+                this.capData[id] = {};
+              }
+              if (!this.capData[id].hasOwnProperty(year)) {
+                this.capData[id][year] = value;
+              }
+            });
+            this.parcels.forEach(parcel => {
+              const id = parcel.properties.GroupID.toString();
+              const year = (planService.getCurrentYear()).toString();
+              if (year >= 2018) {
+                if (this.capData.hasOwnProperty(id)) {
+                  const value = this.capData[id][year];
+                  const color =  () => {
+                    let max = 500;
+                    let min = this.derColors[0].minValue;
+                    for (let i = 0; i < this.derColors.length; i++) {
+                      min = this.derColors[0].minValue;
+                      if (value <= max && value >= min) {
+                        return this.derColors[i].color;
+                      }
+                      max = min;
+                    }
+                    return this.derColors[this.derColors.length  - 1].color;
+                  };
+                  d3.select(parcel.path)
+                    .style('fill', color)
+                    .style('opacity', (this.active) ? 0.85 : 0.0);
+                }
+              }
+            });
+          })
+
+        },
+        updateFunction(planService: PlanService) {
+            this.parcels.forEach(parcel => {
+              const id = parcel.properties.GroupID.toString();
+              const year = (planService.getCurrentYear()).toString();
+              if (year >= 2018) {
+                if (this.capData.hasOwnProperty(id)) {
+                  const value = this.capData[id][year];
+                  const color =  () => {
+                    let max = 500;
+                    let min = this.derColors[0].minValue;
+                    for (let i = 0; i < this.derColors.length; i++) {
+                      min = this.derColors[0].minValue;
+                      if (value <= max && value >= min) {
+                        return this.derColors[i].color;
+                      }
+                      max = min;
+                    }
+                    return this.derColors[this.derColors.length  - 1].color;
+                  };
+                  d3.select(parcel.path)
+                    .style('fill', color)
+                    .style('opacity', (this.active) ? 0.85 : 0.0);
+                }
+              }
+            });
+        },
       }
-      */
     ],
   }
 };
