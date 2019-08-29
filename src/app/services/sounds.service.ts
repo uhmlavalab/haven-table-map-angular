@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
+/** Contains all sound related functions */
 export class SoundsService {
 
   private clicksound: any;
@@ -38,11 +40,11 @@ export class SoundsService {
   public tick() {
     this.ticksound.play();
   }
-  /** Plays a tick sound */
+  /** Plays a water droplet sound */
   public dropDown() {
     this.waterdropDown.play();
   }
-  /** Plays a tick sound */
+  /** Plays a water droplet sound */
   public dropUp() {
     this.waterdropUp.play();
   }

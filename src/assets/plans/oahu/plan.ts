@@ -33,6 +33,7 @@ export const OahuPlan: Plan = {
       top: '3vh'
     },
     legend: {
+      defaultLayout: 'vertical',
       grid: {
         left: '28vw',
         top: '2vh',
@@ -71,7 +72,7 @@ export const OahuPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.237,
+    scale: 0.235,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
@@ -89,7 +90,7 @@ export const OahuPlan: Plan = {
         borderColor: mapLayerColors.Transmission.border,
         borderWidth: 0.02,
         legendColor: mapLayerColors.Transmission.border,
-        filePath: 'assets/plans/oahu/layers/transmission.json',
+        filePath: 'assets/plans/oahu/layers/transmissionbc.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
@@ -127,7 +128,7 @@ export const OahuPlan: Plan = {
             'Public-State': '#ff7f7f',
             'Public-State DHHL': '#895a44',
             'Public-County': '#00c5ff',
-          }
+          };
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.type])
@@ -196,7 +197,7 @@ export const OahuPlan: Plan = {
             '8.5+': 0,
             '7.5-8.5': 1,
             '6.5-7.5': 2
-          }
+          };
           this.parcels.sort((a, b) => parseFloat(dictSort[a.properties.SPD_CLS]) - parseFloat(dictSort[b.properties.SPD_CLS]));
           this.parcels.sort((a, b) => parseFloat(b.properties.MWac) - parseFloat(a.properties.MWac));
           this.parcels.forEach(parcel => {
@@ -302,7 +303,8 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
-      }/*
+      }
+      /*,
       {
         name: 'der',
         displayName: 'DER',
@@ -319,7 +321,8 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
-      }*/
+      }
+      */
     ],
   }
 };

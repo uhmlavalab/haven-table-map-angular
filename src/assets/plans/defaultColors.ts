@@ -5,10 +5,10 @@ export const chartColors = {
   Fossil: '#CC503E',
   Bio: '#73AF48',
   Battery: '#5F4690',
-  Wind: '#38A6A5',
+  Wind: '#2a52be', //38A6A5
   Offshore: '#5F4690',
   Geo: '#ac346a',
-  Hydro: '#5F4690',
+  Hydro: '#38A6A5', //5F4690 /2a52be
 };
 
 export const mapLayerColors = {

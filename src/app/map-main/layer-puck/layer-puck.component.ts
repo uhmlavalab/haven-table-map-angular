@@ -1,7 +1,5 @@
 import { Component, AfterViewInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
 import { PlanService } from '../../services/plan.service';
-import { MapService } from '../../services/map.service';
-import { ProjectableMarker } from '../../classes/projectableMarker';
 
 @Component({
   selector: 'app-layer-puck',
@@ -24,12 +22,9 @@ export class LayerPuckComponent implements AfterViewInit {
   private angle: number;
   private slideImages: { icon: string, text: string, active: boolean, color: string }[] = [];
   private slideIconElements: any[] = [];
-  private arrowImage: string;
   private addRemove: string;
 
-  constructor(private planService: PlanService, private mapService: MapService) {
-    this.addRemove = 'Up';
-    this.arrowImage = '../../assets/images/tracking-icons/greenArrow.png';
+  constructor(private planService: PlanService) {
 
     this.planService.getCurrentPlan().map.mapLayers.forEach(layer => {
       this.iconImages.push({
@@ -42,7 +37,7 @@ export class LayerPuckComponent implements AfterViewInit {
     });
 
   // Subscribe to layer toggling
-  this.mapService.toggleLayerSubject.subscribe((layer) => {
+  this.planService.toggleLayerSubject.subscribe((layer) => {
     if (!layer.active) {
       setTimeout(() => {
         this.iconElements[this.currentIconIndex].style.opacity = 1;
@@ -50,8 +45,6 @@ export class LayerPuckComponent implements AfterViewInit {
       }, 600);
       this.currentIcon.active = false;
       this.repositionSlideIcon();
-      this.toggleArrow(this.currentIcon.active);
-      this.toggleAddRemoveText(this.currentIcon.active);
     } else {
       this.repositionSlideIcon();
       this.slideUp();
@@ -67,12 +60,10 @@ export class LayerPuckComponent implements AfterViewInit {
     this.slideIconElements = this.slideIcons.first.nativeElement.children;
     this.positionElements(this.iconElements);
 
-    this.mapService.layerChangeSubject.subscribe(direction => {
+    this.planService.layerChangeSubject.subscribe(direction => {
       this.cycle(direction);
     });
     this.repositionSlideIcon();
-    this.toggleArrow(this.currentIcon.active);
-    this.toggleAddRemoveText(this.currentIcon.active);
   }
 
   private positionElements(elements) {
@@ -89,14 +80,6 @@ export class LayerPuckComponent implements AfterViewInit {
     this.currentPosition = -90;
   }
 
-  private toggleAddRemoveText(active: boolean): void {
-    if (active) {
-      this.addRemove = 'Down';
-    } else {
-      this.addRemove = 'Up';
-    }
-  }
-
   private cycle(direction: string) {
     if (direction === 'increment') {
       this.iconContainer.nativeElement.style.transform = `rotate(${this.currentPosition + this.angle}deg)`;
@@ -107,8 +90,6 @@ export class LayerPuckComponent implements AfterViewInit {
       this.currentPosition -= this.angle;
       this.decrementCurrentIconIndex();
     }
-    this.toggleArrow(this.currentIcon.active);
-    this.toggleAddRemoveText(this.currentIcon.active);
   }
 
   private decrementCurrentIconIndex() {
@@ -138,13 +119,6 @@ export class LayerPuckComponent implements AfterViewInit {
     slideIcon.style.top = `${offsetTop - puckViewPortOffset.top}px`;
   }
 
-  private toggleArrow(onOff: boolean) {
-    if (onOff) {
-      this.arrowImage = '../../assets/images/tracking-icons/redArrow.png';
-    } else {
-      this.arrowImage = '../../assets/images/tracking-icons/greenArrow.png';
-    }
-  }
 
   private slideUp():void {
     this.repositionSlideIcon();
@@ -152,27 +126,9 @@ export class LayerPuckComponent implements AfterViewInit {
     const slideIcon = this.slideIconElements[this.currentIconIndex];
 
     this.currentIcon.active = true;
-    this.toggleArrow(this.currentIcon.active);
-    this.toggleAddRemoveText(this.currentIcon.active);
     puckIcon.style.opacity = 0.4;
     slideIcon.style.opacity = 1;
     slideIcon.style.top = '-1000px';
   }
 
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.key === 'u') {
-      if (this.currentIcon.active) {
-        this.currentIcon.active = false;
-        setTimeout(() => {
-          this.iconElements[this.currentIconIndex].style.opacity = 1;
-          this.slideIconElements[this.currentIconIndex].style.opacity = 0;
-        }, 600);
-        this.repositionSlideIcon();
-      } else {
-        this.repositionSlideIcon();
-        this.slideUp();
-      }
-    }
-  }
 }
