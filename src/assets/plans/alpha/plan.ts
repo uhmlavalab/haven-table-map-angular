@@ -71,7 +71,7 @@ export const AlphaPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.335,
+    scale: 0.265,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],

@@ -32,7 +32,7 @@ export const BetaPlan: Plan = {
   css: {
     map: {
       left: '24.5vw',
-      top: '5vh'
+      top: '-30vh'
     },
     legend: {
       defaultLayout: 'grid',
@@ -68,7 +68,7 @@ export const BetaPlan: Plan = {
     }
   },
   map: {
-    scale: 0.26,
+    scale: 0.44,
     width: 2179,
     height: 2479,
     bounds: [[-156.0618, 20.2696], [-154.8067, 18.9105]],
