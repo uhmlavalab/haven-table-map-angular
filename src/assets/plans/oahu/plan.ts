@@ -363,7 +363,7 @@ export const OahuPlan: Plan = {
               color: "#d01e16",
             },
           ]
-            
+
           this.capData = {};
           d3.csv('assets/plans/oahu/data/DER_Group_Cap.csv', (data) => {
             data.forEach(element => {
@@ -380,7 +380,7 @@ export const OahuPlan: Plan = {
             this.parcels.forEach(parcel => {
               const id = parcel.properties.GroupID.toString();
               const year = (planService.getCurrentYear()).toString();
-              if (year >= 2018) {
+              if (Number(year) >= 2018) {
                 if (this.capData.hasOwnProperty(id)) {
                   const value = this.capData[id][year];
                   const color =  () => {
@@ -408,7 +408,7 @@ export const OahuPlan: Plan = {
             this.parcels.forEach(parcel => {
               const id = parcel.properties.GroupID.toString();
               const year = (planService.getCurrentYear()).toString();
-              if (year >= 2018) {
+              if (Number(year) >= 2018) {
                 if (this.capData.hasOwnProperty(id)) {
                   const value = this.capData[id][year];
                   const color =  () => {

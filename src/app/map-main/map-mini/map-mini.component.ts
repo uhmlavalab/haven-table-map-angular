@@ -52,7 +52,7 @@ export class MapMiniComponent implements AfterViewInit {
       .projection(this.projection);
     d3.json(`assets/plans/oahu/layers/coastline.json`, (error, geoData) => {
 
-      var that = this;
+      const that = this;
       this.map.selectAll('outline')
         .data(geoData.features)
         .enter().append('path')
