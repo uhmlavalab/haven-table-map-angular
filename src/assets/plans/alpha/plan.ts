@@ -10,21 +10,13 @@ export const AlphaPlan: Plan = {
   secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/backgrounds/alpha-renewable-background.jpg',
   includeSecondScreen: false,
   selectedPlan: false,
-  minYear: 2016,
-  maxYear: 2045,
+  minYear: 1991,
+  maxYear: 2000,
   scenarios: [
     {
-      name: 'postapril',
-      displayName: 'Post April',
+      name: 'alpha',
+      displayName: 'Alpha Scenario',
     },
-    {
-      name: 'e3',
-      displayName: 'E3'
-    },
-    {
-      name: 'e3genmod',
-      displayName: 'E3 Gen Mod'
-    }
   ],
   css: {
     map: {
@@ -75,14 +67,14 @@ export const AlphaPlan: Plan = {
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: 'assets/plans/alpha/images/base-1991.png',
+    baseMapPath: 'assets/plans/alpha/images/base-map.png',
     mapLayers: [
       {
-        name: 'parks',
-        displayName: 'Park Lands',
+        name: 'casinos',
+        displayName: 'Casinos',
         active: false,
         included: true,
-        iconPath: 'assets/plans/alpha/images/icons/parks-icon.png',
+        iconPath: 'assets/plans/alpha/images/icons/casinos.png',
         secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: mapLayerColors.Parks.fill,
@@ -91,60 +83,177 @@ export const AlphaPlan: Plan = {
         legendColor: mapLayerColors.Parks.fill,
         filePath: 'assets/plans/alpha/layers/parks.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = AlphaPlan.minYear; i <= AlphaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/alpha/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
       },
       {
-        name: 'existing_re',
-        displayName: 'Existing Renewables',
+        name: 'climbing',
+        displayName: 'Climbing',
         active: false,
         included: true,
-        iconPath: 'assets/plans/alpha/images/icons/existing_re-icon.png',
-        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/existing_re.jpg',
+        iconPath: 'assets/plans/alpha/images/icons/climbing.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
-        fillColor: mapLayerColors.Existing_RE.fill,
-        borderColor: mapLayerColors.Existing_RE.border,
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
         borderWidth: 1,
-        legendColor: mapLayerColors.Existing_RE.fill,
-        filePath: 'assets/plans/alpha/layers/existing_re.json',
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = AlphaPlan.minYear; i <= AlphaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/alpha/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
       },
       {
-        name: 'agriculture',
-        displayName: 'Ag Lands',
+        name: 'forested',
+        displayName: 'Forests',
         active: false,
         included: true,
-        iconPath: 'assets/plans/alpha/images/icons/agriculture-icon.png',
-        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/agriculture.jpg',
+        iconPath: 'assets/plans/alpha/images/icons/forests.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
-        fillColor: mapLayerColors.Agriculture.fill,
-        borderColor: mapLayerColors.Agriculture.border,
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
         borderWidth: 1,
-        legendColor: mapLayerColors.Agriculture.fill,
-        filePath: 'assets/plans/alpha/layers/agriculture.json',
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = AlphaPlan.minYear; i <= AlphaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/alpha/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
       },
       {
-        name: 'der',
-        displayName: 'DER',
+        name: 'population',
+        displayName: 'Population',
         active: false,
         included: true,
-        iconPath: 'assets/plans/alpha/images/icons/skull.png',
-        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/agriculture.jpg',
+        iconPath: 'assets/plans/alpha/images/icons/population.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
-        fillColor: 'orange',
-        borderColor: 'orange',
-        borderWidth: .1,
-        legendColor: 'orange',
-        filePath: 'assets/plans/alpha/layers/HECODER.json',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
-      }
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = AlphaPlan.minYear; i <= AlphaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/alpha/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'regions',
+        displayName: 'Regions',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/alpha/images/icons/regions.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          this.layers.push({ year: 1991, path: `assets/plans/alpha/layers/${this.name}/${this.name}-allyears.png` });
+          this.imageref.attr('xlink:href', this.layers[0].path);
+        },
+        updateFunction(planservice: PlanService) {
+        },
+      },
+      {
+        name: 'roads',
+        displayName: 'Roads',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/alpha/images/icons/roads.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = AlphaPlan.minYear; i <= AlphaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/alpha/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'transport',
+        displayName: 'Transport',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/alpha/images/icons/transport.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = AlphaPlan.minYear; i <= AlphaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/alpha/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
     ],
   }
 };

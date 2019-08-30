@@ -56,36 +56,11 @@ export class MapElementComponent implements OnInit {
       if (layer.filePath === null) {
         return;
       }
-      d3.json(`${layer.filePath}`, (error, geoData) => {
-        const bounds = [this.projection(this.rasterBounds[0]), this.projection(this.rasterBounds[1])];
-        const scale = 1 / Math.max((bounds[1][0] - bounds[0][0]) / this.width, (bounds[1][1] - bounds[0][1]) / this.height);
-        const transform = [
-          (this.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-          (this.height - scale * (bounds[1][1] + bounds[0][1])) / 2
-        ] as [number, number];
+      layer.imageref = this.map.append(`image`)
+        .attr('width', this.width)
+        .attr('height', this.height);
+      layer.setupFunction(this.planService);
 
-        const proj = d3.geo.mercator()
-          .scale(scale)
-          .translate(transform);
-
-        const path = d3.geo.path()
-          .projection(proj);
-
-        this.map.selectAll(layer.name)
-          .data(geoData.features)
-          .enter().append('path')
-          .attr('d', path)
-          .attr('class', layer.name)
-          .each(function (d) {
-            layer.parcels.push({ path: this, properties: (d.hasOwnProperty(`properties`)) ? d[`properties`] : null } as Parcel);
-          }).call(() => {
-            if (layer.setupFunction !== null) {
-              layer.setupFunction(this.planService);
-            } else {
-              this.defaultFill(layer);
-            }
-          });
-      });
     });
 
     // Subscribe to layer toggling
@@ -108,8 +83,8 @@ export class MapElementComponent implements OnInit {
     this.planService.yearSubject.subscribe((year) => {
       const layers = this.planService.getLayers();
       layers.forEach(layer => {
-        if (layer.updateFunction !== null && layer.active) {
-            layer.updateFunction(this.planService);
+        if (layer.updateFunction !== null) {
+          layer.updateFunction(this.planService);
         } else {
           this.defaultFill(layer);
         }

@@ -30,7 +30,7 @@ export class LandingHomeComponent implements OnInit {
   private activePanel: string;                  // Determines which panel is displayed.  IE. Maps, Help, Change Markers etc.
 
   /* State Variables */
-  private loading: boolean;                     // True if loading, false if not.           
+  private loading: boolean;                     // True if loading, false if not.
 
   /* Marker Change Variables */
   private tempMarkerChange: { id: number, job: string };  // Holds the data temporarily when reassigning a marker's job and id.
@@ -97,7 +97,7 @@ export class LandingHomeComponent implements OnInit {
   /******************************************************************************************
    * ************************* Initialization Subroutines ***********************************
    * The following routines are used to initialize the component
-   * data and are called from the constructor. 
+   * data and are called from the constructor.
    * ****************************************************************************************/
 
   /** Initializes the data used for the reassignment of marker (jobs and id)
@@ -145,7 +145,7 @@ export class LandingHomeComponent implements OnInit {
   private setupUIContent(): void {
     this.buttons = landingButtons;              // Imported from Default Data
     this.panels = panels;                       // Imported from default data
-    this.activePanel = 'maps';                  // Always start showing the map selection panel.                      
+    this.activePanel = 'maps';                  // Always start showing the map selection panel.
     this.help = 'keyboard';                     // Show keyboard shortcut controls as first help view.
     this.nativeWindow = this.windowRefservice.getNativeWindow();
     this.loading = this.windowRefservice.getLoadingStatus();  // Determines if the second screen is loading.
@@ -208,7 +208,7 @@ export class LandingHomeComponent implements OnInit {
         break;
       }
     }
-    
+
     /** Move the dot */
     element.style.left = left;
     element.style.top = top;
@@ -477,27 +477,27 @@ export class LandingHomeComponent implements OnInit {
     this.tempMarkerChange.job = job;
   }
 
- 
 
-  /* KEYBOARD CONTROLS */
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowUp') {
-      this.arservice.incrementYOffset();
-    } else if (event.key === 'ArrowDown') {
-      this.arservice.decrementYOffset();
-    } else if (event.key === 'ArrowLeft') {
-      this.arservice.incrementXOffset();
-    } else if (event.key === 'ArrowRight') {
-      this.arservice.decrementXOffset();
-    } else if (event.key === 'w') {
-      this.arservice.incrementYOffset2();
-    } else if (event.key === 's') {
-      this.arservice.decrementYOffset2();
-    } else if (event.key === 'a') {
-      this.arservice.incrementXOffset2();
-    } else if (event.key === 'd') {
-      this.arservice.decrementXOffset2();
-    }
-  }
+
+  // /* KEYBOARD CONTROLS */
+  // @HostListener('window:keydown', ['$event'])
+  // keyEvent(event: KeyboardEvent) {
+  //   if (event.key === 'ArrowUp') {
+  //     this.arservice.incrementYOffset();
+  //   } else if (event.key === 'ArrowDown') {
+  //     this.arservice.decrementYOffset();
+  //   } else if (event.key === 'ArrowLeft') {
+  //     this.arservice.incrementXOffset();
+  //   } else if (event.key === 'ArrowRight') {
+  //     this.arservice.decrementXOffset();
+  //   } else if (event.key === 'w') {
+  //     this.arservice.incrementYOffset2();
+  //   } else if (event.key === 's') {
+  //     this.arservice.decrementYOffset2();
+  //   } else if (event.key === 'a') {
+  //     this.arservice.incrementXOffset2();
+  //   } else if (event.key === 'd') {
+  //     this.arservice.decrementXOffset2();
+  //   }
+  // }
 }

@@ -141,7 +141,7 @@ export class PlanService {
   }
 
   /** Gets Generation Data
-   * 
+   *
    */
   public getGenerationData(): Promise<any> {
     this.generationData = {};
@@ -167,7 +167,7 @@ export class PlanService {
   }
 
   /** Gets Curtailment Data
-   * 
+   *
    */
   public getCurtailmentData(): Promise<any> {
     this.curtailmentData = {};
@@ -283,6 +283,8 @@ export class PlanService {
 
   /** Increments the current year by 1 and plays a sound */
   public incrementCurrentYear(): void {
+    console.log(this.currentYear);
+
     try {
       if (this.currentYear < this.currentPlan.maxYear) {
         this.currentYear++;
@@ -345,15 +347,15 @@ export class PlanService {
     if (currentIndex === -1) {
       currentIndex = this.layers.length - 1;
     }
-    
-    
+
+
     if (!(_.contains(this.activeLayers, currentIndex))) {
       this.addLayer(currentIndex);
     }
     this.activeLayers[id] = currentIndex;
     if (!(_.contains(this.activeLayers, oldIndex))) {
       this.removeLayer(oldIndex);
-    }   
+    }
 
     this.selectedLayerSubject.next({
       puck: id,
@@ -378,10 +380,10 @@ export class PlanService {
     this.activeLayers[id] = currentIndex;
     if (!(_.contains(this.activeLayers, oldIndex))) {
       this.removeLayer(oldIndex);
-    }    
+    }
 
     marker.layerIndex = currentIndex;
-    
+
     this.selectedLayerSubject.next({
       puck: id,
       layer: this.layers[currentIndex]
@@ -407,6 +409,7 @@ export class PlanService {
     const layer = this.layers[index];
     if (!layer.active) {
       layer.active = true;
+      layer.imageref.attr('visibility', 'visible');
       this.toggleLayerSubject.next(layer);
       return true;
     } else {
@@ -421,6 +424,7 @@ export class PlanService {
     const layer = this.layers[index];
     if (layer.active) {
       layer.active = false;
+      layer.imageref.attr('visibility', 'hidden');
       this.toggleLayerSubject.next(layer);
       return true;
     } else {
@@ -435,7 +439,7 @@ export class PlanService {
     return this.selectedLayer;
   }
 
-  /** When returning from the main map to the landing, all data for the plan 
+  /** When returning from the main map to the landing, all data for the plan
    * needs to be reset.
    */
   public resetPlan() {
