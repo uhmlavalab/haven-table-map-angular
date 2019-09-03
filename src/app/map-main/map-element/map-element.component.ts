@@ -58,8 +58,12 @@ export class MapElementComponent implements OnInit {
       }
       layer.imageref = this.map.append(`image`)
         .attr('width', this.width)
-        .attr('height', this.height);
-      layer.setupFunction(this.planService);
+        .attr('height', this.height)
+        .attr('visibility', 'hidden');
+      
+      if (layer.setupFunction !== null) {
+        layer.setupFunction(this.planService);
+      }
 
     });
 

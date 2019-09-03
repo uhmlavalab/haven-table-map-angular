@@ -4,7 +4,7 @@ import { PlanService } from '../../app/services/plan.service'
 export const markers: Marker[] = [{
   markerId: 320,
   secondId: 3,
-  job: 'year',
+  job: 'layer_0',
   delay: 250, 
   minRotation: 5,
   layerIndex: 0,
@@ -18,7 +18,7 @@ export const markers: Marker[] = [{
 }, {
   markerId: 7,
   secondId: 6,
-  job: 'layer',
+  job: 'layer_1',
   delay: 250, 
   minRotation: 5,
   layerIndex: 0,
@@ -32,7 +32,7 @@ export const markers: Marker[] = [{
 }, {
   markerId: 9,
   secondId: 5,
-  job: 'scenario',
+  job: 'layer_2',
   delay: 250, 
   minRotation: 5,
   layerIndex: 0,
@@ -46,7 +46,7 @@ export const markers: Marker[] = [{
 }, {
   markerId: 11,
   secondId: 7,
-  job: 'add',
+  job: 'layer_3',
   delay: 600, 
   minRotation: 5,
   layerIndex: 0,
@@ -56,5 +56,20 @@ export const markers: Marker[] = [{
    },
    rotateRight(planService: PlanService) {
     planService.incrementNextLayer(3);
+   }
+},
+{
+  markerId: 1,
+  secondId: 3,
+  job: 'year',
+  delay: 250, 
+  minRotation: 3,
+  layerIndex: 0,
+  layerId: 0,
+  rotateLeft(planService: PlanService) {
+    planService.decrementCurrentYear();
+   },
+   rotateRight(planService: PlanService) {
+    planService.incrementCurrentYear();
    }
 }];

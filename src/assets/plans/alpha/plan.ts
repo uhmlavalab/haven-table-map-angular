@@ -70,6 +70,26 @@ export const AlphaPlan: Plan = {
     baseMapPath: 'assets/plans/alpha/images/base-map.png',
     mapLayers: [
       {
+        name: 'off',
+        displayName: 'No Layer',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/alpha/images/icons/no-stopping.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: 'black',
+        borderColor: 'black',
+        borderWidth: 1,
+        legendColor: 'black',
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+        },
+        updateFunction(planservice: PlanService) {}
+      },
+      {
         name: 'casinos',
         displayName: 'Casinos',
         active: false,
@@ -92,7 +112,7 @@ export const AlphaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
@@ -119,7 +139,7 @@ export const AlphaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
@@ -146,7 +166,7 @@ export const AlphaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
@@ -173,7 +193,7 @@ export const AlphaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
@@ -223,7 +243,7 @@ export const AlphaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
@@ -250,7 +270,7 @@ export const AlphaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },

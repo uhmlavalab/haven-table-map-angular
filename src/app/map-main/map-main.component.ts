@@ -18,11 +18,12 @@ import { ProjectableMarker } from '@app/classes/projectableMarker';
 export class MapMainComponent implements AfterViewInit {
 
   /* HTML elements that are projected onto the pucks */
+  @ViewChild('trackingDotLayer_0', { static: false }) trackingDotLayer_0;
+  @ViewChild('trackingDotLayer_1', { static: false }) trackingDotLayer_1;
+  @ViewChild('trackingDotLayer_2', { static: false }) trackingDotLayer_2;
+  @ViewChild('trackingDotLayer_3', { static: false }) trackingDotLayer_3;
   @ViewChild('trackingDotYear', { static: false }) trackingDotYear;
-  @ViewChild('trackingDotLayer', { static: false }) trackingDotLayer;
-  @ViewChild('trackingDotScenario', { static: false }) trackingDotScenario;
-  @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
- // @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
+  // @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
 
   private plan: Plan;                   // The current Plan
 
@@ -66,7 +67,7 @@ export class MapMainComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario, this.trackingDotAdd];
+    this.trackingDots = [this.trackingDotLayer_0, this.trackingDotLayer_1, this.trackingDotLayer_2, this.trackingDotLayer_3, this.trackingDotYear];
 
     /* Subscriptions */
 
@@ -123,30 +124,29 @@ export class MapMainComponent implements AfterViewInit {
 
       dataPoint.x = marker.getMostRecentCenterX();
       dataPoint.y = marker.getMostRecentCenterY();
+      let element = null;
 
       if (dataPoint.x !== null) {
         switch (marker.getJob()) {
           case 'year':
-            this.trackingDotYear.nativeElement.style.opacity = 1;
-            this.trackingDotYear.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotYear.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            element = this.trackingDotYear.nativeElement;
             break;
-          case 'layer':
-            this.trackingDotLayer.nativeElement.style.opacity = 1;
-            this.trackingDotLayer.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotLayer.nativeElement.style.top = dataPoint.y + 25 + 'px';
+          case 'layer_0':
+            element = this.trackingDotLayer_0.nativeElement
             break;
-          case 'scenario':
-            this.trackingDotScenario.nativeElement.style.opacity = 1;
-            this.trackingDotScenario.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotScenario.nativeElement.style.top = dataPoint.y + 25 + 'px';
+          case 'layer_1':
+              element = this.trackingDotLayer_1.nativeElement
             break;
-          case 'add':
-            this.trackingDotAdd.nativeElement.style.opacity = 1;
-            this.trackingDotAdd.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotAdd.nativeElement.style.top = dataPoint.y + 25 + 'px';
+          case 'layer_2':
+            element = this.trackingDotLayer_2.nativeElement
+            break;
+          case 'layer_3':
+            element = this.trackingDotLayer_3.nativeElement
             break;
         }
+        element.style.opacity = 1;
+        element.style.left = dataPoint.x + 25 + 'px';
+        element.style.top = dataPoint.y + 25 + 'px';
       }
 
     } catch (error) {
@@ -155,7 +155,7 @@ export class MapMainComponent implements AfterViewInit {
     }
   }
 
- 
+
 
   /** Adjusts the angle calculation depending on quadrant
    * @theta the angle as calculated by the arc tan function
@@ -262,7 +262,7 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.incrementNextLayer(4);
     } else if (event.key === 'z') {
       this.planService.decrementNextLayer(4);
-    }else if (event.key === 'p') {
+    } else if (event.key === 'p') {
       this.router.navigateByUrl('');
       this.planService.setState('landing');
     }

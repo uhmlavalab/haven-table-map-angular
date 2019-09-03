@@ -36,20 +36,7 @@ export class LayerPuckComponent_0 implements AfterViewInit {
       });
     });
 
-  // Subscribe to layer toggling
-  this.planService.toggleLayerSubject.subscribe((layer) => {
-    if (!layer.active) {
-      setTimeout(() => {
-        this.iconElements[this.currentIconIndex].style.opacity = 1;
-        this.slideIconElements[this.currentIconIndex].style.opacity = 0;
-      }, 600);
-      this.currentIcon.active = false;
-     // this.repositionSlideIcon();
-    } else {
-     // this.repositionSlideIcon();
-     // this.slideUp();
-    }
-  });
+
 
     this.currentIconIndex = 0;
     this.currentIcon = this.iconImages[this.currentIconIndex];

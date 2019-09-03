@@ -326,6 +326,7 @@ export class PlanService {
     this.currentScenario = this.scenarios[(index) % this.scenarios.length];
     this.scenarioSubject.next(this.currentScenario);
     this.soundsService.tick();
+    
   }
 
   /** Goes to the previous scenario */
@@ -361,11 +362,13 @@ export class PlanService {
       puck: id,
       layer: this.layers[currentIndex]
     });
+    
     this.layerChangeSubject.next({
       layerId: id,
       direction: 'decrement'
     });
     this.soundsService.tick();
+    marker.layerIndex = currentIndex; 
 
   }
 
@@ -395,6 +398,7 @@ export class PlanService {
     });
 
     this.soundsService.tick();
+    console.log(currentIndex);
   }
 
   /** Adds or removes the selected layer after checking it's active state. */
