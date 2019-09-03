@@ -75,11 +75,31 @@ export const BetaPlan: Plan = {
     baseMapPath: 'assets/plans/beta/images/base-map.png',
     mapLayers: [
       {
+        name: 'off',
+        displayName: 'No Layer',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/no-stopping.png',
+        secondScreenImagePath: 'assets/plans/beta/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: 'black',
+        borderColor: 'black',
+        borderWidth: 1,
+        legendColor: 'black',
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+        },
+        updateFunction(planservice: PlanService) {}
+      },
+      {
         name: 'attractions',
         displayName: 'Attractions',
         active: false,
         included: true,
-        iconPath: 'assets/plans/alpha/images/icons/casinos.png',
+        iconPath: 'assets/plans/beta/images/icons/attractions.png',
         secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: mapLayerColors.Parks.fill,
@@ -97,7 +117,188 @@ export const BetaPlan: Plan = {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
         updateFunction(planservice: PlanService) {
-          console.log(planservice.getCurrentYear());
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'forests',
+        displayName: 'Forests',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/forests.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'golf',
+        displayName: 'Golf',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/golf.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'population',
+        displayName: 'Population',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/population.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'regions',
+        displayName: 'Regions',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/regions.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'regions',
+        displayName: 'Regions',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/regions.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'roads',
+        displayName: 'Roads',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/roads.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+      },
+      {
+        name: 'transport',
+        displayName: 'Transport',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/beta/images/icons/transport.png',
+        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Parks.fill,
+        borderColor: mapLayerColors.Parks.border,
+        borderWidth: 1,
+        legendColor: mapLayerColors.Parks.fill,
+        filePath: 'assets/plans/alpha/layers/parks.json',
+        parcels: [],
+        imageref: null,
+        layers: [],
+        setupFunction(planservice: PlanService) {
+          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
+            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
+          }
+          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+        },
+        updateFunction(planservice: PlanService) {
           this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
