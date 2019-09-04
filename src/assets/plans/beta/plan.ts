@@ -38,7 +38,7 @@ export const BetaPlan: Plan = {
       defaultLayout: 'grid',
       grid: {
         left: '27vw',
-        top: '15vh',
+        top: '5vh',
         width: '21vw'
       },
       vertical: {
@@ -204,7 +204,7 @@ export const BetaPlan: Plan = {
         active: false,
         included: true,
         iconPath: 'assets/plans/beta/images/icons/regions.png',
-        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
+        secondScreenImagePath: 'assets/plans/beta/images/second-screen-images/layer-images/parks.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: mapLayerColors.Parks.fill,
         borderColor: mapLayerColors.Parks.border,
@@ -215,39 +215,10 @@ export const BetaPlan: Plan = {
         imageref: null,
         layers: [],
         setupFunction(planservice: PlanService) {
-          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
-            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
-          }
-          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
+          this.layers.push({ year: 1991, path: `assets/plans/beta/layers/${this.name}/${this.name}-allyears.png` });
+          this.imageref.attr('xlink:href', this.layers[0].path);
         },
         updateFunction(planservice: PlanService) {
-          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
-        },
-      },
-      {
-        name: 'regions',
-        displayName: 'Regions',
-        active: false,
-        included: true,
-        iconPath: 'assets/plans/beta/images/icons/regions.png',
-        secondScreenImagePath: 'assets/plans/alpha/images/second-screen-images/layer-images/parks.jpg',
-        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
-        fillColor: mapLayerColors.Parks.fill,
-        borderColor: mapLayerColors.Parks.border,
-        borderWidth: 1,
-        legendColor: mapLayerColors.Parks.fill,
-        filePath: 'assets/plans/alpha/layers/parks.json',
-        parcels: [],
-        imageref: null,
-        layers: [],
-        setupFunction(planservice: PlanService) {
-          for (let i = BetaPlan.minYear; i <= BetaPlan.maxYear; i++) {
-            this.layers.push({ year: i, path: `assets/plans/beta/layers/${this.name}/${this.name}-${i}.png` });
-          }
-          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
-        },
-        updateFunction(planservice: PlanService) {
-          this.imageref.attr('xlink:href', this.layers.find(el => el.year === planservice.getCurrentYear()).path);
         },
       },
       {
