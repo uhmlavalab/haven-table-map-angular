@@ -20,8 +20,6 @@ export class LayerPuckComponent implements AfterViewInit {
   private iconElements: any[] = [];
   private currentPosition: number;
   private angle: number;
-  private slideImages: { icon: string, text: string, active: boolean, color: string }[] = [];
-  private slideIconElements: any[] = [];
   private addRemove: string;
 
   constructor(private planService: PlanService) {
@@ -43,13 +41,11 @@ export class LayerPuckComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.iconElements = this.icons.first.nativeElement.children;
-    this.slideIconElements = this.slideIcons.first.nativeElement.children;
     this.positionElements(this.iconElements);
 
     this.planService.layerChangeSubject.subscribe(direction => {
       this.cycle(direction);
     });
-    this.repositionSlideIcon();
 
     this.planService.resetLayersSubject.subscribe(emptySet => {
       this.iconImages = emptySet;
@@ -59,15 +55,10 @@ export class LayerPuckComponent implements AfterViewInit {
   // Subscribe to layer toggling
   this.planService.toggleLayerSubject.subscribe((layer) => {
     if (!layer.active) {
-      setTimeout(() => {
-        this.iconElements[this.currentIconIndex].style.opacity = 1;
-        this.slideIconElements[this.currentIconIndex].style.opacity = 0;
-      }, 600);
+      this.iconElements[this.currentIconIndex].style.opacity = 1;
       this.currentIcon.active = false;
-      this.repositionSlideIcon();
     } else {
-      this.repositionSlideIcon();
-      this.slideUp();
+      this.iconElements[this.currentIconIndex].style.opacity = 0.3;
     }
   });
   }
@@ -110,31 +101,6 @@ export class LayerPuckComponent implements AfterViewInit {
   private incrementCurrentIconIndex() {
     this.currentIconIndex = (this.currentIconIndex + 1) % this.iconImages.length;
     this.currentIcon = this.iconImages[this.currentIconIndex];
-  }
-
-  private repositionSlideIcon() {
-    const puckIcon = this.iconElements[this.currentIconIndex];
-    const slideIcon = this.slideIconElements[this.currentIconIndex];
-
-    const viewPortOffset = puckIcon.getBoundingClientRect();
-    const offsetLeft = viewPortOffset.left;
-    const offsetTop = viewPortOffset.top;
-
-    const puckViewPortOffset = this.puckContainer.nativeElement.getBoundingClientRect();
-    slideIcon.style.left = `${offsetLeft - puckViewPortOffset.left}px`;
-    slideIcon.style.top = `${offsetTop - puckViewPortOffset.top}px`;
-  }
-
-
-  private slideUp():void {
-    this.repositionSlideIcon();
-    const puckIcon = this.iconElements[this.currentIconIndex];
-    const slideIcon = this.slideIconElements[this.currentIconIndex];
-
-    this.currentIcon.active = true;
-    puckIcon.style.opacity = 0.4;
-    slideIcon.style.opacity = 1;
-    slideIcon.style.top = '-1000px';
   }
 
 }
