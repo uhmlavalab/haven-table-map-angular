@@ -21,7 +21,6 @@ export class ArService {
   private tickFunction = null; // Tick function bound to this variable.
 
   /* State Variables */
-  private running: boolean;  // True the map is running, false it is in landing mode.
   private calibrating: boolean; // Is the table in calibration mode?
 
   /* Subjects */
@@ -66,7 +65,6 @@ export class ArService {
       marker.rotateRight,
       this.planService,
       this));
-    this.running = false;
 
     this.trackingIsSet = true; // Tracking is always set.
 
@@ -126,7 +124,6 @@ export class ArService {
   private decodeCalibrationData(data) {
 
     this.calibrationSubject.next(data);
-    /* Get Next Frame */
     requestAnimationFrame(this.tickFunction);
   }
 
@@ -158,10 +155,7 @@ export class ArService {
         }
       });
     }
-
-    /* Get Next Frame */
     requestAnimationFrame(this.tickFunction);
-   
   }
 
   /**
@@ -185,18 +179,9 @@ export class ArService {
     this.videoFeedArray = videoFeeds;
     if (this.videoFeedArray.length === 0) {
       console.log('Video Elements Not Instantiated');
-      this.running = false;
     } else {
       requestAnimationFrame(this.tickFunction);
-      this.running = true;
     }
-  }
-
-  /** Kills the tick recursion.  This is called when we move from the landing
-   * screen to the main application to prevent the function from running twice.
-   */
-  public killTick(): void {
-    this.running = false;
   }
 
   /** Begins the calibration process. */

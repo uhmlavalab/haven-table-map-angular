@@ -25,7 +25,7 @@ export class LayerPuckComponent implements AfterViewInit {
   private addRemove: string;
 
   constructor(private planService: PlanService) {
-
+    this.iconImages = [];
     this.planService.getCurrentPlan().map.mapLayers.forEach(layer => {
       this.iconImages.push({
         icon: layer.iconPath,
@@ -36,20 +36,6 @@ export class LayerPuckComponent implements AfterViewInit {
       });
     });
 
-  // Subscribe to layer toggling
-  this.planService.toggleLayerSubject.subscribe((layer) => {
-    if (!layer.active) {
-      setTimeout(() => {
-        this.iconElements[this.currentIconIndex].style.opacity = 1;
-        this.slideIconElements[this.currentIconIndex].style.opacity = 0;
-      }, 600);
-      this.currentIcon.active = false;
-      this.repositionSlideIcon();
-    } else {
-      this.repositionSlideIcon();
-      this.slideUp();
-    }
-  });
 
     this.currentIconIndex = 0;
     this.currentIcon = this.iconImages[this.currentIconIndex];
@@ -64,6 +50,26 @@ export class LayerPuckComponent implements AfterViewInit {
       this.cycle(direction);
     });
     this.repositionSlideIcon();
+
+    this.planService.resetLayersSubject.subscribe(emptySet => {
+      this.iconImages = emptySet;
+      this.iconElements = emptySet;
+    });
+    
+  // Subscribe to layer toggling
+  this.planService.toggleLayerSubject.subscribe((layer) => {
+    if (!layer.active) {
+      setTimeout(() => {
+        this.iconElements[this.currentIconIndex].style.opacity = 1;
+        this.slideIconElements[this.currentIconIndex].style.opacity = 0;
+      }, 600);
+      this.currentIcon.active = false;
+      this.repositionSlideIcon();
+    } else {
+      this.repositionSlideIcon();
+      this.slideUp();
+    }
+  });
   }
 
   private positionElements(elements) {

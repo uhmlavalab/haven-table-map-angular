@@ -118,9 +118,10 @@ export class MapMainComponent implements AfterViewInit {
    * @param marker The marker to be tracked.
    */
   private track(marker: ProjectableMarker) {
+
     try {
       const dataPoint = { x: null, y: null };
-
+      
       dataPoint.x = marker.getMostRecentCenterX();
       dataPoint.y = marker.getMostRecentCenterY();
 
@@ -315,6 +316,7 @@ export class MapMainComponent implements AfterViewInit {
     } else if (event.key === 'k') {
       this.planService.removeLayer();
     }else if (event.key === 'p') {
+      this.planService.resetPlan();
       this.router.navigateByUrl('');
       this.planService.setState('landing');
     }

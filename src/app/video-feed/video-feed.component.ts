@@ -72,12 +72,11 @@ export class VideoFeedComponent implements OnInit {
   /* When Closed, clear all video feeds so they can be reopened fresh */
   ngOnDestroy() {
     this.videoArray.forEach( videoElement => {
-      videoElement.video.pause();
-      videoElement.video.srcObject = null;
-      videoElement.video.load();
+      // videoElement.video.pause();
+      // videoElement.video.srcObject = null;
+      // videoElement.video.load();
+      videoElement = null;
     });
-
-    this._arservice.killTick(); // Stop recursive tick function
     VideoFeedComponent.numberOfFeeds = 0; // Reset feed Counter
   }
 

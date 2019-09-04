@@ -127,7 +127,8 @@ export class ProjectableMarker {
     this.dataPoints.forEach((point, index) => {
       if (point !== null) {
         movementData.push({
-          corners: point,
+          corners: point.points,
+          camera: point.camera,
           location: index
         });
       }
@@ -174,7 +175,11 @@ export class ProjectableMarker {
   */
   public getMostRecentCenterX() {
     const corners = _.find(this.dataPoints, point => point !== null);
-    return this.getCenterX(corners);
+    if (corners !== undefined) {
+      return this.getCenterX(corners.points);
+    } else {
+      return null;
+    }
   }
 
   /**Finds the most recent location coordinates and returns the center y position
@@ -182,7 +187,12 @@ export class ProjectableMarker {
    */
   public getMostRecentCenterY() {
     const corners = _.find(this.dataPoints, point => point !== null);
-    return this.getCenterY(corners);
+    if (corners !== undefined) {
+      return this.getCenterY(corners.points);
+    } else {
+      return null;
+    }
+    
   }
 
   /** ***********************************************************************************************
@@ -347,8 +357,10 @@ export class ProjectableMarker {
    * @param point The location and camera data for the marker.
    */
   public addDataPoint(point) {
-    if (!(point === undefined)) {
+    if (point !== undefined) {
       this.dataPoints.unshift(this.convertPointToMap(point));
+      if (!this.seenInOtherCamera(point.camera)) {
+      }
     } else {
       this.dataPoints.unshift(null);
     }
@@ -360,6 +372,15 @@ export class ProjectableMarker {
 
   }
 
+  /** Checks to see if the markers is visible in the other camera by checking the previously stored points. 
+   * This is to prevent rapid switching back and forth (flickering) due to being tracked by more than one camera.
+   * @param camera the camera that we are comparing with
+   * @return true if the other camera is found, false if this marker is being tracked by this camera only
+   */
+  private seenInOtherCamera(camera: number): boolean {
+    
+  }
+
   /** Converts data points from the camera location coordinates to the map coordinates
    * @param point the data in cam coordinates
    * @return the converted coordinates.
@@ -369,6 +390,6 @@ export class ProjectableMarker {
     point.corners.forEach(corner => {
       convertedPoints.unshift(this.arService.track(corner.x, corner.y, point.camera));
     });
-    return convertedPoints;
+    return {points: convertedPoints, camera: point.camera};
   }
 }
