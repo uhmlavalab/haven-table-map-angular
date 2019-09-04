@@ -358,8 +358,10 @@ export class ProjectableMarker {
    */
   public addDataPoint(point) {
     if (point !== undefined) {
-      this.dataPoints.unshift(this.convertPointToMap(point));
       if (!this.seenInOtherCamera(point.camera)) {
+        this.dataPoints.unshift(this.convertPointToMap(point));
+      } else {
+        this.dataPoints.unshift(null);
       }
     } else {
       this.dataPoints.unshift(null);
@@ -378,6 +380,15 @@ export class ProjectableMarker {
    * @return true if the other camera is found, false if this marker is being tracked by this camera only
    */
   private seenInOtherCamera(camera: number): boolean {
+    let seen = false;
+    this.dataPoints.forEach((point, index) => {
+      if (point !== null) {
+        if ((point.camera !== camera) && (index <= this.dataPoints.length * 0.2)) {
+          seen = true;
+        }
+      }
+    });
+    return seen;
     
   }
 
