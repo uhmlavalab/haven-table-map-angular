@@ -24,6 +24,13 @@ export class MapElementComponent implements OnInit {
   map: d3.Selection<any>;
 
   circlePos = [-158.00, 21.42] as [number, number];
+  corners = [[0, 0], [0, 0], [0, 0], [0, 0]];
+
+  centerSVG: any;
+  line1SVG: any;
+  line2SVG: any;
+  line3SVG: any;
+  line4SVG: any;
 
 
   @ViewChild('mapDiv', { static: true }) mapDiv: ElementRef;
@@ -71,13 +78,11 @@ export class MapElementComponent implements OnInit {
     this.path = d3.geo.path()
       .projection(this.projection);
 
-    this.map.selectAll('circle')
-      .data([this.circlePos]).enter()
-      .append('circle')
-      .attr('cx', (d) => this.projection(d)[0])
-      .attr('cy', (d) => this.projection(d)[1])
-      .attr('r', '8px')
-      .attr('fill', 'red');
+    this.line1SVG = this.map.selectAll('line1');
+    this.line2SVG = this.map.selectAll('line2');
+    this.line3SVG = this.map.selectAll('line3');
+    this.line4SVG = this.map.selectAll('line4');
+
 
     this.planService.getLayers().forEach(layer => {
       if (layer.filePath === null) {
@@ -102,14 +107,59 @@ export class MapElementComponent implements OnInit {
     });
 
     this.mapService.circlePositionSub.subscribe(pos => {
-      this.circlePos = pos;
-      console.log(pos);
-      this.map.selectAll('circle')
-        .data([this.circlePos])
-        .attr('cx', (d) => this.projection(d)[0])
-        .attr('cy', (d) => this.projection(d)[1])
-        .attr('r', '8px')
-        .attr('fill', 'red');
+      this.circlePos = pos[0];
+      this.corners = pos[1];
+
+      this.line1SVG.remove();
+      this.line2SVG.remove();
+      this.line3SVG.remove();
+      this.line4SVG.remove();
+
+      const line1 = [this.corners[0], this.corners[1]];
+      const line2 = [this.corners[1], this.corners[3]];
+      const line3 = [this.corners[2], this.corners[3]];
+      const line4 = [this.corners[2], this.corners[0]];
+
+      this.line1SVG = this.map.selectAll('line1')
+        .data([line1])
+        .enter()
+        .append('line')
+        .attr('x1', d => this.projection(d[0] as any)[0])
+        .attr('y1', (d) => this.projection(d[0] as any)[1])
+        .attr('x2', (d) => this.projection(d[1] as any)[0])
+        .attr('y2', (d) => this.projection(d[1] as any)[1])
+        .attr('stroke-width', 2)
+        .attr('stroke', 'red');
+      this.line2SVG = this.map.selectAll('line2')
+        .data([line2])
+        .enter()
+        .append('line')
+        .attr('x1', d => this.projection(d[0] as any)[0])
+        .attr('y1', (d) => this.projection(d[0] as any)[1])
+        .attr('x2', (d) => this.projection(d[1] as any)[0])
+        .attr('y2', (d) => this.projection(d[1] as any)[1])
+        .attr('stroke-width', 2)
+        .attr('stroke', 'red');
+      this.line3SVG = this.map.selectAll('line3')
+        .data([line3])
+        .enter()
+        .append('line')
+        .attr('x1', d => this.projection(d[0] as any)[0])
+        .attr('y1', (d) => this.projection(d[0] as any)[1])
+        .attr('x2', (d) => this.projection(d[1] as any)[0])
+        .attr('y2', (d) => this.projection(d[1] as any)[1])
+        .attr('stroke-width', 2)
+        .attr('stroke', 'red');
+      this.line4SVG = this.map.selectAll('line4')
+        .data([line4])
+        .enter()
+        .append('line')
+        .attr('x1', d => this.projection(d[0] as any)[0])
+        .attr('y1', (d) => this.projection(d[0] as any)[1])
+        .attr('x2', (d) => this.projection(d[1] as any)[0])
+        .attr('y2', (d) => this.projection(d[1] as any)[1])
+        .attr('stroke-width', 2)
+        .attr('stroke', 'red');
     });
 
 

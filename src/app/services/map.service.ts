@@ -20,7 +20,8 @@ export class MapService {
   public selectedLayerSubject = new Subject<MapLayer>();
 
   private circlePosition: [number, number];
-  public circlePositionSub = new Subject<[number, number]>();
+  private boundingCoords: any;
+  public circlePositionSub = new Subject<[any, any]>();
 
   /* Subjects */
   public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
@@ -187,9 +188,10 @@ export class MapService {
 
   }
 
-  public updateCirclePosition(position: [number, number]) {
+  public updateCirclePosition(position: [number, number], bounds: any) {
     this.circlePosition = position;
-    this.circlePositionSub.next(this.circlePosition);
+    this.boundingCoords = bounds;
+    this.circlePositionSub.next([this.circlePosition, bounds]);
   }
 
 }
