@@ -314,7 +314,7 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.addLayer();
     } else if (event.key === 'k') {
       this.planService.removeLayer();
-    }else if (event.key === 'p') {
+    } else if (event.key === 'p') {
       this.planService.resetPlan();
       this.router.navigateByUrl('');
       this.planService.setState('landing');

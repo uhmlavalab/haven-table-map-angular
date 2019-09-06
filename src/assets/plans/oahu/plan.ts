@@ -304,10 +304,6 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
-<<<<<<< HEAD
-      }
-      ,
-=======
       },
       {
         name: 'ial',
@@ -329,14 +325,13 @@ export const OahuPlan: Plan = {
           solarTotal += curtailmentTotal;
           this.parcels.sort((a, b) => parseFloat(b.properties.cf_1) - parseFloat(a.properties.cf_1));
           this.parcels.forEach(parcel => {
-            if (parcel.properties.IAL === "Y") {
+            if (parcel.properties.IAL === 'Y') {
               d3.select(parcel.path)
               .style('fill', 'black')
               .style('opacity', (this.active) ? 0.85 : 0.0)
               .style('stroke', this.borderColor)
               .style('stroke-width', this.borderWidth + 'px');
-            }
-            else if (solarTotal > 0) {
+            } else if (solarTotal > 0) {
               d3.select(parcel.path)
                 .style('fill', this.fillColor)
                 .style('opacity', (this.active) ? 0.85 : 0.0)
@@ -357,14 +352,13 @@ export const OahuPlan: Plan = {
           const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
           solarTotal += curtailmentTotal;
           this.parcels.forEach(parcel => {
-            if (parcel.properties.IAL === "Y") {
+            if (parcel.properties.IAL === 'Y') {
               d3.select(parcel.path)
               .style('fill', 'black')
               .style('opacity', (this.active) ? 0.85 : 0.0)
               .style('stroke', this.borderColor)
               .style('stroke-width', this.borderWidth + 'px');
-            }
-            else if (solarTotal > 0) {
+            } else if (solarTotal > 0) {
               d3.select(parcel.path)
                 .style('fill', this.fillColor)
                 .style('opacity', (this.active) ? 0.85 : 0.0);
@@ -377,8 +371,6 @@ export const OahuPlan: Plan = {
           });
         },
       },
-      /*,
->>>>>>> master
       {
         name: 'der',
         displayName: 'DER',
@@ -396,46 +388,46 @@ export const OahuPlan: Plan = {
         setupFunction(planService: PlanService) {
           this.derColors = [
             {
-              minValue:0.75,
-              color: "#f5f500",
+              minValue: 0.75,
+              color: '#f5f500',
             },
                         {
-              minValue:0.675,
-              color: "#f5da00",
+              minValue: 0.675,
+              color: '#f5da00',
             },
                         {
-              minValue:0.6,
-              color: "#f5be00",
+              minValue: 0.6,
+              color: '#f5be00',
             },
                         {
-              minValue:0.525,
-              color: "#f5a300",
+              minValue: 0.525,
+              color: '#f5a300',
             },
                         {
-              minValue:0.45,
-              color: "#f58800",
+              minValue: 0.45,
+              color: '#f58800',
             },
                         {
-              minValue:0.375,
-              color: "#f56d00",
+              minValue: 0.375,
+              color: '#f56d00',
             },
                         {
-              minValue:0.3,
-              color: "#f55200",
+              minValue: 0.3,
+              color: '#f55200',
             },
                         {
-              minValue:0.15,
-              color: "#f53600",
+              minValue: 0.15,
+              color: '#f53600',
             },
                         {
-              minValue:0.05,
-              color: "#f51b00",
+              minValue: 0.05,
+              color: '#f51b00',
             },
                         {
-              minValue:0.00,
-              color: "#f50000",
+              minValue: 0.00,
+              color: '#f50000',
             },
-          ]
+          ];
 
           this.capData = {};
           d3.csv('assets/plans/oahu/data/DER_Group_Cap.csv', (data) => {
@@ -474,8 +466,7 @@ export const OahuPlan: Plan = {
                 }
               }
             });
-          })
-
+          });
         },
         updateFunction(planService: PlanService) {
             this.parcels.forEach(parcel => {
