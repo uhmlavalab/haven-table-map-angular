@@ -76,7 +76,7 @@ export const OahuPlan: Plan = {
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: 'assets/plans/oahu/images/base-map.png',
+    baseMapPath: 'assets/plans/oahu/images/oahu-satellite5.png',
     mapLayers: [
       {
         name: 'transmission',
@@ -90,7 +90,7 @@ export const OahuPlan: Plan = {
         borderColor: mapLayerColors.Transmission.border,
         borderWidth: 0.02,
         legendColor: mapLayerColors.Transmission.border,
-        filePath: 'assets/plans/oahu/layers/transmissionbc.json',
+        filePath: 'assets/plans/oahu/layers/transmission.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
@@ -304,8 +304,73 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
-      }
-      ,
+      },
+      {
+        name: 'ial',
+        displayName: 'IAL',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/oahu/images/icons/ial-icon.png',
+        secondScreenImagePath: 'assets/plans/oahu/images/second-screen-images/layer-images/solar.jpg',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+        fillColor: mapLayerColors.Solar.fill,
+        borderColor: mapLayerColors.Solar.border,
+        borderWidth: 0.2,
+        legendColor: mapLayerColors.Solar.fill,
+        filePath: 'assets/plans/oahu/layers/solar.json',
+        parcels: [],
+        setupFunction(planService: PlanService) {
+          let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
+          const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
+          solarTotal += curtailmentTotal;
+          this.parcels.sort((a, b) => parseFloat(b.properties.cf_1) - parseFloat(a.properties.cf_1));
+          this.parcels.forEach(parcel => {
+            if (parcel.properties.IAL === 'Y') {
+              d3.select(parcel.path)
+              .style('fill', 'black')
+              .style('opacity', (this.active) ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', this.borderWidth + 'px');
+            } else if (solarTotal > 0) {
+              d3.select(parcel.path)
+                .style('fill', this.fillColor)
+                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
+              solarTotal -= (parcel.properties.cf_1 * parcel.properties.capacity * 8760);
+            } else {
+              d3.select(parcel.path)
+                .style('fill', 'transparent')
+                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
+            }
+          });
+        },
+        updateFunction(planService: PlanService) {
+          let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
+          const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
+          solarTotal += curtailmentTotal;
+          this.parcels.forEach(parcel => {
+            if (parcel.properties.IAL === 'Y') {
+              d3.select(parcel.path)
+              .style('fill', 'black')
+              .style('opacity', (this.active) ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', this.borderWidth + 'px');
+            } else if (solarTotal > 0) {
+              d3.select(parcel.path)
+                .style('fill', this.fillColor)
+                .style('opacity', (this.active) ? 0.85 : 0.0);
+              solarTotal -= (parcel.properties.cf_1 * parcel.properties.capacity * 8760);
+            } else {
+              d3.select(parcel.path)
+                .style('fill', 'transparent')
+                .style('opacity', (this.active) ? 0.85 : 0.0);
+            }
+          });
+        },
+      },
       {
         name: 'der',
         displayName: 'DER',
@@ -323,46 +388,46 @@ export const OahuPlan: Plan = {
         setupFunction(planService: PlanService) {
           this.derColors = [
             {
-              minValue:0.75,
-              color: "#f5f500",
+              minValue: 0.75,
+              color: '#f5f500',
             },
                         {
-              minValue:0.675,
-              color: "#f5da00",
+              minValue: 0.675,
+              color: '#f5da00',
             },
                         {
-              minValue:0.6,
-              color: "#f5be00",
+              minValue: 0.6,
+              color: '#f5be00',
             },
                         {
-              minValue:0.525,
-              color: "#f5a300",
+              minValue: 0.525,
+              color: '#f5a300',
             },
                         {
-              minValue:0.45,
-              color: "#f58800",
+              minValue: 0.45,
+              color: '#f58800',
             },
                         {
-              minValue:0.375,
-              color: "#f56d00",
+              minValue: 0.375,
+              color: '#f56d00',
             },
                         {
-              minValue:0.3,
-              color: "#f55200",
+              minValue: 0.3,
+              color: '#f55200',
             },
                         {
-              minValue:0.15,
-              color: "#f53600",
+              minValue: 0.15,
+              color: '#f53600',
             },
                         {
-              minValue:0.05,
-              color: "#f51b00",
+              minValue: 0.05,
+              color: '#f51b00',
             },
                         {
-              minValue:0.00,
-              color: "#f50000",
+              minValue: 0.00,
+              color: '#f50000',
             },
-          ]
+          ];
 
           this.capData = {};
           d3.csv('assets/plans/oahu/data/DER_Group_Cap.csv', (data) => {
@@ -401,8 +466,7 @@ export const OahuPlan: Plan = {
                 }
               }
             });
-          })
-
+          });
         },
         updateFunction(planService: PlanService) {
             this.parcels.forEach(parcel => {

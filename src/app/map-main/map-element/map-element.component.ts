@@ -94,7 +94,7 @@ export class MapElementComponent implements OnInit {
           .enter().append('path')
           .attr('d', this.path)
           .attr('class', layer.name)
-          .each(function (d) {
+          .each(function(d) {
             layer.parcels.push({ path: this, properties: (d.hasOwnProperty(`properties`)) ? d[`properties`] : null } as Parcel);
           }).call(() => {
             if (layer.setupFunction !== null) {
@@ -168,7 +168,7 @@ export class MapElementComponent implements OnInit {
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {
-        this.defaultFill(layer);
+       // this.defaultFill(layer);
       }
     });
 
@@ -176,7 +176,7 @@ export class MapElementComponent implements OnInit {
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {
-        this.defaultFill(layer);
+        // this.defaultFill(layer);
       }
     });
 
@@ -186,7 +186,7 @@ export class MapElementComponent implements OnInit {
         if (layer.updateFunction !== null && layer.active) {
           layer.updateFunction(this.planService);
         } else {
-          this.defaultFill(layer);
+         // this.defaultFill(layer);
         }
       });
     });

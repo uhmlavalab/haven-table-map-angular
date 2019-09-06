@@ -12,7 +12,7 @@ export class ProjectableMarker {
   private static projectableMarkers: object = {};                    // Markers are stored in an Object
   private static projectableMarkerArray: ProjectableMarker[] = [];   // Markers are also stored in an Array
   private static MAX_HISTORY = 40;                                   // Length of array holding historical position data.
-  private static MAX_ROTATION_DEGREES = 120;                         // If rotation is larger than this, it is ignored.
+  private static MAX_ROTATION_DEGREES = 240;                         // If rotation is larger than this, it is ignored.
 
   /* private member variables */
   private markerId: number;           // Id that cooresponds to arucojs marker
@@ -127,7 +127,8 @@ export class ProjectableMarker {
     this.dataPoints.forEach((point, index) => {
       if (point !== null) {
         movementData.push({
-          corners: point,
+          corners: point.points,
+          camera: point.camera,
           location: index
         });
       }
@@ -174,7 +175,11 @@ export class ProjectableMarker {
   */
   public getMostRecentCenterX() {
     const corners = _.find(this.dataPoints, point => point !== null);
-    return this.getCenterX(corners);
+    if (corners !== undefined) {
+      return this.getCenterX(corners.points);
+    } else {
+      return null;
+    }
   }
 
   /**Finds the most recent location coordinates and returns the center y position
@@ -182,7 +187,12 @@ export class ProjectableMarker {
    */
   public getMostRecentCenterY() {
     const corners = _.find(this.dataPoints, point => point !== null);
-    return this.getCenterY(corners);
+    if (corners !== undefined) {
+      return this.getCenterY(corners.points);
+    } else {
+      return null;
+    }
+    
   }
 
   /** ***********************************************************************************************
@@ -347,8 +357,12 @@ export class ProjectableMarker {
    * @param point The location and camera data for the marker.
    */
   public addDataPoint(point) {
-    if (!(point === undefined)) {
-      this.dataPoints.unshift(this.convertPointToMap(point));
+    if (point !== undefined) {
+      if (!this.seenInOtherCamera(point.camera)) {
+        this.dataPoints.unshift(this.convertPointToMap(point));
+      } else {
+        this.dataPoints.unshift(null);
+      }
     } else {
       this.dataPoints.unshift(null);
     }
@@ -360,6 +374,24 @@ export class ProjectableMarker {
 
   }
 
+  /** Checks to see if the markers is visible in the other camera by checking the previously stored points. 
+   * This is to prevent rapid switching back and forth (flickering) due to being tracked by more than one camera.
+   * @param camera the camera that we are comparing with
+   * @return true if the other camera is found, false if this marker is being tracked by this camera only
+   */
+  private seenInOtherCamera(camera: number): boolean {
+    let seen = false;
+    this.dataPoints.forEach((point, index) => {
+      if (point !== null) {
+        if ((index <= this.dataPoints.length * 0.2) && (point.camera !== camera)) {
+          seen = true;
+        }
+      }
+    });
+    return seen;
+    
+  }
+
   /** Converts data points from the camera location coordinates to the map coordinates
    * @param point the data in cam coordinates
    * @return the converted coordinates.
@@ -369,6 +401,6 @@ export class ProjectableMarker {
     point.corners.forEach(corner => {
       convertedPoints.unshift(this.arService.track(corner.x, corner.y, point.camera));
     });
-    return convertedPoints;
+    return {points: convertedPoints, camera: point.camera};
   }
 }
