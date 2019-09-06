@@ -11,6 +11,11 @@ import { BigIslandPlan } from '../../assets/plans/bigisland/plan';
   templateUrl: './second-screen.component.html',
   styleUrls: ['./second-screen.component.css']
 })
+
+/** This component controls the second monitor.  It is a second DOM so all of the data has to be
+ * on this page because the main application cannot communicate with it in the same way that it
+ * communicates with other components.
+ */
 export class SecondScreenComponent implements OnInit {
 
   private currentYear: number;
@@ -41,7 +46,8 @@ export class SecondScreenComponent implements OnInit {
     this.multiWindowService.name = 'dead';
   }
 
-  /** Initializes the second screen when it is opened.
+  /** Initializes the second screen when it is opened.  Since data cannot be passed, the possible maps have to be
+   * hard coded into the logic.
    * @param data => The setup object
    */
   private setupSecondScreen(data: any): void {
@@ -64,6 +70,5 @@ export class SecondScreenComponent implements OnInit {
     this.plan.map.mapLayers.forEach(layer => {
       this.mapLayers.push({text: layer.displayName, color: layer.fillColor, active: false});
     });
-    console.log(this.mapLayers);
   }
 }

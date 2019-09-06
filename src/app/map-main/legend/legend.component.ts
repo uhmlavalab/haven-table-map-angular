@@ -1,5 +1,4 @@
 import { Component, ViewChildren, AfterViewInit } from '@angular/core';
-import { MapService } from '../../services/map.service';
 import { MapLayer } from '@app/interfaces';
 import { LegendDirective } from './legend.directive';
 import { chartColors, mapLayerColors } from '../../../assets/plans/defaultColors';
@@ -19,8 +18,8 @@ export class LegendComponent implements AfterViewInit {
 
   @ViewChildren(LegendDirective) legendElements;
 
-  constructor(private mapdataservice: MapService, private planService: PlanService) {
-    this.layers = this.mapdataservice.getLayers();
+  constructor(private planService: PlanService) {
+    this.layers = this.planService.getLayers();
     this.legendClass = this.planService.getCurrentLegendLayout();
   }
 

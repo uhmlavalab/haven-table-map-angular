@@ -1,3 +1,6 @@
+/** This class is tracking points that are used to convert coordinates from the cameras to 
+ * the table.  Each point has a value for camera 1, camera 2, and map.
+ */
 export class TrackingPoint {
 
     private mapX: number;
@@ -15,16 +18,6 @@ export class TrackingPoint {
         this.camY = camY;
         this.cam2X = cam2X;
         this.cam2Y = cam2Y;
-    }
-
-    public setCamPoint(x: number, y: number): void {
-        this.camX = x;
-        this.camY = y;
-    }
-
-    public setMapPoint(x: number, y: number): void {
-        this.mapX = x;
-        this.mapY = y;
     }
 
     public getCam2X() {
@@ -49,9 +42,5 @@ export class TrackingPoint {
 
     public getMapY() {
         return this.mapY;
-    }
-
-    public detect() {
-        this.detected = true;
     }
 }

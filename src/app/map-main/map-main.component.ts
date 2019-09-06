@@ -1,11 +1,9 @@
 import { Component, AfterViewInit, HostListener, ViewChild } from '@angular/core';
-import { MapService } from '../services/map.service';
 import { WindowRefService } from '../services/window-ref.service';
 import { ArService } from '../services/ar.service';
 import { Router } from '@angular/router';
 import { Plan } from '@app/interfaces';
 import { PlanService } from '@app/services/plan.service';
-import { AddRemoveLayersComponent } from './interaction-element/add-remove-layers/add-remove-layers.component';
 import { ProjectableMarker } from '@app/classes/projectableMarker';
 
 @Component({
@@ -19,55 +17,59 @@ import { ProjectableMarker } from '@app/classes/projectableMarker';
  */
 export class MapMainComponent implements AfterViewInit {
 
+  /* HTML elements that are projected onto the pucks */
   @ViewChild('trackingDotYear', { static: false }) trackingDotYear;
   @ViewChild('trackingDotLayer', { static: false }) trackingDotLayer;
   @ViewChild('trackingDotScenario', { static: false }) trackingDotScenario;
   @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
-  @ViewChild('connectingLine', { static: false }) connectingLine;
+  @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
 
-  plan: Plan;
-  private top: string;
-  private left: string;
-  private width: string;
-  private legendClass: string;
-  private currentYear: number;
-  private nextLayer: string;
-  private addColor: string;
-  trackingDots: any[] = [];
-  private currentScenario: string;
+  private plan: Plan;                   // The current Plan
+
+  /* Legend Related Variables */
+  private top: string;                  // Y Position of the legend
+  private left: string;                 // X Position of the legend
+  private width: string;                // Width of the legend
+  private legendClass: string;          // Vertical or horizontal legend.
+
+  /* Tracking Puck and other Data Related Variables */
+  private trackingDots: any[] = [];     // Holds the view children
+  private currentYear: number;          // Current Year
+  private nextLayer: string;            // The next layer that will be added or removed.
+  private addColor: string;             // What color is the next layer associated with.
+  private currentScenario: string;      // Current scenario.
 
   constructor(
     private planService: PlanService,
-    private mapService: MapService,
     private arService: ArService,
     private router: Router,
     private windowRefService: WindowRefService) {
+
     this.plan = this.planService.getCurrentPlan();
-    this.legendClass = this.planService.getCurrentLegendLayout();
-    this.currentYear = 2016;
-    this.addColor = this.mapService.getSelectedLayer().legendColor;
+
+    // if the plan is undefined, then the application will go back to the landing page.
     try {
+      this.legendClass = this.planService.getCurrentLegendLayout();
+      this.currentYear = this.planService.getMinimumYear();
+      this.addColor = this.planService.getSelectedLayer().legendColor;
       this.currentScenario = this.planService.getCurrentScenario().displayName;
-    } catch(error) {
-      console.log("No Plan Set");
-    }
-
-
-    // If no plan has been selected, route back to setup
-    if (this.plan == null) {
+    } catch (error) {
       this.router.navigateByUrl('');
       this.planService.setState('landing');
       console.log('No Plan Found --> Route to setup');
+    } finally {
+      this.top = this.plan.css.legend[this.legendClass].top;
+      this.left = this.plan.css.legend[this.legendClass].left;
+      this.width = this.plan.css.legend[this.legendClass].width;
     }
-
-    this.top = this.plan.css.legend[this.legendClass].top;
-    this.left = this.plan.css.legend[this.legendClass].left;
-    this.width = this.plan.css.legend[this.legendClass].width;
-
   }
 
   ngAfterViewInit() {
+
     this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario, this.trackingDotAdd];
+
+    /* Subscriptions */
+
     this.planService.legendSubject.subscribe({
       next: value => {
         this.top = this.plan.css.legend[value].top;
@@ -89,15 +91,16 @@ export class MapMainComponent implements AfterViewInit {
     });
 
     // Push Year Data to Second Screen
-    this.mapService.selectedLayerSubject.subscribe({
+    this.planService.selectedLayerSubject.subscribe({
       next: value => {
         this.windowRefService.notifySecondScreen(JSON.stringify(
           {
             type: 'layer',
             name: value.name
           }));
-          this.nextLayer = value.displayName;
-          this.addColor = value.legendColor;
+        this.nextLayer = value.displayName;
+        this.addColor = value.legendColor;
+        this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
       }
     });
 
@@ -105,10 +108,9 @@ export class MapMainComponent implements AfterViewInit {
       next: value => {
         this.trackingDots.forEach(dot => dot.nativeElement.style.opacity = 0);
         value.forEach(marker => this.track(marker));
-        this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
       }
     });
-    
+
     this.planService.scenarioSubject.subscribe(scenario => this.currentScenario = scenario.displayName);
   }
 
@@ -116,38 +118,39 @@ export class MapMainComponent implements AfterViewInit {
    * @param marker The marker to be tracked.
    */
   private track(marker: ProjectableMarker) {
-    try {
-      const dataPoint = {x: null, y: null};
 
+    try {
+      const dataPoint = { x: null, y: null };
+      
       dataPoint.x = marker.getMostRecentCenterX();
       dataPoint.y = marker.getMostRecentCenterY();
-      
-      if (dataPoint.x !== null) {
-      switch (marker.getJob()) {
-        case 'year':
-          this.trackingDotYear.nativeElement.style.opacity = 1;
-          this.trackingDotYear.nativeElement.style.left = dataPoint.x + 25 + 'px';
-          this.trackingDotYear.nativeElement.style.top = dataPoint.y + 25 + 'px';
-          break;
-        case 'layer':
-          this.trackingDotLayer.nativeElement.style.opacity = 1;
-          this.trackingDotLayer.nativeElement.style.left = dataPoint.x + 25 + 'px';
-          this.trackingDotLayer.nativeElement.style.top = dataPoint.y + 25 + 'px';
-          break;
-          case 'scenario':
-          this.trackingDotScenario.nativeElement.style.opacity = 1;
-          this.trackingDotScenario.nativeElement.style.left = dataPoint.x + 25 + 'px';
-          this.trackingDotScenario.nativeElement.style.top = dataPoint.y + 25 + 'px';
-          break;
-          case 'add':
-          this.trackingDotAdd.nativeElement.style.opacity = 1;
-          this.trackingDotAdd.nativeElement.style.left = dataPoint.x + 25 + 'px';
-          this.trackingDotAdd.nativeElement.style.top = dataPoint.y + 25 + 'px';
-          break;
-      }
-    }
 
-    } catch (error) {;
+      if (dataPoint.x !== null) {
+        switch (marker.getJob()) {
+          case 'year':
+            this.trackingDotYear.nativeElement.style.opacity = 1;
+            this.trackingDotYear.nativeElement.style.left = dataPoint.x + 25 + 'px';
+            this.trackingDotYear.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            break;
+          case 'layer':
+            this.trackingDotLayer.nativeElement.style.opacity = 1;
+            this.trackingDotLayer.nativeElement.style.left = dataPoint.x + 25 + 'px';
+            this.trackingDotLayer.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            break;
+          case 'scenario':
+            this.trackingDotScenario.nativeElement.style.opacity = 1;
+            this.trackingDotScenario.nativeElement.style.left = dataPoint.x + 25 + 'px';
+            this.trackingDotScenario.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            break;
+          case 'add':
+            this.trackingDotAdd.nativeElement.style.opacity = 1;
+            this.trackingDotAdd.nativeElement.style.left = dataPoint.x + 25 + 'px';
+            this.trackingDotAdd.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            break;
+        }
+      }
+
+    } catch (error) {
       //undefined marker
       console.log(error);
     }
@@ -159,7 +162,7 @@ export class MapMainComponent implements AfterViewInit {
    * @param add the native element of the add puck.
    */
   private connectLayerAndAdd(layer, add) {
-    
+
     const layerMarker = ProjectableMarker.getProjectableMarkerByJob('layer');
     const addMarker = ProjectableMarker.getProjectableMarkerByJob('add');
 
@@ -167,8 +170,8 @@ export class MapMainComponent implements AfterViewInit {
     const xOffset = layerRect.width / 2;
     const yOffset = layerRect.height / 2;
 
-    const layerPosition = {x: layerMarker.getMostRecentCenterX(), y: layerMarker.getMostRecentCenterY()};
-    const addPosition = {x: addMarker.getMostRecentCenterX(), y: addMarker.getMostRecentCenterY()};
+    const layerPosition = { x: layerMarker.getMostRecentCenterX(), y: layerMarker.getMostRecentCenterY() };
+    const addPosition = { x: addMarker.getMostRecentCenterX(), y: addMarker.getMostRecentCenterY() };
 
     if (layerPosition.x === null || addPosition.x === null) {
       this.connectingLine.nativeElement.style.opacity = 0;
@@ -194,10 +197,13 @@ export class MapMainComponent implements AfterViewInit {
   private moveLine(element, theta, width, x, y) {
     element.style.opacity = 1;
     element.style.width = `${width}px`;
-    element.style.left = `${x}px`;
+    element.style.left = `${x + 15}px`;
     element.style.top = `${y}px`;
     element.style.transform = `rotate(-${theta}deg)`;
-    element.style.backgroundColor = this.mapService.getSelectedLayer().legendColor;
+    element.style.backgroundColor = this.planService.getSelectedLayer().legendColor;
+    setTimeout(() => {
+      element.style.opacity = 0;
+    }, 500);
   }
 
   /** Adjusts the angle calculation depending on quadrant
@@ -234,12 +240,12 @@ export class MapMainComponent implements AfterViewInit {
     return quadrant;
   }
   private convertRadsToDegrees(theta): number {
-    return theta * (180/Math.PI);
+    return theta * (180 / Math.PI);
   }
 
   private getTheta(opposite: number, adjacent: number): number {
-    return Math.atan(opposite/adjacent);
-  } 
+    return Math.atan(opposite / adjacent);
+  }
 
   private getAdjacent(a: number, b: number): number {
     return Math.abs(a - b);
@@ -263,62 +269,56 @@ export class MapMainComponent implements AfterViewInit {
     return this.plan.name;
   }
 
-  /*
-  //KEYBOARD CONTROLS 
+  // KEYBOARD CONTROLS
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowRight') {
-      this.planService.incrementCurrentYear();
-    } else if (event.key === 'ArrowLeft') {
-      this.planService.decrementCurrentYear();
-    } else if (event.key === 'ArrowUp') {
-      this.mapService.incrementNextLayer();
+    if (event.key === 'ArrowUp') {
+      if (event.shiftKey) {
+        this.arService.incrementYOffset2();
+      } else {
+        this.arService.incrementYOffset();
+      }
     } else if (event.key === 'ArrowDown') {
-      this.mapService.decrementNextLayer();
-    } else if (event.key === 'Enter') {
-      this.mapService.addLayer();
-    } else if (event.key === 'k') {
-      this.mapService.removeLayer();
-    }else if (event.key === 'p') {
-      this.router.navigateByUrl('');
-      this.planService.setState('landing');
-      this.windowRefService.closeSecondScreen();
-    } else if (event.key === 'r') {
-      this.mapService.resetMap();
-    } else if (event.key === 'a') {
-      // this.chartService.incrementChart();
-    } else if (event.key === 's') {
-      // this.chartService.decrementChart();
+      if (event.shiftKey) {
+        this.arService.decrementYOffset2();
+      } else {
+        this.arService.decrementYOffset();
+      }
+    } else if (event.key === 'ArrowLeft') {
+      if (event.shiftKey) {
+        this.arService.incrementXOffset2();
+      }
+      else {
+        this.arService.incrementXOffset();
+      }
+    } else if (event.key === 'ArrowRight') {
+      if (event.shiftKey) {
+        this.arService.decrementXOffset2();
+      } else {
+        this.arService.decrementXOffset();
+      }
+    } else if (event.key === 'l') {
+      this.planService.changeCurrentLegendLayout();
     } else if (event.key === 'q') {
       this.planService.incrementScenario();
     } else if (event.key === 'w') {
       this.planService.decrementScenario();
-    } else if (event.key === 'l') {
-      this.planService.changeCurrentLegendLayout();
-    } else if (event.key === 'f') {
-      console.log('second => ' + this.windowRefService.secondScreenExists());
-    }
-  }
-  */
-  /* KEYBOARD CONTROLS */
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowUp') {
-      this.arService.incrementYOffset();
-    } else if (event.key === 'ArrowDown') {
-      this.arService.decrementYOffset();
-    } else if (event.key === 'ArrowLeft') {
-      this.arService.incrementXOffset();
-    } else if (event.key === 'ArrowRight') {
-      this.arService.decrementXOffset();
-    } else if (event.key === 'w') {
-      this.arService.incrementYOffset2();
     } else if (event.key === 's') {
-      this.arService.decrementYOffset2();
+      this.planService.incrementCurrentYear();
     } else if (event.key === 'a') {
-      this.arService.incrementXOffset2();
-    } else if (event.key === 'd') {
-      this.arService.decrementXOffset2();
+      this.planService.decrementCurrentYear();
+    } else if (event.key === 'x') {
+      this.planService.incrementNextLayer();
+    } else if (event.key === 'z') {
+      this.planService.decrementNextLayer();
+    } else if (event.key === 'Enter') {
+      this.planService.addLayer();
+    } else if (event.key === 'k') {
+      this.planService.removeLayer();
+    }else if (event.key === 'p') {
+      this.planService.resetPlan();
+      this.router.navigateByUrl('');
+      this.planService.setState('landing');
     }
   }
 

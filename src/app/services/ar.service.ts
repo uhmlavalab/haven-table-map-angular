@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Marker } from '../interfaces/marker';
 import { ProjectableMarker } from '../classes/projectableMarker';
 import { PlanService } from './plan.service';
 import { SoundsService } from './sounds.service';
 import { markers } from '../../assets/defaultData/markers';
 import { _ } from 'underscore';
 import AR from 'js-aruco';
-import { MapService } from './map.service';
 import { Subject } from 'rxjs';
 import { TrackingPoint } from '../classes/trackingPoint';
 import { defaultTrackingPoints } from '../../assets/defaultData/defaultTrackingPoints.js'
@@ -19,17 +17,19 @@ import { defaultTrackingPoints } from '../../assets/defaultData/defaultTrackingP
 * the ar interaction with the pucks and markers */
 export class ArService {
 
-  detector: any; // Aruco JS detector object
-  tickFunction = null;
-  width: number;
-  height: number;
-  running: boolean;
-  calibrating: boolean;
+  private detector: any; // Aruco JS detector object
+  private tickFunction = null; // Tick function bound to this variable.
+
+  /* State Variables */
+  private calibrating: boolean; // Is the table in calibration mode?
+
+  /* Subjects */
   public markerSubject = new Subject<ProjectableMarker[]>();
   public calibrationSubject = new Subject<any>();
   public trackingSubject = new Subject<any>();
+
+  /* Tracking Variables */
   private trackingPoints: TrackingPoint[] = [];
-  private defaultPointData: any[];
   private camWidth: number;
   private camHeight: number;
   private camWidth2: number;
@@ -38,7 +38,6 @@ export class ArService {
   private mapHeight: number;
   private mapWidth2: number;
   private mapHeight2: number;
-  private calibrated: false;
   private yOffset: number;
   private xOffset: number;
   private yOffset2: number;
@@ -47,34 +46,41 @@ export class ArService {
 
   /* The array holding the video feeds is created by the video feed components.
   * The tick cannot be started until there is at least one video element */
-  videoFeedArray: any[] = [];
+  private videoFeedArray: any[] = [];
 
   constructor(private planService: PlanService,
-    private soundsservice: SoundsService,
-    private mapService: MapService) {
+    private soundsservice: SoundsService) {
+
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();
     this.tickFunction = this.tick.bind(this);
+
+    // Create the projectable markers from the default data.
     markers.forEach(marker => new ProjectableMarker(
       marker.markerId,
       marker.job,
       marker.minRotation,
       marker.delay,
+      marker.rotateLeft,
+      marker.rotateRight,
       this.planService,
-      this.soundsservice,
-      this,
-      this.mapService));
-    this.running = false;
-    this.xOffset = 117; // Bottom Camera
-    this.yOffset = 105 // Bottom Camera ARROW
-    this.xOffset2 = 17; // Top Camera
-    this.yOffset2 = 152; // Top Camera WASD
-    this.trackingIsSet = true;
-    this.createDefaultTrackingPoints();
-    this.completeCalibration(false);
+      this));
+
+    this.trackingIsSet = true; // Tracking is always set.
+
+    try {
+      this.createDefaultTrackingPoints();
+    } catch (error) {
+      console.log('No Default Data File Found, cannot create tracking points.')
+    }
+
+    this.completeCalibration(false);  // Set up tracking without generating a new file.
+
   }
 
-  /* Detects the Markers and makes the changes in the program */
+  /******************************************************************************************************************************* 
+  ***************** Detects the Markers and makes the changes in the program.  This is the Main Loop that runs the table. ********
+  ****************************************************************************************************************************** */
   private tick(): void {
 
     /* Holds the raw aruco marker data from each camera */
@@ -104,6 +110,7 @@ export class ArService {
       }
     });
 
+    // Handle the data differently if running or calibrating.
     if (this.calibrating) {
       this.decodeCalibrationData(tempMarkerData);
     } else {
@@ -117,7 +124,6 @@ export class ArService {
   private decodeCalibrationData(data) {
 
     this.calibrationSubject.next(data);
-    /* Get Next Frame */
     requestAnimationFrame(this.tickFunction);
   }
 
@@ -142,31 +148,13 @@ export class ArService {
    * and rotated, they are loaded into a queue and their jobs are executed before the next frame is captured.
   */
   private runMarkers() {
-
-    const jobQueue = [];  // Holds all jobs that need to be executed following the checks.
-    ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
-      if (pm.wasMoved()) {
-        if (pm.wasRotated()) {
-          jobQueue.push(pm);
+    if (this.planService.getState() === 'run') {
+      ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
+        if (pm.wasMoved()) {
+          pm.wasRotated();
         }
-      }
-    });
-
-    this.doJobs(jobQueue);
-  }
-
-  /** If markers were moved, their jobs are executed and then the next frame is collected.
-   * @param jobsQueue Array holding the projectable markers who need do work.
-   */
-  private doJobs(jobQueue: ProjectableMarker[]) {
-
-    if (jobQueue.length > 0) {
-      jobQueue.forEach(pm => {
-        pm.doJob();
-      })
+      });
     }
-
-    /* Get Next Frame */
     requestAnimationFrame(this.tickFunction);
   }
 
@@ -191,33 +179,24 @@ export class ArService {
     this.videoFeedArray = videoFeeds;
     if (this.videoFeedArray.length === 0) {
       console.log('Video Elements Not Instantiated');
-      this.running = false;
     } else {
       requestAnimationFrame(this.tickFunction);
-      this.running = true;
     }
   }
 
-  /** Kills the tick recursion.  This is called when we move from the landing
-   * screen to the main application to prevent the function from running twice.
-   */
-  public killTick(): void {
-    this.running = false;
-  }
-
-  public createPoint(): void {
-    console.log('configure');
-  }
-
+  /** Begins the calibration process. */
   public startCalibration(): void {
     this.calibrating = true;
-    this.trackingPoints = [];
+    this.trackingPoints = []; // Clear the tracking points.
   }
 
+  /** Creates tracking point data from the default data file. */
   private createDefaultTrackingPoints(): void {
     defaultTrackingPoints.trackingPoints.forEach(point => {
       this.createTrackingPoint(point.camX, point.camY, point.cam2X, point.cam2Y, point.mapX, point.mapY);
     });
+
+    // The offsets are the x and y adjustments to the tracking that allow for more precise tracking.
     this.xOffset = defaultTrackingPoints.offsets.xOffset;
     this.yOffset = defaultTrackingPoints.offsets.yOffset;
     this.xOffset2 = defaultTrackingPoints.offsets.xOffset2;
@@ -231,21 +210,15 @@ export class ArService {
    */
   public completeCalibration(createFile: boolean): boolean {
 
-    // TODO: Verify that all 4 points are set and that none of them are equal to 0
-
     /* The x and y points generated by the camera are upside down and reversed
     *  from the ones generated by the map.  Therefore, it is necessary to convert them
     *  to get an accurate picture of the x and y to allow tracking. */
     this.mapHeight = this.trackingPoints[5].getMapY() - this.trackingPoints[3].getMapY();
     this.mapWidth = this.trackingPoints[3].getMapX() - this.trackingPoints[2].getMapX();
-
     this.camHeight = this.trackingPoints[4].getCamX() - this.trackingPoints[3].getCamX();
     this.camWidth = this.trackingPoints[5].getCamY() - this.trackingPoints[4].getCamY();
-
-
     this.mapHeight2 = this.trackingPoints[3].getMapY() - this.trackingPoints[1].getMapY();
     this.mapWidth2 = this.trackingPoints[1].getMapX() - this.trackingPoints[0].getMapX();
-
     this.camHeight2 = this.trackingPoints[2].getCam2X() - this.trackingPoints[1].getCam2X();
     this.camWidth2 = this.trackingPoints[3].getCam2Y() - this.trackingPoints[2].getCam2Y();
     return true;
@@ -265,6 +238,10 @@ export class ArService {
     this.trackingPoints.push(new TrackingPoint(camX, camY, cam2X, cam2Y, mapX, mapY));
   }
 
+  /** Uses the track method to convert any point to map coordinates.
+   * @param dataPoint Camera coordinates and cam id.
+   * @return the map coordinates.
+   */
   public convertCamCoordinatesToMapCoordinates(dataPoint) {
     return this.track(this.getCenterX(dataPoint.corners), this.getCenterY(dataPoint.corners), dataPoint.camera);
   }
@@ -286,7 +263,13 @@ export class ArService {
     return (corners[0].y + corners[2].y) * 0.5;
   }
 
-
+  /** This routine tracks the marker on the table by converting the data returned by
+   * the camera into coordinates of the overall map.  
+   * @param x X position in the camera.
+   * @param y Y position in the camera.
+   * @param camId Id of the camera (top or bottom camera)
+   * @return the x and y position marker in map coordinates.
+   */
   public track(x: number, y: number, camId: number): { x: number, y: number } {
     if (camId === 1) {
       // First Get the actualy X Position
@@ -313,42 +296,34 @@ export class ArService {
 
   public incrementXOffset(): void {
     this.xOffset++;
-    console.log('x' + this.xOffset);
   }
 
   public incrementYOffset(): void {
     this.yOffset++;
-    console.log('y' + this.yOffset);
   }
 
   public decrementXOffset(): void {
     this.xOffset--;
-    console.log('x' + this.xOffset);
   }
 
   public decrementYOffset(): void {
     this.yOffset--;
-    console.log('y' + this.yOffset);
   }
 
   public incrementXOffset2(): void {
     this.xOffset2++;
-    console.log('x' + this.xOffset2);
   }
 
   public incrementYOffset2(): void {
     this.yOffset2++;
-    console.log('y' + this.yOffset2);
   }
 
   public decrementXOffset2(): void {
     this.xOffset2--;
-    console.log('x' + this.xOffset2);
   }
 
   public decrementYOffset2(): void {
     this.yOffset2--;
-    console.log('y' + this.yOffset2);
   }
 
   public stopCalibration(): void {

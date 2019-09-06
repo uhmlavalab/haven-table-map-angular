@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { chartColors, mapLayerColors } from '../../../../assets/plans/defaultColors';
 import { MapMainComponent } from '../../map-main.component';
-import { Subject } from 'rxjs';
 import { MapLayer } from '@app/interfaces';
-import { MapService } from '../../../services/map.service';
 import { ArService } from '../../../services/ar.service';
+import { PlanService } from '../../../services/plan.service';
 import { CardStyleDirective } from '../card-style.directive';
 import { _ } from 'underscore';
 
@@ -23,15 +22,15 @@ export class AddRemoveLayersComponent implements OnInit {
   nextLayer: MapLayer; // The next layer to be added or removed.
   private tracking: boolean;
 
-  constructor(private mapService: MapService, private arService: ArService) {
-    this.layers = this.mapService.getLayers();
+  constructor(private planService: PlanService, private arService: ArService) {
+    this.layers = this.planService.getLayers();
     this.nextLayer = this.layers[0];
     this.tracking = this.arService.isTrackingSet();
   }
 
   ngOnInit() {
     // Subscribe to changes in the next layer
-    this.mapService.selectedLayerSubject.subscribe({
+    this.planService.selectedLayerSubject.subscribe({
       next: value => {
         this.nextLayer = value as MapLayer;
         this.updateBackgroundColorActive(value as MapLayer);

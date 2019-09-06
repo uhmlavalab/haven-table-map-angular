@@ -31,9 +31,7 @@ import { CardStyleDirective } from './map-main/interaction-element/card-style.di
 
 // Services
 import { ArService } from './services/ar.service';
-import { MarkerService } from './services/marker.service';
 import { PlanService } from './services/plan.service';
-import { MapService } from './services/map.service';
 import { SoundsService } from './services/sounds.service';
 import { WindowRefService } from './services/window-ref.service';
 
@@ -70,10 +68,8 @@ import { WindowRefService } from './services/window-ref.service';
     MultiWindowModule
   ],
   providers: [
-    MapService,
     ArService,
     PlanService,
-    MarkerService,
     SoundsService,
     WindowRefService
   ],

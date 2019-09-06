@@ -17,13 +17,14 @@ export class YearPuckComponent implements AfterViewInit {
   private angle: number;
   private yearBoxElements: any[];
   private currentPosition: number;
+  private YEAR_PUCK_COLOR: string = 'rgba(147, 93, 201)';
 
   constructor(private planService: PlanService) {
     this.currentPosition = 0;
-    this.currentYear = 2016;
-    this.numberOfYears = 30;
+    this.currentYear = this.planService.getMinimumYear();
+    this.numberOfYears = this.planService.getMaximumYear() - this.planService.getMinimumYear() + 1;
     for (let i = 0; i < this.numberOfYears; i++) {
-      this.years.push({year: i + 2016, filled: false});
+      this.years.push({year: i + this.planService.getMinimumYear(), filled: false});
     }
    }
 
@@ -38,16 +39,23 @@ export class YearPuckComponent implements AfterViewInit {
     })
   }
 
+
+  /** Colors each of the year nodes.
+   * 
+   */
   private colorNodes() {
-    for (let index = 0; index < 30; index++) {
-      if (index <= this.currentYear - 2016) {
-        this.yearBoxElements[index].style.backgroundColor = 'rgba(147, 93, 201)';
+    for (let index = 0; index < this.numberOfYears; index++) {
+      if (index <= this.currentYear - this.planService.getMinimumYear()) {
+        this.yearBoxElements[index].style.backgroundColor = this.YEAR_PUCK_COLOR;
       } else {
         this.yearBoxElements[index].style.backgroundColor = 'transparent';
       }
     }
   }
 
+  /** Positions the nodes around the puck
+   * @param elements the HTML elements to position.
+   */
   private positionElements(elements) {
     this.angle = 360 / elements.length;
     this.currentPosition = 0;

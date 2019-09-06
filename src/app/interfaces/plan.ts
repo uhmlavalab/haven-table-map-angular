@@ -17,6 +17,7 @@ export interface Plan {
       left: string;
     }
     legend: {
+      defaultLayout: string;
       grid: {
         top: string;
         left: string;
