@@ -39,6 +39,9 @@ export class PlanService {
   private currentLegendLayout: number;          // Currently selected legend layout
   public legendSubject = new Subject<string>(); // Legend Publisher
 
+  /* Reset Subjects */
+  public resetLayersSubject = new Subject<any>();
+
   /* Data Objects */
   private capacityData = {};
   private generationData = {};
@@ -397,17 +400,15 @@ export class PlanService {
     return this.selectedLayer;
   }
 
-  /** When returning from the main map to the landing, all data for the plan 
+  /** When returning from the main map to the landing, all layer data for the plan 
    * needs to be reset.
    */
   public resetPlan() {
-    this.currentPlan = null;
-    this.currentYear = null;
-    this.scenarios = null;
-    this.currentScenario = null;
-    this.planSubject.next(this.currentPlan);
+    this.currentPlan.map.mapLayers.forEach(layer => layer.active = false);
+    this.currentYear = this.currentPlan.minYear;
     this.yearSubject.next(this.currentYear);
-    this.scenarioSubject.next(this.currentScenario);
+    this.layers = [];
+    this.resetLayersSubject.next(this.layers);
   }
 
   /** Gets the class name of the correct legend css to display.
