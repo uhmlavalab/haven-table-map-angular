@@ -6,7 +6,7 @@ export const markers: Marker[] = [{
   //markerId: 1,
   secondId: 3,
   job: 'year',
-  delay: 120, 
+  delay: 75, 
   minRotation: 4,
   rotateLeft(planService: PlanService) {
    planService.decrementCurrentYear();
