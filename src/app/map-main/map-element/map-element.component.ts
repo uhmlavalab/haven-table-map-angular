@@ -93,7 +93,7 @@ export class MapElementComponent implements OnInit {
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {
-       //this.defaultFill(layer);
+       this.defaultFill(layer);
       }
     });
 
