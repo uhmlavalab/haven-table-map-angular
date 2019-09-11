@@ -78,6 +78,7 @@ export class MapElementComponent implements OnInit {
     this.path = d3.geo.path()
       .projection(this.projection);
 
+
     this.line1SVG = this.map.selectAll('line1');
     this.line2SVG = this.map.selectAll('line2');
     this.line3SVG = this.map.selectAll('line3');

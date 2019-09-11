@@ -98,14 +98,14 @@ export class WindowRefService {
    * @param messageData => The data
    */
   private sendMessageToSecondScreen(screenId: string, messageData: string): void {
-    console.log(screenId);
+    console.log(screenId, messageData);
     this.multiWindowService.sendMessage(screenId, 'customEvent', messageData).subscribe(
       (messageId: string) => {
        // console.log('Message send, ID is ' + messageId);
       },
       (error) => {
         console.log('Message sending failed, error: ' + error);
-        /* If the message fails due to timeout because of an error with the windows 
+        /* If the message fails due to timeout because of an error with the windows
          * not closed yet.  Keep trying until it works */
         if (JSON.parse(messageData).type === 'setup') {
           this.notifySecondScreen(messageData);

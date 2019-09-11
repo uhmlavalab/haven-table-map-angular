@@ -76,7 +76,7 @@ export const OahuPlan: Plan = {
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: 'assets/plans/oahu/images/oahu-satellite5.png',
+    baseMapPath: 'assets/plans/oahu/images/oahu-satellite6.png',
     mapLayers: [
       {
         name: 'transmission',

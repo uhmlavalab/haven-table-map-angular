@@ -3,6 +3,7 @@ import { MapService } from '../../services/map.service';
 import { PlanService } from '../../services/plan.service';
 import * as d3 from 'd3';
 import { MapLayer, Parcel } from '@app/interfaces';
+import { WindowRefService } from '../../services/window-ref.service';
 
 @Component({
   selector: 'app-map-mini',
@@ -33,7 +34,7 @@ export class MapMiniComponent implements AfterViewInit {
 
   @ViewChild('miniMapDiv', { static: true }) mapDiv: ElementRef;
 
-  constructor(private mapService: MapService, private planService: PlanService) {
+  constructor(private mapService: MapService, private planService: PlanService, private secondScreen: WindowRefService) {
     this.corners = this.boundingCoordinates(this.circlePos[1], this.circlePos[0], this.zoomLvl);
     window.addEventListener('wheel', event => {
       const zoom = (event.deltaY > 0) ? 1 : -1;
@@ -182,6 +183,14 @@ export class MapMiniComponent implements AfterViewInit {
         .attr('y2', (d) => this.projection(d[1])[1])
         .attr('stroke-width', 2)
         .attr('stroke', 'red');
+
+      const secondScreenUpdate = {
+        type: 'map',
+        corners: pos[1],
+        center: pos[0]
+      };
+
+      this.secondScreen.notifySecondScreen(JSON.stringify(secondScreenUpdate));
     });
 
 
