@@ -39,6 +39,8 @@ export class PlanService {
   private currentLegendLayout: number;          // Currently selected legend layout
   public legendSubject = new Subject<string>(); // Legend Publisher
 
+  public secondScreen = false;
+
   /* Reset Subjects */
   public resetLayersSubject = new Subject<any>();
 
@@ -87,7 +89,8 @@ export class PlanService {
 
     // Load All Plan Data
     this.getCapacityData();
-    //this.getGenerationData();
+    if (this.secondScreen) { this.getGenerationData(); }
+
     this.getCurtailmentData();
 
     // Change Legend Layout if it is not 'grid'.
@@ -140,7 +143,7 @@ export class PlanService {
   }
 
   /** Gets Generation Data
-   * 
+   *
    */
   public getGenerationData(): Promise<any> {
     this.generationData = {};
@@ -166,7 +169,7 @@ export class PlanService {
   }
 
   /** Gets Curtailment Data
-   * 
+   *
    */
   public getCurtailmentData(): Promise<any> {
     this.curtailmentData = {};
@@ -400,7 +403,7 @@ export class PlanService {
     return this.selectedLayer;
   }
 
-  /** When returning from the main map to the landing, all layer data for the plan 
+  /** When returning from the main map to the landing, all layer data for the plan
    * needs to be reset.
    */
   public resetPlan() {

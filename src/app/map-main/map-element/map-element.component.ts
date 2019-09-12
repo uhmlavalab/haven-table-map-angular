@@ -4,6 +4,7 @@ import { MapService } from '../../services/map.service';
 import { MapDirective } from './map.directive';
 import * as d3 from 'd3';
 import { MapLayer, Parcel } from '@app/interfaces';
+import { WindowRefService } from '@app/services/window-ref.service';
 
 @Component({
   selector: 'app-map-element',
@@ -37,7 +38,7 @@ export class MapElementComponent implements OnInit {
 
   @ViewChild(MapDirective, { static: true }) mapElement;
 
-  constructor(private planService: PlanService, private mapService: MapService) {
+  constructor(private planService: PlanService, private mapService: MapService, private secondScreen: WindowRefService) {
     this.scale = planService.getMapScale();
     this.width = planService.getMapImageWidth() * this.scale;
     this.height = planService.getMapImageHeight() * this.scale;
@@ -166,6 +167,12 @@ export class MapElementComponent implements OnInit {
 
     // Subscribe to layer toggling
     this.planService.toggleLayerSubject.subscribe((layer) => {
+      const secondScreenUpdate = {
+        type: 'toggleLayer',
+        name: layer.name
+      };
+
+      this.secondScreen.notifySecondScreen(JSON.stringify(secondScreenUpdate));
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {
