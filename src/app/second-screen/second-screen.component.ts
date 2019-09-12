@@ -53,44 +53,13 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
       } else if (data.type === 'layer') {
         this.nextLayer = data.name;
       } else if (data.type === 'map') {
-        const coordinates = this.projection(data.center);
-        console.log(coordinates);
-
-        const geojson =
-        {
-          'name': 'NewFeatureType',
-          'type': 'FeatureCollection',
-          'features': [{
-            'type': 'Feature',
-            'geometry': {
-              'type': 'LineString',
-              'coordinates': null
-            },
-            'properties': null
-          }]
-        };
-
         const trans = this.projection(data.center);
-
-        // data.corners[0] = this.projection(data.corners[0]);
-        // data.corners[1] = this.projection(data.corners[1]);
-        // data.corners[2] = this.projection(data.corners[2]);
-        // data.corners[3] = this.projection(data.corners[3]);
-        geojson.features[0].geometry.coordinates = data.corners;
-
-        const scaleX =  (Math.abs(this.plan.map.bounds[1][1] - this.plan.map.bounds[0][1])) / (Math.abs(data.corners[0][1] - data.corners[2][1]));
+        const scaleX = (Math.abs(this.plan.map.bounds[1][1] - this.plan.map.bounds[0][1])) / (Math.abs(data.corners[0][1] - data.corners[2][1]));
         const scaleY = (Math.abs(this.plan.map.bounds[1][0] - this.plan.map.bounds[0][0])) / (Math.abs(data.corners[0][0] - data.corners[1][0]));
         const scale = Math.max(scaleX, scaleY);
-        const t = [(-trans[0] + this.width / 2) * scale , (-trans[1] + this.height / 2) * scale] as [number, number];
-        // this.projection
-        //   .scale(s)
-        //   .translate(t);
-        // console.log(b);
-
-        console.log(t, scale);
+        const t = [(-trans[0] + this.width / 2) * scale, (-trans[1] + this.height / 2) * scale] as [number, number];
         this.map.transition()
-        .duration(500).attr('transform', 'translate(' + (t[0] + ',' + t[1]) + ') scale(' + scale + ')');
-
+          .duration(500).attr('transform', 'translate(' + (t[0] + ',' + t[1]) + ') scale(' + scale + ')');
       }
     });
 
