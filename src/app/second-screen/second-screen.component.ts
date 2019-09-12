@@ -81,8 +81,6 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
         const scaleX =  (Math.abs(this.plan.map.bounds[1][1] - this.plan.map.bounds[0][1])) / (Math.abs(data.corners[0][1] - data.corners[2][1]));
         const scaleY = (Math.abs(this.plan.map.bounds[1][0] - this.plan.map.bounds[0][0])) / (Math.abs(data.corners[0][0] - data.corners[1][0]));
         const scale = Math.max(scaleX, scaleY);
-        const b = this.path.bounds(geojson);
-        const s = Math.max((b[1][0] - b[0][0]) / this.width, (b[1][1] - b[0][1]) / this.height);
         const t = [(-trans[0] + this.width / 2) * scale , (-trans[1] + this.height / 2) * scale] as [number, number];
         // this.projection
         //   .scale(s)
@@ -90,7 +88,8 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
         // console.log(b);
 
         console.log(t, scale);
-        this.map.attr('transform', 'translate(' + (t[0] + ',' + t[1]) + ') scale(' + scale + ')');
+        this.map.transition()
+        .duration(500).attr('transform', 'translate(' + (t[0] + ',' + t[1]) + ') scale(' + scale + ')');
 
       }
     });
@@ -164,16 +163,20 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    d3.json(this.plan.map.mapLayers[0].filePath, (error, geoData) => {
-      this.map.selectAll('transmission')
-        .data(geoData.features)
-        .enter().append('path')
-        .attr('d', this.path)
-        .attr('class', 'transmission')
-        .style('stroke', 'yellow')
-        .style('stroke-width', 3 + 'px');
-
+    this.plan.map.mapLayers.forEach(layer => {
+      d3.json(layer.filePath, (error, geoData) => {
+        this.map.selectAll(layer.name)
+          .data(geoData.features)
+          .enter().append('path')
+          .attr('d', this.path)
+          .attr('class', layer.name)
+          .style('color', 'transparent')
+          .style('fill', 'transparent')
+          .style('stroke', layer.fillColor)
+          .style('stroke-width', .2 + 'px');
+      });
     });
+
 
 
   }
