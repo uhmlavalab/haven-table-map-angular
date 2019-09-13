@@ -76,7 +76,7 @@ export const OahuPlan: Plan = {
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: 'assets/plans/oahu/images/oahu-satellite6.png',
+    baseMapPath: 'assets/plans/oahu/images/old/base-map.png',
     mapLayers: [
       {
         name: 'transmission',
@@ -299,12 +299,32 @@ export const OahuPlan: Plan = {
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: mapLayerColors.Agriculture.fill,
         borderColor: mapLayerColors.Agriculture.border,
-        borderWidth: 1,
+        borderWidth: 0.25,
         legendColor: mapLayerColors.Agriculture.fill,
-        filePath: 'assets/plans/oahu/layers/agriculture.json',
+        filePath: 'assets/plans/oahu/layers/lsb.json',
         parcels: [],
-        setupFunction: null,
-        updateFunction: null,
+        setupFunction(planService: PlanService) {
+          const colors = {
+            'A': '#7de87d',
+            'B': '#2edd2e',
+            'C': '#00d100',
+            'D': '#009300',
+            'E': '#005400',
+          };
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.type])
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', this.borderWidth + 'px');
+          });
+        },
+        updateFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('opacity', this.active ? 0.85 : 0.0);
+          });
+        },
       },
       {
         name: 'sealevel',

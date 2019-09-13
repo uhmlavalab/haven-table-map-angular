@@ -189,7 +189,7 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
     if (layer.updateFunction !== null) {
       layer.updateFunction(this.planService);
     } else {
-      // this.defaultFill(layer);
+      this.defaultFill(layer);
     }
   }
 
