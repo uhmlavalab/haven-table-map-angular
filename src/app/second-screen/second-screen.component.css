@@ -34,8 +34,8 @@
 }
 
 .left-card p {
-  text-align: center;
-    padding: 50px;
+  text-align: left;
+    padding: 0px 16px 0px 16px;
     font-size: 20px;
 }
 

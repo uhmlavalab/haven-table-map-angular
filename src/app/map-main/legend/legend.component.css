@@ -57,10 +57,11 @@
 }
 
 .legend-card-vertical-wrapper .legend-card {
-  width: 70px;
-  height: 70px;
+  width: 60x;
+  height: 60px;
   margin: 7px;
   padding: 2px;
+  text-align: center;
 }
 
 .legend-card-vertical-wrapper .legend-card-left {
@@ -74,7 +75,7 @@
   width: 32px;
   height: 32px;
   top: 7px;
-  left: 2px;
+  left: -6px;
   position: relative;
 }
 
@@ -92,6 +93,7 @@
   position: relative;
   padding: 4px;
   left: 2px;
+  text-align: center;
   height: calc(70px - 4px - 8px - 32px);
 }
 .legend-card-vertical-wrapper .legend-card-text p {

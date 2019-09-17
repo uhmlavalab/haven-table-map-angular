@@ -49,6 +49,10 @@ export class PlanService {
   private generationData = {};
   private curtailmentData = {};
 
+  /* Update Timer */
+  private UPDATE_DELAY: number = 600;
+  private startTime: number;
+
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
     this.state = 'landing'; // Initial state is landing
@@ -60,6 +64,9 @@ export class PlanService {
    * @param plan The plan to set up
    */
   public setupSelectedPlan(plan: Plan) {
+
+    this.resetTimer(); // Start the update timer
+
     this.currentPlan = plan;
     this.currentMap = plan.map;
 
@@ -287,10 +294,12 @@ export class PlanService {
   public incrementCurrentYear(): void {
     try {
       if (this.currentYear < this.currentPlan.maxYear) {
+        this.resetTimer();
         this.currentYear++;
         this.soundsService.click();
       }
-      this.yearSubject.next(this.currentYear);
+        this.yearSubject.next(this.currentYear);
+      
     } catch (error) {
       // Catch error when setting up
     }
@@ -300,10 +309,11 @@ export class PlanService {
   public decrementCurrentYear(): void {
     try {
       if (this.currentYear > this.currentPlan.minYear) {
+        this.resetTimer();
         this.currentYear--;
         this.soundsService.click();
       }
-      this.yearSubject.next(this.currentYear);
+        this.yearSubject.next(this.currentYear);
     } catch (error) {
       // catch error when setting up
     }
@@ -504,5 +514,19 @@ export class PlanService {
    */
   public getMaximumYear(): number {
     return this.currentPlan.maxYear;
+  }
+
+  private resetTimer(): void {
+    const date = new Date();
+    this.startTime = date.getTime();
+  }
+
+  public okToUpdate(): boolean {
+    const currentTime = new Date().getTime();
+    if (currentTime - this.startTime > this.UPDATE_DELAY) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
