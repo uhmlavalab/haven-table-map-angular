@@ -3,7 +3,7 @@ import { PlanService } from '../../app/services/plan.service'
 
 export const markers: Marker[] = [{
   markerId: 320,
-  //markerId: 1,
+  //markerId: 320,
   secondId: 3,
   job: 'year',
   delay: 75, 
