@@ -6,7 +6,7 @@ export const markers: Marker[] = [{
   //markerId: 1,
   secondId: 3,
   job: 'year',
-  delay: 75, 
+  delay: 75,
   minRotation: 3,
   rotateLeft(planService: PlanService) {
    planService.decrementCurrentYear();
@@ -18,7 +18,7 @@ export const markers: Marker[] = [{
   markerId: 7,
   secondId: 6,
   job: 'layer',
-  delay: 300, 
+  delay: 300,
   minRotation: 5,
   rotateLeft(planService: PlanService) {
     planService.decrementNextLayer();
@@ -30,7 +30,7 @@ export const markers: Marker[] = [{
   markerId: 4,
   secondId: 9,
   job: 'scenario',
-  delay: 300, 
+  delay: 300,
   minRotation: 5,
   rotateLeft(planService: PlanService) {
     this.planService.decrementScenario();
@@ -42,11 +42,7 @@ export const markers: Marker[] = [{
   markerId: 8,
   secondId: 7,
   job: 'add',
-<<<<<<< HEAD
-  delay: 1000, 
-=======
-  delay: 300, 
->>>>>>> 8ea61524f7dfe639c49814f6dbcd7d1e71865309
+  delay: 300,
   minRotation: 5,
   rotateLeft(planService: PlanService) {
     planService.toggleLayer();

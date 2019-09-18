@@ -1,15 +1,30 @@
-<div class="second-screen-container" [style.backgroundColor]="plan ? 'transparent' : 'black'">
+<div class="second-screen-container">
   <div *ngIf="plan; else elseBlock">
-    <img class="background-image" src="{{ plan.secondScreenImagePath }}" />
-    <div *ngFor="let layer of plan.map.mapLayers" class="left-card" [style.opacity]="layer.name === nextLayer ? 1 : 0">
-      <h2>{{ layer.displayName }}</h2>
-      <img src="{{ layer.secondScreenImagePath }}" />
-      <p>{{ layer.secondScreenText }}</p>
+
+
+
+    <div class="left-card">
+      <h2>{{ layerName }}</h2>
+      <img src="{{layerImage}}" />
+      <p>{{ layerText }}</p>
     </div>
+
     <div class="right-card">
+        <h2>{{ layerName }}</h2>
+        <img src="{{layerImage}}" />
+        <p>{{ layerText }}</p>
+      </div>
+
+    <div class="map-container">
       <div #mapDiv class="mapDiv"></div>
     </div>
+
+    <app-pie-chart></app-pie-chart>
+
+    <h1>2020</h1>
   </div>
+
+
 
   <!-- loader called until plan is set-->
   <ng-template #elseBlock>

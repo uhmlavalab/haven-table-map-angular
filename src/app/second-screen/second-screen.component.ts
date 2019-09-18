@@ -29,6 +29,10 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
   private plan: Plan;
   private mapLayers: { text: string, color: string, active: boolean }[] = [];
 
+  layerName = 'LayerName';
+  layerText = 'LayerText';
+  layerImage = '';
+
   scale: number;
   width: number;
   height: number;
@@ -50,6 +54,7 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
 
     this.multiWindowService.onMessage().subscribe((value: Message) => {
       const data = JSON.parse(value.data);
+      console.log(data);
       if (data.type === 'setup') {
         this.setupSecondScreen(data);
         this.setupMap();
@@ -59,6 +64,9 @@ export class SecondScreenComponent implements AfterViewInit, OnDestroy {
         console.log(this.currentYear);
       } else if (data.type === 'layer') {
         this.nextLayer = data.name;
+        this.layerName = data.displayName;
+        this.layerText = data.secondScreenText;
+        this.layerImage = data.secondScreenImagePath;
       } else if (data.type === 'map') {
         this.updateMap(data);
       } else if (data.type === 'toggleLayer') {

@@ -1,5 +1,4 @@
 /* Classes for the second-screen wrapper */
-
 .second-screen-container {
   height: 100%;
   width: 100%;
@@ -9,13 +8,51 @@
   margin: 0;
   padding: 0;
   color: white;
+  background: #212121;
 }
 
-.second-screen-container .background-image {
-  z-index: -1;
-  width: 100%;
-  height: 100%;
+h1  {
   position: absolute;
+  width: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  font-size: 10vh;
+  line-height: 2vh;
+  top: 0;
+}
+
+
+.right-card h2 {
+  font-size: 3vh;
+  line-height: 1.5vh;
+}
+
+.right-card {
+  position: absolute;
+  left: calc(98vw - 32vw);
+  top: 2vh;
+  height: calc(96vh - 20px);
+  width: calc(32vw - 20px);
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 25px;
+}
+
+.right-card img {
+  width: 95%;
+}
+
+.right-card p {
+  text-align: left;
+    padding: 0px 16px 0px 16px;
+    font-size: 20px;
+}
+
+.left-card h2 {
+  font-size: 3vh;
+  line-height: 1.5vh;
 }
 
 .left-card {
@@ -23,10 +60,11 @@
   left: 2vw;
   top: 2vh;
   height: calc(96vh - 20px);
-  width: calc(46vw - 20px);
+  width: calc(32vw - 20px);
   padding: 10px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 25px;
 }
 
 .left-card img {
@@ -39,39 +77,17 @@
     font-size: 20px;
 }
 
-.right-card {
+.map-container {
   position: absolute;
-  left: 50vw;
-  top: 2vw;
-  height: calc(96vh - 20px);
-  width: calc(48vw - 20px);
-  padding: 10px;
-  text-align: center;
-}
-
-.right-card .chart-title {
-  position: absolute;
-  width: 100%;
-  font-size: 28px;
-  top: -1%;
-}
-.right-card img {
-  opacity: 0.9;
-  width: 100%;
-  border-radius: 3px;
-  top: 9%;
-  position: relative;
-}
-
-.right-card .year-display-container {
-  width: 100%;
-  top: 76%;
-  position: absolute;
-}
-
-.right-card .year-display-container h1 {
-  font-size: 55px;
-  font-variant: small-caps;
+  height: 75vh;
+  width: 75vh;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background: #174b5d;
+  border: solid #212121 50px;
 }
 
 .loading {

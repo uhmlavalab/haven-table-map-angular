@@ -167,7 +167,6 @@ export class MapElementComponent implements OnInit {
 
     // Subscribe to layer toggling
     this.planService.toggleLayerSubject.subscribe((layer) => {
-<<<<<<< HEAD
       const secondScreenUpdate = {
         type: 'toggleLayer',
         name: layer.name
@@ -178,13 +177,6 @@ export class MapElementComponent implements OnInit {
         layer.updateFunction(this.planService);
       } else {
        this.defaultFill(layer);
-=======
-
-      if (layer.updateFunction !== null) {
-        layer.updateFunction(this.planService);
-      } else {
-        this.defaultFill(layer);
->>>>>>> master
       }
 
     });
@@ -198,14 +190,6 @@ export class MapElementComponent implements OnInit {
     });
 
     this.planService.yearSubject.subscribe((year) => {
-<<<<<<< HEAD
-      const layers = this.planService.getLayers();
-      layers.forEach(layer => {
-        if (layer.updateFunction !== null && layer.active) {
-          layer.updateFunction(this.planService);
-        } else {
-         // this.defaultFill(layer);
-=======
       setTimeout(() => {
         if (this.planService.okToUpdate()) {
           const layers = this.planService.getLayers();
@@ -214,7 +198,6 @@ export class MapElementComponent implements OnInit {
               layer.updateFunction(this.planService);
             }
           });
->>>>>>> master
         }
       }, 700);
     });

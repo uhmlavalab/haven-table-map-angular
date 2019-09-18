@@ -32,6 +32,8 @@ export class MapMiniComponent implements AfterViewInit {
   line3SVG: any;
   line4SVG: any;
 
+  secondScreenTimeout: any;
+
   @ViewChild('miniMapDiv', { static: true }) mapDiv: ElementRef;
 
   constructor(private mapService: MapService, private planService: PlanService, private secondScreen: WindowRefService) {
@@ -190,7 +192,11 @@ export class MapMiniComponent implements AfterViewInit {
         center: pos[0]
       };
 
-      this.secondScreen.notifySecondScreen(JSON.stringify(secondScreenUpdate));
+      if (this.secondScreenTimeout) {
+        clearTimeout(this.secondScreenTimeout);
+      }
+      this.secondScreenTimeout = setTimeout(() => { this.secondScreen.notifySecondScreen(JSON.stringify(secondScreenUpdate)); }, 250);
+
     });
 
 

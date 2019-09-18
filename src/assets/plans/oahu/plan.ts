@@ -143,10 +143,8 @@ export const OahuPlan: Plan = {
             d3.select(parcel.path)
               .style('opacity', this.active ? 0.85 : 0.0);
           });
-<<<<<<< HEAD
         },
-=======
-        },      },
+      },
       {
         name: 'parks',
         displayName: 'Park Lands',
@@ -163,7 +161,6 @@ export const OahuPlan: Plan = {
         parcels: [],
         setupFunction: null,
         updateFunction: null,
->>>>>>> master
       },
       // {
       //   name: 'parks',
@@ -385,10 +382,10 @@ export const OahuPlan: Plan = {
           this.parcels.forEach(parcel => {
             if (parcel.properties.IAL === 'Y') {
               d3.select(parcel.path)
-              .style('fill', 'black')
-              .style('opacity', (this.active) ? 0.85 : 0.0)
-              .style('stroke', this.borderColor)
-              .style('stroke-width', this.borderWidth + 'px');
+                .style('fill', 'black')
+                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
             } else if (solarTotal > 0) {
               d3.select(parcel.path)
                 .style('fill', this.fillColor)
@@ -412,10 +409,10 @@ export const OahuPlan: Plan = {
           this.parcels.forEach(parcel => {
             if (parcel.properties.IAL === 'Y') {
               d3.select(parcel.path)
-              .style('fill', 'black')
-              .style('opacity', (this.active) ? 0.85 : 0.0)
-              .style('stroke', this.borderColor)
-              .style('stroke-width', this.borderWidth + 'px');
+                .style('fill', 'black')
+                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
             } else if (solarTotal > 0) {
               d3.select(parcel.path)
                 .style('fill', this.fillColor)
@@ -449,39 +446,39 @@ export const OahuPlan: Plan = {
               minValue: 0.75,
               color: '#f5f500',
             },
-                        {
+            {
               minValue: 0.675,
               color: '#f5da00',
             },
-                        {
+            {
               minValue: 0.6,
               color: '#f5be00',
             },
-                        {
+            {
               minValue: 0.525,
               color: '#f5a300',
             },
-                        {
+            {
               minValue: 0.45,
               color: '#f58800',
             },
-                        {
+            {
               minValue: 0.375,
               color: '#f56d00',
             },
-                        {
+            {
               minValue: 0.3,
               color: '#f55200',
             },
-                        {
+            {
               minValue: 0.15,
               color: '#f53600',
             },
-                        {
+            {
               minValue: 0.05,
               color: '#f51b00',
             },
-                        {
+            {
               minValue: 0.00,
               color: '#f50000',
             },
@@ -492,7 +489,7 @@ export const OahuPlan: Plan = {
             data.forEach(element => {
               const id = element.GroupId.toString();
               const year = element.Year.toString();
-              const value  = Number(element.Value);
+              const value = Number(element.Value);
               if (!this.capData.hasOwnProperty(id)) {
                 this.capData[id] = {};
               }
@@ -506,7 +503,7 @@ export const OahuPlan: Plan = {
               if (Number(year) >= 2018) {
                 if (this.capData.hasOwnProperty(id)) {
                   const value = this.capData[id][year];
-                  const color =  () => {
+                  const color = () => {
                     let max = 1;
                     let min = 0;
                     for (let i = 0; i < this.derColors.length; i++) {
@@ -516,7 +513,7 @@ export const OahuPlan: Plan = {
                       }
                       max = min;
                     }
-                    return this.derColors[this.derColors.length  - 1].color;
+                    return this.derColors[this.derColors.length - 1].color;
                   };
                   d3.select(parcel.path)
                     .style('fill', color)
@@ -527,30 +524,30 @@ export const OahuPlan: Plan = {
           });
         },
         updateFunction(planService: PlanService) {
-            this.parcels.forEach(parcel => {
-              const id = parcel.properties.Building_F.toString().split('_')[1];
-              const year = (planService.getCurrentYear()).toString();
-              if (Number(year) >= 2018) {
-                if (this.capData.hasOwnProperty(id)) {
-                  const value = this.capData[id][year];
-                  const color =  () => {
-                    let max = 1;
-                    let min = 0;
-                    for (let i = 0; i < this.derColors.length; i++) {
-                      min = this.derColors[i].minValue;
-                      if (value <= max && value >= min) {
-                        return this.derColors[i].color;
-                      }
-                      max = min;
+          this.parcels.forEach(parcel => {
+            const id = parcel.properties.Building_F.toString().split('_')[1];
+            const year = (planService.getCurrentYear()).toString();
+            if (Number(year) >= 2018) {
+              if (this.capData.hasOwnProperty(id)) {
+                const value = this.capData[id][year];
+                const color = () => {
+                  let max = 1;
+                  let min = 0;
+                  for (let i = 0; i < this.derColors.length; i++) {
+                    min = this.derColors[i].minValue;
+                    if (value <= max && value >= min) {
+                      return this.derColors[i].color;
                     }
-                    return this.derColors[this.derColors.length  - 1].color;
-                  };
-                  d3.select(parcel.path)
-                    .style('fill', color)
-                    .style('opacity', (this.active) ? 1.00 : 0.0);
-                }
+                    max = min;
+                  }
+                  return this.derColors[this.derColors.length - 1].color;
+                };
+                d3.select(parcel.path)
+                  .style('fill', color)
+                  .style('opacity', (this.active) ? 1.00 : 0.0);
               }
-            });
+            }
+          });
         },
       }
     ],
