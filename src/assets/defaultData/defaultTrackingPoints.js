@@ -1,9 +1,9 @@
 export const defaultTrackingPoints = {
 offsets: {
-xOffset: 163,
+xOffset: 106,
 yOffset: 128,
-xOffset2: 111,
-yOffset2: 221,
+xOffset2: 61,
+yOffset2: 182,
 },
 trackingPoints: [
 {
@@ -49,10 +49,8 @@ mapY: 681.6953125,
 {
 cam2X: 0,
 cam2Y: 0,
-camX: 265.5,
 camY: 282,
 mapX: 272.09375,
 mapY: 681.6953125,
 },
-]
-};
+]}
