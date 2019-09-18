@@ -90,11 +90,13 @@ export class MapElementComponent implements OnInit {
 
     // Subscribe to layer toggling
     this.planService.toggleLayerSubject.subscribe((layer) => {
+
       if (layer.updateFunction !== null) {
         layer.updateFunction(this.planService);
       } else {
-       //this.defaultFill(layer);
+        this.defaultFill(layer);
       }
+
     });
 
     this.planService.updateLayerSubject.subscribe((layer) => {
@@ -106,14 +108,16 @@ export class MapElementComponent implements OnInit {
     });
 
     this.planService.yearSubject.subscribe((year) => {
-      const layers = this.planService.getLayers();
-      layers.forEach(layer => {
-        if (layer.updateFunction !== null && layer.active) {
-            layer.updateFunction(this.planService);
-        } else {
-         //this.defaultFill(layer);
+      setTimeout(() => {
+        if (this.planService.okToUpdate()) {
+          const layers = this.planService.getLayers();
+          layers.forEach(layer => {
+            if (layer.updateFunction !== null && layer.active) {
+              layer.updateFunction(this.planService);
+            }
+          });
         }
-      });
+      }, 700);
     });
   }
 
