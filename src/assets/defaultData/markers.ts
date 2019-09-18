@@ -2,7 +2,7 @@ import { Marker } from '@app/interfaces';
 import { PlanService } from '../../app/services/plan.service'
 
 export const markers: Marker[] = [{
-  markerId: 320,
+  markerId: 3,
   //markerId: 1,
   secondId: 3,
   job: 'year',
