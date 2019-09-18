@@ -23,8 +23,8 @@ export class VideoFeedComponent implements OnInit {
   private static MAX_FEEDS: number = 2;
 
   constructor(private _arservice: ArService, private planService: PlanService) {
-    this.canvasHeight = 400;
-    this.canvasWidth = 400;
+    this.canvasHeight = 350;
+    this.canvasWidth = 350;
     this.mapState = this.planService.getState();
   }
 

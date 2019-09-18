@@ -75,7 +75,7 @@
   width: 32px;
   height: 32px;
   top: 7px;
-  left: -6px;
+  left: 5px;
   position: relative;
 }
 
@@ -91,8 +91,8 @@
   color: white;
   top: 42px;
   position: relative;
-  padding: 4px;
-  left: 2px;
+  padding: 1px;
+  left: 15px;
   text-align: center;
   height: calc(70px - 4px - 8px - 32px);
 }

@@ -2,11 +2,11 @@ import { Marker } from '@app/interfaces';
 import { PlanService } from '../../app/services/plan.service'
 
 export const markers: Marker[] = [{
-  markerId: 1,
+  markerId: 3,
   //markerId: 1,
   secondId: 3,
   job: 'year',
-  delay: 75, 
+  delay: 150, 
   minRotation: 3,
   rotateLeft(planService: PlanService) {
    planService.decrementCurrentYear();
@@ -15,10 +15,10 @@ export const markers: Marker[] = [{
     planService.incrementCurrentYear();
   }
 }, {
-  markerId: 7,
-  secondId: 6,
+  markerId: 6,
+  secondId: 7,
   job: 'layer',
-  delay: 300, 
+  delay: 500, 
   minRotation: 5,
   rotateLeft(planService: PlanService) {
     planService.decrementNextLayer();
@@ -27,10 +27,10 @@ export const markers: Marker[] = [{
     planService.incrementNextLayer();
    }
 }, {
-  markerId: 4,
+  markerId: 5,
   secondId: 9,
   job: 'scenario',
-  delay: 300, 
+  delay: 600, 
   minRotation: 5,
   rotateLeft(planService: PlanService) {
     this.planService.decrementScenario();
@@ -39,8 +39,8 @@ export const markers: Marker[] = [{
     this.planService.incrementScenario();
    }
 }, {
-  markerId: 8,
-  secondId: 7,
+  markerId: 11,
+  secondId: 8,
   job: 'add',
   delay: 1000, 
   minRotation: 5,
