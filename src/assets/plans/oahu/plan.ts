@@ -184,7 +184,7 @@ export const OahuPlan: Plan = {
         included: true,
         iconPath: 'assets/plans/oahu/images/icons/wind-icon.png',
         secondScreenImagePath: 'assets/plans/oahu/images/second-screen-images/layer-images/wind.jpg',
-        secondScreenText: 'This layer shows land owned by different levels of government including Federal, State, County, and DHHL. ',
+        secondScreenText: 'This layer represents this technical potential of solar based on an analysis by the National Renewable Energy Laboratory that accounts for the wind resource by location.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
         borderWidth: 0.2,
