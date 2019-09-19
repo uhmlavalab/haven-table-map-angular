@@ -359,7 +359,7 @@ export class ProjectableMarker {
   public addDataPoint(point) {
     if (point !== undefined) {
       if (!this.seenInOtherCamera(point.camera)) {
-        this.dataPoints.unshift(this.convertPointToMap(point));
+        this.dataPoints.unshift({point: this.convertPointToMap(point), used: false});
       } else {
         this.dataPoints.unshift(null);
       }
@@ -383,7 +383,7 @@ export class ProjectableMarker {
     let seen = false;
     this.dataPoints.forEach((point, index) => {
       if (point !== null) {
-        if ((index <= this.dataPoints.length * 0.2) && (point.camera !== camera)) {
+        if ((index <= this.dataPoints.length * 0.2) && (points.point.camera !== camera)) {
           seen = true;
         }
       }
