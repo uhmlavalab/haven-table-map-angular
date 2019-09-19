@@ -125,12 +125,12 @@ export class ProjectableMarker {
   private getMovementData(): any[] {
     const movementData = [];
     this.dataPoints.forEach((point, index) => {
-      if (point !== null) {
-        movementData.push({
-          corners: point.points,
-          camera: point.camera,
-          location: index
-        });
+      if (point !== null && !point.used) {
+          movementData.push({
+            corners: point.pointData.points,
+            camera: point.pointData.camera,
+            location: index
+          });
       }
     });
     return movementData;
@@ -176,7 +176,7 @@ export class ProjectableMarker {
   public getMostRecentCenterX() {
     const corners = _.find(this.dataPoints, point => point !== null);
     if (corners !== undefined) {
-      return this.getCenterX(corners.points);
+      return this.getCenterX(corners.pointData.points);
     } else {
       return null;
     }
@@ -188,7 +188,7 @@ export class ProjectableMarker {
   public getMostRecentCenterY() {
     const corners = _.find(this.dataPoints, point => point !== null);
     if (corners !== undefined) {
-      return this.getCenterY(corners.points);
+      return this.getCenterY(corners.pointData.points);
     } else {
       return null;
     }
@@ -236,7 +236,7 @@ export class ProjectableMarker {
    */
   public wasMoved(): boolean {
     const movementData = this.getMovementData();
-
+    console.log(movementData);
     // Check to see if there is a previous to compare data with.  If not, couldn't have moved.
     if (movementData.length < 2) {
       return false;
@@ -359,7 +359,7 @@ export class ProjectableMarker {
   public addDataPoint(point) {
     if (point !== undefined) {
       if (!this.seenInOtherCamera(point.camera)) {
-        this.dataPoints.unshift({point: this.convertPointToMap(point), used: false});
+        this.dataPoints.unshift({pointData: this.convertPointToMap(point), used: false});
       } else {
         this.dataPoints.unshift(null);
       }
@@ -383,7 +383,7 @@ export class ProjectableMarker {
     let seen = false;
     this.dataPoints.forEach((point, index) => {
       if (point !== null) {
-        if ((index <= this.dataPoints.length * 0.2) && (points.point.camera !== camera)) {
+        if ((index <= this.dataPoints.length * 0.2) && (point.pointData.camera !== camera)) {
           seen = true;
         }
       }

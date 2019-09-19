@@ -15,7 +15,7 @@ export const markers: Marker[] = [{
     planService.incrementCurrentYear();
   }
 }, {
-  markerId: 7,
+  markerId: 11,
   secondId: 6,
   job: 'layer',
   delay: 300, 
@@ -27,7 +27,7 @@ export const markers: Marker[] = [{
     planService.incrementNextLayer();
    }
 }, {
-  markerId: 4,
+  markerId: 7,
   secondId: 9,
   job: 'scenario',
   delay: 300, 
@@ -39,7 +39,7 @@ export const markers: Marker[] = [{
     this.planService.incrementScenario();
    }
 }, {
-  markerId: 8,
+  markerId: 9,
   secondId: 7,
   job: 'add',
   delay: 1000, 
