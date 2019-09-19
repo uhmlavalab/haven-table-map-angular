@@ -12,7 +12,7 @@ export class ProjectableMarker {
   private static projectableMarkers: object = {};                    // Markers are stored in an Object
   private static projectableMarkerArray: ProjectableMarker[] = [];   // Markers are also stored in an Array
   private static MAX_HISTORY = 40;                                   // Length of array holding historical position data.
-  private static MAX_ROTATION_DEGREES = 240;                         // If rotation is larger than this, it is ignored.
+  private static MAX_ROTATION_DEGREES = 300;                         // If rotation is larger than this, it is ignored.
 
   /* private member variables */
   private markerId: number;           // Id that cooresponds to arucojs marker
@@ -218,7 +218,7 @@ export class ProjectableMarker {
 
         // Check to see if the x and y positions are at least 1 pixel different than the previous position.
         if (y > 1 && x > 1) {
-          const direction = this.calcDirection(data);
+          const direction = this.calcDirection(data[0].corners, data[6].corners);
           if (direction === 'left') {
             this.rotateLeft(this.planService);
             this.disable();
