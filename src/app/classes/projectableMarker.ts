@@ -211,14 +211,14 @@ export class ProjectableMarker {
       const data = this.getMovementData();
 
       // If there are not at least 2 datapoints, then the marker was not moved or just placed.
-      if (data.length > 2) {
+      if (data.length > 7) {
         const movementData = this.getDistanceMoved(data);
         const y = movementData.y;
         const x = movementData.x;
 
         // Check to see if the x and y positions are at least 1 pixel different than the previous position.
         if (y > 1 && x > 1) {
-          const direction = this.calcDirection(data[0].corners, data[1].corners);
+          const direction = this.calcDirection(data);
           if (direction === 'left') {
             this.rotateLeft(this.planService);
             this.disable();
@@ -236,9 +236,8 @@ export class ProjectableMarker {
    */
   public wasMoved(): boolean {
     const movementData = this.getMovementData();
-    console.log(movementData);
     // Check to see if there is a previous to compare data with.  If not, couldn't have moved.
-    if (movementData.length < 2) {
+    if (movementData.length < 5) {
       return false;
     } else {
       if (movementData[0].corners[0].x !== movementData[1].corners[0].x) {
@@ -258,7 +257,7 @@ export class ProjectableMarker {
     const y = movementData.y;
     const x = movementData.x;
 
-    if ((x > 1 && x < 4) || (y > 1 && y < 4)) {
+    if ((x > 1 && x < 40) || (y > 1 && y < 40)) {
       return false;
     }
     else {
