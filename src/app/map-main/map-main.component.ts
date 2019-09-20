@@ -315,11 +315,24 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.addLayer();
     } else if (event.key === 'k') {
       this.planService.removeLayer();
-    }else if (event.key === 'p') {
+    } else if (event.key === 'p') {
       this.planService.resetPlan();
       this.router.navigateByUrl('');
       this.planService.setState('landing');
+    } else if (event.key === 'b') {
+      this.runWorker();
     }
+  }
+
+  runWorker() {
+    const worker = new Worker('../web-workers/update-worker.worker', {
+      type: 'module'
+    });
+
+    worker.onmessage = ({ data }) => {
+      console.log('From Web Worker:', data);
+    };
+    worker.postMessage({});
   }
 
 }
