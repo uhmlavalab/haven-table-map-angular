@@ -120,34 +120,32 @@ export class MapMainComponent implements AfterViewInit {
   private track(marker: ProjectableMarker) {
 
     try {
+
       const dataPoint = { x: null, y: null };
-      
       dataPoint.x = marker.getMostRecentCenterX();
       dataPoint.y = marker.getMostRecentCenterY();
+
+      let element = null;
 
       if (dataPoint.x !== null) {
         switch (marker.getJob()) {
           case 'year':
-            this.trackingDotYear.nativeElement.style.opacity = 1;
-            this.trackingDotYear.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotYear.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            element = this.trackingDotYear.nativeElement;
             break;
           case 'layer':
-            this.trackingDotLayer.nativeElement.style.opacity = 1;
-            this.trackingDotLayer.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotLayer.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            element = this.trackingDotLayer.nativeElement;
             break;
           case 'scenario':
-            this.trackingDotScenario.nativeElement.style.opacity = 1;
-            this.trackingDotScenario.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotScenario.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            element = this.trackingDotScenario.nativeElement;
             break;
           case 'add':
-            this.trackingDotAdd.nativeElement.style.opacity = 1;
-            this.trackingDotAdd.nativeElement.style.left = dataPoint.x + 25 + 'px';
-            this.trackingDotAdd.nativeElement.style.top = dataPoint.y + 25 + 'px';
+            element = this.trackingDotAdd.nativeElement;
             break;
         }
+        element.style.opacity = 1;
+        element.style.left = dataPoint.x + 25 + 'px';
+        element.style.top = dataPoint.y + 25 + 'px';
+
       }
 
     } catch (error) {
@@ -315,7 +313,7 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.addLayer();
     } else if (event.key === 'k') {
       this.planService.removeLayer();
-    }else if (event.key === 'p') {
+    } else if (event.key === 'p') {
       this.planService.resetPlan();
       this.router.navigateByUrl('');
       this.planService.setState('landing');

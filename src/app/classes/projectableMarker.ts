@@ -218,7 +218,7 @@ export class ProjectableMarker {
 
         // Check to see if the x and y positions are at least 1 pixel different than the previous position.
         if (y > 1 && x > 1) {
-          const direction = this.calcDirection(data[0].corners, data[6].corners);
+          const direction = this.calcDirection(data);
           if (direction === 'left') {
             this.rotateLeft(this.planService);
             this.disable();
@@ -321,14 +321,33 @@ export class ProjectableMarker {
   /** Calculate the direction that the marker was turned.
   * @return the direction that it was turned
   */
-  private calcDirection(corners, previousCorners) {
+  private calcDirection(data) {
 
-    const oldRotation = this.calcRotation(previousCorners);
-    const newRotation = this.calcRotation(corners);
-    let diff = oldRotation - newRotation; // Change in rotation
-    if (diff > this.minRotation && Math.abs(diff) < ProjectableMarker.MAX_ROTATION_DEGREES) {
+    const rotations = [];
+    data.forEach( point => {
+      if (!point.used) {
+        rotations.push(this.calcRotation(point.corners));
+        point.used = true;
+      }
+    });
+
+    let diff = 0;
+
+    let length = 6;
+
+    if (rotations.length < 7) {
+      length = rotations.length
+    }
+    for (let i = 0; i < length; i++) {
+      const total = (rotations[i] - rotations[i + 1]);
+      if (Math.abs(total) < 200) {
+        diff += (rotations[i] - rotations[i + 1]);
+      }
+    }
+
+    if (diff < -this.minRotation) {
       return 'left';
-    } else if (diff < -this.minRotation && Math.abs(diff) < ProjectableMarker.MAX_ROTATION_DEGREES) {
+    } else if (diff > this.minRotation) {
       return 'right';
     } else {
       return 'none;'
