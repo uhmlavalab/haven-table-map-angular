@@ -27,7 +27,7 @@ export const markers: Marker[] = [{
     planService.incrementNextLayer();
    }
 }, {
-  markerId: 7,
+  markerId: 4,
   secondId: 9,
   job: 'scenario',
   delay: 400, 
@@ -39,7 +39,7 @@ export const markers: Marker[] = [{
     this.planService.incrementScenario();
    }
 }, {
-  markerId: 9,
+  markerId: 7,
   secondId: 7,
   job: 'add',
   delay: 400, 
