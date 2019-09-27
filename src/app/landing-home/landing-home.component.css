@@ -5,10 +5,10 @@
 
 /* Wrapper for the map selection boxes */
 .map-selector-container {
-  width: 70%;
+  width: 86%;
   position: absolute;
   text-align: center;
-  left: 25%;
+  left: 8%;
   height: 70%;
   top: 15%;
   font-family: 'Roboto-Regular',Arial, sans-serif;
@@ -17,7 +17,7 @@
 
 /* Actual map selector Box.  Each box contains an image and a button */
 .map-selector-box {
-  width: 27%;
+  width: 17%;
   height: 100%;
   position: relative;
   display: inline-block;
@@ -111,7 +111,7 @@
 /* Styles for the buttons on the left side of the landing page */
 .landing-buttons-container {
   position: absolute;
-  width: 22%;
+  width: 17%;
   left: 5%;
   top: 17%;
   text-align: center;

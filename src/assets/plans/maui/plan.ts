@@ -289,7 +289,7 @@ export const MauiPlan: Plan = {
               .style('fill', colors[parcel.properties.type])
               .style('opacity', this.active ? 0.85 : 0.0)
               .style('stroke', this.borderColor)
-              .style('stroke-width', this.borderWidth  + 'px');
+              .style('stroke-width', this.borderWidth + 'px');
           });
         },
         updateFunction(planService: PlanService) {
@@ -299,6 +299,104 @@ export const MauiPlan: Plan = {
           });
         },
       },
+      {
+        name: 'der',
+        displayName: 'Distributed Energy Resources',
+        active: false,
+        included: true,
+        iconPath: 'assets/plans/maui/images/icons/der.jpg',
+        secondScreenImagePath: 'assets/plans/maui/images/second-screen-images/layer-images/solar.jpg',
+        secondScreenText: 'This layer depicts the available locational capacity for distributed energy resources. The layer changes to red as DER from the PSIP plan is added to the available capacity.',
+        fillColor: 'orange',
+        borderColor: 'orange',
+        borderWidth: .1,
+        legendColor: 'orange',
+        filePath: 'assets/plans/maui/layers/der.json',
+        parcels: [],
+        setupFunction(planService: PlanService) {
+          this.derColors = [
+            {
+              minValue: 2027,
+              color:  '#f50000'
+            },
+            {
+              minValue: 2025,
+              color:'#f51b00',
+            },
+            {
+              minValue: 2023,
+              color: '#f53600',
+            },
+            {
+              minValue: 2022,
+              color: '#f55200',
+            },
+            {
+              minValue: 2021,
+              color: '#f56d00',
+            },
+            {
+              minValue: 2020,
+              color: '#f58800',
+            },
+            {
+              minValue: 2019,
+              color: '#f5a300',
+            },
+            {
+              minValue: 2018,
+              color: '#f5be00',
+            },
+            {
+              minValue: 2017,
+              color:  '#f5da00',
+            },
+            {
+              minValue: 2016,
+              color: '#f5f500',
+            },
+          ];
+          const value = planService.getCurrentYear();
+          const color = () => {
+            let max = 2045;
+            let min = 2016;
+            for (let i = 0; i < this.derColors.length; i++) {
+              min = this.derColors[i].minValue;
+              if (value <= max && value >= min) {
+                return this.derColors[i].color;
+              }
+              max = min;
+            }
+            return this.derColors[this.derColors.length - 1].color;
+          };
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', color)
+              .style('opacity', (this.active) ? 0.85 : 0.0);
+          });
+        },
+        updateFunction(planService: PlanService) {
+          const value = planService.getCurrentYear();
+          const color = () => {
+            let max = 2045;
+            let min = 2016;
+            for (let i = 0; i < this.derColors.length; i++) {
+              min = this.derColors[i].minValue;
+              if (value <= max && value >= min) {
+                return this.derColors[i].color;
+              }
+              max = min;
+            }
+            return this.derColors[this.derColors.length - 1].color;
+          };
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', color)
+              .style('opacity', (this.active) ? 0.85 : 0.0);
+          });
+        },
+      }
+
     ],
   },
 
