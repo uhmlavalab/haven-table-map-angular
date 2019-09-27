@@ -31,14 +31,14 @@ export const MauiPlan: Plan = {
   },
   css: {
     map: {
-      left: '24.5vw',
-      top: '4vh'
+      left: '25.5vw',
+      top: '4.5vh'
     },
     legend: {
       defaultLayout: 'grid',
       grid: {
-        left: '47vw',
-        top: '8vh',
+        left: '49vw',
+        top: '2vh',
         width: '23vw'
       },
       vertical: {

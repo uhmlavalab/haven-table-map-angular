@@ -30,7 +30,7 @@ export const markers: Marker[] = [{
   markerId: 5,
   secondId: 9,
   job: 'scenario',
-  delay: 400, 
+  delay: 600, 
   minRotation: 10,
   rotateLeft(planService: PlanService) {
     this.planService.decrementScenario();
@@ -42,7 +42,7 @@ export const markers: Marker[] = [{
   markerId: 7,
   secondId: 7,
   job: 'add',
-  delay: 400, 
+  delay: 800, 
   minRotation: 10,
   rotateLeft(planService: PlanService) {
     planService.toggleLayer();
