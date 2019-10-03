@@ -76,7 +76,7 @@ export const OahuPlan: Plan = {
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
-    baseMapPath: 'assets/plans/oahu/images/old/base-map.png',
+    baseMapPath: 'assets/plans/oahu/images/oahu-satellite6.png',
     mapLayers: [
       {
         name: 'transmission',
@@ -102,7 +102,6 @@ export const OahuPlan: Plan = {
           });
         },
         updateFunction(planService: PlanService) {
-          console.log('hi from second screen tramsission');
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
               .style('opacity', this.active ? 0.85 : 0.0);
@@ -519,6 +518,10 @@ export const OahuPlan: Plan = {
                     .style('fill', color)
                     .style('opacity', (this.active) ? 0.85 : 0.0);
                 }
+              } else {
+                d3.select(parcel.path)
+                  .style('fill', 'transparent')
+                  .style('opacity', (this.active) ? 0.85 : 0.0);
               }
             });
           });
@@ -546,6 +549,10 @@ export const OahuPlan: Plan = {
                   .style('fill', color)
                   .style('opacity', (this.active) ? 1.00 : 0.0);
               }
+            } else {
+              d3.select(parcel.path)
+                .style('fill', 'transparent')
+                .style('opacity', (this.active) ? 0.85 : 0.0);
             }
           });
         },

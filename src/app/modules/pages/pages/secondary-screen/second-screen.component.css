@@ -1,0 +1,181 @@
+/* Classes for the second-screen wrapper */
+.second-screen-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  color: white;
+  background: #212121;
+}
+
+h1  {
+  position: absolute;
+  width: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  font-size: 10vh;
+  line-height: 2vh;
+  top: 0;
+}
+
+
+.right-card h2 {
+  font-size: 3vh;
+  line-height: 1.5vh;
+}
+
+.right-card {
+  position: absolute;
+  left: calc(98vw - 32vw);
+  top: 2vh;
+  height: calc(96vh - 20px);
+  width: calc(32vw - 20px);
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 25px;
+}
+
+.right-card img {
+  width: 95%;
+}
+
+.right-card p {
+  text-align: left;
+    padding: 0px 16px 0px 16px;
+    font-size: 20px;
+}
+
+.left-card h2 {
+  font-size: 3vh;
+  line-height: 1.5vh;
+}
+
+.left-card {
+  position: absolute;
+  left: 2vw;
+  top: 2vh;
+  height: calc(96vh - 20px);
+  width: calc(32vw - 20px);
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 25px;
+}
+
+.left-card img {
+  width: 95%;
+}
+
+.left-card p {
+  text-align: left;
+    padding: 0px 16px 0px 16px;
+    font-size: 20px;
+}
+
+.map-container {
+  position: absolute;
+  height: 75vh;
+  width: 75vh;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background: #174b5d;
+  border: solid #212121 50px;
+}
+
+.loading {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: calc(50% - 64px);
+  color: white;
+}
+
+.loading>h2 {
+  font-variant: small-caps;
+}
+
+.lds-facebook {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 6px;
+  width: 13px;
+  background: purple;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+  0% {
+    top: 6px;
+    height: 51px;
+  }
+
+  50%,
+  100% {
+    top: 19px;
+    height: 26px;
+  }
+}
+
+.second-screen-legend-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.second-screen-legend-container .node-container {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+}
+.second-screen-legend-container .node-container .node {
+  width: 100%;
+  height: 100%;
+  border: 2px solid gray;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+
+.mapDiv {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.legend-container {
+  width: 9vw;
+  height: 10vh;
+  position: absolute;
+}

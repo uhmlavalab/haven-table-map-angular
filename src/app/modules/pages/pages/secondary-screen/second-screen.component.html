@@ -1,0 +1,43 @@
+<div class="second-screen-container">
+  <div *ngIf="plan; else elseBlock">
+
+
+
+    <div class="left-card">
+      <h2>{{ selectedLayer?.displayName }}</h2>
+      <img src="{{selectedLayer?.layerImage}}" />
+      <p>{{ selectedLayer?.layerText }}</p>
+    </div>
+
+    <div class="right-card">
+      <h2>{{ selectedLayer?.layerName }}</h2>
+      <img src="{{selectedLayer?.layerImage}}" />
+      <p>{{ selectedLayer?.layerText }}</p>
+    </div>
+
+    <div class="map-container">
+      <div #mapDiv class="mapDiv"></div>
+    </div>
+
+    <app-legend class="legend-container" [left]="legendLeft" [top]="legendTop" [width]="width" [height]="height">
+    </app-legend>
+
+    <h1>{{ currentYear }}</h1>
+
+    <h2>{{ currentScenario?.displayName }} </h2>
+  </div>
+
+
+
+  <!-- loader called until plan is set-->
+  <ng-template #elseBlock>
+    <div class="loading">
+      <div class="lds-facebook">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <h2>Getting The Second Screen Ready</h2>
+    </div>
+  </ng-template>
+</div>

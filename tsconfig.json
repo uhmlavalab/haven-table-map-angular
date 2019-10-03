@@ -4,6 +4,13 @@
     "paths": {
       "*": ["types/*"],
       "@app/*": ["src/app/*"],
+      "@app/charts": ["src/app/modules/charts/"],
+      "@app/data": ["src/app/modules/data/"],
+      "@app/pages": ["src/app/modules/pages/"],
+      "@app/maps": ["src/app/modules/maps/"],
+      "@app/sounds": ["src/app/modules/sounds/"],
+      "@app/input": ["src/app/modules/user-input/"]
+
      },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LandingHomeComponent } from './landing-home/landing-home.component';
-import { MapMainComponent } from './map-main/map-main.component';
-import { SecondScreenComponent } from './second-screen/second-screen.component';
+import { LandingHomeComponent } from '@app/pages';
+import { MapMainComponent } from '@app/pages';
+import { SecondScreenComponent } from '@app/pages';
 
 const routes: Routes = [
   { path: '', component: LandingHomeComponent },
