@@ -104,6 +104,36 @@ export const BigIslandPlan: Plan = {
           });
         },
       },
+      {  //Begin Test Layer (2019)
+        name: 'testlayer',
+        displayName: 'Test Layer 2019',
+        active: false, 
+        included: true, 
+        iconPath: 'assets/plans/bigisland/images/icons/transmission-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/transmission.jpg',
+        secondScreenText: 'Sometimes, I dream about cheese.',
+        fillColor: mapLayerColors.Transmission.fill,
+        borderColor: mapLayerColors.Transmission.border,
+        borderWidth: 0.04,
+        legendColor: mapLayerColors.Transmission.border,
+        filePath: 'assets/plans/bigisland/layers/transmission.json',
+        parcels: [],
+        setupFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', this.fillColor)
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          });
+        },
+        updateFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('opacity', this.active ? 0.85 : 0.0);
+          });
+        },
+      },  //End Test Layer (2019)
       {
         name: 'dod',
         displayName: 'Government Lands',
