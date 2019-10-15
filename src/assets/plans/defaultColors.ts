@@ -37,6 +37,11 @@ export const mapLayerColors = {
     border: '#ccff00',
     legend: '#ccff00'
   },
+  Test2019:{  //CSS for 2019 Test Layer
+    fill: '#4287f5',
+    border: '#005a5c',
+    legend: '#005a5c'
+  },
   Agriculture: {
     fill: '#0F8554',
     border: 'white',
