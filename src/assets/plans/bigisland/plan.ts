@@ -106,7 +106,7 @@ export const BigIslandPlan: Plan = {
       },
       {  //Begin Test Layer (2019)
         name: 'testlayer',  //Internal layer name
-        displayName: 'Test Layer 2019',  //Display name (on the table.)
+        displayName: 'Test Layer 2019[HPMS,2015]',  //Display name (on the table.)
         active: false,  
         included: true,   
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  
@@ -116,7 +116,7 @@ export const BigIslandPlan: Plan = {
         borderColor: mapLayerColors.Test2019.border,
         borderWidth: 0.04,
         legendColor: mapLayerColors.Test2019.border,
-        filePath: 'assets/plans/bigisland/layers/transmission.json',
+        filePath: 'assets/plans/bigisland/layers/test2019.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
