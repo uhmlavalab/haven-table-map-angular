@@ -111,7 +111,7 @@ export const BigIslandPlan: Plan = {
         included: true,   
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  
         secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',  
-        secondScreenText: 'Sometimes, I dream about cheese.',
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer',
         fillColor: mapLayerColors.Test2019.fill,
         borderColor: mapLayerColors.Test2019.border,
         borderWidth: 0.04,
@@ -134,6 +134,43 @@ export const BigIslandPlan: Plan = {
           });
         },
       },  //End Test Layer (2019)
+      {  
+        name: 'testlayer2',  //Internal layer name
+        displayName: 'Test Layer [TE Plants,1992]',  //Display name (on the table.)
+        active: false,  
+        included: true,   
+        iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',  
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer',
+        fillColor: mapLayerColors.Test1992.fill,
+        borderColor: mapLayerColors.Test1992.border,
+        borderWidth: 0.04,
+        legendColor: mapLayerColors.Test1992.border,
+        filePath: 'assets/plans/bigisland/layers/test1992.json',
+        parcels: [],
+        setupFunction(planService: PlanService) {
+          const colors = {
+            'O': 'white',//look at json file for density names
+            'L': '#ffdbdb',
+            'M': '#ff8080',
+            'H': '#ff4242',
+            'VH': '#ff0000',
+          }
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          });
+        },
+        updateFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('opacity', this.active ? 0.5 : 0.0);//changes opacity for parcels
+          });
+        },
+      },  //End Test Layer 2 (2019)
       {
         name: 'dod',
         displayName: 'Government Lands',
@@ -171,7 +208,7 @@ export const BigIslandPlan: Plan = {
         },
       },
       {
-        name: 'solar',
+        name: 'solar', //layer noted to break in firefox
         displayName: 'Solar',
         active: false,
         included: true,
@@ -231,7 +268,7 @@ export const BigIslandPlan: Plan = {
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: mapLayerColors.Wind.fill,
         borderColor: mapLayerColors.Wind.border,
-        borderWidth: .05,
+        borderWidth: 0.1,//.05
         legendColor: mapLayerColors.Wind.fill,
         filePath: 'assets/plans/bigisland/layers/wind.json',
         parcels: [],
