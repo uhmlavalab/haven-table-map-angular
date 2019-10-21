@@ -3,7 +3,8 @@
   'legend-card-vertical-wrapper': legendClass === 'vertical'
 }">
   <div *ngFor="let layer of layers" class="legend-card" id="layer-card-{{layer.name}}"
-    [style.opacity]="layer.active ? 1 : 0.3">
+  [style.opacity]="(layer.active || layer == getSelectedLayer()) ? 1 : 0.3"
+  [style.border]="layer == getSelectedLayer() ? '2px solid yellow' : none">
     <div class="legend-card-left">
       <img src="{{ layer.iconPath }}" />
     </div>
