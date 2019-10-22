@@ -1,5 +1,5 @@
-import { Marker } from '@app/interfaces';
-import { PlanService } from '../../app/services/plan.service'
+import { Marker } from '@app/input';
+import { UserInputService } from '@app/input';
 
 export const markers: Marker[] = [{
   markerId: 1,
@@ -8,23 +8,22 @@ export const markers: Marker[] = [{
   job: 'year',
   delay: 75,
   minRotation: 3,
-  rotateLeft(planService: PlanService) {
-   planService.decrementCurrentYear();
+  rotateLeft(inputService: UserInputService) {
+    inputService.sendInputEvent('decrement_year');
   },
-  rotateRight(planService: PlanService) {
-    planService.incrementCurrentYear();
-  }
+  rotateRight(inputService: UserInputService) {
+    inputService.sendInputEvent('decrement_year');  }
 }, {
   markerId: 7,
   secondId: 6,
   job: 'layer',
   delay: 300,
   minRotation: 5,
-  rotateLeft(planService: PlanService) {
-    planService.decrementNextLayer();
+  rotateLeft(inputService: UserInputService) {
+    inputService.sendInputEvent('decrement_maplayer');
    },
-   rotateRight(planService: PlanService) {
-    planService.incrementNextLayer();
+   rotateRight(inputService: UserInputService) {
+    inputService.sendInputEvent('increment_maplayer');
    }
 }, {
   markerId: 4,
@@ -32,11 +31,11 @@ export const markers: Marker[] = [{
   job: 'scenario',
   delay: 300,
   minRotation: 5,
-  rotateLeft(planService: PlanService) {
-    this.planService.decrementScenario();
+  rotateLeft(inputService: UserInputService) {
+    inputService.sendInputEvent('decrement_scenario');
    },
-   rotateRight(planService: PlanService) {
-    this.planService.incrementScenario();
+   rotateRight(inputService: UserInputService) {
+    inputService.sendInputEvent('increment_scenario');
    }
 }, {
   markerId: 8,
@@ -44,10 +43,10 @@ export const markers: Marker[] = [{
   job: 'add',
   delay: 300,
   minRotation: 5,
-  rotateLeft(planService: PlanService) {
-    planService.toggleLayer();
+  rotateLeft(inputService: UserInputService) {
+    inputService.sendInputEvent('toggle_maplayer');
    },
-   rotateRight(planService: PlanService) {
-    planService.toggleLayer();
+   rotateRight(inputService: UserInputService) {
+    inputService.sendInputEvent('toggle_maplayer');
    }
 }];

@@ -6,8 +6,8 @@ import { MultiWindowModule } from 'ngx-multi-window';
 // Modules
 import { ChartsModule } from '@app/charts';
 import { SoundsModule } from '@app/sounds';
-import { DataModule } from '@app/data';
-import { PagesModule } from '@app/pages';
+import { PlanModule } from '@app/plan';
+import { SectionsModule } from '@app/sections';
 import { MapsModule } from '@app/maps';
 import { UserInputModule } from '@app/input';
 
@@ -27,8 +27,8 @@ import { AppComponent } from './app.component';
     DragDropModule,
     MultiWindowModule,
     ChartsModule,
-    DataModule,
-    PagesModule,
+    PlanModule,
+    SectionsModule,
     MapsModule,
     SoundsModule,
     UserInputModule

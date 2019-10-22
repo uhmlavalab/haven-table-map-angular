@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import * as d3 from 'd3';
-import { MapLayer, Parcel } from '@app/modules/data/interfaces/plan';
+import { MapLayer, MapFeature } from '@app/plan';
 
 @Component({
   selector: 'app-d3-map',
@@ -82,7 +82,7 @@ export class D3MapComponent implements OnInit {
           .attr('d', this.path)
           .attr('class', layer.name)
           .each(function(d) {
-            layer.parcels.push({ path: this, properties: (d.hasOwnProperty(`properties`)) ? d[`properties`] : null } as Parcel);
+            layer.features.push({ path: this, properties: (d.hasOwnProperty(`properties`)) ? d[`properties`] : null } as MapFeature);
           }).call(() => {
             if (layer.setupFunction !== null) {
               layer.setupFunction();
@@ -96,7 +96,7 @@ export class D3MapComponent implements OnInit {
   }
 
   defaultFill(layer: MapLayer) {
-    layer.parcels.forEach(el => {
+    layer.features.forEach(el => {
       d3.select(el.path)
         .style('fill', layer.fillColor)
         .style('opacity', layer.active ? 0.85 : 0.0)

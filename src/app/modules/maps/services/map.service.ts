@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
-import { PlanService } from './plan.service';
-import { Map, MapLayer } from '@app/interfaces';
-import { SoundsService } from './sounds.service';
-import { ProjectableMarker } from '../classes/projectableMarker';
+import { PlanService } from '@app/data';
+import { Map, MapLayer } from '@app/maps';
+import { SoundsService } from '@app/sounds';
 
 @Injectable({
   providedIn: 'root'

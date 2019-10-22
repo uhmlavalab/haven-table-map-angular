@@ -7,45 +7,55 @@ import { Injectable } from '@angular/core';
 /** Contains all sound related functions */
 export class SoundsService {
 
-  private clicksound: any;
-  private ticksound: any;
-  private waterdropUp: any;
-  private waterdropDown: any;
+  private introSound: HTMLAudioElement;
+  private clickSound: HTMLAudioElement;
+  private tickSound: HTMLAudioElement;
+  private upSound: HTMLAudioElement;
+  private downSound: HTMLAudioElement;
 
   constructor() {
-    this.clicksound = new Audio();
-    this.clicksound.src = '../assets/sounds/click3.mp3';
-    this.clicksound.load();
+    this.introSound = new Audio();
+    this.introSound.src = '../assets/sounds/intro.m4a';
+    this.introSound.load();
 
-    this.ticksound = new Audio();
-    this.ticksound.src = '../assets/sounds/tick.mp3';
-    this.ticksound.load();
+    this.clickSound = new Audio();
+    this.clickSound.src = '../assets/sounds/click.mp3';
+    this.clickSound.load();
 
-    this.waterdropUp = new Audio();
-    this.waterdropUp.src = '../assets/sounds/water-high.mp3';
-    this.waterdropUp.load();
+    this.tickSound = new Audio();
+    this.tickSound.src = '../assets/sounds/tick.mp3';
+    this.tickSound.load();
 
-    this.waterdropDown = new Audio();
-    this.waterdropDown.src = '../assets/sounds/water-low.mp3';
-    this.waterdropDown.load();
+    this.upSound = new Audio();
+    this.upSound.src = '../assets/sounds/up.mp3';
+    this.upSound.load();
 
+    this.downSound = new Audio();
+    this.downSound.src = '../assets/sounds/down.mp3';
+    this.downSound.load();
+
+  }
+
+  /** Plays the intro music */
+  public playIntro() {
+    this.introSound.play();
   }
 
   /** Plays a click sound */
-  public click() {
-    this.clicksound.play();
+  public playClick() {
+    this.clickSound.play();
   }
 
   /** Plays a tick sound */
-  public tick() {
-    this.ticksound.play();
+  public playTick() {
+    this.tickSound.play();
   }
   /** Plays a water droplet sound */
-  public dropDown() {
-    this.waterdropDown.play();
+  public playUp() {
+    this.upSound.play();
   }
   /** Plays a water droplet sound */
-  public dropUp() {
-    this.waterdropUp.play();
+  public playDown() {
+    this.downSound.play();
   }
 }
