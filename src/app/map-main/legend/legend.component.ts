@@ -13,6 +13,7 @@ import { PlanService } from '@app/services/plan.service';
 export class LegendComponent implements AfterViewInit {
 
   layers: MapLayer[];
+  //selectedLayer: MapLayer;
   width: number;
   private legendClass: string;
 
@@ -31,6 +32,9 @@ export class LegendComponent implements AfterViewInit {
     });
   }
 
+  private getSelectedLayer(planService: PlanService): object {
+    return this.planService.getSelectedLayer();
+  }
 
   /** Changes the background of a mini-card when that layer is either added or
    * removed from the map.
