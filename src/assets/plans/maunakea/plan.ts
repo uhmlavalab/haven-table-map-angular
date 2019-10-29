@@ -5,7 +5,7 @@ import * as d3 from 'd3';
 
 export const MaunaKeaPlan: Plan = {
   name: 'maunakea',
-  displayName: 'MaunaKea',
+  displayName: 'Mauna Kea',
   landingImagePath: 'assets/plans/maunakea/images/landing-image.jpg',
   secondScreenImagePath: 'assets/plans/maunakea/images/second-screen-images/backgrounds/maunakea.jpg',
   includeSecondScreen: false,
