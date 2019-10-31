@@ -149,26 +149,58 @@ export const BigIslandPlan: Plan = {
         filePath: 'assets/plans/bigisland/layers/test1992.json',
         parcels: [],
         setupFunction(planService: PlanService) {
-          const colors = {
-            'O': 'white',//look at json file for density names
-            'L': '#ffdbdb',
-            'M': '#ff8080',
-            'H': '#ff4242',
-            'VH': '#ff0000',
-          }
+        
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
-              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('transparent', this.fillColor)
               .style('opacity', this.active ? 0.85 : 0.0)
               .style('stroke', this.borderColor)
               .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           });
         },
+
         updateFunction(planService: PlanService) {
+          let year = planService.getCurrentYear();
+
+          
           this.parcels.forEach(parcel => {
+
+            let layerattribute = parcel.properties.density;
+
+            const colors = {
+              'O': 'white',//look at json file for density names
+              'L': '#ffdbdb',
+              'M': '#ff8080',
+              'H': '#ff4242',
+              'VH': '#ff0000',
+            }
+
+            if((year <= 2019) && (layerattribute == 'L'))
+            {
             d3.select(parcel.path)
-              .style('opacity', this.active ? 0.5 : 0.0);//changes opacity for parcels
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if(((year <= 2022)) && (year > 2019) && (layerattribute == 'M'))
+            {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else{
+              d3.select(parcel.path)
+                .style('fill', 'transparent')//needed to fill multi-color by density
+                .style('opacity', this.active ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+
           });
+
         },
       },  //End Test Layer 2 (2019)
       {
