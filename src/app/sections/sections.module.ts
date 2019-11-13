@@ -1,22 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { LandingHomeComponent } from './pages/landing-home/landing-home.component';
-import { MapMainComponent } from './pages/map-screen/map-main.component';
-
-import { BouncingTitleComponent } from './components/bouncing-title/bouncing-title.component';
-import { TextTitleComponent } from './components/text-title/text-title.component';
-
+import { LandingModule } from './landing/landing.module';
+import { MapModule } from './map/map.module';
+import { SecondScreenModule } from './second-screen/second-screen.module';
 
 @NgModule({
   declarations: [
-    LandingHomeComponent,
-    MapMainComponent,
-    TextTitleComponent,
-    BouncingTitleComponent
+
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    LandingModule,
+    MapModule,
+    SecondScreenModule
   ]
 })
 export class SectionsModule { }

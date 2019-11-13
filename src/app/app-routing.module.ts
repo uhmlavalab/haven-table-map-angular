@@ -1,23 +1,33 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LandingHomeComponent } from '@app/sections';
-import { MapMainComponent } from '@app/sections';
-import { SecondScreenComponent } from '@app/sections';
+import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  { path: '', component: LandingHomeComponent },
-  { path: 'map-main', component: MapMainComponent },
-  { path: 'second-screen', component: SecondScreenComponent }
+const appRoutes: Routes = [
+
+  {
+    path: 'landing',
+    loadChildren: () => import('./sections/landing/landing.module').then(mod => mod.LandingModule),
+  },
+  {
+    path: 'map',
+    loadChildren: () => import('./sections/map/map.module').then(mod => mod.MapModule),
+  },
+  {
+    path: 'secondscreen',
+    loadChildren: () => import('./sections/second-screen/second-screen.module').then(mod => mod.SecondScreenModule),
+  },
+  {
+    path: '**',
+    redirectTo: 'landing',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(appRoutes)
   ],
   exports: [
-    RouterModule,
+    RouterModule
   ]
 })
-
 export class AppRoutingModule { }
-export const routingComponents = [LandingHomeComponent, MapMainComponent, SecondScreenComponent];

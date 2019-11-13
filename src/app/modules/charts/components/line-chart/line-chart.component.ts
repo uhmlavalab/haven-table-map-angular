@@ -39,7 +39,7 @@ export class LineChartComponent implements OnInit {
       dataset.labels.push(...this.data[i].x);
     }
 
-    dataset.labels =  [...new Set(dataset.labels)];
+   // dataset.labels =  [...new Set(dataset.labels)];
     this.createLineChart(dataset);
   }
 

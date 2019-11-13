@@ -1,9 +1,9 @@
 import { Component, HostListener, Input } from '@angular/core';
-import { InputService } from '@app/input';
+import { InputService } from '../../services/input.service';
 
 export interface KeyboardInput {
   key: string;
-  eventName: string;
+  eventname: string;
 }
 
 @Component({
@@ -19,7 +19,7 @@ export class KeyboardComponent {
   keyEvent(event: KeyboardEvent) {
     const command = this.keyboardCommands.find(el => el.key === event.key);
     if (command) {
-      this.inputService.sendInputEvent(command.eventName);
+      this.inputService.sendInputEvent(command.eventname);
     }
   }
 

@@ -10,7 +10,9 @@
       "@app/maps": ["src/app/modules/maps/"],
       "@app/sounds": ["src/app/modules/sounds/"],
       "@app/input": ["src/app/modules/input/"],
-      "@app/window": ["src/app/modules/window/"]
+      "@app/inputTypes": ["src/app/modules/input/inputTypes"],
+      "@app/window": ["src/app/modules/window/"],
+      "@app/material": ["src/app/modules/material/"]
 
      },
     "baseUrl": "./",

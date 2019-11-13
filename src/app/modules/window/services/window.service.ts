@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 })
 /** Contains the functions and data for controlling the second monitor */
 export class WindowService {
+
   private secondScreenObject: any; // Stores the object of the second window
   private secondScreenSet: boolean; // True if the screen his open, false if not.
   private loadingStatus: boolean; // True if loading, false if not (for loading-screen after close window)

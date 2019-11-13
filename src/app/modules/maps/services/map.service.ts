@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
-import { PlanService } from '@app/data';
-import { Map, MapLayer } from '@app/maps';
+import { PlanService } from '@app/plan';
+import { Map, MapLayer } from '@app/plan';
 import { SoundsService } from '@app/sounds';
 
 @Injectable({
@@ -31,102 +31,102 @@ export class MapService {
 
   constructor(private planService: PlanService, private soundsService: SoundsService) {
 
-    this.planService.planSubject.subscribe(plan => {
-      if (plan === null) {
-        this.layers = [];
-        this.selectedLayer = null;
-        this.currentMap = null;
-        return;
-      }
-      this.currentMap = plan.map;
-      this.currentMap.mapLayers.forEach(layer => {
-        if (layer.included) {
-          this.layers.push(layer);
-        }
-      });
-      this.selectedLayer = this.layers[0];
-      this.selectedLayerSubject.next(this.selectedLayer);
-    });
+    // this.planService.getPlan().subscribe(plan => {
+    //   if (plan === null) {
+    //     this.layers = [];
+    //     this.selectedLayer = null;
+    //     this.currentMap = null;
+    //     return;
+    //   }
+    //   this.currentMap = plan.map;
+    //   this.currentMap.mapLayers.forEach(layer => {
 
-    this.planService.scenarioSubject.subscribe(scenario => {
-      this.layers.forEach(layer => {
-        this.updateLayerSubject.next(layer);
-      });
-    });
+    //       this.layers.push(layer);
 
-    this.planService.yearSubject.subscribe(year => {
-      clearTimeout(this.updateTimeout);
-      this.updateTimeout = setTimeout(() => {
+    //   });
+    //   this.selectedLayer = this.layers[0];
+    //   this.selectedLayerSubject.next(this.selectedLayer);
+    // });
+
+    // this.planService.scenarioSubject.subscribe(scenario => {
+    //   this.layers.forEach(layer => {
+    //     this.updateLayerSubject.next(layer);
+    //   });
+    // });
+
+    // this.planService.yearSubject.subscribe(year => {
+    //   clearTimeout(this.updateTimeout);
+    //   this.updateTimeout = setTimeout(() => {
 
 
-      this.layers.forEach(layer => {
-        this.updateLayerSubject.next(layer);
-      });
-    }, 500);
-    });
+    //   this.layers.forEach(layer => {
+    //     this.updateLayerSubject.next(layer);
+    //   });
+    // }, 500);
+    // });
   }
 
-  /** Gets the scale of the map
-   * @return the scale of the map
-   */
-  public getMapScale(): number {
-    try {
-      return this.currentMap.scale;
-    } catch (error) {
-      console.log('No Map Selected');
-      return 0;
-    }
-  }
+  // /** Gets the scale of the map
+  //  * @return the scale of the map
+  //  */
+  // public getMapScale(): number {
+  //   try {
+  //     return this.currentMap.scale;
+  //   } catch (error) {
+  //     console.log('No Map Selected');
+  //     return 0;
+  //   }
+  // }
 
-  /** Gets the map Image width
-   * @return the map image width
-   */
-  public getMapImageWidth(): number {
-    try {
-      return this.currentMap.width;
-    } catch (error) {
-      console.log('No Map Selected');
-      return 0;
-    }
-  }
+  // /** Gets the map Image width
+  //  * @return the map image width
+  //  */
+  // public getMapImageWidth(): number {
+  //   try {
+  //     return this.currentMap.width;
+  //   } catch (error) {
+  //     console.log('No Map Selected');
+  //     return 0;
+  //   }
+  // }
 
-  /** Get the map Image height
-   * @return the map Image height
-   */
-  public getMapImageHeight(): number {
-    try {
-      return this.currentMap.height;
-    } catch (error) {
-      console.log('No Map Selected');
-      return 0;
-    }
+  // /** Get the map Image height
+  //  * @return the map Image height
+  //  */
+  // public getMapImageHeight(): number {
+  //   try {
+  //     return this.currentMap.height;
+  //   } catch (error) {
+  //     console.log('No Map Selected');
+  //     return 0;
+  //   }
 
-  }
+  // }
 
-  /** Gets the map bounds
-   * @return array of bounds.
-   */
-  public getMapBounds(): any[] {
-    try {
-      return this.currentMap.bounds;
-    } catch (error) {
-      console.log('No Map Selected');
-      return [];
-    }
+  // /** Gets the map bounds
+  //  * @return array of bounds.
+  //  */
+  // public getMapBounds(): any[] {
+  //   try {
+  //     return this.currentMap.bounds;
+  //   } catch (error) {
+  //     console.log('No Map Selected');
+  //     return [];
+  //   }
 
-  }
+  // }
 
-  /** Gets the map image name
-   * @return the path to the map Image
-   */
-  public getBaseMapPath(): string {
-    try {
-      return this.currentMap.baseMapPath;
-    } catch (error) {
-      console.log('No Map Selected');
-      return '';
-    }
-  }
+  // /** Gets the map image name
+  //  * @return the path to the map Image
+  //  */
+  // public getBaseMapPath(): string {
+  //   try {
+  //     return this.currentMap.baseMapPath;
+  //   } catch (error) {
+  //     console.log('No Map Selected');
+  //     return '';
+  //   }
+  // }
 
 
   /** Gets the active layers
@@ -144,7 +144,7 @@ export class MapService {
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
     this.layerChangeSubject.next('decrement');
-    this.soundsService.tick();
+    this.soundsService.playTick();
 
   }
 
@@ -153,7 +153,7 @@ export class MapService {
     this.selectedLayer = this.layers[(index) % this.layers.length];
     this.selectedLayerSubject.next(this.selectedLayer);
     this.layerChangeSubject.next('increment');
-    this.soundsService.tick();
+    this.soundsService.playTick();
   }
 
   public addLayer(): boolean {
@@ -161,7 +161,7 @@ export class MapService {
     if (!layer.active) {
       layer.active = true;
       this.toggleLayerSubject.next(layer);
-      this.soundsService.dropUp();
+      this.soundsService.playUp();
       return true;
     } else {
       return false;
@@ -173,7 +173,7 @@ export class MapService {
     if (layer.active) {
       layer.active = false;
       this.toggleLayerSubject.next(layer);
-      this.soundsService.dropDown();
+      this.soundsService.playDown();
       return true;
     } else {
       return false;
