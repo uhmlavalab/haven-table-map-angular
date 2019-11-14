@@ -50,8 +50,8 @@ export const OahuPlan: Plan = {
       top: '57vh'
     },
     scenario: {
-      left: '58vw',
-      top: '88vh'
+      left: '36vw',
+      top: '12vh'
     },
     charts: {
       pie: {
