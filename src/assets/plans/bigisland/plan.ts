@@ -2,6 +2,7 @@ import { Plan } from '@app/interfaces';
 import { mapLayerColors, chartColors } from '../defaultColors';
 import { PlanService } from '@app/services/plan.service';
 import * as d3 from 'd3';
+import { ParseSourceFile } from '@angular/compiler';
 
 export const BigIslandPlan: Plan = {
   name: 'bigisland',
@@ -106,12 +107,12 @@ export const BigIslandPlan: Plan = {
       },
       {  //Begin Test Layer (2019)
         name: 'testlayer',  //Internal layer name
-        displayName: 'Test Layer 2019[HPMS,2015]',  //Display name (on the table.)
-        active: false,  
-        included: true,   
-        iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  
-        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',  
-        secondScreenText: 'Slide the Layer Puck to add or remove this layer',
+        displayName: 'Test Layer 2019[Rain Gauge Status]',  //Display name (on the table.)
+        active: false,  //Default for active (visible) status
+        included: true,   //Default for inclusion in the layer list
+        iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  //Icon path for table.
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',    //Background image for second screen, image path.
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer',  //Instructional/information text on second screen.
         fillColor: mapLayerColors.Test2019.fill,
         borderColor: mapLayerColors.Test2019.border,
         borderWidth: 0.04,
@@ -128,9 +129,36 @@ export const BigIslandPlan: Plan = {
           });
         },
         updateFunction(planService: PlanService) {
-          this.parcels.forEach(parcel => {
+
+          let year = planService.getCurrentYear();
+
+          this.parcels.forEach(parcel => 
+          {
+
+          let layerattribute = parcel.properties.stationsta;
+
+          const colors = {
+            'Discontinued' : '#ff0000',
+            'Current'       : '#00ff00'
+          }
+
+          if(year >= parcel.properties.maxYear + 100 && layerattribute == 'Current')
+          {
             d3.select(parcel.path)
-              .style('opacity', this.active ? 0.85 : 0.0);
+            .style('fill', colors[parcel.properties.stationsta])
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', this.borderColor)
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');            
+          }
+          else
+          {
+            d3.select(parcel.path)
+            .style('fill', colors[parcel.properties.stationsta])
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', this.borderColor)
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');   
+          }
+
           });
         },
       },  //End Test Layer (2019)
