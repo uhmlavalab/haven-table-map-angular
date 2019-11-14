@@ -231,10 +231,10 @@ export const BigIslandPlan: Plan = {
 
         },
       },  //End Test Layer 2 (2019)
-      //Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
+            //Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
       {  
         name: 'testlayer3', 
-        displayName: 'voting precincts 2002,2014', 
+        displayName: 'voting precincts 02,06,08,10,14,16', 
         active: false,  
         included: true,   
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  
@@ -263,11 +263,15 @@ export const BigIslandPlan: Plan = {
           
           this.parcels.forEach(parcel => {
 
-            let layerattribute = parcel.properties.layer;//divide based on attribute named "layer"
+            let layerattribute = parcel.properties.layer;//divide based on layer attribute 
 
             const borderColors = {
               'Historical_Voting_Precincts__2002': '#33fff3',//look at json file for names
-              'Historical_Voting_Precincts__2014': '#ff0000',
+              'Historical_Voting_Precincts__2006': '#33fff3',
+              'Historical_Voting_Precincts__2008': '#33fff3',
+              'Historical_Voting_Precincts__2010': '#33fff3',
+              'Historical_Voting_Precincts__2014': '#33fff3',
+              'Historical_Voting_Precincts__2016': '#33fff3',
             }
 
             if((year <= 2019) && (layerattribute == 'Historical_Voting_Precincts__2002'))
@@ -278,7 +282,39 @@ export const BigIslandPlan: Plan = {
               .style('stroke', borderColors[parcel.properties.layer])//set to borderColors if borders wanted otherwise this.bordercolor
               .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
             }
-            else if(((year <= 2022)) && (year > 2019) && (layerattribute == 'Historical_Voting_Precincts__2014'))
+            else if((year > 2019) && (year <= 2023) && (layerattribute == 'Historical_Voting_Precincts__2006'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2023) && (year <= 2025) && (layerattribute == 'Historical_Voting_Precincts__2008'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2025) && (year <= 2027) && (layerattribute == 'Historical_Voting_Precincts__2010'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2027) && (year <= 2031) && (layerattribute == 'Historical_Voting_Precincts__2014'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2031) && (year <= 2033) && (layerattribute == 'Historical_Voting_Precincts__2016'))
             {
             d3.select(parcel.path)
               .style('fill', 'transparent')
@@ -297,7 +333,7 @@ export const BigIslandPlan: Plan = {
           });
 
         },
-      },  //End Test Layer 3 (2019)   
+      },  //End Test Layer 3 (2019)
       {
         name: 'dod',
         displayName: 'Government Lands',
