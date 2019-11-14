@@ -215,9 +215,9 @@ html {
 }
 
 .offshore {
-  width: 600px;
-  height: 200px;
-  top: 82vh;
-  left: 43vw;
+  width: 375px;
+  height: 100px;
+  top: 88vh;
+  left: 47vw;
   position: absolute;
 }
