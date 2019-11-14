@@ -105,7 +105,7 @@ export const BigIslandPlan: Plan = {
           });
         },
       },
-      {  //Begin Test Layer (2019)
+      {  //Begin Test Layer 1 (2019)
         name: 'testlayer',  //Internal layer name
         displayName: 'Test Layer 2019[Rain Gauge Status]',  //Display name (on the table.)
         active: false,  //Default for active (visible) status
@@ -134,7 +134,6 @@ export const BigIslandPlan: Plan = {
 
           this.parcels.forEach(parcel => 
           {
-
           let layerattribute = parcel.properties.stationsta;
 
           const colors = {
@@ -142,12 +141,12 @@ export const BigIslandPlan: Plan = {
             'Current'       : '#00ff00'
           }
 
-          if(year >= parcel.properties.maxYear + 100 && layerattribute == 'Current')
+          if(year >= Number(parcel.properties.maxYear + 100) && layerattribute == 'Current')
           {
             d3.select(parcel.path)
             .style('fill', colors[parcel.properties.stationsta])
             .style('opacity', this.active ? 0.85 : 0.0)
-            .style('stroke', this.borderColor)
+            .style('stroke', 'black')
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');            
           }
           else
@@ -155,13 +154,13 @@ export const BigIslandPlan: Plan = {
             d3.select(parcel.path)
             .style('fill', colors[parcel.properties.stationsta])
             .style('opacity', this.active ? 0.85 : 0.0)
-            .style('stroke', this.borderColor)
+            .style('stroke', 'black')
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');   
           }
 
           });
         },
-      },  //End Test Layer (2019)
+      },  //End Test Layer 1 (2019)
       {  
         name: 'testlayer2',  //Internal layer name
         displayName: 'Test Layer [TE Plants,1992]',  //Display name (on the table.)
