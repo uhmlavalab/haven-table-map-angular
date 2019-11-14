@@ -235,7 +235,7 @@ export const BigIslandPlan: Plan = {
           
           this.parcels.forEach(parcel => {
 
-            let layerattribute = parcel.properties.layer;//divide based on layer attribute 
+            let layerattribute = parcel.properties.layer;//divide based on attribute named "layer"
 
             const borderColors = {
               'Historical_Voting_Precincts__2002': '#33fff3',//look at json file for names
