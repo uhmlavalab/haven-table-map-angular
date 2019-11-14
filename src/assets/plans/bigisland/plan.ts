@@ -113,12 +113,12 @@ export const BigIslandPlan: Plan = {
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  //Icon path for table.
         secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',    //Background image for second screen, image path.
         secondScreenText: 'Slide the Layer Puck to add or remove this layer',  //Instructional/information text on second screen.
-        fillColor: mapLayerColors.Test2019.fill,
-        borderColor: mapLayerColors.Test2019.border,
-        borderWidth: 0.04,
-        legendColor: mapLayerColors.Test2019.border,
+        fillColor: mapLayerColors.Test2019.fill,     //See defaultColors.ts.
+        borderColor: mapLayerColors.Test2019.border, //See defaultColors.ts.
+        borderWidth: 0.04,  //Border width, default is set here.
+        legendColor: mapLayerColors.Test2019.border, //See defaultColors.ts.
         filePath: 'assets/plans/bigisland/layers/test2019.json',
-        parcels: [],
+        parcels: [],  //Empty list of parcels, gets populated by setupFunction()
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
