@@ -7,10 +7,22 @@
 }
 
 .grid-item {
-  padding: 5px;
+  padding: 4px;
   text-align: center;
 }
 
 img {
   width: 100%;
+}
+
+.title {
+  color: white;
+  font-size: 18px;
+  margin: 0;
+}
+
+.subtitle {
+color: white;
+font-size: 14px;
+margin: 0;
 }

@@ -1,6 +1,9 @@
+<p class="title">Windmill Total: {{this.windmills.length}}</p>
+<p class="subtitle">{{this.capacity}}MW</p>
 <div class="grid-container">
+
   <div class="grid-item" *ngFor="let hero of windmills">
-    <img src="assets/images/windmill.png" alt="">
+    <img [src]="hero.src" alt="">
   </div>
 
 </div>

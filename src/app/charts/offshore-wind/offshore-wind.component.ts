@@ -11,7 +11,11 @@ export class OffshoreWindComponent implements OnInit {
 
   year: number;
   scenario: Scenario;
+  capacity = 0;
   windmills = [];
+
+  img1 = 'assets/images/wind.gif';
+  img2 = 'assets/images/windmill.png';
 
   constructor(private planService: PlanService) {
 
@@ -31,10 +35,10 @@ export class OffshoreWindComponent implements OnInit {
     });
   }
   updateWindmills() {
-    const cap = this.planService.getCapacityTotalForCurrentYear(['Offshore']);
+    this.capacity = this.planService.getCapacityTotalForCurrentYear(['Offshore']);
     this.windmills = [];
-    for (let i = 0; i < cap; i += 20) {
-      this.windmills.push({ icon: 'windmill' });
+    for (let i = 0; i < this.capacity; i += 20) {
+      this.windmills.push({ src: this.img1 });
     }
   }
 }
