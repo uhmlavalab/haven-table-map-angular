@@ -203,6 +203,73 @@ export const BigIslandPlan: Plan = {
 
         },
       },  //End Test Layer 2 (2019)
+      //Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
+      {  
+        name: 'testlayer3', 
+        displayName: 'voting precincts 2002,2014', 
+        active: false,  
+        included: true,   
+        iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',  
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer',
+        fillColor: mapLayerColors.Test1992.fill,
+        borderColor: mapLayerColors.Test1992.border,
+        borderWidth: 0.04,
+        legendColor: mapLayerColors.Test1992.border,
+        filePath: 'assets/plans/bigisland/layers/voting.json',
+        parcels: [],
+        setupFunction(planService: PlanService) {
+        
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+            .style('fill', 'transparent')//set to transparent
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', 'transparent')//change to color if want default layer to be shown, otherwise transparent
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          });
+        },
+
+        updateFunction(planService: PlanService) {
+          let year = planService.getCurrentYear();
+
+          
+          this.parcels.forEach(parcel => {
+
+            let layerattribute = parcel.properties.layer;//divide based on layer attribute 
+
+            const borderColors = {
+              'Historical_Voting_Precincts__2002': '#33fff3',//look at json file for names
+              'Historical_Voting_Precincts__2014': '#ff0000',
+            }
+
+            if((year <= 2019) && (layerattribute == 'Historical_Voting_Precincts__2002'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')//set to Colors if fill wanted, otherwise transparent
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])//set to borderColors if borders wanted otherwise this.bordercolor
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if(((year <= 2022)) && (year > 2019) && (layerattribute == 'Historical_Voting_Precincts__2014'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else{
+              d3.select(parcel.path)
+                .style('fill', 'transparent')
+                .style('opacity', this.active ? 0.85 : 0.0)
+                .style('stroke', 'transparent')
+                .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+
+          });
+
+        },
+      },  //End Test Layer 3 (2019)   
       {
         name: 'dod',
         displayName: 'Government Lands',
