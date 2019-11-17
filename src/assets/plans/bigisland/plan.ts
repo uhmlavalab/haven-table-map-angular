@@ -161,7 +161,7 @@ export const BigIslandPlan: Plan = {
           });
         },
       },  //End Test Layer 1 (2019)
-      {  
+     {  
         name: 'testlayer2',  //Internal layer name
         displayName: 'Test Layer [TE Plants,1992]',  //Display name (on the table.)
         active: false,  
@@ -202,7 +202,7 @@ export const BigIslandPlan: Plan = {
               'VH': '#ff0000',
             }
 
-            if((year <= 2019) && (layerattribute == 'L'))
+            if((year <= 2019) && (layerattribute == 'O'))
             {
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
@@ -210,8 +210,32 @@ export const BigIslandPlan: Plan = {
               .style('stroke', this.borderColor)
               .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
             }
-            else if(((year <= 2022)) && (year > 2019) && (layerattribute == 'M'))
+            else if((year > 2019) && (year <= 2021) && (layerattribute == 'L'))
             {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2021) && (year <= 2023) && (layerattribute == 'M'))
+            {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2023) && (year <= 2025) && (layerattribute == 'H'))
+            {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2025) && (layerattribute == 'VH'))
+            {1
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
               .style('opacity', this.active ? 0.85 : 0.0)
