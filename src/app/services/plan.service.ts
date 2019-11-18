@@ -131,6 +131,7 @@ export class PlanService {
         }
       });
     });
+    console.log(this.capacityData);
     return capacityTotal;
   }
 
@@ -203,6 +204,7 @@ export class PlanService {
     return new Promise((resolve, error) => {
       this.capacityData = {};
       d3.csv(this.currentPlan.data.capacityPath, (data) => {
+        this.capacityData = {};
         data.forEach(element => {
           const year = element.year;
           const technology = element.technology;

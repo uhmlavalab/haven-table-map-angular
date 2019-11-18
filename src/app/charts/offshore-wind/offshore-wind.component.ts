@@ -37,8 +37,8 @@ export class OffshoreWindComponent implements OnInit {
   updateWindmills() {
     this.capacity = this.planService.getCapacityTotalForCurrentYear(['Offshore']);
     this.windmills = [];
-    for (let i = 0; i < this.capacity; i += 20) {
-      this.windmills.push({ src: this.img1 });
+    for (let i = 0; i < this.capacity; i += 10) {
+      this.windmills.push({ src: this.img2 });
     }
   }
 }
