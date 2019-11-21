@@ -32,8 +32,8 @@
 }
 
 .legend-card-grid-wrapper .legend-card .legend-card-left>img {
-  width: 125%;  /*Alter legend card icon width here.*/
-  height: 125%;  /*Alter legend card icon height here.*/
+  width: 115%;  /*Alter legend card icon width here.*/
+  height: 115%;  /*Alter legend card icon height here.*/
   display: inline-block;
 }
 
