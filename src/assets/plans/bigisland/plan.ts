@@ -105,7 +105,7 @@ export const BigIslandPlan: Plan = {
           });
         },
       },
-      {  //Begin Test Layer 1 (2019)
+      {  //Begin Test Layer 1 [Rain Gauges] (2019)
         name: 'testlayer',  //Internal layer name
         displayName: 'Test Layer 2019[Rain Gauge Status]',  //Display name (on the table.)
         active: false,  //Default for active (visible) status
@@ -134,9 +134,9 @@ export const BigIslandPlan: Plan = {
           this.parcels.forEach(parcel => 
           {
           let layerattribute = parcel.properties.stationsta;
-          var yearComp = Number(year);
-          var highComp = Number(parcel.properties.maxyear) || 20500;  //Will parse maxyear into an integer, will return 20500 if it fails.
-          var lowComp = Number(parcel.properties.minyear) || 20500;   //Will parse minyear into an integer, will return 20500 if it fails.
+          var yearComp = Number(year);                                //Stores the current year that the table is displaying into a Number(floating point).
+          var highComp = Number(parcel.properties.maxyear) || 20500;  //Will parse maxyear into an Numer(floating point), will return 20500 if it fails.
+          var lowComp = Number(parcel.properties.minyear) || 20500;   //Will parse minyear into a Number (floating point), will return 20500 if it fails.
 
           const colors = {  //Colours to be used by the conditional checks below
             'Discontinued' : '#ff0000',  //Pure red.
@@ -144,7 +144,7 @@ export const BigIslandPlan: Plan = {
           }
           
           //If the rain gauge is active during the currently selected year, change the point's colour to green.
-          if (yearComp >= lowComp +50 && yearComp <= highComp +50)
+          if (yearComp >= lowComp + 50 && yearComp <= highComp + 50)
           {
             d3.select(parcel.path)
             .style('fill', colors['Current'])
