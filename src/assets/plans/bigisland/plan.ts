@@ -62,7 +62,7 @@ export const BigIslandPlan: Plan = {
         top: '61vh'
       },
       line: {
-        left: 'calc(100vw - 500px)',  //Editing for line graph location.
+        left: 'calc(100vw - 500px)',  //Edit this line to change the indent of the graph (right-justified)
         top: '0vh'
       }
 
