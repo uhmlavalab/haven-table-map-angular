@@ -166,7 +166,7 @@ export const BigIslandPlan: Plan = {
           });
         },
       },  //End Test Layer 1 (2019)
-      {  
+     {  
         name: 'testlayer2',  //Internal layer name
         displayName: 'Test Layer [TE Plants,1992]',  //Display name (on the table.)
         active: false,  
@@ -207,7 +207,7 @@ export const BigIslandPlan: Plan = {
               'VH': '#ff0000',
             }
 
-            if((year <= 2019) && (layerattribute == 'L'))
+            if((year <= 2019) && (layerattribute == 'O'))
             {
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
@@ -215,8 +215,32 @@ export const BigIslandPlan: Plan = {
               .style('stroke', this.borderColor)
               .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
             }
-            else if(((year <= 2022)) && (year > 2019) && (layerattribute == 'M'))
+            else if((year > 2019) && (year <= 2021) && (layerattribute == 'L'))
             {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2021) && (year <= 2023) && (layerattribute == 'M'))
+            {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2023) && (year <= 2025) && (layerattribute == 'H'))
+            {
+            d3.select(parcel.path)
+              .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2025) && (layerattribute == 'VH'))
+            {1
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
               .style('opacity', this.active ? 0.85 : 0.0)
@@ -235,7 +259,7 @@ export const BigIslandPlan: Plan = {
 
         },
       },  //End Test Layer 2 (2019)
- //Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
+//Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
       {  
         name: 'testlayer3', 
         displayName: 'voting precincts 02,06,10,14,16', 
@@ -248,7 +272,7 @@ export const BigIslandPlan: Plan = {
         borderColor: mapLayerColors.Test1992.border,
         borderWidth: 0.04,
         legendColor: mapLayerColors.Test1992.border,
-        filePath: 'assets/plans/bigisland/layers/voting.json',
+        filePath: 'assets/plans/bigisland/layers/voting2.json',
         parcels: [],
         setupFunction(planService: PlanService) {
         
@@ -271,7 +295,10 @@ export const BigIslandPlan: Plan = {
 
             const borderColors = {
               'Historical_Voting_Precincts__2002': '#33fff3',//look at json file for names
+              'Historical_Voting_Precincts__2006': '#33fff3',
+              'Historical_Voting_Precincts__2010': '#33fff3',
               'Historical_Voting_Precincts__2014': '#33fff3',
+              'Historical_Voting_Precincts__2016': '#33fff3',
             }
 
             if((year <= 2019) && (layerattribute == 'Historical_Voting_Precincts__2002'))
@@ -282,7 +309,31 @@ export const BigIslandPlan: Plan = {
               .style('stroke', borderColors[parcel.properties.layer])//set to borderColors if borders wanted otherwise this.bordercolor
               .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
             }
-            else if((year > 2019) && (year <= 2023) && (layerattribute == 'Historical_Voting_Precincts__2014'))
+            else if((year > 2019) && (year <= 2023) && (layerattribute == 'Historical_Voting_Precincts__2006'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2023) && (year <= 2027) && (layerattribute == 'Historical_Voting_Precincts__2010'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2027) && (year <= 2031) && (layerattribute == 'Historical_Voting_Precincts__2014'))
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.layer])
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if((year > 2031) && (layerattribute == 'Historical_Voting_Precincts__2016'))
             {
             d3.select(parcel.path)
               .style('fill', 'transparent')
