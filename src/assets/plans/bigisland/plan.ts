@@ -131,31 +131,36 @@ export const BigIslandPlan: Plan = {
         updateFunction(planService: PlanService) {
 
           let year = planService.getCurrentYear();
-
           this.parcels.forEach(parcel => 
           {
           let layerattribute = parcel.properties.stationsta;
+          var yearComp = Number(year);
+          var highComp = Number(parcel.properties.maxyear) || 20500;  //Will parse maxyear into an integer, will return 20500 if it fails.
+          var lowComp = Number(parcel.properties.minyear) || 20500;   //Will parse minyear into an integer, will return 20500 if it fails.
 
-          const colors = {
-            'Discontinued' : '#ff0000',
-            'Current'       : '#00ff00'
+          const colors = {  //Colours to be used by the conditional checks below
+            'Discontinued' : '#ff0000',  //Pure red.
+            'Current'       : '#00ff00'  //Pure green.
           }
-
-          if(year >= Number(parcel.properties.maxYear + 100) && layerattribute == 'Current')
+          
+          //If the rain gauge is active during the currently selected year, change the point's colour to green.
+          if (yearComp >= lowComp +50 && yearComp <= highComp +50)
           {
             d3.select(parcel.path)
-            .style('fill', colors[parcel.properties.stationsta])
+            .style('fill', colors['Current'])
             .style('opacity', this.active ? 0.85 : 0.0)
             .style('stroke', 'black')
-            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');            
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');    
+            console.log("Changed to Active(Green).");
           }
-          else
+          else  //The else statement implies that the rain gauge is inactive.  Changes the point's colour to red.
           {
             d3.select(parcel.path)
-            .style('fill', colors[parcel.properties.stationsta])
+            .style('fill', colors['Discontinued'])
             .style('opacity', this.active ? 0.85 : 0.0)
             .style('stroke', 'black')
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');   
+            console.log("Changed to Inactive(Red).");
           }
 
           });
