@@ -62,7 +62,7 @@ export const BigIslandPlan: Plan = {
         top: '61vh'
       },
       line: {
-        left: 'calc(100vw - 325px)',
+        left: 'calc(100vw - 500px)',  //Edit this line to change the indent of the graph (right-justified)
         top: '0vh'
       }
 
@@ -107,7 +107,7 @@ export const BigIslandPlan: Plan = {
       },
       {  //Begin Test Layer 1 [Rain Gauges] (2019)
         name: 'testlayer',  //Internal layer name
-        displayName: 'Test Layer 2019[Rain Gauge Status]',  //Display name (on the table.)
+        displayName: 'Rain Gauge Status',  //Display name (on the table.)
         active: false,  //Default for active (visible) status
         included: true,   //Default for inclusion in the layer list
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  //Icon path for table.
