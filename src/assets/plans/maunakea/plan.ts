@@ -37,8 +37,8 @@ export const MaunaKeaPlan: Plan = {
     legend: {
       defaultLayout: 'grid',
       grid: {
-        left: '47vw',
-        top: '8vh',
+        left: '75vw',
+        top: '65vh',
         width: '23vw'
       },
       vertical: {
@@ -48,8 +48,8 @@ export const MaunaKeaPlan: Plan = {
       }
     },
     title: {
-      left: '88vw',
-      top: '90vh'
+      left: '50vw',
+      top: '85vh'
     },
     scenario: {
       left: '27vw',
@@ -61,7 +61,7 @@ export const MaunaKeaPlan: Plan = {
         top: '65vh'
       },
       line: {
-        left: 'calc(100vw - 325px)',
+        left: 'calc(100vw - 400px)',
         top: '0vh'
       }
     }
