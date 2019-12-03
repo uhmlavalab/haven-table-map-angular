@@ -52,7 +52,7 @@ export const MaunaKeaPlan: Plan = {
       top: '85vh'
     },
     scenario: {
-      left: '27vw',
+      left: '29vw',
       top: '2vh'
     },
     charts: {
