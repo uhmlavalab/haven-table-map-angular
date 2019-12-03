@@ -1,0 +1,73 @@
+help-nav {
+    width: 30%;
+    position: absolute;
+    top: -12px;
+    left: -2vw;
+  }
+  
+    .help-nav > ul {
+      list-style: none;
+    }
+  
+      .help-nav > ul > li {
+        width: 100%;
+        height: 35px;
+        background-color: rgba(53,67,80,1);
+        margin: 5px 0 0 0;
+        cursor: pointer;
+        transition: background-color 0.4s ease-out, color 0.4s ease-out;
+      }
+  
+        .help-nav > ul > li:hover span.text {
+          text-decoration: underline;
+        }
+  
+        .help-nav > ul > li > span.text {
+          width: calc(92% - 12px);
+          padding: 9px 0 0 12px;
+          display: inline-block;
+          vertical-align: top;
+          color: WHITE;
+          font-size: 14px;
+        }
+  
+        .help-nav > ul > li > span.accent {
+          width: 3px;
+          background-color: WHITE;
+          height: 100%;
+          display: inline-block;
+        }
+  
+        .help-nav > ul > li.active > span.accent {
+          background-color: rgba(181, 31, 36, 1);
+        }
+  
+        .help-nav > ul > li.active > span.text {
+          color: rgba(181, 31, 36, 1);
+        }
+  
+        .help-nav > ul > li.active {
+          background-color: black;
+        }
+  
+  .help-selector-container > div.content-container {
+    position: relative;
+    left: 26%;
+    width: 94%;
+    height: calc(100% - 28px);
+    background-color: black;
+    color: white;
+    padding: 20px 0 0 20px;
+    border: 4px solid rgba(130,145,188, 1);
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+  }
+  
+    .help-selector-container > div.content-container > div {
+      width: 100%;
+      transition: opacity 0.4s ease-out;
+    }
+  
+      .help-selector-container > div.content-container > div > table > tr > td {
+        padding: 5px 0 5px 15px;
+      }

@@ -6,7 +6,7 @@ import { MultiWindowModule } from 'ngx-multi-window';
 // Components
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BouncingTitleComponent } from './landing-home/bouncing-title/bouncing-title.component';
+import { BouncingTitleComponent } from './landing-home/components/bouncing-title/bouncing-title.component';
 import { VideoFeedComponent } from './video-feed/video-feed.component';
 import { MapElementComponent } from './map-main/map-element/map-element.component';
 import { AddRemoveLayersComponent } from './map-main/interaction-element/add-remove-layers/add-remove-layers.component';
@@ -34,6 +34,15 @@ import { ArService } from './services/ar.service';
 import { PlanService } from './services/plan.service';
 import { SoundsService } from './services/sounds.service';
 import { WindowRefService } from './services/window-ref.service';
+import { LoadingComponent } from './landing-home/components/loading/loading.component';
+import { TrackingTestComponent } from './landing-home/components/tracking-test/tracking-test.component';
+import { CalibrationComponent } from './landing-home/components/calibration/calibration.component';
+import { LandingButtonsContainerComponent } from './landing-home/components/landing-buttons-container/landing-buttons-container.component';
+import { MapSelectorComponent } from './landing-home/map-selector/map-selector.component';
+import { HelpComponent } from './landing-home/components/help/help.component';
+import { CamBoxesComponent } from './landing-home/components/cam-boxes/cam-boxes.component';
+import { CameraSelectorComponent } from './landing-home/components/camera-selector/camera-selector.component';
+import { MarkerSelectionComponent } from './landing-home/components/marker-selection/marker-selection.component';
 
 
 @NgModule({
@@ -59,7 +68,16 @@ import { WindowRefService } from './services/window-ref.service';
     ScenarioComponent,
     LayerPuckComponent,
     YearPuckComponent,
-    AddPuckComponent
+    AddPuckComponent,
+    LoadingComponent,
+    TrackingTestComponent,
+    CalibrationComponent,
+    LandingButtonsContainerComponent,
+    MapSelectorComponent,
+    HelpComponent,
+    CamBoxesComponent,
+    CameraSelectorComponent,
+    MarkerSelectionComponent
   ],
   imports: [
     BrowserModule,

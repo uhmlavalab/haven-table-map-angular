@@ -1,0 +1,5 @@
+<!-- Selection Buttons -->
+<div *ngFor="let button of buttons" class="selection-button"
+  (click)="handleClick(button.id)">
+  {{ button.text }}
+</div>

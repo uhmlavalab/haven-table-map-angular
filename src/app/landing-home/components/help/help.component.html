@@ -1,0 +1,26 @@
+<!-- contains the help selector cards -->
+<div class="help-nav">
+  <ul>
+    <li *ngFor="let button of buttons" [className]="help === button.tag ? 'active' : ''" (click)="handleHelpNavClick($event, button.tag)"
+      #keyboard>
+      <span class="accent"></span>
+      <span class="text">{{button.text}}</span>
+    </li>
+  </ul>
+</div>
+
+<div class="content-container">
+
+  <!-- Keyboard Controls Help Content -->
+  <div [style.opacity]="help === 'keyboard' ? '1' : '0'">
+    <table>
+      <tr>
+        <th>Key</th>
+        <th>Function</th>
+      </tr>
+      <tr *ngFor="let key of keys">
+        <td>{{key.key}}</td>
+        <td>{{key.function}}</td>
+      </tr>
+    </table>
+  </div>

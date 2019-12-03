@@ -1,0 +1,20 @@
+<div class="calibration-overlay" >
+  <div class="manual-point" #manualPoint>
+    <div class="center"></div>
+  </div>
+  <div class="manual-point-detection-container">
+    <div class="marker-detected-details">
+      Marker Currently Detected: {{ markerDetected }} <br/>
+      Bottom Cam X: {{ centerX }} <br/>
+      Bottom Cam Y: {{ centerY }} <br/>
+      Top Cam X: {{ centerX2 }} <br/>
+      Top Cam Y: {{ centerY2 }}
+    </div>
+    <div class="selection-button" (click)="confirmPosition()">
+      Confirm Position
+    </div>
+    <div class="warning" [style.opacity]="detectionWarning ? '1' : '0'">
+      Oops!  Lost track of the marker, try again.
+    </div>
+  </div>
+</div>

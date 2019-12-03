@@ -13,3 +13,21 @@ body {
 .hidden {
   display: none;
 }
+
+/* Buttons on landing home Page - used by multiple components */
+.selection-button {
+  width: 80%;
+  height: 40px;
+  color: white;
+  margin: 10px 0 10px 0;
+  background-color: rgba(109, 98, 125, 0.6);
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 20px 0 0 0;
+  transition: background-color 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+  .selection-button:hover {
+    background-color: rgba(109, 98, 125, 1);
+    text-decoration: underline;
+  }

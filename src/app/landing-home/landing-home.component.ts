@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
 import { MapSelectionDirectiveDirective } from './map-selection-directive.directive';
-import { landingButtons } from '../../assets/defaultData/landingButtons';
 import { panels } from '../../assets/defaultData/landingPanels';
 import { Plan, Marker, Panel, LandingButton, MapLayer } from '@app/interfaces';
 import { ArService } from '../services/ar.service';
@@ -8,6 +7,7 @@ import { PlanService } from '../services/plan.service';
 import { WindowRefService } from '../services/window-ref.service';
 import { ProjectableMarker } from '../classes/projectableMarker';
 import { _ } from 'underscore';
+import { ContentDeliveryService } from '@app/services/content-delivery.service';
 
 
 @Component({
@@ -25,8 +25,6 @@ export class LandingHomeComponent implements OnInit {
   @ViewChild('trackingDot', { static: false }) trackingDot;
 
   /* Strings That determine what html elements to display */
-  private help: string;                         // Determines which help menu to display
-  private changingMarkerJob: string;            // Determines which job is being changed.
   private activePanel: string;                  // Determines which panel is displayed.  IE. Maps, Help, Change Markers etc.
 
   /* State Variables */
@@ -42,7 +40,6 @@ export class LandingHomeComponent implements OnInit {
   private panels: Panel;                        // Loaded from default Data (holds panel data)
   private plans: Plan[];                        // Array of all possible Plans
   private jobs: any[];                          // List of all possible jobs.
-  private buttons: LandingButton;               // Button array used to load html elements
 
 
   /* Calibration */
@@ -60,13 +57,11 @@ export class LandingHomeComponent implements OnInit {
 
   constructor(private arservice: ArService,
     private planService: PlanService,
-    private windowRefservice: WindowRefService) {
+    private windowRefservice: WindowRefService,
+    private contentDeliveryService: ContentDeliveryService) {
 
     /* Initialize all State and HTML content (for *ngFor routines) */
     this.setupUIContent();
-
-    /* Initialize All Marker Change Data (Only used in reference to reassigning jobs and ids to projectable marker pucks*/
-    this.setupMarkerChangeData();
 
 
     /* Initialize All Calibration Data */
@@ -75,7 +70,6 @@ export class LandingHomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.plans = this.planService.getPlans();  // Initialize the plans.
 
     /** Data Subscriptions */
     this.windowRefservice.loadingSubject.subscribe({
@@ -92,6 +86,12 @@ export class LandingHomeComponent implements OnInit {
         }
       }
     });
+
+    this.contentDeliveryService.landingRouteSubject.subscribe({
+      next: value => {
+        this.activePanel = value; // Set active panel to the route.
+      }
+    });
   }
 
   /******************************************************************************************
@@ -100,33 +100,7 @@ export class LandingHomeComponent implements OnInit {
    * data and are called from the constructor. 
    * ****************************************************************************************/
 
-  /** Initializes the data used for the reassignment of marker (jobs and id)
-   */
-  private setupMarkerChangeData(): void {
-    this.changingMarkerJob = 'none';            // No Marker is being changed.
-    this.tempMarkerChange = { id: -1, job: '' };  // Initialize the temp marker Data
-    this.markerIcons = {
-      year: 'layers-01.png',
-      chart: 'pie-01.png',
-      layer: 'layers-01.png',
-      scenario: 'scenario-01.png',
-      unassigned: ''
-    }
-    this.jobs = this.setJobsArray();            // Get the Available Jobs data
-  }
 
-  /** Initializes the jobs Array.  The jobsList is currently hardcoded here. */
-  private setJobsArray(): any[] {
-    const jobsList = ['year', 'layer', 'chart', 'scenario'];
-    const resultsArray = [];
-    jobsList.forEach(jobText => {
-      const marker = ProjectableMarker.getProjectableMarkerByJob(jobText);
-      const iconText = marker ? marker.icon : null;
-      const id = marker ? marker.markerId : null;
-      resultsArray.push({ job: jobText, icon: this.markerIcons[jobText], markerId: id });
-    });
-    return resultsArray;
-  }
 
   /** Initializes the data used for calibrating the pucks */
   private setupCalibrationData(): void {
@@ -143,10 +117,8 @@ export class LandingHomeComponent implements OnInit {
 
   /** Initializes the data that determines what data is displayed in the UI */
   private setupUIContent(): void {
-    this.buttons = landingButtons;              // Imported from Default Data
     this.panels = panels;                       // Imported from default data
     this.activePanel = 'maps';                  // Always start showing the map selection panel.                      
-    this.help = 'keyboard';                     // Show keyboard shortcut controls as first help view.
     this.nativeWindow = this.windowRefservice.getNativeWindow();
     this.loading = this.windowRefservice.getLoadingStatus();  // Determines if the second screen is loading.
   }
@@ -411,70 +383,7 @@ export class LandingHomeComponent implements OnInit {
     }
   }
 
-  /**
-   * This function is called when user clicks on one of the help navigation buttons.  It changes the
-   * class of the button that was clicked to active, reverts the previous to normal and swaps the view of
-   * the content container.
-   * @param event => The mouseclick event.
-   * @param tag => The string that identifies the button that was clicked.
-   */
-  private handleHelpNavClick(event: any, tag: string): void {
-    this.help = tag;
-  }
 
-  /**
-   * This function is called when user clicks on change a marker during setup.  The user will be shown a
-   * list of active markers and they can choose from those markers and assign it to this job.
-   * @param event => The click event
-   * @param tag => The job that is being changed.
-   */
-  private handleChangeMarker(event: any, tag: string): void {
-    this.changingMarkerJob = tag;
-  }
-
-  /**
-   * Confirms changes made to the markers.
-   * @param event => The click event
-   * @param tag => The job tag
-   */
-  private handleConfirmMarkerChange(event: any, tag: string): void {
-
-    const newId = this.tempMarkerChange.id;
-    const newJob = this.tempMarkerChange.job;
-    const markers = ProjectableMarker.getAllProjectableMarkers();
-
-    if (ProjectableMarker.getProjectableMarkerByJob(newJob) === undefined) {
-      markers[newId].setJob(newJob);
-      markers[newId].setIcon(this.markerIcons[newJob]);
-    } else {
-      const oldMarker = ProjectableMarker.getProjectableMarkerByJob(newJob);
-      const oldId = oldMarker.markerId;
-      oldMarker.setJob('unassigned');
-      oldMarker.setIcon(this.markerIcons['unassigned']);
-      markers[newId].setJob(newJob);
-      markers[newId].setIcon(this.markerIcons[newJob]);
-    }
-    this.changingMarkerJob = 'none';
-    this.jobs = this.setJobsArray();
-  }
-
-
-  /** Cancels a Marker change by reverting the data to unset. */
-  private handleCancelMarkerChange(): void {
-    this.tempMarkerChange.id = -1;
-    this.tempMarkerChange.job = '';
-    this.changingMarkerJob = 'none';
-  }
-
-
-  /** Reassigns the marker job and id
-   * @param job The new job to assign.
-   * @param id the new id to assign.
-   */
-  private reassignMarker(job: string, id: number) {
-    this.tempMarkerChange.id = id;
-    this.tempMarkerChange.job = job;
-  }
 
  
 

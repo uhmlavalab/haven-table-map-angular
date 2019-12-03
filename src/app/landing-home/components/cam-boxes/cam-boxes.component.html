@@ -1,0 +1,9 @@
+<div class="cam-box" id="cam-box-1"></div>
+<div class="cam-box" id="cam-box-2"></div>
+<div class="cam-box" id="cam-box-3"></div>
+<div class="cam-box" id="cam-box-4"></div>
+<!-- back button is only displayed when the map selection panel is not in view -->
+<div class="selection-button" [style.display]="activePanel == 'cams' ? 'block' : 'none'" id="maps"
+  (click)="toggleLandmarks()">
+  Hide landmarks
+</div>

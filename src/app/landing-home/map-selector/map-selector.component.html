@@ -1,0 +1,16 @@
+  <!-- Contains the cards for each selectable map -->
+  <div *ngFor="let plan of plans" class="map-selector-box">
+    <img src="{{ plan.landingImagePath }}" />
+    <div class="map-selector-box-dark-overlay">
+      <div class="map-selector-stripe-button">
+        <h3>{{ plan.displayName }}</h3>
+      </div>
+      <div class="map-selector-start-wrapper">
+        <div class="map-selector-start-button">
+          <input type="checkbox" id="second-screen-{{plan.displayName}}"
+            (change)="handleIncludeSecondScreenCheckboxChange(plan, $event.target.checked)"> Include 2nd Screen
+          <h3 routerLink="/map-main" id="start-{{plan.displayName}}" (click)="handleStartButtonClick(plan)">Start</h3>
+        </div>
+      </div>
+    </div>
+  </div>
