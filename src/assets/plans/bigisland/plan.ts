@@ -62,7 +62,7 @@ export const BigIslandPlan: Plan = {
         top: '61vh'
       },
       line: {
-        left: 'calc(100vw - 500px)',  //Edit this line to change the indent of the graph (right-justified)
+        left: 'calc(100vw - 325px)',
         top: '0vh'
       }
 
@@ -105,9 +105,9 @@ export const BigIslandPlan: Plan = {
           });
         },
       },
-      {  //Begin Test Layer 1 [Rain Gauges] (2019)
+      {  //Begin Test Layer 1 (2019)
         name: 'testlayer',  //Internal layer name
-        displayName: 'Rain Gauge Status',  //Display name (on the table.)
+        displayName: 'Test Layer 2019[Rain Gauge Status]',  //Display name (on the table.)
         active: false,  //Default for active (visible) status
         included: true,   //Default for inclusion in the layer list
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  //Icon path for table.
@@ -131,36 +131,31 @@ export const BigIslandPlan: Plan = {
         updateFunction(planService: PlanService) {
 
           let year = planService.getCurrentYear();
+
           this.parcels.forEach(parcel => 
           {
           let layerattribute = parcel.properties.stationsta;
-          var yearComp = Number(year);                                //Stores the current year that the table is displaying into a Number(floating point).
-          var highComp = Number(parcel.properties.maxyear) || 20500;  //Will parse maxyear into an Numer(floating point), will return 20500 if it fails.
-          var lowComp = Number(parcel.properties.minyear) || 20500;   //Will parse minyear into a Number (floating point), will return 20500 if it fails.
 
-          const colors = {  //Colours to be used by the conditional checks below
-            'Discontinued' : '#ff0000',  //Pure red.
-            'Current'       : '#00ff00'  //Pure green.
+          const colors = {
+            'Discontinued' : '#ff0000',
+            'Current'       : '#00ff00'
           }
-          
-          //If the rain gauge is active during the currently selected year, change the point's colour to green.
-          if (yearComp >= lowComp + 50 && yearComp <= highComp + 50)
+
+          if(year >= Number(parcel.properties.maxYear + 100) && layerattribute == 'Current')
           {
             d3.select(parcel.path)
-            .style('fill', colors['Current'])
+            .style('fill', colors[parcel.properties.stationsta])
             .style('opacity', this.active ? 0.85 : 0.0)
             .style('stroke', 'black')
-            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');    
-            console.log("Changed to Active(Green).");
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');            
           }
-          else  //The else statement implies that the rain gauge is inactive.  Changes the point's colour to red.
+          else
           {
             d3.select(parcel.path)
-            .style('fill', colors['Discontinued'])
+            .style('fill', colors[parcel.properties.stationsta])
             .style('opacity', this.active ? 0.85 : 0.0)
             .style('stroke', 'black')
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');   
-            console.log("Changed to Inactive(Red).");
           }
 
           });
@@ -259,7 +254,7 @@ export const BigIslandPlan: Plan = {
 
         },
       },  //End Test Layer 2 (2019)
-//Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
+ //Test Layer 3  Dynamic datalayer using lines -using merged shapefiles
       {  
         name: 'testlayer3', 
         displayName: 'voting precincts 02,06,10,14,16', 
@@ -490,31 +485,33 @@ export const BigIslandPlan: Plan = {
           });
         },
       },
-      {
-        name: 'agriculture',
-        displayName: 'Ag Lands',
+      {//start placeholder layer
+        name: 'Moisture Zones',
+        displayName: 'Moisture Zones',
         active: false,
         included: true,
-        iconPath: 'assets/plans/bigisland/images/icons/agriculture-icon.png',
-        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/agriculture.jpg',
+        iconPath: 'assets/plans/bigisland/images/icons/dod-icon.png',
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
-        fillColor: mapLayerColors.Agriculture.fill,
-        borderColor: mapLayerColors.Agriculture.border,
+        fillColor: mapLayerColors.Dod.fill,
+        borderColor: mapLayerColors.Dod.border,
         borderWidth: 1,
-        legendColor: mapLayerColors.Agriculture.fill,
-        filePath: 'assets/plans/bigisland/layers/agriculture.json',
+        legendColor: mapLayerColors.Dod.fill,
+        filePath: 'assets/plans/bigisland/layers/moisture.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           const colors = {
-            A: '#267300' + 'aa',
-            B: '#4ce600' + 'aa',
-            C: '#ffaa00' + 'aa',
-            D: '#a87000' + 'aa',
-            E: '#895a44' + 'aa',
+            '1': '#e60000',
+            '2': '#ff7f7f',
+            '3': '#895a44',
+            '4': '#00c5ff',
+            '5': '#037ffc',
+            '6': '#031cfc',
+            '7': '#1302d1',
           }
           this.parcels.forEach(parcel => {
             d3.select(parcel.path)
-              .style('fill', colors[parcel.properties.type])
+              .style('fill', colors[parcel.properties.zone])//change from type to attribute name
               .style('opacity', this.active ? 0.85 : 0.0)
               .style('stroke', this.borderColor)
               .style('stroke-width', this.borderWidth + 'px');
@@ -526,7 +523,7 @@ export const BigIslandPlan: Plan = {
               .style('opacity', this.active ? 0.85 : 0.0);
           });
         },
-      }
+      },//end placeholder layer
     ],
   }
 }
