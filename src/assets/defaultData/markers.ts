@@ -2,7 +2,7 @@ import { Marker } from '@app/interfaces';
 import { PlanService } from '../../app/services/plan.service'
 
 export const markers: Marker[] = [{
-  markerId: 1,
+  markerId: 384,
   //markerId: 1,
   secondId: 3,
   job: 'year',
@@ -15,7 +15,7 @@ export const markers: Marker[] = [{
     planService.incrementCurrentYear();
   }
 }, {
-  markerId: 11,
+  markerId: 5,
   secondId: 6,
   job: 'layer',
   delay: 400, 
@@ -27,7 +27,7 @@ export const markers: Marker[] = [{
     planService.incrementNextLayer();
    }
 }, {
-  markerId: 5,
+  markerId: 11,
   secondId: 9,
   job: 'scenario',
   delay: 600, 
