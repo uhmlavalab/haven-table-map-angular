@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ArService } from '@app/services/ar.service';
-import { ProjectableMarker } from '@app/classes/projectableMarker';
 import { _ } from 'underscore';
+import { ContentDeliveryService } from '@app/services/content-delivery.service';
 
 @Component({
   selector: 'app-calibration',
@@ -12,11 +12,9 @@ export class CalibrationComponent implements OnInit {
   
   // Create an array of the children tagged with MapSelectionDirectiveDirective
   @ViewChild('manualPoint', { static: false }) manualPoint;
-  @ViewChild('trackingDot', { static: false }) trackingDot;
 
   /* Calibration */
   private calibrating: boolean;                 // Is the map in a calibrating state.
-  private testTrack: boolean;                   // True when completing calibration and making the final adjustments on the tracking.
   private detectionWarning: boolean;            // True when user tries to store a data point and marker is not detected.
   private markerDetected: boolean;              // If marker is detected on the table during calibration, then this is true.  Otherwise false.
   private manualPosition: number;               // Identifies which location to place the dot during calibration.
@@ -27,7 +25,7 @@ export class CalibrationComponent implements OnInit {
   private centerX2: number;                     // Bottom Camera X
   private centerY2: number;                     // Bottom Camera Y
 
-  constructor(private arservice: ArService) {
+  constructor(private arservice: ArService, private contentDeliveryService: ContentDeliveryService) {
     this.setupCalibrationData();
    }
 
@@ -35,9 +33,6 @@ export class CalibrationComponent implements OnInit {
     this.arservice.calibrationSubject.subscribe({
       next: value => {
         this.calibrationDetected(value);
-        if (this.testTrack) {
-          this.track(value);
-        }
       }
     });
   }
@@ -45,7 +40,6 @@ export class CalibrationComponent implements OnInit {
    /** Initializes the data used for calibrating the pucks */
    private setupCalibrationData(): void {
     this.calibrating = false;
-    this.testTrack = false;
     this.detectionWarning = false;
     this.markerDetected = false;
     this.manualPosition = -1;
@@ -118,13 +112,6 @@ export class CalibrationComponent implements OnInit {
     /** Move the dot */
     element.style.left = left;
     element.style.top = top;
-  }
-
-  /** This ends the final adjustment process of calibration. */
-  private completeTrackTesting(): void {
-    this.testTrack = false; // Set State
-    this.arservice.stopCalibration(); // Stop Calibrating in the service.
-    this.arservice.generateFile(); // Create the new calibration File for download.
   }
 
   /** Tells HMTL template to display a warning */
@@ -201,50 +188,7 @@ export class CalibrationComponent implements OnInit {
 
   /** Begins the process of fine tuning the x and y offests.*/
   private testTracking(): void {
-    this.testTrack = true;
+    this.contentDeliveryService.routeLanding('testTracking');
   }
-
-  /** Tracks the marker on the table.  Uses the same algorithm as the map-main */
-  private track(data) {
-    if (data != undefined) {
-      try {
-
-        ProjectableMarker.getAllProjectableMarkersArray().forEach(pm => {
-          const dataPoint = _.find(data, m => m.marker.markerId === pm.markerId);
-          pm.addDataPoint(dataPoint);
-        });
-
-        const dataPoint = { x: data[0].marker.getMostRecentCenterX(), y: data[0].marker.getMostRecentCenterY() };
-        this.trackingDot.nativeElement.style.left = dataPoint.x + 25 + 'px';
-        this.trackingDot.nativeElement.style.top = dataPoint.y + 25 + 'px';
-
-
-      } catch (error) {
-        //undefined marker
-      }
-    }
-  }
-/* KEYBOARD CONTROLS */
-@HostListener('window:keydown', ['$event'])
-keyEvent(event: KeyboardEvent) {
-  if (event.key === 'ArrowUp') {
-    this.arservice.incrementYOffset();
-  } else if (event.key === 'ArrowDown') {
-    this.arservice.decrementYOffset();
-  } else if (event.key === 'ArrowLeft') {
-    this.arservice.incrementXOffset();
-  } else if (event.key === 'ArrowRight') {
-    this.arservice.decrementXOffset();
-  } else if (event.key === 'w') {
-    this.arservice.incrementYOffset2();
-  } else if (event.key === 's') {
-    this.arservice.decrementYOffset2();
-  } else if (event.key === 'a') {
-    this.arservice.incrementXOffset2();
-  } else if (event.key === 'd') {
-    this.arservice.decrementXOffset2();
-  }
-}
-
 
 }

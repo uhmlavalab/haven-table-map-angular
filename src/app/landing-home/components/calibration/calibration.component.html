@@ -1,8 +1,19 @@
-<div 
-class="selection-button"
-(click)="startCalibration()"
-[style.display]="calibrating ? 'none' : 'block'"
->Begin Calibration</div>
+<div class="calibration-start-container">
+  <p class="calibration-start-instructions">
+    To calibrate the pucks, remove all but one puck from the table.  Place this puck into the white circle with the dot in the center.  When the marker is detected, its coordinates will
+    be printed to the screen.  Confirm that position and continue to the next until cablbration is completed.
+  </p><br/>
+  <p>After completing initial calibration, you can adjust the x and y offset for both cameras using the arrow keys for the lower camera and w, a, s, d for the upper camera.  Place the puck on the table and
+    make the adjustment until the puck is centered in the tracking circle.  When satisfied with the calibration, save the file, overwriting the previous default tracking data file.
+
+  </p><br/>
+  <div class="button-container">  <div 
+    class="selection-button"
+    (click)="startCalibration()"
+    [style.display]="calibrating ? 'none' : 'block'"
+    >Begin Calibration</div></div>
+</div>
+
 <div
  class="calibration-overlay" 
  [style.display]="calibrating ? 'block' : 'none'"

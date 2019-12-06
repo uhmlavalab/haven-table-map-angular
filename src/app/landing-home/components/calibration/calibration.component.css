@@ -58,3 +58,24 @@
   height: 100%;
   border: 10px solid white;
 }
+
+.calibration-start-container {
+  width: 60%;
+  left: 35%;
+  height: 70%;
+  top: 15%;
+  position: absolute;
+  color: white;  
+}
+
+p {
+  width: 80%;
+  margin: auto;
+  position: relative;
+}
+.button-container {
+  width: 40%;
+  margin: auto;
+  position: relative;
+  text-align: center;
+}
