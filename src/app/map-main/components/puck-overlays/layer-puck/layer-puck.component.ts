@@ -1,5 +1,5 @@
-import { Component, AfterViewInit, ViewChildren, ViewChild, HostListener } from '@angular/core';
-import { PlanService } from '../../services/plan.service';
+import { Component, AfterViewInit, ViewChildren, ViewChild } from '@angular/core';
+import { PlanService } from '@app/services/plan.service';
 
 @Component({
   selector: 'app-layer-puck',

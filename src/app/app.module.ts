@@ -9,24 +9,22 @@ import { AppComponent } from './app.component';
 import { BouncingTitleComponent } from './landing-home/components/bouncing-title/bouncing-title.component';
 import { VideoFeedComponent } from './video-feed/video-feed.component';
 import { MapElementComponent } from './map-main/map-element/map-element.component';
-import { AddRemoveLayersComponent } from './map-main/interaction-element/add-remove-layers/add-remove-layers.component';
 import { LargeYearComponent } from './map-main/large-year/large-year.component';
 import { LegendComponent } from './map-main/legend/legend.component';
 import { TitleComponent } from './map-main/title/title.component';
 import { SecondScreenComponent } from './second-screen/second-screen.component';
-import { InteractionElementComponent } from './map-main/interaction-element/interaction-element.component';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
-import { LayerPuckComponent } from './map-main/layer-puck/layer-puck.component';
-import { YearPuckComponent } from './map-main/year-puck/year-puck.component';
-import { AddPuckComponent } from './map-main/add-puck/add-puck.component';
+import { LayerPuckComponent } from './map-main/components/puck-overlays/layer-puck/layer-puck.component';
+import { YearPuckComponent } from './map-main/components/puck-overlays/year-puck/year-puck.component';
+import { AddPuckComponent } from './map-main/components/puck-overlays/add-puck/add-puck.component';
 import { ScenarioComponent } from './scenario/scenario.component';
 
 // Directives
 import { MapDirective } from './map-main/map-element/map.directive';
 import { MapLayerDirective } from './map-main/map-element/map-layer.directive';
 import { LegendDirective } from './map-main/legend/legend.directive';
-import { CardStyleDirective } from './map-main/interaction-element/card-style.directive';
+
 
 // Services
 import { ArService } from './services/ar.service';
@@ -37,7 +35,7 @@ import { LoadingComponent } from './landing-home/components/loading/loading.comp
 import { TrackingTestComponent } from './landing-home/components/tracking-test/tracking-test.component';
 import { CalibrationComponent } from './landing-home/components/calibration/calibration.component';
 import { LandingButtonsContainerComponent } from './landing-home/components/landing-buttons-container/landing-buttons-container.component';
-import { MapSelectorComponent } from './landing-home/map-selector/map-selector.component';
+import { MapSelectorComponent } from './landing-home/components/map-selector/map-selector.component';
 import { HelpComponent } from './landing-home/components/help/help.component';
 import { CamBoxesComponent } from './landing-home/components/cam-boxes/cam-boxes.component';
 import { CameraSelectorComponent } from './landing-home/components/camera-selector/camera-selector.component';
@@ -50,11 +48,8 @@ import { MarkerSelectionComponent } from './landing-home/components/marker-selec
     AppComponent,
     BouncingTitleComponent,
     VideoFeedComponent,
-    InteractionElementComponent,
     MapElementComponent,
-    AddRemoveLayersComponent,
     LargeYearComponent,
-    CardStyleDirective,
     MapDirective,
     MapLayerDirective,
     LegendComponent,

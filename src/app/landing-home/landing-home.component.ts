@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Plan, Panel } from '@app/interfaces';
+import { Component, OnInit, ViewChild } from '@angular/core';;
 import { _ } from 'underscore';
 import { ContentDeliveryService } from '@app/services/content-delivery.service';
 
