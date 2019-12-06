@@ -23,7 +23,6 @@ import { AddPuckComponent } from './map-main/add-puck/add-puck.component';
 import { ScenarioComponent } from './scenario/scenario.component';
 
 // Directives
-import { MapSelectionDirectiveDirective } from './landing-home/map-selection-directive.directive';
 import { MapDirective } from './map-main/map-element/map.directive';
 import { MapLayerDirective } from './map-main/map-element/map-layer.directive';
 import { LegendDirective } from './map-main/legend/legend.directive';
@@ -50,7 +49,6 @@ import { MarkerSelectionComponent } from './landing-home/components/marker-selec
     routingComponents,
     AppComponent,
     BouncingTitleComponent,
-    MapSelectionDirectiveDirective,
     VideoFeedComponent,
     InteractionElementComponent,
     MapElementComponent,

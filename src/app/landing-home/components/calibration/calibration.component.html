@@ -1,4 +1,12 @@
-<div class="calibration-overlay" >
+<div 
+class="selection-button"
+(click)="startCalibration()"
+[style.display]="calibrating ? 'none' : 'block'"
+>Begin Calibration</div>
+<div
+ class="calibration-overlay" 
+ [style.display]="calibrating ? 'block' : 'none'"
+>
   <div class="manual-point" #manualPoint>
     <div class="center"></div>
   </div>

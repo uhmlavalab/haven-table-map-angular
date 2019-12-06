@@ -4,6 +4,7 @@ import { MultiWindowService } from 'ngx-multi-window';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
 import { SecondScreenComponent } from '@app/second-screen/second-screen.component';
+import { Plan } from '@app/interfaces/plan';
 
 
 @Injectable({
@@ -122,4 +123,34 @@ export class WindowRefService {
   public getLoadingStatus(): boolean {
     return this.loadingStatus;
   }
+
+  
+  /** Opens a second screen as long as there isnt one opened already.
+   * @return true if scucessful, false if not opened
+   */
+  public openSecondScreen(): boolean {
+    if (!(this.secondScreenIsSet())) {
+      this.setSecondSceenObject(this.getNativeWindow().open('second-screen', 'secondScreen'));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   /** Start UP the Second screen */
+   public startSecondScreen(plan: Plan, year: number): void {
+    if (this.secondScreenExists()) {
+      this.notifySecondScreen(JSON.stringify(
+        {
+          type: 'setup',
+          name: plan.name,
+          currentYear: year,
+        }));
+    } else {
+      setTimeout(() => {
+        this.startSecondScreen(plan, year);
+      }, 1000);
+    }
+  }
+
 }

@@ -2,17 +2,37 @@
   <app-loading></app-loading>
 </div>
 <ng-template #elseBlock>
+  <!-- Bouncing text title -->
   <app-bouncing-title></app-bouncing-title>
-  <app-tracking-test [style.display]="testTrack ? 'block' : 'none'"></app-tracking-test>
-  <app-calibration [style.display]="calibrating ? 'block' : 'none'"></app-calibration>
-  <app-landing-buttons-container class="landing-buttons-container"></app-landing-buttons-container>
-  <app-map-selector class="map-selector-container" [style.left]="activePanel == 'maps' ? '25%' : '100%'" id="map-selector-container"
-  name="map-selector-container" appMapSelectionDirective></app-map-selector>
-  <app-cam-boxes class="cam-box-container" [style.display]="displayLandmarks ? 'block' : 'none'"></app-cam-boxes>
-  <app-camera-selector class="camera-selector-container" [style.left]="activePanel == 'cams' ? '25%' : '100%'"
-  id="camera-selector-container" name="camera-selector-container" appMapSelectionDirective>></app-camera-selector>
-  <app-marker-selection class="marker-selector-container" [style.left]="activePanel == 'markers' ? '25%' : '100%'"
-  id="marker-selector-container" name="marker-selector-container" appMapSelectionDirective></app-marker-selection>
-  <app-help class="help-selector-container" [style.left]="activePanel == 'help' ? '25%' : '100%'"
-  id="help-selector-container" name="help-selector-container"></app-help>
+  <!-- Test Tracking Component -->
+  <app-tracking-test
+  [style.display]="routeArray.testTracking.visible ? 'block' : 'none'"
+   #testTracking></app-tracking-test>
+  <!-- Calibrating component-->
+  <app-calibration 
+  [style.display]="routeArray.calibrating.visible ? 'block' : 'none'"
+  #calibrating></app-calibration>
+  <!-- Buttons for landing page -->
+  <app-landing-buttons-container 
+    class="landing-buttons-container" 
+    #buttons></app-landing-buttons-container>
+  <!-- Map Selector container-->
+  <app-map-selector 
+    class="selector-container" 
+    [style.display]="routeArray.maps.visible ? 'block' : 'none'"
+    #mapSelector></app-map-selector>
+  <!-- Camera Selector Container -->
+  <app-camera-selector 
+  [style.display]="routeArray.cams.visible ? 'block' : 'none'"
+  class="selector-container"
+   #cams></app-camera-selector>
+  <!-- Marker Selection Container -->
+  <app-marker-selection 
+  class="selector-container" 
+  [style.display]="routeArray.markers.visible ? 'block' : 'none'"
+  #markerSelector></app-marker-selection>
+  <!-- Help Menu -->
+  <app-help 
+  [style.display]="routeArray.help.visible ? 'block' : 'none'"
+  class="selector-container" #help></app-help>
 </ng-template>

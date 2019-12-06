@@ -4,7 +4,7 @@
 }
 
 /* Wrapper for the map selection boxes */
-.map-selector-container {
+.selector-container {
   width: 70%;
   position: absolute;
   text-align: center;
@@ -12,7 +12,6 @@
   height: 70%;
   top: 15%;
   font-family: 'Roboto-Regular',Arial, sans-serif;
-  transition: left 0.4s ease-out;
 }
 
 
@@ -26,41 +25,6 @@
 }
 
 
-/* Styles for the marker selection */
-.marker-selector-container {
-  width: 70%;
-  position: absolute;
-  left: 100%;
-  top: 15%;
-  transition: left 0.4s ease-out;
-  text-align: center;
-  padding: 10px;
-}
-
-
-.calibration-overlay {
-  position: absolute;
-  z-index: 10000;
-  left: 0;
-  top: 0;
-  width: 24vw;
-  height: 100vh;
-  background-color:black;
-}
-
-
-.tracking-point {
-  width: calc(14% - 8px);
-  text-align: center;
-  display: inline-block;
-  animation:spin 20s linear infinite;
-}
-
-.tracking-point img {
-  width: 100%;
-  height: 100%;
-  border: 10px solid white;
-}
 
 .cam-box-container {
   width: 24vw;

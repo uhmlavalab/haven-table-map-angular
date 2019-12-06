@@ -222,6 +222,15 @@ export class PlanService {
     });
   }
 
+  /* Start The Map */
+  public startTheMap(plan: Plan): number {
+    this.plans.forEach(el => el.selectedPlan = false);
+    plan.selectedPlan = true;
+    this.setupSelectedPlan(plan);
+    this.setState('run');
+    return this.getCurrentYear()
+  }
+
 
   /******************* GETTERS AND SETTERS **************/
 

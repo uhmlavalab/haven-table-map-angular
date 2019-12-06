@@ -15,7 +15,7 @@ export class HelpComponent implements OnInit {
 
   constructor(private contentDeliveryService: ContentDeliveryService) { 
     this.help = 'keyboard';                     // Show keyboard shortcut controls as first help view.
-    this.buttons = contentDeliveryService.getLandingButtonContent();
+    this.buttons = contentDeliveryService.getHelpButtons();
     this.keys = contentDeliveryService.getKeyboardControls();
   }
 

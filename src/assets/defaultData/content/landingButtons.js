@@ -13,10 +13,10 @@ export const landingButtons = [
   },
   {
     text: 'Calibrate',
-    id: 'calibrate'
+    id: 'calibrating'
   },
   {
     text: 'Back',
-    id: 'back'
+    id: 'maps'
   }
 ];
