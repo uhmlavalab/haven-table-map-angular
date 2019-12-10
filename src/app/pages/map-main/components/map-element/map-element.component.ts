@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { PlanService } from '../../services/plan.service';
+import { PlanService } from '@app/services/plan.service';
 import { MapDirective } from './map.directive';
 import * as d3 from 'd3';
 import { MapLayer, Parcel } from '@app/interfaces';

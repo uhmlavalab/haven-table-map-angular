@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ArService } from '../services/ar.service';
-import { PlanService } from '../services/plan.service';
+import { ArService } from '../../services/ar.service';
+import { PlanService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-video-feed',

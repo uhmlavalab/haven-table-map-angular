@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PlanService } from '../../services/plan.service';
-import { Subject } from 'rxjs';
+import { PlanService } from '@app/services/plan.service';
 
 @Component({
   selector: 'app-large-year',

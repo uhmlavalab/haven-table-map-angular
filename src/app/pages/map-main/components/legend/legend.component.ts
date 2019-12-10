@@ -1,7 +1,7 @@
 import { Component, ViewChildren, AfterViewInit } from '@angular/core';
 import { MapLayer } from '@app/interfaces';
 import { LegendDirective } from './legend.directive';
-import { chartColors, mapLayerColors } from '../../../assets/plans/defaultColors';
+import { chartColors, mapLayerColors } from '../../../../../assets/plans/defaultColors';
 import { _ } from 'underscore';
 import { PlanService } from '@app/services/plan.service';
 

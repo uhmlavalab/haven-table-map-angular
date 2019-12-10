@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MultiWindowService, Message} from 'ngx-multi-window';
-import { Plan } from '../interfaces/plan';
-import { OahuPlan } from '../../assets/plans/oahu/plan';
-import { MauiPlan } from '../../assets/plans/maui/plan';
-import { BigIslandPlan } from '../../assets/plans/bigisland/plan';
+import { Plan } from '../../interfaces/plan';
+import { OahuPlan } from '../../../assets/plans/oahu/plan';
+import { MauiPlan } from '../../../assets/plans/maui/plan';
+import { BigIslandPlan } from '../../../assets/plans/bigisland/plan';
 
 
 @Component({

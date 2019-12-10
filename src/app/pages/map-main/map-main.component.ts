@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, HostListener, ViewChild } from '@angular/core';
-import { WindowRefService } from '../services/window-ref.service';
-import { ArService } from '../services/ar.service';
+import { WindowRefService } from '../../services/window-ref.service';
+import { ArService } from '../../services/ar.service';
 import { Router } from '@angular/router';
 import { Plan } from '@app/interfaces';
 import { PlanService } from '@app/services/plan.service';

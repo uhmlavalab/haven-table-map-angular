@@ -3,7 +3,7 @@ import { PlanService } from '@app/services/plan.service';
 
 import { Scenario } from '@app/interfaces';
 
-import { chartColors } from '../../../assets/plans/defaultColors';
+import { chartColors } from '../../../../assets/plans/defaultColors';
 
 @Component({
   selector: 'app-line-chart',

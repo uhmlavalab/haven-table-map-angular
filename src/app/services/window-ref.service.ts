@@ -3,7 +3,7 @@ import { PlanService } from './plan.service';
 import { MultiWindowService } from 'ngx-multi-window';
 import { _ } from 'underscore';
 import { Subject } from 'rxjs';
-import { SecondScreenComponent } from '@app/second-screen/second-screen.component';
+import { SecondScreenComponent } from '@app/pages/second-screen/second-screen.component';
 import { Plan } from '@app/interfaces/plan';
 
 
