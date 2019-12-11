@@ -29,9 +29,10 @@ html {
 /* Legends for each map.  Each is placed in a different location */
 
 .legend-container {
-  width: 10vw;
-  height: 90vh;
+  width: 5vw;
+  height: 100vw;
   position: absolute;
+  vertical-align: center;
 }
 
 /* Each title is placed in a different section based on the map.  Each

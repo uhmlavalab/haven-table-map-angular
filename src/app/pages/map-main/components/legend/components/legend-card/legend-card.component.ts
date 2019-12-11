@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PlanService } from '@app/services/plan.service';
 
 @Component({
   selector: 'app-legend-card',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LegendCardComponent implements OnInit {
 
-  constructor() { }
+  @Input() iconPath: string;
+  @Input() name: string;
+  @Input() color: string;
+
+  constructor(private planService: PlanService) { }
 
   ngOnInit() {
+
+  }
+
+  toggleBackgroundColor() {
+    
   }
 
 }
