@@ -31,14 +31,14 @@ export const MaunaKeaPlan: Plan = {
   },
   css: {
     map: {
-      left: '24.5vw',
+      left: '24.5vw',  //Default is 24.5
       top: '4vh'
     },
     legend: {
       defaultLayout: 'grid',
       grid: {
-        left: '47vw',
-        top: '8vh',
+        left: '75vw',
+        top: '65vh',
         width: '23vw'
       },
       vertical: {
@@ -48,11 +48,11 @@ export const MaunaKeaPlan: Plan = {
       }
     },
     title: {
-      left: '88vw',
-      top: '90vh'
+      left: '50vw',
+      top: '85vh'
     },
     scenario: {
-      left: '27vw',
+      left: '29vw',
       top: '2vh'
     },
     charts: {
@@ -61,17 +61,18 @@ export const MaunaKeaPlan: Plan = {
         top: '65vh'
       },
       line: {
-        left: 'calc(100vw - 325px)',
+        left: 'calc(100vw - 400px)',
         top: '0vh'
       }
     }
   },
   map: {
-    scale: 0.258,
-    width: 3613,
-    height: 2794,
-    bounds: [[-155.94, 19.8], [-155.021, 19.536]],
-    baseMapPath: 'assets/plans/maunakea/images/base-map.png',
+    scale: 0.258, 
+    width: 3500,
+    height: 2600,
+    bounds: [[-155.733, 19.929], [-154.998, 20.069]],
+    baseMapPath: 'assets/plans/maunakea/images/base-map-test.png',
+
     mapLayers: [
       {
         name: 'transmission',
@@ -265,8 +266,8 @@ export const MaunaKeaPlan: Plan = {
       {
         name: 'agriculture',
         displayName: 'Ag Lands',
-        active: false,
-        included: false,
+        active: false,  
+        included: true,
         iconPath: 'assets/plans/maunakea/images/icons/agriculture-icon.png',
         secondScreenImagePath: 'assets/plans/maunakea/images/second-screen-images/layer-images/agriculture.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
