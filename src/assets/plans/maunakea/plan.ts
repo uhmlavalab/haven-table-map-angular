@@ -68,9 +68,9 @@ export const MaunaKeaPlan: Plan = {
   },
   map: {
     scale: 0.258, 
-    width: 3613,
-    height: 2794,
-    bounds: [[-155.81, 19.95], [-155.03, 20.11]],
+    width: 3500,
+    height: 2600,
+    bounds: [[-155.741, 19.929], [-154.979, 20.069]],
     baseMapPath: 'assets/plans/maunakea/images/base-map-test.png',
     mapLayers: [
       {
