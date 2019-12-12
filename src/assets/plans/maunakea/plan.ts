@@ -31,7 +31,7 @@ export const MaunaKeaPlan: Plan = {
   },
   css: {
     map: {
-      left: '24.5vw',
+      left: '24.5vw',  //Default is 24.5
       top: '4vh'
     },
     legend: {
@@ -67,10 +67,10 @@ export const MaunaKeaPlan: Plan = {
     }
   },
   map: {
-    scale: 0.258,
+    scale: 0.258, 
     width: 3613,
     height: 2794,
-    bounds: [[-156.00, 20.0], [-155.20, 20.1]],
+    bounds: [[-155.81, 19.95], [-155.03, 20.11]],
     baseMapPath: 'assets/plans/maunakea/images/base-map-test.png',
     mapLayers: [
       {
@@ -265,7 +265,7 @@ export const MaunaKeaPlan: Plan = {
       {
         name: 'agriculture',
         displayName: 'Ag Lands',
-        active: false,
+        active: true,  //Change this back.
         included: true,
         iconPath: 'assets/plans/maunakea/images/icons/agriculture-icon.png',
         secondScreenImagePath: 'assets/plans/maunakea/images/second-screen-images/layer-images/agriculture.jpg',
