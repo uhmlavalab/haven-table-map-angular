@@ -72,6 +72,7 @@ export const MaunaKeaPlan: Plan = {
     height: 2600,
     bounds: [[-155.733, 19.929], [-154.998, 20.069]],
     baseMapPath: 'assets/plans/maunakea/images/base-map-test.png',
+
     mapLayers: [
       {
         name: 'transmission',
@@ -299,7 +300,45 @@ export const MaunaKeaPlan: Plan = {
           });
         },
       },
+            {//start placeholder layer
+              name: 'Moisture Zones',
+              displayName: 'Moisture Zones',
+              active: false,
+              included: true,
+              iconPath: 'assets/plans/maunakea/images/icons/dod-icon.png',
+              secondScreenImagePath: 'assets/plans/maunakea/images/second-screen-images/layer-images/dod.jpg',
+              secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+              fillColor: mapLayerColors.Dod.fill,
+              borderColor: mapLayerColors.Dod.border,
+              borderWidth: 1,
+              legendColor: mapLayerColors.Dod.fill,
+              filePath: 'assets/plans/maunakea/layers/moisture.json',
+              parcels: [],
+              setupFunction(planService: PlanService) {
+                const colors = {
+                  '1': '#e60000',
+                  '2': '#ff7f7f',
+                  '3': '#895a44',
+                  '4': '#00c5ff',
+                  '5': '#037ffc',
+                  '6': '#031cfc',
+                  '7': '#1302d1',
+                }
+                this.parcels.forEach(parcel => {
+                  d3.select(parcel.path)
+                    .style('fill', colors[parcel.properties.zone])//change from type to attribute name
+                    .style('opacity', this.active ? 0.85 : 0.0)
+                    .style('stroke', this.borderColor)
+                    .style('stroke-width', this.borderWidth + 'px');
+                });
+              },
+              updateFunction(planService: PlanService) {
+                this.parcels.forEach(parcel => {
+                  d3.select(parcel.path)
+                    .style('opacity', this.active ? 0.85 : 0.0);
+                });
+              },
+            },//end placeholder layer
     ],
   },
-
 };
