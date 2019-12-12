@@ -265,7 +265,7 @@ export const MaunaKeaPlan: Plan = {
       {
         name: 'agriculture',
         displayName: 'Ag Lands',
-        active: true,  //Change this back.
+        active: false,  
         included: true,
         iconPath: 'assets/plans/maunakea/images/icons/agriculture-icon.png',
         secondScreenImagePath: 'assets/plans/maunakea/images/second-screen-images/layer-images/agriculture.jpg',
