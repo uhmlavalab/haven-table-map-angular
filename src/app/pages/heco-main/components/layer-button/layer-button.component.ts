@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { UiServiceService } from '@app/services/ui-service.service';
 
 @Component({
   selector: 'app-layer-button',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayerButtonComponent implements OnInit {
 
-  constructor() { }
+  @Input() layerName: string;
+  @Input() layerDisplayName: string;
+  constructor(private uiService: UiServiceService) {
+    
+   }
 
   ngOnInit() {
+  }
+
+  private handleClick(): void {
+    this.uiService.messageMap({type: 'layer-update', data: this.layerName});
+    console.log('click');
   }
 
 }

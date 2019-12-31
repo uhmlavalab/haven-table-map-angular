@@ -26,14 +26,14 @@ export class TouchUiComponent implements AfterViewInit {
       try {
         this.reviewMessage(this.window.opener.localStorage.getItem('ui-msg'));
       } catch(err) {
-        // Failed to revieve a new message
+        console.log('Failed to revieve a new message');
       }
     }, 500);
   }
 
   private reviewMessage(msg): void {
     const data = JSON.parse(msg);
-    this.window.opener.localStorage.clear();
+    //this.window.opener.localStorage.clear();
 
     if (data.type === 'plan') {
       this.setupUI(this.touchService.setCurrentPlan(data.data));
@@ -43,5 +43,5 @@ export class TouchUiComponent implements AfterViewInit {
   private setupUI(plan: Plan): void {
     this.test = plan.displayName;
     this.layers = plan.map.mapLayers;
-  }
+  } 
 }

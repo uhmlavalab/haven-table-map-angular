@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
 import { _ } from 'underscore';
 import { Plan } from '@app/interfaces/plan';
 import { Plans } from '../../assets/plans/plans';
@@ -113,11 +113,16 @@ export class PlanService {
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
     let generationTotal = 0;
     technologies.forEach(tech => {
-      this.generationData[this.currentScenario.name][tech].forEach(el => {
-        if (el.year === this.currentYear) {
-          generationTotal += el.value;
-        }
-      });
+      try {
+        this.generationData[this.currentScenario.name][tech].forEach(el => {
+          if (el.year === this.currentYear) {
+            generationTotal += el.value;
+          }
+        });
+      } catch(error) {
+        console.log('error setting generation.');
+      }
+
     });
     return generationTotal;
   }

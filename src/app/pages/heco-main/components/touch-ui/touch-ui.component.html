@@ -2,4 +2,4 @@
   {{ test }}
 </p>
 
-<app-layer-button *ngFor="let layer of layers"></app-layer-button>
+<app-layer-button *ngFor="let layer of layers" layerName={{layer.name}} layerDisplayName={{layer.displayName}}></app-layer-button>

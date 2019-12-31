@@ -51,6 +51,11 @@ export class TouchService {
     this.uiWindow = this.window.open('/heco-main/touch-ui', 'touch-ui');
   }
 
+  public readMessage(): string {
+     const message = this.uiWindow.localStorage.getItem('map-msg');
+     return message;
+  }
+
   public messageUI(msg): void {
     this.uiWindow.localStorage.setItem('ui-msg', JSON.stringify(msg));
   }

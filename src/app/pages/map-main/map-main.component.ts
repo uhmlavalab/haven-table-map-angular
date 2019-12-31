@@ -25,9 +25,9 @@ export class MapMainComponent implements AfterViewInit {
   @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
   @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
   @ViewChild('legend', { static: false, read: ElementRef }) legend; // The legend element
-  @ViewChild('map', {static:false, read: ElementRef}) mapElement; // The custom Map component.
-  @ViewChild('pieChart', {static:false, read: ElementRef}) pieChart; // The custom Map component.
-  @ViewChild('lineChart', {static:false, read: ElementRef}) lineChart; // The custom Map component.
+  @ViewChild('map', { static: false, read: ElementRef }) mapElement; // The custom Map component.
+  @ViewChild('pieChart', { static: false, read: ElementRef }) pieChart; // The custom Map component.
+  @ViewChild('lineChart', { static: false, read: ElementRef }) lineChart; // The custom Map component.
   private plan: Plan;                   // The current Plan
 
   /* Tracking Puck and other Data Related Variables */
@@ -41,8 +41,9 @@ export class MapMainComponent implements AfterViewInit {
     private planService: PlanService,
     private arService: ArService,
     private router: Router,
-    private windowRefService: WindowRefService, 
-    private contentDeliveryService: ContentDeliveryService) {
+    private windowRefService: WindowRefService,
+    private contentDeliveryService: ContentDeliveryService,
+    private window: Window) {
 
     this.plan = this.planService.getCurrentPlan();
 
@@ -56,7 +57,7 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.setState('landing');
       console.log('No Plan Found --> Route to setup');
     } finally {
-      
+
     }
   }
 
@@ -102,6 +103,7 @@ export class MapMainComponent implements AfterViewInit {
 
     this.planService.scenarioSubject.subscribe(scenario => this.currentScenario = scenario.displayName);
   }
+
 
   /** Tracks the marker on the table
    * @param marker The marker to be tracked.
@@ -193,7 +195,7 @@ export class MapMainComponent implements AfterViewInit {
     }, 500);
   }
 
-  
+
 
 
   /**

@@ -17,6 +17,7 @@ export class HecoMainComponent implements AfterViewInit {
   private uiWindow: any;
   private currentYear: number;          // Current Year
   private currentScenario: string;      // Current scenario.
+  private messageCheckInterval: any;
 
 
   constructor(private planService: PlanService,
@@ -24,7 +25,7 @@ export class HecoMainComponent implements AfterViewInit {
     private touchService: TouchService,
     private router: Router) {
 
-       // if the plan is undefined, then the application will go back to the landing page.
+    // if the plan is undefined, then the application will go back to the landing page.
     try {
       this.currentYear = this.planService.getMinimumYear();
       this.currentScenario = this.planService.getCurrentScenario().displayName;
@@ -33,7 +34,7 @@ export class HecoMainComponent implements AfterViewInit {
       this.planService.setState('landing');
       console.log('No Plan Found --> Route to setup');
     } finally {
-      
+
     }
 
   }
@@ -43,7 +44,27 @@ export class HecoMainComponent implements AfterViewInit {
     this.positionLineChart();
     this.positionPieChart();
     this.touchService.openUIWindow();
-    this.touchService.messageUI({type: 'plan', data: 'heco-oahu'});
+    this.touchService.messageUI({ type: 'plan', data: 'heco-oahu' });
+
+    this.messageCheckInterval = setInterval(() => {
+      console.log(this.touchService.readMessage());
+      try {
+        this.reviewMessage(this.touchService.readMessage());
+      } catch (err) {
+        console.log('Failed to revieve a new message');
+      }
+    }, 500);
+  }
+
+  private reviewMessage(msg): void {
+    const data = JSON.parse(msg);
+    //this.window.opener.localStorage.clear();
+
+    if (data.type === 'test') {
+      console.log('message received' + data.data);
+    } else {
+      console.log('oops');
+    }
   }
 
   private positionMap(): void {
