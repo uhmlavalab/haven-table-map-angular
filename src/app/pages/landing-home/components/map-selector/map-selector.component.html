@@ -9,7 +9,7 @@
         <div class="map-selector-start-button">
           <input type="checkbox" id="second-screen-{{plan.displayName}}"
             (change)="handleIncludeSecondScreenCheckboxChange(plan, $event.target.checked)"> Include 2nd Screen
-          <h3 routerLink="/map-main" id="start-{{plan.displayName}}" (click)="handleStartButtonClick(plan)">Start</h3>
+          <h3 routerLink="{{plan.route}}" id="start-{{plan.displayName}}" (click)="handleStartButtonClick(plan)">Start</h3>
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ export const BigIslandPlan: Plan = {
   selectedPlan: false,
   minYear: 2016,
   maxYear: 2045,
+  route: 'map-main',
   scenarios: [
     {
       name: 'postapril',
@@ -35,6 +36,7 @@ export const BigIslandPlan: Plan = {
       top: '5vh'
     },
     legend: {
+      display: 'block',
       defaultLayout: 'grid',
       grid: {
         left: '27vw',

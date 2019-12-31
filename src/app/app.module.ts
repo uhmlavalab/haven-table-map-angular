@@ -12,7 +12,7 @@ import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BouncingTitleComponent } from './pages/landing-home/components/bouncing-title/bouncing-title.component';
 import { VideoFeedComponent } from './universal-components/video-feed/video-feed.component';
-import { MapElementComponent } from './pages/map-main/components/map-element/map-element.component';
+import { MapElementComponent } from './universal-components/map-element/map-element.component';
 import { LargeYearComponent } from './pages/map-main/components/large-year/large-year.component';
 import { LegendComponent } from './pages/map-main/components/legend/legend.component';
 import { TitleComponent } from './pages/map-main/components/title/title.component';
@@ -25,8 +25,8 @@ import { AddPuckComponent } from './pages/map-main/components/puck-overlays/add-
 import { ScenarioComponent } from './scenario/scenario.component';
 
 // Directives
-import { MapDirective } from './pages/map-main/components/map-element/map.directive';
-import { MapLayerDirective } from './pages/map-main/components/map-element/map-layer.directive';
+import { MapDirective } from './universal-components/map-element/map.directive';
+import { MapLayerDirective } from './universal-components/map-element/map-layer.directive';
 import { LegendDirective } from './pages/map-main/components/legend/legend.directive';
 
 
@@ -45,6 +45,9 @@ import { CamBoxesComponent } from './pages/landing-home/components/cam-boxes/cam
 import { CameraSelectorComponent } from './pages/landing-home/components/camera-selector/camera-selector.component';
 import { MarkerSelectionComponent } from './pages/landing-home/components/marker-selection/marker-selection.component';
 import { LegendCardComponent } from './pages/map-main/components/legend/components/legend-card/legend-card.component';
+import { HecoMainComponent } from './pages/heco-main/heco-main.component';
+import { TouchUiComponent } from './pages/heco-main/components/touch-ui/touch-ui.component';
+import { LayerButtonComponent } from './pages/heco-main/components/layer-button/layer-button.component';
 
 
 @NgModule({
@@ -77,8 +80,9 @@ import { LegendCardComponent } from './pages/map-main/components/legend/componen
     CameraSelectorComponent,
     MarkerSelectionComponent,
     LandingHomeComponent,
-    MapMainComponent, 
-    LegendCardComponent
+    MapMainComponent,
+    LegendCardComponent,
+    HecoMainComponent, TouchUiComponent, LayerButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +94,8 @@ import { LegendCardComponent } from './pages/map-main/components/legend/componen
     ArService,
     PlanService,
     SoundsService,
-    WindowRefService
+    WindowRefService,
+    { provide: Window, useValue: window }
   ],
   bootstrap: [AppComponent]
 })

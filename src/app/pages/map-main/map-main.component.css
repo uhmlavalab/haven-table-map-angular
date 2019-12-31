@@ -14,18 +14,6 @@ html {
   left: 0;
 }
 
-/* Contains styles for the right side of the main map display */
-
-.map-container {
-  width: 75.5vw;
-  height: 100vh;
-  background-color: transparent;
-  display: inline-block;
-  position: absolute;
-  text-align: center;
-  cursor: none;
-}
-
 /* Legends for each map.  Each is placed in a different location */
 
 .legend-container {
@@ -49,22 +37,6 @@ html {
   color: white;
   position: absolute;
   text-align: center;
-}
-
-/* Holds the chart data.  Positioned for each island*/
-
-.line-chart {
-  width: 325px;
-  height: 325px;
-  position: absolute;
-  color: white;
-}
-
-.pie-chart {
-  width: 250px;
-  height: 250px;
-  position: absolute;
-  color: white;
 }
 
 /* Holds the scenario data.  Positioned for each island*/

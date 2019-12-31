@@ -293,6 +293,14 @@ export class PlanService {
     return this.state;
   }
 
+  /** Gets the current CSS styles for the legend based on the currently selected
+   * plan.
+   * @return object containing key value pairs for the legend styles.
+   */
+  public getCss(): any {
+    return this.currentPlan.css;
+  }
+
   /************** Data Manipulation Functions *****************
    ************************************************************/
 

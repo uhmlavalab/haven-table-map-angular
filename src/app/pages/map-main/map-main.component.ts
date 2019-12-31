@@ -1,10 +1,11 @@
-import { Component, AfterViewInit, HostListener, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { WindowRefService } from '../../services/window-ref.service';
 import { ArService } from '../../services/ar.service';
 import { Router } from '@angular/router';
 import { Plan } from '@app/interfaces';
 import { PlanService } from '@app/services/plan.service';
 import { ProjectableMarker } from '@app/classes/projectableMarker';
+import { ContentDeliveryService } from '@app/services/content-delivery.service';
 
 @Component({
   selector: 'app-map-main',
@@ -23,14 +24,11 @@ export class MapMainComponent implements AfterViewInit {
   @ViewChild('trackingDotScenario', { static: false }) trackingDotScenario;
   @ViewChild('trackingDotAdd', { static: false }) trackingDotAdd;
   @ViewChild('connectingLine', { static: false }) connectingLine; // The line that connects the Layer and Add pucks.
-
+  @ViewChild('legend', { static: false, read: ElementRef }) legend; // The legend element
+  @ViewChild('map', {static:false, read: ElementRef}) mapElement; // The custom Map component.
+  @ViewChild('pieChart', {static:false, read: ElementRef}) pieChart; // The custom Map component.
+  @ViewChild('lineChart', {static:false, read: ElementRef}) lineChart; // The custom Map component.
   private plan: Plan;                   // The current Plan
-
-  /* Legend Related Variables */
-  private top: string;                  // Y Position of the legend
-  private left: string;                 // X Position of the legend
-  private width: string;                // Width of the legend
-  private legendClass: string;          // Vertical or horizontal legend.
 
   /* Tracking Puck and other Data Related Variables */
   private trackingDots: any[] = [];     // Holds the view children
@@ -43,13 +41,13 @@ export class MapMainComponent implements AfterViewInit {
     private planService: PlanService,
     private arService: ArService,
     private router: Router,
-    private windowRefService: WindowRefService) {
+    private windowRefService: WindowRefService, 
+    private contentDeliveryService: ContentDeliveryService) {
 
     this.plan = this.planService.getCurrentPlan();
 
     // if the plan is undefined, then the application will go back to the landing page.
     try {
-      this.legendClass = this.planService.getCurrentLegendLayout();
       this.currentYear = this.planService.getMinimumYear();
       this.addColor = this.planService.getSelectedLayer().legendColor;
       this.currentScenario = this.planService.getCurrentScenario().displayName;
@@ -58,25 +56,16 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.setState('landing');
       console.log('No Plan Found --> Route to setup');
     } finally {
-      this.top = this.plan.css.legend[this.legendClass].top;
-      this.left = this.plan.css.legend[this.legendClass].left;
-      this.width = this.plan.css.legend[this.legendClass].width;
+      
     }
   }
 
   ngAfterViewInit() {
-
+    this.positionLegend();
+    this.positionMap();
+    this.positionLineChart();
+    this.positionPieChart();
     this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario, this.trackingDotAdd];
-
-    /* Subscriptions */
-
-    this.planService.legendSubject.subscribe({
-      next: value => {
-        this.top = this.plan.css.legend[value].top;
-        this.left = this.plan.css.legend[value].left;
-        this.width = this.plan.css.legend[value].width;
-      }
-    });
 
     // Push Year Data to Second Screen
     this.planService.yearSubject.subscribe({
@@ -174,13 +163,13 @@ export class MapMainComponent implements AfterViewInit {
     if (layerPosition.x === null || addPosition.x === null) {
       this.connectingLine.nativeElement.style.opacity = 0;
     } else {
-      const adjacent = this.getAdjacent(addPosition.x, layerPosition.x);
-      const opposite = this.getOpposite(addPosition.y, layerPosition.y);
-      const hypotenuse = this.getHypotenuse(adjacent, opposite); // This is the width of the div
-      let theta = this.getTheta(opposite, adjacent);
-      theta = this.convertRadsToDegrees(theta);
-      const quadrant = this.getQuadrant(addPosition.x - layerPosition.x, addPosition.y - layerPosition.y);
-      theta = this.adjustTheta(theta, quadrant);
+      const adjacent = this.contentDeliveryService.getAdjacent(addPosition.x, layerPosition.x);
+      const opposite = this.contentDeliveryService.getOpposite(addPosition.y, layerPosition.y);
+      const hypotenuse = this.contentDeliveryService.getHypotenuse(adjacent, opposite); // This is the width of the div
+      let theta = this.contentDeliveryService.getTheta(opposite, adjacent);
+      theta = this.contentDeliveryService.convertRadsToDegrees(theta);
+      const quadrant = this.contentDeliveryService.getQuadrant(addPosition.x - layerPosition.x, addPosition.y - layerPosition.y);
+      theta = this.contentDeliveryService.adjustTheta(theta, quadrant);
       this.moveLine(this.connectingLine.nativeElement, theta, hypotenuse, layerPosition.x + xOffset + 25, layerPosition.y + 25);
     }
   }
@@ -204,58 +193,7 @@ export class MapMainComponent implements AfterViewInit {
     }, 500);
   }
 
-  /** Adjusts the angle calculation depending on quadrant
-   * @theta the angle as calculated by the arc tan function
-   * @quadrant the quadrant of the unit circle
-   */
-  private adjustTheta(theta, quadrant) {
-    theta = theta;
-    if (quadrant === 2) {
-      theta = 180 - theta;
-    } else if (quadrant === 3) {
-      theta = 180 + theta;
-    } else if (quadrant === 4) {
-      theta = 360 - theta;
-    }
-    return theta;
-  }
-
-  /** Get the quadrant of the unit circle
-   * @param x the distance from the origin along x axis
-   * @param y the distance from the origin along the y axis
-   */
-  private getQuadrant(x: number, y: number) {
-    let quadrant = 0;
-    if (x <= 0 && y <= 0) {
-      quadrant = 2;
-    } else if (x > 0 && y <= 0) {
-      quadrant = 1;
-    } else if (x >= 0 && y > 0) {
-      quadrant = 4;
-    } else {
-      quadrant = 3;
-    }
-    return quadrant;
-  }
-  private convertRadsToDegrees(theta): number {
-    return theta * (180 / Math.PI);
-  }
-
-  private getTheta(opposite: number, adjacent: number): number {
-    return Math.atan(opposite / adjacent);
-  }
-
-  private getAdjacent(a: number, b: number): number {
-    return Math.abs(a - b);
-  }
-
-  private getOpposite(a: number, b: number): number {
-    return Math.abs(a - b);
-  }
-
-  private getHypotenuse(a: number, b: number): number {
-    return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-  }
+  
 
 
   /**
@@ -265,6 +203,47 @@ export class MapMainComponent implements AfterViewInit {
    */
   private getIslandName(): string {
     return this.plan.name;
+  }
+
+  /** These functions apply styles from the PLAN */
+  private positionLegend(): void {
+    // Select legend element from viewchild.
+    const e = this.legend.nativeElement;
+    // Get styles from the plan
+    const styles = this.planService.getCss();
+    const layout = styles.legend.defaultLayout;
+    // Apply selected styles to the legend element.
+    e.style.left = styles.legend[layout].left;
+    e.style.top = styles.legend[layout].top;
+    e.style.width = styles.legend[layout].width;
+    e.style.display = styles.legend.display;
+  }
+
+  private positionMap(): void {
+    //Select map element from viewchild
+    const e = this.mapElement.nativeElement;
+    // Get styles from the plan service.
+    const styles = this.planService.getCss();
+    e.style.left = styles.map.left;
+    e.style.top = styles.map.top;
+  }
+
+  private positionLineChart(): void {
+    //Select map element from viewchild
+    const e = this.lineChart.nativeElement;
+    // Get styles from the plan service.
+    const styles = this.planService.getCss();
+    e.style.left = styles.charts.line.left;
+    e.style.top = styles.charts.line.top;
+  }
+
+  private positionPieChart(): void {
+    //Select map element from viewchild
+    const e = this.pieChart.nativeElement;
+    // Get styles from the plan service.
+    const styles = this.planService.getCss();
+    e.style.left = styles.charts.pie.left;
+    e.style.top = styles.charts.pie.top;
   }
 
   // KEYBOARD CONTROLS

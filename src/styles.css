@@ -31,3 +31,30 @@ body {
     background-color: rgba(109, 98, 125, 1);
     text-decoration: underline;
   }
+
+  /* Holds the chart data.  Positioned for each island*/
+
+.line-chart {
+  width: 325px;
+  height: 325px;
+  position: absolute;
+  color: white;
+}
+
+.pie-chart {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  color: white;
+}
+
+/* Contains styles for map element container */
+.map-container {
+  width: 75.5vw;
+  height: 100vh;
+  background-color: transparent;
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+  cursor: none;
+}

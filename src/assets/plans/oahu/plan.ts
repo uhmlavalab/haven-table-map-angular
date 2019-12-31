@@ -13,6 +13,7 @@ export const OahuPlan: Plan = {
   selectedPlan: false,
   minYear: 2016,
   maxYear: 2045,
+  route: 'map-main',
   scenarios: [
     {
       name: 'postapril',
@@ -33,6 +34,7 @@ export const OahuPlan: Plan = {
       top: '3vh'
     },
     legend: {
+      display: 'block',
       defaultLayout: 'vertical',
       grid: {
         left: '28vw',
@@ -72,7 +74,7 @@ export const OahuPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.24,
+    scale: 0.256,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],

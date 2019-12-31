@@ -11,12 +11,14 @@ export interface Plan {
   minYear: number;
   maxYear: number;
   scenarios: Scenario[];
+  route: string;
   css: {
     map: {
       top: string;
       left: string;
     }
     legend: {
+      display: string;
       defaultLayout: string;
       grid: {
         top: string;
