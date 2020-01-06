@@ -38,30 +38,26 @@ export class TouchService {
     this.clusterKey = 0;
   }
 
-  public setCurrentPlan(planName: string): Plan {
-    this.plans.forEach(plan => {
-      if (plan.name === planName) {
-        this.currentPlan = plan;
-      }
-    });
-    return this.currentPlan;
-  }
-
   public openUIWindow(): void {
     this.uiWindow = this.window.open('/heco-main/touch-ui', 'touch-ui');
   }
 
   public readMessage(): string {
-     const message = this.uiWindow.localStorage.getItem('map-msg');
+     const message = this.window.localStorage.getItem('map-msg');
      return message;
   }
 
   public messageUI(msg): void {
-    this.uiWindow.localStorage.setItem('ui-msg', JSON.stringify(msg));
+    this.window.localStorage.setItem('ui-msg', JSON.stringify(msg));
   }
 
   public clearMessages(): void {
-    this.window.localStorage.clear();
+    const msg = {
+      type: 'none',
+      data: 'none',
+      newMsg: 'false'
+    };
+    this.window.localStorage.setItem('map-msg', JSON.stringify(msg));
   }
 
   /** Takes any array of any size and will trim it

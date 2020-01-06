@@ -395,6 +395,16 @@ export class PlanService {
     this.selectedLayer.active ? this.removeLayer() : this.addLayer();
   }
 
+  /** Adds or removes the selected layer after checking it's active state. */
+  public toggleSelectedLayer(layerName: string): void {
+    this.layers.forEach(e => {
+      if (e.name === layerName) { 
+        this.selectedLayer = e;
+      }
+    });
+    this.toggleLayer();
+  }
+
   /** Adds a layer to the map
    * @return true if successful, false if not.
    */

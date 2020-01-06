@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 import { TouchService } from '@app/services/touch.service';
 import { Router } from '@angular/router';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-heco-main',
@@ -44,26 +45,45 @@ export class HecoMainComponent implements AfterViewInit {
     this.positionLineChart();
     this.positionPieChart();
     this.touchService.openUIWindow();
-    this.touchService.messageUI({ type: 'plan', data: 'heco-oahu' });
+    this.touchService.messageUI({ type: 'plan', data: 'heco-oahu', newMsg: 'true' });
 
     this.messageCheckInterval = setInterval(() => {
-      console.log(this.touchService.readMessage());
       try {
         this.reviewMessage(this.touchService.readMessage());
       } catch (err) {
         console.log('Failed to revieve a new message');
       }
-    }, 500);
+    }, 50);
+
+    // Push Year Data to Second Screen
+    this.planService.yearSubject.subscribe({
+      next: value => {
+        const msg = {
+          type: 'year',
+          data: value,
+          newMsg: 'true'
+        }
+        this.touchService.messageUI(msg);
+      }
+    });
   }
 
   private reviewMessage(msg): void {
     const data = JSON.parse(msg);
-    //this.window.opener.localStorage.clear();
-
-    if (data.type === 'test') {
-      console.log('message received' + data.data);
+    if (data.newMsg === 'true') {
+      this.touchService.clearMessages();
+      console.log(data.type);
+      if (data.type === 'layer-update') {
+        this.planService.toggleSelectedLayer(data.data);
+      } else if (data.type === 'change year') {
+        if (data.data === 'increment') {
+          this.planService.incrementCurrentYear();
+        } else {
+          this.planService.decrementCurrentYear();
+        }
+      }
     } else {
-      console.log('oops');
+      console.log('no new message');
     }
   }
 
