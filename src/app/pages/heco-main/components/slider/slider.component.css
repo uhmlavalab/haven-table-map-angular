@@ -1,5 +1,7 @@
 :host {
     color: white;
+    width: 100%;
+    height: auto;
 }
 
 .background-bar {
@@ -7,7 +9,7 @@
     height: 10px;
     position: absolute;
     background-color: #ffffff;
-    top: 86px;
+    top: 15px;
 }
 
 .slidable-element {
@@ -17,4 +19,5 @@
     background-color: blue;
     border-radius: 50%;
     z-index: 1;
+    left: -20px;
 }

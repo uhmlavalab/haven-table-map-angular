@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 import { Plan } from '@app/interfaces/plan';
 import { UiServiceService } from '@app/services/ui-service.service';
@@ -9,6 +9,8 @@ import { UiServiceService } from '@app/services/ui-service.service';
   styleUrls: ['./touch-ui.component.css']
 })
 export class TouchUiComponent implements AfterViewInit {
+
+  @ViewChild('year', {static: false, read: ElementRef}) yearElement: ElementRef;
 
   private test: string;
   private layers: any;
@@ -23,6 +25,7 @@ export class TouchUiComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.setYearHeight();
     // Checks for new messages on a selected time interval.  The faster the interval, less lag between windows.
     this.messageCheckInterval = setInterval(() => {
       try {
@@ -30,7 +33,13 @@ export class TouchUiComponent implements AfterViewInit {
       } catch (err) {
         console.log('Failed to revieve a new message');
       }
-    }, 200);
+    }, 20);
+
+    this.uiService.yearSubject.subscribe({
+      next: value => {
+        this.year = value;
+      }
+    });
   }
 
   /** When a new message is received by a component, it is decoded here
@@ -55,5 +64,8 @@ export class TouchUiComponent implements AfterViewInit {
     this.layers = plan.map.mapLayers;
   }
 
+  private setYearHeight(): void {
+    this.yearElement.nativeElement.style.height =`${this.yearElement.nativeElement.getBoundingClientRect().width}px`;
+  }
 
 }

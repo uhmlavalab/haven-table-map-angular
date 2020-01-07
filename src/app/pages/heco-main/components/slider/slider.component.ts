@@ -8,7 +8,7 @@ import { UiServiceService } from '@app/services/ui-service.service';
 })
 export class SliderComponent implements AfterViewInit {
 
-  @ViewChild('slideElement', {static: false}) slideElement;
+  @ViewChild('slideElement', { static: false }) slideElement;
 
   @Input() type: string;
 
@@ -16,22 +16,29 @@ export class SliderComponent implements AfterViewInit {
 
   constructor(private uiService: UiServiceService) {
 
-   }
+  }
 
   ngAfterViewInit() {
-    this.slideElement.nativeElement.addEventListener('mousedown', this.startDrag);
-    this.slideElement.nativeElement.addEventListener('mouseup', this.stopDragging);
-    this.slideElement.nativeElement.addEventListener('mousemove', (event) => {
-        this.drag(event, this.slideElement);
-    });
-
-    this.slideElement.nativeElement.addEventListener('touchstart', this.startDrag);
-    this.slideElement.nativeElement.addEventListener('touchend', this.stopDragging);
-    this.slideElement.nativeElement.addEventListener('touchmove', (event) => {
+    this.slideElement.nativeElement.addEventListener('mousedown', () => this.startDrag());
+    this.slideElement.nativeElement.addEventListener('mouseup', () => this.stopDragging());
+    this.slideElement.nativeElement.addEventListener('mouseleave', () => this.stopDragging());
+    this.slideElement.nativeElement.addEventListener('mousemove', event => {
       if (this.dragging) {
-        this.drag(event, this.slideElement);
+        this.uiService.changeYear(this.drag(event, this.slideElement));
       }
     });
+
+    this.slideElement.nativeElement.addEventListener('touchstart', () => {
+      this.startDrag();
+    }, { passive: false });
+    this.slideElement.nativeElement.addEventListener('touchend', () => {
+      this.stopDragging();
+    }, { passive: false });
+    this.slideElement.nativeElement.addEventListener('touchmove', event => {
+      if (this.dragging) {
+        this.uiService.changeYear(this.drag(event, this.slideElement));
+      }
+    }, { passive: false });
   }
 
   incrementYear() {
@@ -48,18 +55,36 @@ export class SliderComponent implements AfterViewInit {
 
   private stopDragging(): void {
     this.dragging = false;
-
   }
 
-  private drag(event, e): void {
-    const mousex = event.screenX;
-    const eWidth = e.nativeElement.getBoundingClientRect().width;
-    const parentx = e.nativeElement.parentElement.getBoundingClientRect().left;
-    const parentWidth = e.nativeElement.parentElement.getBoundingClientRect().width;
-
-    const left = mousex - parentx;
-    if (left > 0 && mousex < parentx + parentWidth ) {
-      e.nativeElement.style.left = `${left - eWidth/2}px`;
+  private drag(event, e): number {
+    let percentFromLeft = -1
+    try {
+      // Capture X position of mouse or touch
+      let mousex = event.screenX;
+      if (mousex === undefined) {
+        Object.values(event.touches).forEach((touch: Touch) => {
+          if (touch.target === e.nativeElement) {
+            mousex = touch.screenX;
+          }
+        });
+      }
+      // Find slide element width and parent size.
+      const eWidth = e.nativeElement.getBoundingClientRect().width;
+      const parentx = e.nativeElement.parentElement.getBoundingClientRect().left;
+      const parentWidth = e.nativeElement.parentElement.getBoundingClientRect().width;
+      const left = mousex - parentx; // Left boundary of element
+      // Slider is bounded
+      let newPosition = left - eWidth / 2;
+      console.log(e.nativeElement.parentElement);
+      if (left > 0 && mousex < parentx + parentWidth) {
+        e.nativeElement.style.left = `${newPosition}px`; // Slider is centered on the touch.
+        percentFromLeft = left / parentWidth;
+      }
+    } catch (error) {
+      console.log('Error Dragging Slider object');
+    } finally {
+      return percentFromLeft;
     }
   }
 

@@ -49,6 +49,7 @@ import { HecoMainComponent } from './pages/heco-main/heco-main.component';
 import { TouchUiComponent } from './pages/heco-main/components/touch-ui/touch-ui.component';
 import { LayerButtonComponent } from './pages/heco-main/components/layer-button/layer-button.component';
 import { SliderComponent } from './pages/heco-main/components/slider/slider.component';
+import { YearComponent } from './pages/heco-main/components/year/year.component';
 
 
 @NgModule({
@@ -83,7 +84,7 @@ import { SliderComponent } from './pages/heco-main/components/slider/slider.comp
     LandingHomeComponent,
     MapMainComponent,
     LegendCardComponent,
-    HecoMainComponent, TouchUiComponent, LayerButtonComponent, SliderComponent
+    HecoMainComponent, TouchUiComponent, LayerButtonComponent, SliderComponent, YearComponent
   ],
   imports: [
     BrowserModule,

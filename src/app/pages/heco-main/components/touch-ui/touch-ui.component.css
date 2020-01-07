@@ -6,7 +6,7 @@
 .layer-button-container {
     position: absolute;
     left: 77%;
-    top: 2%;
+    top: -7%;
     margin: 0;
     padding: 0;
     width: 20%;
@@ -20,6 +20,7 @@
     height: 0;
     margin: 0 0 14% 0;
     display: inline-block;
+
 }
 
 /* Layer buttons are max of 3 per row and overflows are hidden */
@@ -32,8 +33,18 @@
 /* Positions the Slide Bar */
 .slider-container {
     height: 10%;
-    top: 85%;
+    top: 93%;
     position: absolute;
-    width: 15%;
-    left: 42.5%;
+    width: 25%;
+    left: 37.5%;
+}
+
+/* Positions the year graphic component */
+.year-container {
+    width: 20%;
+    left: 40%;
+    top: 50%;
+    position: absolute;
+    border: 2px solid white;
+    border-radius: 50%;
 }

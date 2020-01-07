@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plans } from '../../assets/plans/plans';
 import { Plan } from '@app/interfaces/plan';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ export class UiServiceService {
 
   private plans: Plan[];
   private currentPlan: Plan;
+  public yearSubject = new Subject<number>();
 
   constructor(private window: Window) { 
     this.plans = Plans;
@@ -55,6 +57,20 @@ export class UiServiceService {
     const msg = {
       type: 'change year',
       data: 'decrement',
+      newMsg: 'true'
+    }
+    this.messageMap(msg);
+  }
+
+  public changeYear(percent: number) {
+    const max = this.currentPlan.maxYear;
+    const min = this.currentPlan.minYear;
+    const totalYears = max - min + 1;
+    const currentNumber = Math.trunc(Math.round(totalYears * percent + min));
+    this.yearSubject.next(currentNumber);
+    const msg = {
+      type: 'change year',
+      data: currentNumber, 
       newMsg: 'true'
     }
     this.messageMap(msg);

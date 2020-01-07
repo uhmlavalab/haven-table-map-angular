@@ -53,7 +53,7 @@ export class HecoMainComponent implements AfterViewInit {
       } catch (err) {
         console.log('Failed to revieve a new message');
       }
-    }, 50);
+    }, 20);
 
     // Push Year Data to Second Screen
     this.planService.yearSubject.subscribe({
@@ -78,8 +78,10 @@ export class HecoMainComponent implements AfterViewInit {
       } else if (data.type === 'change year') {
         if (data.data === 'increment') {
           this.planService.incrementCurrentYear();
-        } else {
+        } else if (data.data === 'decrement') {
           this.planService.decrementCurrentYear();
+        } else {
+          this.planService.setCurrentYear(parseInt(data.data, 10));
         }
       }
     } else {

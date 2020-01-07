@@ -23,7 +23,7 @@ export class LineChartComponent implements OnInit {
   data: any;
   labels: any;
   chartMax: number;
-
+  
   constructor(private planService: PlanService) { }
 
   ngOnInit() {
