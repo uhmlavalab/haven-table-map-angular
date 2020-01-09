@@ -1,6 +1,7 @@
 {
-    "markdown.preview.fontSize": 10,
-    "terminal.integrated.fontSize": 10,
-    "editor.fontSize": 10,
-    "debug.console.fontSize": 10
+    "debug.console.fontSize": 10,
+    "mssql.resultsFontSize": 14,
+    "editor.fontSize": 16,
+    "terminal.integrated.fontSize": 16,
+    "markdown.preview.fontSize": 16
 }

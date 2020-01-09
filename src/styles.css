@@ -58,3 +58,7 @@ body {
   text-align: center;
   cursor: none;
 }
+
+app-border-line {
+  width: 100%;
+}

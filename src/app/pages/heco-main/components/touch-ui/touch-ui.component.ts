@@ -16,12 +16,22 @@ export class TouchUiComponent implements AfterViewInit {
   private layers: any;
   private messageCheckInterval: any;
   private year: number;
+  private layerTitle: string;
+  private mapTitle: string;
+  private chartTitle: string;
+  private layerInfoTitle: string;
+  private yearTitle: string;
 
   constructor(private uiService: UiServiceService,
     private planService: PlanService,
     private window: Window) {
     this.test = 'testing';
     this.year = 9999;
+    this.layerTitle = 'Layer Toggles';
+    this.mapTitle = 'Mini Map';
+    this.chartTitle = 'Chart';
+    this.layerInfoTitle = 'Layer Info';
+    this.yearTitle = 'Year';
   }
 
   ngAfterViewInit() {
@@ -49,7 +59,7 @@ export class TouchUiComponent implements AfterViewInit {
   private reviewMessage(msg: string): void {
     const data = JSON.parse(msg);
     // If there is a new message, the newMsg value will be true.  Otherwise it is 'false'.
-    if (data.newMsg = 'true') {
+    if (data.newMsg === 'true') {
       if (data.type === 'plan') {  // Only called when the map is changed.
         this.setupUI(this.uiService.setCurrentPlan(data.data));
       } else if (data.type === 'year') {

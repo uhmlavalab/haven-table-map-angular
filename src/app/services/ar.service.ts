@@ -48,8 +48,7 @@ export class ArService {
   * The tick cannot be started until there is at least one video element */
   private videoFeedArray: any[] = [];
 
-  constructor(private planService: PlanService,
-    private soundsservice: SoundsService) {
+  constructor(private planService: PlanService, private soundsservice: SoundsService) {
 
     /* Aruco Js library requires AR.AR. for access */
     this.detector = new AR.AR.Detector();

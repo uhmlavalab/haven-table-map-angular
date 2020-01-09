@@ -2,16 +2,22 @@
 
 <!-- Layer Buttons for turning on and off the layers. -->
 <div class="layer-button-container" #layerButtonContainer>
+  <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="left">
+  </app-border-line>
+  <div class="section-title"></div>
   <!-- Wrapper forces the buttons to be 1 to 1 ratio -->
-  <div class="layer-button-wrapper" *ngFor="let layer of layers">
-    <app-layer-button class="layer-button" layerName={{layer.name}} layerDisplayName={{layer.displayName}}
-      layerIcon={{layer.iconPath}}></app-layer-button>
+  <div class="buttons-container">
+    <div class="layer-button-wrapper" *ngFor="let layer of layers">
+      <app-layer-button class="layer-button" layerName={{layer.name}} layerDisplayName={{layer.displayName}}
+        layerIcon={{layer.iconPath}}></app-layer-button>
+    </div>
   </div>
+  <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="left">
+  </app-border-line>
 </div>
 
 <!-- Slider control to change the year -->
-  <app-slider type="year" class="slider-container"></app-slider>
-
+<app-slider type="year" class="slider-container"></app-slider>
 
 <!-- Graphic that shows the year -->
-  <app-year class="year-container" #year></app-year>
+<app-year class="year-container" #year></app-year>
