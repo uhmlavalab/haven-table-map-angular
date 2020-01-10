@@ -5,26 +5,126 @@
 /* Styles for the UI section Titles */
 .section-title {
     color: white;
-    font-size: 40px;
+    font-size: 18px;
 }
+
+app-border-line {
+    position: relative;
+}
+
+/* Left Container contains the charts */
+.left-container {
+    width: 20%;
+    position: absolute;
+    height: 100%;
+    padding: 2%;
+}
+
+.left-container > div {
+    height: 50%;
+    width: 100%;
+    position: relative;
+}
+
+/* The Center Container contains the mini map and the year controls */
+.center-container {
+    width: 34%;
+    position: absolute;
+    left: 33%;
+    height: 100%;
+}
+
+/* First row in the center contianer */
+.center-container>.top {
+    width: 100%;
+    height: 45%;
+    position: relative;
+}
+
+.center-container>.top>div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.center-container>.top>.left {
+    width: 75%;
+    height: 100%;
+}
+
+.center-container>.top>.right {
+    height: 100%;
+    width: 25%;
+}
+
+/* Second row in the center container */
+.center-container>.middle {
+    width: 100%;
+    height: 40%;
+    position: relative;
+}
+
+/* Positions the year graphic component */
+.year-container {
+    width: 15vw;
+    height: 15vw;
+    margin-left: 8.5vw;
+    position: absolute;
+}
+
+/* Bottom row in the center container */
+.center-container>.bottom{
+    width: 100%;
+    height: 15%;
+    position: relative;
+}
+
+/* Positions the Slide Bar */
+.slider-container {
+    position: absolute;
+    width: 100%;
+}
+
+/* Third and right most column */
+.right-container {
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    left: 75%;
+}
+.right-container>.top {
+    width: 100%;
+    height: 60%;
+    position: relative;
+}
+.right-container>.bottom {
+    width: 100%;
+    height: 40%;
+    position: relative;
+}
+
+
 
 /* Positions the container holding the layer buttons. */
 .layer-button-container {
-    position: absolute;
-    left: 77%;
-    top: 4%;
     margin: 0;
     padding: 0;
-    width: 20%;
+    width: 100%;
+    position: relative;
+}
+
+.buttons-container {
+    margin-top: -20%;
+    padding-bottom: 27%;
+    width: 100%;
 }
 
 /* Wrapper forces the boxes to maintain a 1 to 1 aspect ratio */
 .layer-button-wrapper{
     position: relative;
-    width: 30%;
-    padding-top: 30%;
+    width: 25%;
+    padding-top: 25%;
     height: 0;
-    margin: 0 0 14% 0;
+    margin: 0 3% 14% 3%;
     display: inline-block;
 
 }
@@ -34,31 +134,4 @@
    width: 100%;
    height: 100%;
    position: absolute;
-}
-
-.buttons-container {
-    margin-top: -24%;
-    position: relative;
-    margin-bottom: 30%;
-}
-app-border-line {
-    position: relative;
-}
-/* Positions the Slide Bar */
-.slider-container {
-    height: 10%;
-    top: 93%;
-    position: absolute;
-    width: 25%;
-    left: 37.5%;
-}
-
-/* Positions the year graphic component */
-.year-container {
-    width: 20%;
-    left: 40%;
-    top: 50%;
-    position: absolute;
-    border: 2px solid white;
-    border-radius: 50%;
 }

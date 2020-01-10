@@ -16,20 +16,11 @@ export class YearComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.positionContent();
-    }, 20);
 
     this.uiService.yearSubject.subscribe({
       next: value => {
         this.year = value;
       }
     });
-  }
-
-  positionContent(): void {
-    const parentHeight = this.wrapperElement.nativeElement.parentElement.getBoundingClientRect().height / 2;
-    const elementHeight = this.wrapperElement.nativeElement.getBoundingClientRect().height / 2;
-    this.wrapperElement.nativeElement.style.top = `${parentHeight - elementHeight}px`;
   }
 }

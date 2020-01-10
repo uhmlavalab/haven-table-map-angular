@@ -21,6 +21,9 @@ export class TouchUiComponent implements AfterViewInit {
   private chartTitle: string;
   private layerInfoTitle: string;
   private yearTitle: string;
+  private scenarioTitle: string;
+
+  private scenarios: any[]; // Array containing all available scenarios in the plan.
 
   constructor(private uiService: UiServiceService,
     private planService: PlanService,
@@ -32,10 +35,10 @@ export class TouchUiComponent implements AfterViewInit {
     this.chartTitle = 'Chart';
     this.layerInfoTitle = 'Layer Info';
     this.yearTitle = 'Year';
+    this.scenarioTitle = 'Scenario';
   }
 
   ngAfterViewInit() {
-    this.setYearHeight();
     // Checks for new messages on a selected time interval.  The faster the interval, less lag between windows.
     this.messageCheckInterval = setInterval(() => {
       try {
@@ -48,6 +51,12 @@ export class TouchUiComponent implements AfterViewInit {
     this.uiService.yearSubject.subscribe({
       next: value => {
         this.year = value;
+      }
+    });
+
+    this.uiService.scenarioListSubject.subscribe({
+      next: value => {
+        this.scenarios = value;
       }
     });
   }
@@ -72,10 +81,6 @@ export class TouchUiComponent implements AfterViewInit {
   private setupUI(plan: Plan): void {
     this.test = plan.displayName;
     this.layers = plan.map.mapLayers;
-  }
-
-  private setYearHeight(): void {
-    this.yearElement.nativeElement.style.height =`${this.yearElement.nativeElement.getBoundingClientRect().width}px`;
   }
 
 }

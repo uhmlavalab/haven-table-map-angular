@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener, ElementRef } from '@angular/core';
 import { UiServiceService } from '@app/services/ui-service.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class LayerButtonComponent implements OnInit {
   @Input() layerDisplayName: string;
   @Input() layerIcon: string;
 
-  constructor(private uiService: UiServiceService) {
+  constructor(private uiService: UiServiceService, private el: ElementRef) {
 
   }
 
@@ -24,6 +24,18 @@ export class LayerButtonComponent implements OnInit {
 
   private handleClick(): void {
     this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
+  }
+
+  /** When these toggles are touched, they show a loading up animation */
+  @HostListener('touchstart') onTouchStart(event: TouchEvent) {
+    // Start the effect
+    this.el.nativeElement.style.backgroundColor =  'blue';
+  }
+
+  /** If the animation isnt finished, it will end prematurely if the touch is ended. */
+  @HostListener('touchend') onTouchEnd() {
+    // End the effect if it is still going
+    this.el.nativeElement.style.backgroundColor = 'transparent';
   }
 
 }

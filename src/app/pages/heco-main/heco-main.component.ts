@@ -83,6 +83,8 @@ export class HecoMainComponent implements AfterViewInit {
         } else {
           this.planService.setCurrentYear(parseInt(data.data, 10));
         }
+      } else if (data.type === 'change scenario') {
+        this.planService.setScenario(data.data);
       }
     } else {
       console.log('no new message');

@@ -11,6 +11,7 @@ export class UiServiceService {
   private plans: Plan[];
   private currentPlan: Plan;
   public yearSubject = new Subject<number>();
+  public scenarioListSubject = new Subject<any[]>();
 
   constructor(private window: Window) { 
     this.plans = Plans;
@@ -40,8 +41,12 @@ export class UiServiceService {
         this.currentPlan = plan;
       }
     });
-
+    this.publishPlans(this.currentPlan);
     return this.currentPlan;
+  }
+
+  private publishPlans(plan: Plan): void {
+    this.scenarioListSubject.next(plan.scenarios);
   }
 
   public incrementYear() {
@@ -71,6 +76,15 @@ export class UiServiceService {
     const msg = {
       type: 'change year',
       data: currentNumber, 
+      newMsg: 'true'
+    }
+    this.messageMap(msg);
+  }
+
+  public changeScenario(scenarioName: string) {
+    const msg = {
+      type: 'change scenario',
+      data: scenarioName,
       newMsg: 'true'
     }
     this.messageMap(msg);

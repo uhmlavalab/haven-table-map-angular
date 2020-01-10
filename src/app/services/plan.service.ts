@@ -349,6 +349,17 @@ export class PlanService {
     this.yearSubject.next(this.currentYear);
   }
 
+  public setScenario(scenarioName: string): void {
+    let scenario = null;
+    this.scenarios.forEach(s => {
+      if (s.name === scenarioName) {
+        this.currentScenario = s;
+      }
+    });
+    this.scenarioSubject.next(this.currentScenario);
+    this.soundsService.tick();
+  }
+
   /** Advances to the next scenario */
   public incrementScenario(): void {
     const index = this.scenarios.indexOf(this.currentScenario) + 1;
