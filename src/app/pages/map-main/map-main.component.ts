@@ -28,7 +28,12 @@ export class MapMainComponent implements AfterViewInit {
   @ViewChild('map', { static: false, read: ElementRef }) mapElement; // The custom Map component.
   @ViewChild('pieChart', { static: false, read: ElementRef }) pieChart; // The custom Map component.
   @ViewChild('lineChart', { static: false, read: ElementRef }) lineChart; // The custom Map component.
+  @ViewChild('title', {static: false, read: ElementRef}) titleElement;
+  @ViewChild('scenario', {static: false, read: ElementRef}) scenarioElement;
+
   private plan: Plan;                   // The current Plan
+  private pucks: boolean;               // Does the plan use pucks?
+  private touch: boolean;               // Does the plan use Touch?
 
   /* Tracking Puck and other Data Related Variables */
   private trackingDots: any[] = [];     // Holds the view children
@@ -36,6 +41,7 @@ export class MapMainComponent implements AfterViewInit {
   private nextLayer: string;            // The next layer that will be added or removed.
   private addColor: string;             // What color is the next layer associated with.
   private currentScenario: string;      // Current scenario.
+  private planSet: boolean;
 
   constructor(
     private planService: PlanService,
@@ -44,11 +50,61 @@ export class MapMainComponent implements AfterViewInit {
     private windowRefService: WindowRefService,
     private contentDeliveryService: ContentDeliveryService,
     private window: Window) {
+     // this.planService.setMain(true);
+      this.planSet = false;
 
-    this.plan = this.planService.getCurrentPlan();
+  }
 
+  ngAfterViewInit() {
+    this.planService.planSubject.subscribe(plan => this.setup(plan));
+    // Push Year Data to Second Screen
+    this.planService.yearSubject.subscribe({
+      next: value => {
+        if (this.plan.includeSecondScreen) {
+          this.windowRefService.notifySecondScreen(JSON.stringify(
+            {
+              type: 'year',
+              year: value
+            }));
+        }
+        this.currentYear = value;
+      }
+    });
+
+    // Push Year Data to Second Screen
+    this.planService.selectedLayerSubject.subscribe({
+      next: value => {
+        if (this.plan.includeSecondScreen) {
+          this.windowRefService.notifySecondScreen(JSON.stringify(
+            {
+              type: 'layer',
+              name: value.name
+            }));
+        }
+        this.nextLayer = value.displayName;
+        this.addColor = value.legendColor;
+        if (this.pucks) {
+          this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
+        }
+      }
+    });
+    if (this.pucks) {
+      this.arService.trackingSubject.subscribe({
+        next: value => {
+          this.trackingDots.forEach(dot => dot.nativeElement.style.opacity = 0);
+          value.forEach(marker => this.track(marker));
+        }
+      });
+    }
+    this.planService.scenarioSubject.subscribe(scenario => this.currentScenario = scenario.displayName);
+  }
+
+
+  private setup(plan) {
     // if the plan is undefined, then the application will go back to the landing page.
     try {
+      this.touch = plan.touch;
+      this.pucks = plan.pucks;
       this.currentYear = this.planService.getMinimumYear();
       this.addColor = this.planService.getSelectedLayer().legendColor;
       this.currentScenario = this.planService.getCurrentScenario().displayName;
@@ -57,61 +113,23 @@ export class MapMainComponent implements AfterViewInit {
       this.planService.setState('landing');
       console.log('No Plan Found --> Route to setup');
     } finally {
-
+      this.positionLegend(plan.css);
+      this.positionMap(plan.css);
+      this.positionLineChart(plan.css);
+      this.positionPieChart(plan.css);
+      this.positionTitle(plan.css);
+      this.positionScenario(plan.css);
+      if (this.pucks){
+        this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario, this.trackingDotAdd];
+      }
     }
   }
-
-  ngAfterViewInit() {
-    this.positionLegend();
-    this.positionMap();
-    this.positionLineChart();
-    this.positionPieChart();
-    this.trackingDots = [this.trackingDotYear, this.trackingDotLayer, this.trackingDotScenario, this.trackingDotAdd];
-
-    // Push Year Data to Second Screen
-    this.planService.yearSubject.subscribe({
-      next: value => {
-        this.windowRefService.notifySecondScreen(JSON.stringify(
-          {
-            type: 'year',
-            year: value
-          }));
-        this.currentYear = value;
-      }
-    });
-
-    // Push Year Data to Second Screen
-    this.planService.selectedLayerSubject.subscribe({
-      next: value => {
-        this.windowRefService.notifySecondScreen(JSON.stringify(
-          {
-            type: 'layer',
-            name: value.name
-          }));
-        this.nextLayer = value.displayName;
-        this.addColor = value.legendColor;
-        this.connectLayerAndAdd(this.trackingDotLayer.nativeElement, this.trackingDotAdd.nativeElement);
-      }
-    });
-
-    this.arService.trackingSubject.subscribe({
-      next: value => {
-        this.trackingDots.forEach(dot => dot.nativeElement.style.opacity = 0);
-        value.forEach(marker => this.track(marker));
-      }
-    });
-
-    this.planService.scenarioSubject.subscribe(scenario => this.currentScenario = scenario.displayName);
-  }
-
 
   /** Tracks the marker on the table
    * @param marker The marker to be tracked.
    */
   private track(marker: ProjectableMarker) {
-
     try {
-
       const dataPoint = { x: null, y: null };
       dataPoint.x = marker.getMostRecentCenterX();
       dataPoint.y = marker.getMostRecentCenterY();
@@ -208,11 +226,11 @@ export class MapMainComponent implements AfterViewInit {
   }
 
   /** These functions apply styles from the PLAN */
-  private positionLegend(): void {
+  private positionLegend(css): void {
     // Select legend element from viewchild.
     const e = this.legend.nativeElement;
     // Get styles from the plan
-    const styles = this.planService.getCss();
+    const styles = css;
     const layout = styles.legend.defaultLayout;
     // Apply selected styles to the legend element.
     e.style.left = styles.legend[layout].left;
@@ -221,31 +239,60 @@ export class MapMainComponent implements AfterViewInit {
     e.style.display = styles.legend.display;
   }
 
-  private positionMap(): void {
+  private positionMap(css): void {
     //Select map element from viewchild
     const e = this.mapElement.nativeElement;
     // Get styles from the plan service.
-    const styles = this.planService.getCss();
+    const styles = css;
     e.style.left = styles.map.left;
     e.style.top = styles.map.top;
   }
 
-  private positionLineChart(): void {
-    //Select map element from viewchild
-    const e = this.lineChart.nativeElement;
-    // Get styles from the plan service.
-    const styles = this.planService.getCss();
-    e.style.left = styles.charts.line.left;
-    e.style.top = styles.charts.line.top;
+  private positionLineChart(css): void {
+    try {
+      //Select map element from viewchild
+
+      const e = this.lineChart.nativeElement;
+      // Get styles from the plan service.
+      const styles = css;
+      e.style.left = styles.charts.line.left;
+      e.style.top = styles.charts.line.top;
+    } catch (error) {
+      console.log('Error.  Failed to find element to position.');
+    }
   }
 
-  private positionPieChart(): void {
-    //Select map element from viewchild
-    const e = this.pieChart.nativeElement;
-    // Get styles from the plan service.
-    const styles = this.planService.getCss();
-    e.style.left = styles.charts.pie.left;
-    e.style.top = styles.charts.pie.top;
+  private positionPieChart(css): void {
+    try {
+      //Select map element from viewchild
+      const e = this.pieChart.nativeElement;
+      // Get styles from the plan service.
+      const styles = css;
+      e.style.left = styles.charts.pie.left;
+      e.style.top = styles.charts.pie.top;
+    } catch (error) {
+      console.log('Error. Failed to find the element to position. ');
+    }
+  }
+
+  private positionScenario(css): void {
+    try {
+      const e = this.scenarioElement.nativeElement;
+      e.style.top = css.scenario.top;
+      e.style.left = css.scenario.left;
+    } catch(error) {
+
+    }
+  }
+
+  private positionTitle(css): void {
+try {
+      const e = this.titleElement.nativeElement;
+      e.style.top = css.scenario.top;
+      e.style.left = css.scenario.left;
+    } catch(error) {
+      
+    }
   }
 
   // KEYBOARD CONTROLS

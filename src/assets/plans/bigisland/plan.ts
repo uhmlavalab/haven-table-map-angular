@@ -13,6 +13,8 @@ export const BigIslandPlan: Plan = {
   minYear: 2016,
   maxYear: 2045,
   route: 'map-main',
+  pucks: true,
+  touch: false,
   scenarios: [
     {
       name: 'postapril',
@@ -71,6 +73,7 @@ export const BigIslandPlan: Plan = {
   },
   map: {
     scale: 0.26,
+    miniMapScale: 0.1,
     width: 2179,
     height: 2479,
     bounds: [[-156.0618, 20.2696], [-154.8067, 18.9105]],

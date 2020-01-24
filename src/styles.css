@@ -56,7 +56,7 @@ body {
   display: inline-block;
   position: absolute;
   text-align: center;
-  cursor: none;
+  z-index: -1;
 }
 
 app-border-line {

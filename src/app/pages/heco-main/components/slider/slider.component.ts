@@ -21,7 +21,12 @@ export class SliderComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.slideElement.nativeElement.addEventListener('mousedown', () => this.startDrag());
     this.slideElement.nativeElement.addEventListener('mouseup', () => this.stopDragging());
-    this.slideElement.nativeElement.addEventListener('mouseleave', () => this.stopDragging());
+    this.slideElement.nativeElement.addEventListener('mouseleave', () => {
+      if (this.dragging) {
+        this.stopDragging()
+      }
+    });
+    
     this.slideElement.nativeElement.addEventListener('mousemove', event => {
       if (this.dragging) {
         this.uiService.changeYear(this.drag(event, this.slideElement));
@@ -76,7 +81,6 @@ export class SliderComponent implements AfterViewInit {
       const left = mousex - parentx; // Left boundary of element
       // Slider is bounded
       let newPosition = left - eWidth / 2;
-      console.log(e.nativeElement.parentElement);
       if (left > 0 && mousex < parentx + parentWidth) {
         e.nativeElement.style.left = `${newPosition}px`; // Slider is centered on the touch.
         percentFromLeft = left / parentWidth;

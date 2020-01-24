@@ -18,10 +18,20 @@ export class LegendComponent implements AfterViewInit {
   
 
   constructor(private planService: PlanService) {
-    this.layers = this.planService.getLayers();
+    
   }
 
   ngAfterViewInit() {
+
+    this.planService.layersSubject.subscribe(layers => {
+      if (layers) {
+        this.layers = layers;
+        this.arrangeCards();
+        alert('now');
+        console.log(this.layers);
+      }
+    });
+    
     this.planService.toggleLayerSubject.subscribe({
       next: value => {
         const active = value.active;
@@ -30,7 +40,7 @@ export class LegendComponent implements AfterViewInit {
         this.toggleLegendColor(active, color, name);
       }
     });
-    this.arrangeCards();
+
   }
 
   private arrangeCards() {

@@ -14,6 +14,8 @@ export const HecoPlan: Plan = {
   minYear: 2016,
   maxYear: 2045,
   route: 'heco-main',
+  pucks: false,
+  touch: true,
   scenarios: [
     {
       name: 'postapril',
@@ -74,7 +76,8 @@ export const HecoPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.256,
+    scale: 0.2375,
+    miniMapScale: 0.1,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],
@@ -144,7 +147,8 @@ export const HecoPlan: Plan = {
             d3.select(parcel.path)
               .style('opacity', this.active ? 0.85 : 0.0);
           });
-        },      },
+        },
+      },
       {
         name: 'parks',
         displayName: 'Park Lands',
@@ -328,10 +332,10 @@ export const HecoPlan: Plan = {
           this.parcels.forEach(parcel => {
             if (parcel.properties.IAL === "Y") {
               d3.select(parcel.path)
-              .style('fill', 'black')
-              .style('opacity', (this.active) ? 0.85 : 0.0)
-              .style('stroke', this.borderColor)
-              .style('stroke-width', this.borderWidth + 'px');
+                .style('fill', 'black')
+                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
             }
             else if (solarTotal > 0) {
               d3.select(parcel.path)
@@ -356,10 +360,10 @@ export const HecoPlan: Plan = {
           this.parcels.forEach(parcel => {
             if (parcel.properties.IAL === "Y") {
               d3.select(parcel.path)
-              .style('fill', 'black')
-              .style('opacity', (this.active) ? 0.85 : 0.0)
-              .style('stroke', this.borderColor)
-              .style('stroke-width', this.borderWidth + 'px');
+                .style('fill', 'black')
+                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
             }
             else if (solarTotal > 0) {
               d3.select(parcel.path)

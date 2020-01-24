@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
-import { MapDirective } from './map.directive';
 import * as d3 from 'd3';
 import { MapLayer, Parcel } from '@app/interfaces';
 
@@ -25,10 +24,8 @@ export class MapElementComponent implements OnInit {
 
   @ViewChild('mapDiv', { static: true }) mapDiv: ElementRef;
 
-  @ViewChild(MapDirective, { static: true }) mapElement;
-
   constructor(private planService: PlanService) {
-    this.scale = planService.getMapScale();
+    this.scale = this.planService.getMain() ? planService.getMapScale() : planService.getMiniMapScale();
     this.width = planService.getMapImageWidth() * this.scale;
     this.height = planService.getMapImageHeight() * this.scale;
     this.rasterBounds = planService.getMapBounds();
@@ -89,35 +86,35 @@ export class MapElementComponent implements OnInit {
     });
 
     // Subscribe to layer toggling
-    this.planService.toggleLayerSubject.subscribe((layer) => {
-
-      if (layer.updateFunction !== null) {
-        layer.updateFunction(this.planService);
-      } else {
-        this.defaultFill(layer);
-      }
-
-    });
-
-    this.planService.updateLayerSubject.subscribe((layer) => {
-      if (layer.updateFunction !== null) {
-        layer.updateFunction(this.planService);
-      } else {
-        //this.defaultFill(layer);
-      }
-    });
-
-    this.planService.yearSubject.subscribe((year) => {
-      setTimeout(() => {
-        if (this.planService.okToUpdate()) {
-          const layers = this.planService.getLayers();
-          layers.forEach(layer => {
-            if (layer.updateFunction !== null && layer.active) {
-              layer.updateFunction(this.planService);
-            }
-          });
+    this.planService.toggleLayerSubject.subscribe(layer => {
+      if (layer) {
+        if (layer.updateFunction !== null) {
+          layer.updateFunction(this.planService);
+        } else {
+          this.defaultFill(layer);
         }
-      }, 700);
+      }
+    });
+
+    this.planService.updateLayerSubject.subscribe(layer => {
+      if (layer) {
+        if (layer.updateFunction !== null && this.planService.getCurrentPlan()) {
+          layer.updateFunction(this.planService);
+        } else {
+          //this.defaultFill(layer);
+        }
+      }
+    });
+
+    this.planService.yearSubject.subscribe(year => {
+      if (year) {
+        const layers = this.planService.getLayers();
+        layers.forEach(layer => {
+          if (layer.updateFunction !== null && layer.active) {
+            layer.updateFunction(this.planService);
+          }
+        });
+      }
     });
   }
 

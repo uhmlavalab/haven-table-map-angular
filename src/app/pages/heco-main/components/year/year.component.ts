@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { UiServiceService } from '@app/services/ui-service.service';
+import { PlanService } from '@app/services/plan.service';
 
 @Component({
   selector: 'app-year',
@@ -11,15 +12,15 @@ export class YearComponent implements AfterViewInit {
   @ViewChild('wrapper', {static: false}) wrapperElement: ElementRef;
   private year: number;
 
-  constructor(private uiService: UiServiceService) {
+  constructor(private planService: PlanService) {
     this.year = 2016;
   }
 
   ngAfterViewInit() {
 
-    this.uiService.yearSubject.subscribe({
-      next: value => {
-        this.year = value;
+    this.planService.yearSubject.subscribe( year => {
+      if (year) {
+        this.year = year;
       }
     });
   }

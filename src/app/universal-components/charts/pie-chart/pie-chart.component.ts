@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 
 import { Scenario } from '@app/interfaces';
@@ -10,7 +10,7 @@ import { chartColors } from '../../../../assets/plans/defaultColors';
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.css']
 })
-export class PieChartComponent implements OnInit {
+export class PieChartComponent implements AfterViewInit {
 
   @ViewChild('pieDiv', { static: true }) chartDiv: ElementRef;
   ctx: any;
@@ -26,11 +26,14 @@ export class PieChartComponent implements OnInit {
 
   constructor(private planService: PlanService) { }
 
-  ngOnInit() {
-
-    this.scenario = this.planService.getCurrentScenario();
-    this.year = this.planService.getCurrentYear();
-    this.fetchData();
+  ngAfterViewInit() {
+    this.planService.planSubject.subscribe(plan => {
+      if (plan) {
+        this.scenario = this.planService.getCurrentScenario();
+        this.year = this.planService.getCurrentYear();
+        this.fetchData();
+      }
+    });
 
     this.planService.scenarioSubject.subscribe(scenario => {
       if (scenario) {
@@ -140,19 +143,33 @@ export class PieChartComponent implements OnInit {
   }
 
   updateYear(year: number) {
-    this.year = year;
-    const data = this.data.generation[this.scenario.name].data;
-    data.datasets[0].data = this.data.generation[this.scenario.name].yearlyData[this.year];
-    this.myChart.data = data;
-    this.myChart.update();
+    if (this.data) {
+      try {
+        this.year = year;
+        const data = this.data.generation[this.scenario.name].data;
+        data.datasets[0].data = this.data.generation[this.scenario.name].yearlyData[this.year];
+        this.myChart.data = data;
+        this.myChart.update();
+      } catch (error) {
+        console.log('Error. Failed to update Year for Pie Chart.');
+      }
+    }
+
   }
 
   updateScenario(scenario: Scenario) {
-    this.scenario = scenario;
-    const data = this.data.generation[scenario.name].data;
-    data.datasets[0].data = this.data.generation[scenario.name].yearlyData[this.year];
-    this.myChart.data = data;
-    this.myChart.update();
+    if (this.data) {
+      try {
+        this.scenario = scenario;
+        const data = this.data.generation[scenario.name].data;
+        data.datasets[0].data = this.data.generation[scenario.name].yearlyData[this.year];
+        this.myChart.data = data;
+        this.myChart.update();
+      } catch (error) {
+        console.log('Error.  Failed to update Scenario for Pie Chart');
+      }
+    }
+
   }
 
 }

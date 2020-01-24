@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 
 import { Scenario } from '@app/interfaces';
@@ -10,7 +10,7 @@ import { chartColors } from '../../../../assets/plans/defaultColors';
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements AfterViewInit {
 
   @ViewChild('lineDiv', { static: true }) chartDiv: ElementRef;
   ctx: any;
@@ -24,13 +24,20 @@ export class LineChartComponent implements OnInit {
   labels: any;
   chartMax: number;
   
-  constructor(private planService: PlanService) { }
+  constructor(private planService: PlanService) {
+    
+  }
 
-  ngOnInit() {
+  ngAfterViewInit() {
 
-    this.scenario = this.planService.getCurrentScenario();
-    this.year = this.planService.getCurrentYear();
-    this.fetchData();
+    this.planService.planSubject.subscribe(plan => {
+      console.log(plan)
+      if (plan) {
+        this.scenario = this.planService.getCurrentScenario();
+        this.year = this.planService.getCurrentYear();
+        this.fetchData();
+      }
+    });
 
     this.planService.scenarioSubject.subscribe(scenario => {
       if (scenario) {
@@ -171,16 +178,29 @@ export class LineChartComponent implements OnInit {
   }
 
   updateYear(year: number) {
-    this.year = year;
-    this.myChart.options.annotation.annotations[0].value = this.year;
-    this.myChart.options.annotation.annotations[0].label.content = this.year;
-    this.myChart.update();
+    if (this.myChart) {
+      try {
+        this.year = year;
+        this.myChart.options.annotation.annotations[0].value = this.year;
+        this.myChart.options.annotation.annotations[0].label.content = this.year;
+        this.myChart.update();
+      } catch (error) {
+        console.log('Error.  Failed to update year for Line Chart.');
+      }
+    }
+
   }
 
   updateScenario(scenario: Scenario) {
-    this.scenario = scenario;
-    this.myChart.data.datasets = this.data.capacity[this.scenario.name].datasets;
-    this.myChart.update();
+    if (this.myChart) {
+      try {
+        this.scenario = scenario;
+        this.myChart.data.datasets = this.data.capacity[this.scenario.name].datasets;
+        this.myChart.update();
+      } catch (error) {
+        console.log('Error.  Failed to update scenario for Line Chart.');
+      }
+    }
   }
 
 }

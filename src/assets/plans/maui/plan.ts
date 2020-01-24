@@ -13,6 +13,8 @@ export const MauiPlan: Plan = {
   minYear: 2016,
   maxYear: 2045,
   route: 'map-main',
+  pucks: true,
+  touch: false,
   scenarios: [
     {
       name: 'postapril',
@@ -70,6 +72,7 @@ export const MauiPlan: Plan = {
   },
   map: {
     scale: 0.258,
+    miniMapScale: 0.1,
     width: 3613,
     height: 2794,
     bounds: [[-156.6969, 21.03142], [-155.9788, 20.5746]],

@@ -10,7 +10,7 @@ import { UiServiceService } from '@app/services/ui-service.service';
 })
 export class TouchUiComponent implements AfterViewInit {
 
-  @ViewChild('year', {static: false, read: ElementRef}) yearElement: ElementRef;
+  @ViewChild('year', { static: false, read: ElementRef }) yearElement: ElementRef;
 
   private test: string;
   private layers: any;
@@ -22,6 +22,7 @@ export class TouchUiComponent implements AfterViewInit {
   private layerInfoTitle: string;
   private yearTitle: string;
   private scenarioTitle: string;
+  private planSet: boolean;
 
   private scenarios: any[]; // Array containing all available scenarios in the plan.
 
@@ -36,7 +37,8 @@ export class TouchUiComponent implements AfterViewInit {
     this.layerInfoTitle = 'Layer Info';
     this.yearTitle = 'Year';
     this.scenarioTitle = 'Scenario';
-  }
+    this.planSet = false;
+    }
 
   ngAfterViewInit() {
     // Checks for new messages on a selected time interval.  The faster the interval, less lag between windows.
@@ -48,15 +50,21 @@ export class TouchUiComponent implements AfterViewInit {
       }
     }, 20);
 
-    this.uiService.yearSubject.subscribe({
-      next: value => {
-        this.year = value;
+    this.planService.yearSubject.subscribe(year => {
+      if (year) {
+        this.year = year;
       }
     });
 
-    this.uiService.scenarioListSubject.subscribe({
-      next: value => {
-        this.scenarios = value;
+    this.planService.scenarioListSubject.subscribe(scenario => {
+      if (scenario) {
+        this.scenarios = scenario;
+      }
+    });
+
+    this.planService.planSubject.subscribe(plan => {
+      if (plan) {
+        this.planSet = true;
       }
     });
   }
@@ -79,8 +87,18 @@ export class TouchUiComponent implements AfterViewInit {
   }
 
   private setupUI(plan: Plan): void {
+    this.year = this.startPlanService(plan);
     this.test = plan.displayName;
     this.layers = plan.map.mapLayers;
+  }
+
+  /**
+   * The touch ui component runs a second plan service so that we can duplicate components.
+   * @param plan => Contains the island that will be used for this program.
+   * @return Returns the current year.
+   */
+  startPlanService(plan: Plan): number {
+    return this.planService.startTheMap(plan);
   }
 
 }

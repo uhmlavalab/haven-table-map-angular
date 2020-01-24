@@ -18,52 +18,59 @@ export class HecoMainComponent implements AfterViewInit {
   private uiWindow: any;
   private currentYear: number;          // Current Year
   private currentScenario: string;      // Current scenario.
-  private messageCheckInterval: any;
-
+  private messageCheckInterval: any;    // How often to check the local storage for messages (in Milliseconds.)
 
   constructor(private planService: PlanService,
     private window: Window,
     private touchService: TouchService,
     private router: Router) {
 
-    // if the plan is undefined, then the application will go back to the landing page.
+    this.messageCheckInterval = 20; // Set Milliseconds to check app for updates.
+
+    /* Set the year and current scenario.  This data comes from the plan service.  If there is an error getting the data
+    Then the plan was not properly set.  Rerout the application back to the landing page to try agian. */
     try {
       this.currentYear = this.planService.getMinimumYear();
       this.currentScenario = this.planService.getCurrentScenario().displayName;
     } catch (error) {
       this.router.navigateByUrl('');
       this.planService.setState('landing');
+      this.touchService.closeUIWindow();
       console.log('No Plan Found --> Route to setup');
-    } finally {
-
     }
-
   }
 
   ngAfterViewInit() {
-    this.positionMap();
-    this.positionLineChart();
-    this.positionPieChart();
-    this.touchService.openUIWindow();
-    this.touchService.messageUI({ type: 'plan', data: 'heco-oahu', newMsg: 'true' });
 
+    // Map and Charts are positioned from CSS data from the plan.
+    this.positionMap();
+    this.positionTopChart();
+    this.positionBottomChart();
+
+    // Open the second screen for the Touch UI and notify it of the current plan.
+    this.touchService.openUIWindow();
+    this.touchService.messageUI('plan', 'heco-oahu');
+
+    // Subscribe to the local storages.
     this.messageCheckInterval = setInterval(() => {
       try {
         this.reviewMessage(this.touchService.readMessage());
       } catch (err) {
-        console.log('Failed to revieve a new message');
+        // console.log('Failed to revieve a new message');
       }
-    }, 20);
+    }, this.messageCheckInterval);
 
-    // Push Year Data to Second Screen
-    this.planService.yearSubject.subscribe({
-      next: value => {
-        const msg = {
-          type: 'year',
-          data: value,
-          newMsg: 'true'
-        }
-        this.touchService.messageUI(msg);
+    // Subscribe to scenario Changes.
+    this.planService.scenarioSubject.subscribe(scenario => {
+      if (scenario) {
+        this.currentScenario = scenario.displayName;
+      }
+    });
+
+    // Subscribe to changes in the year.
+    this.planService.yearSubject.subscribe(year => {
+      if (year) {
+        this.currentYear = year;
       }
     });
   }
@@ -72,22 +79,13 @@ export class HecoMainComponent implements AfterViewInit {
     const data = JSON.parse(msg);
     if (data.newMsg === 'true') {
       this.touchService.clearMessages();
-      console.log(data.type);
       if (data.type === 'layer-update') {
         this.planService.toggleSelectedLayer(data.data);
       } else if (data.type === 'change year') {
-        if (data.data === 'increment') {
-          this.planService.incrementCurrentYear();
-        } else if (data.data === 'decrement') {
-          this.planService.decrementCurrentYear();
-        } else {
-          this.planService.setCurrentYear(parseInt(data.data, 10));
-        }
+        this.planService.setCurrentYear(parseInt(data.data, 10));
       } else if (data.type === 'change scenario') {
         this.planService.setScenario(data.data);
       }
-    } else {
-      console.log('no new message');
     }
   }
 
@@ -104,9 +102,10 @@ export class HecoMainComponent implements AfterViewInit {
     }
   }
 
-  private positionLineChart(): void {
+  private positionTopChart(): void {
     try {
       //Select map element from viewchild
+
       const e = this.lineChart.nativeElement;
       // Get styles from the plan service.
       const styles = this.planService.getCss();
@@ -117,7 +116,7 @@ export class HecoMainComponent implements AfterViewInit {
     }
   }
 
-  private positionPieChart(): void {
+  private positionBottomChart(): void {
     try {
       //Select map element from viewchild
       const e = this.pieChart.nativeElement;
@@ -129,5 +128,4 @@ export class HecoMainComponent implements AfterViewInit {
       console.log('Error. Failed to find the element to position. ');
     }
   }
-
 }

@@ -6,12 +6,14 @@
     <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="right">
     </app-border-line>
     <div class="section-title">{{chartTitle}}</div>
+    <app-line-chart></app-line-chart>
     <!-- <app-progress-ring></app-progress-ring> -->
   </div>
   <div class="chart">
     <app-border-line leftColor="blue" rightColor="orange" dotColor="green" dotSize="medium" longSide="left">
     </app-border-line>
     <div class="section-title">{{chartTitle}}</div>
+    <app-pie-chart></app-pie-chart>
   </div>
 </div>
 
@@ -22,6 +24,8 @@
     </app-border-line>
     <div class="left">
       <div class="section-title">{{mapTitle}}</div>
+      <app-map-element *ngIf="planSet" class="map-container" cdkDrag #map>
+      </app-map-element>
     </div>
     <div class="right">
       <div class="section-title">{{scenarioTitle}}</div>
@@ -34,13 +38,21 @@
   <div class="middle">
     <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="left">
     </app-border-line>
-    <div class="section-title">{{yearTitle}}</div>
-    <!-- Graphic that shows the year -->
-    <app-year class="year-container" #year></app-year>
+    <div class="left">
+      <app-scrolling-menu type="scenario"></app-scrolling-menu>
+    </div>
+    <div class="middle">
+      <div class="section-title">{{yearTitle}}</div>
+      <!-- Graphic that shows the year -->
+      <app-year class="year-container" #year></app-year>
+    </div>
+    <div class="right">
+      <app-scrolling-menu type="year"></app-scrolling-menu>
+    </div>
   </div>
   <div class="bottom">
     <!-- Slider control to change the year -->
-    <app-slider type="year" class="slider-container"></app-slider>
+    <!-- <app-slider type="year" class="slider-container"></app-slider> -->
   </div>
 </div>
 <!-- right column has two rows. -->

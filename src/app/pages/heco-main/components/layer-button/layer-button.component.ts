@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, HostListener, ElementRef } from '@angular/core';
 import { UiServiceService } from '@app/services/ui-service.service';
+import { PlanService } from '@app/services/plan.service';
 
 @Component({
   selector: 'app-layer-button',
@@ -15,7 +16,7 @@ export class LayerButtonComponent implements OnInit {
   @Input() layerDisplayName: string;
   @Input() layerIcon: string;
 
-  constructor(private uiService: UiServiceService, private el: ElementRef) {
+  constructor(private uiService: UiServiceService, private el: ElementRef, private planService: PlanService) {
 
   }
 
@@ -24,6 +25,7 @@ export class LayerButtonComponent implements OnInit {
 
   private handleClick(): void {
     this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
+    this.planService.toggleSelectedLayer(this.layerName);
   }
 
   /** When these toggles are touched, they show a loading up animation */

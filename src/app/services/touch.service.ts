@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Plan } from '@app/interfaces/plan';
 import { Plans } from '../../assets/plans/plans';
+import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -42,12 +43,17 @@ export class TouchService {
     this.uiWindow = this.window.open('/heco-main/touch-ui', 'touch-ui');
   }
 
+  public closeUIWindow(): void {
+    this.uiWindow.close();
+  }
+
   public readMessage(): string {
      const message = this.window.localStorage.getItem('map-msg');
      return message;
   }
 
-  public messageUI(msg): void {
+  public messageUI(idString: string, data: any): void {
+    const msg = {type: idString, data: data, newMsg: 'true'};
     this.window.localStorage.setItem('ui-msg', JSON.stringify(msg));
   }
 

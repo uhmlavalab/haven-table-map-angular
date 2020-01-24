@@ -7,14 +7,13 @@
 </app-map-element>
 <app-legend class="legend-container" cdkDrag #legend>
 </app-legend>
-<app-title class="title-container" [style.top]="plan.css.title.top" [style.left]="plan.css.title.left" cdkDrag>
+<app-title class="title-container" cdkDrag #title>
 </app-title>
 <app-line-chart class="line-chart" cdkDrag #lineChart>
 </app-line-chart>
-<app-pie-chart class="pie-chart" cdkDrag #pieChart>
+<app-pie-chart  class="pie-chart" cdkDrag #pieChart>
 </app-pie-chart>
-<app-scenario class="scenario-container" [style.top]="plan.css.scenario.top" [style.left]="plan.css.scenario.left"
-  cdkDrag></app-scenario>
+<app-scenario class="scenario-container" cdkDrag #scenario></app-scenario>
 <app-video-feed></app-video-feed>
 <div class="tracking-dot year" #trackingDotYear>
   <app-year-puck></app-year-puck>

@@ -53,6 +53,9 @@ import { YearComponent } from './pages/heco-main/components/year/year.component'
 import { BorderLineComponent } from './universal-components/border-line/border-line.component';
 import { ProgressRingComponent } from './universal-components/progress-ring/progress-ring.component';
 import { ScenarioButtonComponent } from './pages/heco-main/components/scenario-button/scenario-button.component';
+import { YearDisplayComponent } from './pages/heco-main/components/year-display/year-display.component';
+import { ScrollingMenuComponent } from './pages/heco-main/components/scrolling-menu/scrolling-menu.component';
+import { MenuOptionComponent } from './pages/heco-main/components/scrolling-menu/components/menu-option/menu-option.component';
 
 
 @NgModule({
@@ -87,7 +90,7 @@ import { ScenarioButtonComponent } from './pages/heco-main/components/scenario-b
     LandingHomeComponent,
     MapMainComponent,
     LegendCardComponent,
-    HecoMainComponent, TouchUiComponent, LayerButtonComponent, SliderComponent, YearComponent, BorderLineComponent, ProgressRingComponent, ScenarioButtonComponent
+    HecoMainComponent, TouchUiComponent, LayerButtonComponent, SliderComponent, YearComponent, BorderLineComponent, ProgressRingComponent, ScenarioButtonComponent, YearDisplayComponent, ScrollingMenuComponent, MenuOptionComponent
   ],
   imports: [
     BrowserModule,

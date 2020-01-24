@@ -14,6 +14,8 @@ export const OahuPlan: Plan = {
   minYear: 2016,
   maxYear: 2045,
   route: 'map-main',
+  pucks: true,
+  touch: false,
   scenarios: [
     {
       name: 'postapril',
@@ -75,6 +77,7 @@ export const OahuPlan: Plan = {
   },
   map: {
     scale: 0.256,
+    miniMapScale: 0.1,
     width: 3613,
     height: 2794,
     bounds: [[-158.281, 21.710], [-157.647, 21.252]],

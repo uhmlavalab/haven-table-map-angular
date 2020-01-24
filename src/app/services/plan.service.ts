@@ -4,7 +4,7 @@ import { Plan } from '@app/interfaces/plan';
 import { Plans } from '../../assets/plans/plans';
 import { Scenario, Map, MapLayer } from '@app/interfaces';
 import { SoundsService } from './sounds.service';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import * as d3 from 'd3/d3.min';
 
@@ -14,30 +14,33 @@ import * as d3 from 'd3/d3.min';
 export class PlanService {
 
   private state: string;  // Current state of the machine
+  private isMain: boolean; // True if main map, false if ui.
 
   private currentMap: Map;                      // Current Map
 
   private layers: MapLayer[] = [];              // Array Holding All Layers
   private selectedLayer: MapLayer;              // Currently Selected Layer
-  public selectedLayerSubject = new Subject<MapLayer>(); // layer publisher
-  public toggleLayerSubject = new Subject<MapLayer>();      // Pubisher for when a layer is toggled
-  public updateLayerSubject = new Subject<MapLayer>();
-  public layerChangeSubject = new Subject<string>();
+  public selectedLayerSubject = new BehaviorSubject<MapLayer>(null); // layer publisher
+  public toggleLayerSubject = new BehaviorSubject<MapLayer>(null);      // Pubisher for when a layer is toggled
+  public updateLayerSubject = new BehaviorSubject<MapLayer>(null);
+  public layerChangeSubject = new BehaviorSubject<string>(null);
+  public layersSubject = new BehaviorSubject<any[]>(null);
 
   private plans: Plan[];                        // Array Holding All Plans
   private currentPlan: Plan;                    // Currently Active Plan
-  public planSubject = new Subject<Plan>();     // Plan Publisher
+  public planSubject = new BehaviorSubject<Plan>(null);     // Plan Publisher
 
   private scenarios: Scenario[];                // Array Holding All Scenarios
   private currentScenario: Scenario;            // Currently active scenario
-  public scenarioSubject = new Subject<Scenario>(); // Scenario publisher
+  public scenarioSubject = new BehaviorSubject<Scenario>(null); // Scenario publisher
+  public scenarioListSubject = new BehaviorSubject<any[]>(null);
 
   private currentYear: number;                  // Current year
-  public yearSubject = new Subject<number>();   // Year Publisher
+  public yearSubject = new BehaviorSubject<number>(null);   // Year Publisher
 
   private legendLayouts: string[] = [];         // Array holding possible layouts (grid / vertical)
   private currentLegendLayout: number;          // Currently selected legend layout
-  public legendSubject = new Subject<string>(); // Legend Publisher
+  public legendSubject = new BehaviorSubject<string>(null); // Legend Publisher
 
   /* Reset Subjects */
   public resetLayersSubject = new Subject<any>();
@@ -47,10 +50,6 @@ export class PlanService {
   private generationData = {};
   private curtailmentData = {};
 
-  /* Update Timer */
-  private UPDATE_DELAY: number = 600;
-  private startTime: number;
-
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
     this.state = 'landing'; // Initial state is landing
@@ -58,15 +57,21 @@ export class PlanService {
     this.currentLegendLayout = 0;
   }
 
+  /* Start The Map */
+  public startTheMap(plan: Plan): number {
+    this.currentPlan = plan;
+    console.log(this.currentPlan);
+    this.setupSelectedPlan(this.currentPlan);
+    this.setState('run');
+    return this.getCurrentYear();
+  }
+
   /** Sets Up the Current Plan
    * @param plan The plan to set up
    */
-  public setupSelectedPlan(plan: Plan) {
+  public setupSelectedPlan(plan: Plan): void {
 
-    this.resetTimer(); // Start the update timer
-
-    this.currentPlan = plan;
-    this.currentMap = plan.map;
+    this.currentMap = plan.map; // Sets the base map image.
 
     // Load layers array with each layer associated with the current map.
     this.currentMap.mapLayers.forEach(layer => {
@@ -74,24 +79,20 @@ export class PlanService {
         this.layers.push(layer);
       }
     });
-
+    
     this.selectedLayer = this.layers[0];  // This is the layer that can currently be added/removed.
-    this.selectedLayerSubject.next(this.selectedLayer); // Publish current selected layer
-
-    // Publish data for each layer.
-    this.scenarioSubject.subscribe(scenario => {
-      this.layers.forEach(layer => {
-        this.updateLayerSubject.next(layer);
-      });
-    });
-
     this.currentYear = this.currentPlan.minYear;  // Begin with the lowest allowed year.
     this.scenarios = this.currentPlan.scenarios;  // Load array with all scenarios associated with this plan
     this.currentScenario = this.scenarios[0];     // Always start with index 0.
-    this.planSubject.next(this.currentPlan);      // Publish plan
-    this.yearSubject.next(this.currentYear);      // Publish current year
-    this.scenarioSubject.next(this.currentScenario); // Publist current scenario
 
+    // Publish the data to the components.
+    this.planSubject.next(plan); // Publish the current plan.
+    this.yearSubject.next(this.currentYear);      // Publish current year
+    this.scenarioListSubject.next(this.scenarios); // Publish a list of scenarios.
+    this.layersSubject.next(this.layers); // Publish All Layers
+    this.selectedLayerSubject.next(this.selectedLayer); // Publish current selected layer
+    this.scenarioSubject.next(this.currentScenario); // Publish current scenario
+ 
     // Load All Plan Data
     this.getCapacityData();
     //this.getGenerationData();
@@ -112,18 +113,18 @@ export class PlanService {
 
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
     let generationTotal = 0;
-    technologies.forEach(tech => {
-      try {
+    try {
+      technologies.forEach(tech => {
         this.generationData[this.currentScenario.name][tech].forEach(el => {
           if (el.year === this.currentYear) {
             generationTotal += el.value;
           }
         });
-      } catch(error) {
-        console.log('error setting generation.');
-      }
-
-    });
+      });
+    } catch (error) {
+      console.log(error);
+      console.log('error setting generation.');
+    }
     return generationTotal;
   }
 
@@ -227,17 +228,22 @@ export class PlanService {
     });
   }
 
-  /* Start The Map */
-  public startTheMap(plan: Plan): number {
-    this.plans.forEach(el => el.selectedPlan = false);
-    plan.selectedPlan = true;
-    this.setupSelectedPlan(plan);
-    this.setState('run');
-    return this.getCurrentYear()
+  /******************* GETTERS AND SETTERS **************/
+
+  /** Sets the main Variable.  If this is true, this plan service runs
+   * the main map.  If it is false, it runs the UI.
+   * @param main true if map, false if UI
+   */
+  public setMain(main: boolean): void {
+    this.isMain = main;
   }
 
-
-  /******************* GETTERS AND SETTERS **************/
+  /** Gets the main variable.  
+   * @return true if is map service, false if is ui service.
+   */
+  public getMain(): boolean {
+    return this.isMain;
+  }
 
   /** Gets the currently active plan
    * @return the current plan
@@ -310,43 +316,43 @@ export class PlanService {
    ************************************************************/
 
   /** Increments the current year by 1 and plays a sound */
-  public incrementCurrentYear(): void {
+  public incrementCurrentYear(): number {
     try {
       if (this.currentYear < this.currentPlan.maxYear) {
-        this.resetTimer();
         this.currentYear++;
         this.soundsService.click();
       }
-        this.yearSubject.next(this.currentYear);
-      
+      this.yearSubject.next(this.currentYear);
+
     } catch (error) {
       // Catch error when setting up
     }
+    return this.currentYear;
   }
 
   /** Decrements the current year by 1 and plays a sound */
-  public decrementCurrentYear(): void {
+  public decrementCurrentYear(): number {
     try {
       if (this.currentYear > this.currentPlan.minYear) {
-        this.resetTimer();
         this.currentYear--;
         this.soundsService.click();
       }
-        this.yearSubject.next(this.currentYear);
+      this.yearSubject.next(this.currentYear);
     } catch (error) {
       // catch error when setting up
     }
-
+    return this.currentYear;
   }
 
   /** Sets the year to a specific value
    * @param year the year to set
    */
-  public setCurrentYear(year): void {
+  public setCurrentYear(year): number {
     if (year >= this.currentPlan.minYear && year <= this.currentPlan.maxYear) {
       this.currentYear = year;
     }
     this.yearSubject.next(this.currentYear);
+    return this.currentYear;
   }
 
   public setScenario(scenarioName: string): void {
@@ -409,7 +415,7 @@ export class PlanService {
   /** Adds or removes the selected layer after checking it's active state. */
   public toggleSelectedLayer(layerName: string): void {
     this.layers.forEach(e => {
-      if (e.name === layerName) { 
+      if (e.name === layerName) {
         this.selectedLayer = e;
       }
     });
@@ -424,7 +430,9 @@ export class PlanService {
     if (!layer.active) {
       layer.active = true;
       this.toggleLayerSubject.next(layer);
-      this.soundsService.dropUp();
+      if (this.isMain) {
+        this.soundsService.dropUp();
+      }
       return true;
     } else {
       return false;
@@ -439,7 +447,9 @@ export class PlanService {
     if (layer.active) {
       layer.active = false;
       this.toggleLayerSubject.next(layer);
-      this.soundsService.dropDown();
+      if (this.isMain) {
+        this.soundsService.dropDown();
+      }
       return true;
     } else {
       return false;
@@ -486,6 +496,19 @@ export class PlanService {
   public getMapScale(): number {
     try {
       return this.currentMap.scale;
+    } catch (error) {
+      console.log('No Map Selected');
+      return 0;
+    }
+  }
+
+  /** Map Construction Functions */
+  /** Gets the scale of the map
+   * @return the scale of the map
+   */
+  public getMiniMapScale(): number {
+    try {
+      return this.currentMap.miniMapScale;
     } catch (error) {
       console.log('No Map Selected');
       return 0;
@@ -554,19 +577,5 @@ export class PlanService {
    */
   public getMaximumYear(): number {
     return this.currentPlan.maxYear;
-  }
-
-  private resetTimer(): void {
-    const date = new Date();
-    this.startTime = date.getTime();
-  }
-
-  public okToUpdate(): boolean {
-    const currentTime = new Date().getTime();
-    if (currentTime - this.startTime > this.UPDATE_DELAY) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }

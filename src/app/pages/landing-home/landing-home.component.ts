@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';;
 import { _ } from 'underscore';
 import { ContentDeliveryService } from '@app/services/content-delivery.service';
+import { PlanService } from '@app/services/plan.service';
 
 
 @Component({
@@ -23,8 +24,8 @@ export class LandingHomeComponent implements OnInit {
   
   private routeArray: any;
 
-  constructor(private contentDeliveryService: ContentDeliveryService) {
-
+  constructor(private contentDeliveryService: ContentDeliveryService, private planService: PlanService) {
+    this.planService.setMain(true);
     this.routeArray = {
       cams: {
         view: this.camView,
@@ -67,9 +68,9 @@ export class LandingHomeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.contentDeliveryService.landingRouteSubject.subscribe({
-      next: value => {
-        this.route(value);
+    this.contentDeliveryService.landingRouteSubject.subscribe( route => {
+      if (route) {
+        this.route(route);
       }
     });
   }

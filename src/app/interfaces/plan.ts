@@ -12,6 +12,8 @@ export interface Plan {
   maxYear: number;
   scenarios: Scenario[];
   route: string;
+  pucks: boolean;
+  touch: boolean;
   css: {
     map: {
       top: string;
