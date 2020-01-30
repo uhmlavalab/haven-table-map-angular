@@ -235,7 +235,7 @@ export const BigIslandPlan: Plan = {
               .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
             }
             else if((year > 2025) && (layerattribute == 'VH'))
-            {1
+            {
             d3.select(parcel.path)
               .style('fill', colors[parcel.properties.density])//needed to fill multi-color by density
               .style('opacity', this.active ? 0.85 : 0.0)
@@ -411,7 +411,7 @@ export const BigIslandPlan: Plan = {
           }
 
 
-          if(low_elev == 0 && high_elev == 500)  //0-500ft
+          if(low_elev == 0 && high_elev == 500 && year == 2016)  //0-500ft
           {
             d3.select(parcel.path)
             .style('fill', colours['0-500'])
@@ -419,7 +419,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }
-          if(low_elev == 500 && high_elev == 1000)  //500-1000ft
+          else if(low_elev == 500 && high_elev == 1000 && year == 2017)  //500-1000ft
           {
             d3.select(parcel.path)
             .style('fill', colours['500-1000'])
@@ -427,7 +427,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['500-1000'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }
-          if(low_elev == 1000 && high_elev == 1500)
+          else if(low_elev == 1000 && high_elev == 1500 && year == 2018)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -435,7 +435,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }
-          if(low_elev == 1500 && high_elev == 2000)
+          else if(low_elev == 1500 && high_elev == 2000 && year == 2019)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -443,7 +443,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }     
-          if(low_elev == 2000 && high_elev == 2500)
+          else if(low_elev == 2000 && high_elev == 2500 && year == 2020)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -451,7 +451,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }                            
-          if(low_elev == 2500 && high_elev == 3000)
+          else if(low_elev == 2500 && high_elev == 3000 && year == 2021)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -459,7 +459,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 3000 && high_elev == 3500)
+          else if(low_elev == 3000 && high_elev == 3500 && year == 2022)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -467,7 +467,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 3500 && high_elev == 4000)
+          else if(low_elev == 3500 && high_elev == 4000 && year == 2022)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -475,7 +475,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 4000 && high_elev == 4500)
+          else if(low_elev == 4000 && high_elev == 4500 && year == 2023)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -483,7 +483,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }  
-          if(low_elev == 4500 && high_elev == 5000)
+          else if(low_elev == 4500 && high_elev == 5000 && year == 2024)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -491,7 +491,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 5000 && high_elev == 5500)
+          else if(low_elev == 5000 && high_elev == 5500 && year == 2025)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -499,7 +499,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 5500 && high_elev == 6000)
+          else if(low_elev == 5500 && high_elev == 6000 && year == 2026)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -507,7 +507,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 6000 && high_elev == 6500)
+          else if(low_elev == 6000 && high_elev == 6500 && year == 2027)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -515,7 +515,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 6500 && high_elev == 7000)
+          else if(low_elev == 6500 && high_elev == 7000 && year == 2028)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -523,7 +523,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 7000 && high_elev == 7500)
+          else if(low_elev == 7000 && high_elev == 7500 && year == 2029)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -531,7 +531,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 7500 && high_elev == 8000)
+          else if(low_elev == 7500 && high_elev == 8000 && year == 2030)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -539,7 +539,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 8000 && high_elev == 8500)
+          else if(low_elev == 8000 && high_elev == 8500 && year == 2031)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -547,7 +547,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 8500 && high_elev == 9000)
+          else if(low_elev == 8500 && high_elev == 9000 && year == 2032)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -555,7 +555,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 9000 && high_elev == 9500)
+          else if(low_elev == 9000 && high_elev == 9500 && year == 2033)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -563,7 +563,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }    
-          if(low_elev == 9500 && high_elev == 10000)
+          else if(low_elev == 9500 && high_elev == 10000 && year == 2034)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -571,7 +571,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 10000 && high_elev == 10500)
+          else if(low_elev == 10000 && high_elev == 10500 && year == 2035)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -579,7 +579,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 10500 && high_elev == 11000)
+          else if(low_elev == 10500 && high_elev == 11000 && year == 2036)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -587,7 +587,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 11000 && high_elev == 11500)
+          else if(low_elev == 11000 && high_elev == 11500 && year == 2037)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -595,7 +595,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 11500 && high_elev == 12000)
+          else if(low_elev == 11500 && high_elev == 12000 && year == 2038)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -603,7 +603,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 12000 && high_elev == 12500)
+          else if(low_elev == 12000 && high_elev == 12500 && year == 2039)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -611,7 +611,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 12500 && high_elev == 13000)
+          else if(low_elev == 12500 && high_elev == 13000 && year == 2040)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -619,7 +619,7 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 13000 && high_elev == 13500)
+          else if(low_elev == 13000 && high_elev == 13500 && year == 2041)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
@@ -627,14 +627,18 @@ export const BigIslandPlan: Plan = {
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
           }   
-          if(low_elev == 13500 && high_elev == 14000)
+          else if(low_elev == 13500 && high_elev == 14000 && year == 2042)
           {
             d3.select(parcel.path)
             .style('fill', '#0500fa')
             .style('opacity', this.active ? 0.85 : 0.0)
             .style('stroke', colours['0-500'])
             .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
-          }   
+          }  
+          else(  //Fallback, disable any visible parcels.
+            d3.select(parcel.path)
+            .style('opacity',0.0)
+          ) 
           });
         },
       },
