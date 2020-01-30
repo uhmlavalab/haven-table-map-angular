@@ -351,7 +351,7 @@ export const BigIslandPlan: Plan = {
       {  //Begin Test Layer 4 (2020)
         name: 'testlayer4',  //Internal layer name
         displayName: 'Elevation Ranges',  //Display name (on the table.)
-        active: true,  //Default for active (visible) status
+        active: false,  //Default for active (visible) status
         included: true,   //Default for inclusion in the layer list
         iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  //Icon path for table.
         secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',    //Background image for second screen, image path.
