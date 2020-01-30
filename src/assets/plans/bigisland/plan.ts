@@ -348,6 +348,296 @@ export const BigIslandPlan: Plan = {
 
         },
       },  //End Test Layer 3 (2019)
+      {  //Begin Test Layer 4 (2020)
+        name: 'testlayer4',  //Internal layer name
+        displayName: 'Elevation Ranges',  //Display name (on the table.)
+        active: true,  //Default for active (visible) status
+        included: true,   //Default for inclusion in the layer list
+        iconPath: 'assets/plans/bigisland/images/icons/hourglass.png',  //Icon path for table.
+        secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',    //Background image for second screen, image path.
+        secondScreenText: 'Slide the Layer Puck to add or remove this layer',  //Instructional/information text on second screen.
+        fillColor: mapLayerColors.Test2019.fill,     //See defaultColors.ts.
+        borderColor: mapLayerColors.Test2019.border, //See defaultColors.ts.
+        borderWidth: 0.04,  //Border width, default is set here.
+        legendColor: mapLayerColors.Test2019.border, //See defaultColors.ts.
+        filePath: 'assets/plans/bigisland/layers/Elevation_Ranges.json',
+        parcels: [],  //Empty list of parcels, gets populated by setupFunction()
+        setupFunction(planService: PlanService) {
+          this.parcels.forEach(parcel => {
+            d3.select(parcel.path)
+              .style('fill', this.fillColor)
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', this.borderColor)
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          });
+        },
+        updateFunction(planService: PlanService) {
+
+          let year = planService.getCurrentYear();
+
+          this.parcels.forEach(parcel => 
+          {
+          
+          let high_elev = parcel.properties.highelev;
+          let low_elev = parcel.properties.lowelev;
+
+          const colours = {  //Colours, constant.  Gradient from blue(low) to red(high)
+            '0-500'       : '#0500fa',  
+            '500-1000'    : '#2000dd',
+            '1000-1500'   : '',
+            '1500-2000'   : '',
+            '2000-2500'   : '',
+            '2500-3000'   : '',
+            '3000-3500'   : '',
+            '3500-4000'   : '',
+            '4000-4500'   : '',
+            '4500-5000'   : '',
+            '5000-5500'   : '',
+            '5500-6000'   : '',
+            '6000-6500'   : '',
+            '6500-7000'   : '',
+            '7000-7500'   : '',
+            '7500-8000'   : '',
+            '8000-8500'   : '',
+            '8500-9000'   : '',
+            '9000-9500'   : '',
+            '9500-10000'  : '',
+            '10000-10500' : '',
+            '10500-12000' : '',
+            '12000-12500' : '',
+            '12500-13500' : '',
+            '13000-13500' : '',
+            'Current'       : '#00ff00'
+          }
+
+
+          if(low_elev == 0 && high_elev == 500)  //0-500ft
+          {
+            d3.select(parcel.path)
+            .style('fill', colours['0-500'])
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }
+          if(low_elev == 500 && high_elev == 1000)  //500-1000ft
+          {
+            d3.select(parcel.path)
+            .style('fill', colours['500-1000'])
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['500-1000'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }
+          if(low_elev == 1000 && high_elev == 1500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }
+          if(low_elev == 1500 && high_elev == 2000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }     
+          if(low_elev == 2000 && high_elev == 2500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }                            
+          if(low_elev == 2500 && high_elev == 3000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 3000 && high_elev == 3500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 3500 && high_elev == 4000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 4000 && high_elev == 4500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }  
+          if(low_elev == 4500 && high_elev == 5000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 5000 && high_elev == 5500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 5500 && high_elev == 6000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 6000 && high_elev == 6500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 6500 && high_elev == 7000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 7000 && high_elev == 7500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 7500 && high_elev == 8000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 8000 && high_elev == 8500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 8500 && high_elev == 9000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 9000 && high_elev == 9500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }    
+          if(low_elev == 9500 && high_elev == 10000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 10000 && high_elev == 10500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 10500 && high_elev == 11000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 11000 && high_elev == 11500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 11500 && high_elev == 12000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 12000 && high_elev == 12500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 12500 && high_elev == 13000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 13000 && high_elev == 13500)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          if(low_elev == 13500 && high_elev == 14000)
+          {
+            d3.select(parcel.path)
+            .style('fill', '#0500fa')
+            .style('opacity', this.active ? 0.85 : 0.0)
+            .style('stroke', colours['0-500'])
+            .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+          }   
+          });
+        },
+      },
       {
         name: 'dod',
         displayName: 'Government Lands',
