@@ -69,7 +69,7 @@ export const BigIslandPlan: Plan = {
     }
   },
   map: {
-    scale: 0.26,
+    scale: 0.32,
     width: 2179,
     height: 2479,
     bounds: [[-156.0618, 20.2696], [-154.8067, 18.9105]],
