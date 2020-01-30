@@ -84,7 +84,7 @@ export class PieChartComponent implements OnInit {
           });
         });
       });
-      this.createChart(); 
+      //this.createChart(); Disabled Pie Chart
     });
 
   }

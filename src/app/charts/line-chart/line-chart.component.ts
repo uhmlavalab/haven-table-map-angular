@@ -78,7 +78,7 @@ export class LineChartComponent implements OnInit {
         this.data.capacity[scenario].labels = [...new Set(this.data.capacity[scenario].labels)];
       });
       this.chartMax = Math.ceil(Math.max(...valueArray) / 100) * 100;
-      this.createChart();
+      //this.createChart(); Disabled Line Chart.
     });
 
   }
