@@ -150,19 +150,19 @@ export class MapElementComponent implements OnInit, OnDestroy {
         this.view.goTo(cam);
         break;
       case "Numpad7":
-        cam.heading = this.view.camera.heading - 1;
+        cam.heading = this.view.camera.heading - 0.25;
         this.view.goTo(cam);
         break;
       case "Numpad9":
-        cam.heading = this.view.camera.heading + 1;
+        cam.heading = this.view.camera.heading + 0.25;
         this.view.goTo(cam);
         break;
       case "NumpadAdd":
-        cam.position.z = this.view.camera.position.z + 1000;
+        cam.position.z = this.view.camera.position.z - 1000;
         this.view.goTo(cam);
         break;
       case "NumpadSubtract":
-        cam.position.z = this.view.camera.position.z - 1000;
+        cam.position.z = this.view.camera.position.z + 1000;
         this.view.goTo(cam);
         break;
 
@@ -174,14 +174,29 @@ export class MapElementComponent implements OnInit, OnDestroy {
       const [WebMap, SceneView] = await loadModules([
         "esri/WebMap",
         "esri/views/SceneView",
+        "esri/layers/support/LOD"
       ]);
 
       var webmap = new WebMap({
         portalItem: {
           id: "2d7ddfbe1b854b12877fcd96ea3f5b1c"
-        }
+        },
+        displayLevels: [1, 2 ]
+      })
+      webmap .when(function() {
+        // This function will execute once the promise is resolved
+        setTimeout(function(){ 
+          console.log(webmap);
+          // webmap.basemap.baseLayers.items[0].tileInfo.lods[16].resolution = 0.018;
+          // webmap.basemap.baseLayers.items[0].tileInfo.lods[16].scale = 70.52;
+        }, 1000);
+       
+
+      })
+      .catch(function(error) {
+        // This function will execute if the promise is rejected
+        console.log("error: ", error);
       });
- 
       var view = new SceneView({
         container: this.mapDiv.nativeElement,
         map: webmap,
