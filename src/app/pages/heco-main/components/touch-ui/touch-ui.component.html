@@ -1,18 +1,12 @@
 <!-- This is the main component for the touch UI interface. -->
-
+<img src="../../../../../assets/images/BackGround.png" class="background-image"> 
 <!-- This section contains the charts-->
 <div class="left-container">
   <div class="chart">
-    <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="right">
-    </app-border-line>
-    <div class="section-title">{{chartTitle}}</div>
     <app-line-chart></app-line-chart>
     <!-- <app-progress-ring></app-progress-ring> -->
   </div>
   <div class="chart">
-    <app-border-line leftColor="blue" rightColor="orange" dotColor="green" dotSize="medium" longSide="left">
-    </app-border-line>
-    <div class="section-title">{{chartTitle}}</div>
     <app-pie-chart></app-pie-chart>
   </div>
 </div>
@@ -20,24 +14,11 @@
 <!-- Center column.  Largest column, contains mini map and the year controls -->
 <div class="center-container">
   <div class="top">
-    <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="left">
-    </app-border-line>
-    <div class="left">
       <div class="section-title">{{mapTitle}}</div>
       <app-map-element *ngIf="planSet" class="map-container" cdkDrag #map>
       </app-map-element>
-    </div>
-    <div class="right">
-      <div class="section-title">{{scenarioTitle}}</div>
-      <div *ngFor="let scenario of scenarios">
-        <app-scenario-button scenarioName={{scenario.name}} scenarioDisplayName={{scenario.displayName}}>
-        </app-scenario-button>
-      </div>
-    </div>
   </div>
   <div class="middle">
-    <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="left">
-    </app-border-line>
     <div class="left">
       <app-scrolling-menu type="scenario"></app-scrolling-menu>
     </div>
@@ -50,18 +31,12 @@
       <app-scrolling-menu type="year"></app-scrolling-menu>
     </div>
   </div>
-  <div class="bottom">
-    <!-- Slider control to change the year -->
-    <!-- <app-slider type="year" class="slider-container"></app-slider> -->
-  </div>
 </div>
 <!-- right column has two rows. -->
 <div class="right-container">
   <div class="top">
     <!-- Layer Buttons for turning on and off the layers. -->
     <div class="layer-button-container" #layerButtonContainer>
-      <app-border-line leftColor="blue" rightColor="red" dotColor="green" dotSize="medium" longSide="left">
-      </app-border-line>
       <div class="section-title">{{layerTitle}}</div>
       <!-- Wrapper forces the buttons to be 1 to 1 ratio -->
       <div class="buttons-container">
@@ -73,8 +48,6 @@
     </div>
   </div>
   <div class="bottom">
-    <app-border-line leftColor="yellow" rightColor="pink" dotColor="green" dotSize="medium" longSide="right">
-    </app-border-line>
     <div class="section-title">{{layerInfoTitle}}</div>
   </div>
 </div>

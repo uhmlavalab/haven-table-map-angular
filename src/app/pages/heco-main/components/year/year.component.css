@@ -1,29 +1,42 @@
-:host {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    /* border: 2px solid white;
-    border-radius: 50%; */
-    vertical-align: middle;
-}
 
 .content-wrapper {
-    width: 100%;
-    height: 20%;
-    top: 40%;
+    width: 150px;
+    height: 150px;
     position: relative;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    left: 30%;
+    margin-top: 15%;
+
 }
 .border-line {
-    width: 90%;
+    width: 80%;
+    left: 10%;
     position: relative;
-    left: 5%;
-    height: 3px;
-    background-color: white;
+    height: 1px;
+    background-color: transparent;
+}
+
+.border-line:first-child {
+    margin-top: calc(5vw - 25px);
 }
 
 p {
     width: 100%;
     text-align: center;
-    font-size: 40px;
+    font-size: 32px;
     margin: 5px 0 5px 0;
+}
+
+.year-bar-wrapper {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+}
+
+.year-bar {
+    width: 2px;
+    height: 10px;
+    position: absolute;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
 }

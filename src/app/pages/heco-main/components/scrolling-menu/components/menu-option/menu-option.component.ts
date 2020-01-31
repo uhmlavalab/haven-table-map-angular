@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MenuOptionComponent implements OnInit {
   @Input() text: string;
+  @Input() type: string;
 
   constructor() { }
 

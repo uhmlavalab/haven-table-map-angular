@@ -5,8 +5,10 @@ import { Plans } from '../../assets/plans/plans';
 import { Scenario, Map, MapLayer } from '@app/interfaces';
 import { SoundsService } from './sounds.service';
 import { BehaviorSubject, Subject } from 'rxjs';
+import {chartColors} from '../../assets/plans/defaultColors';
 
 import * as d3 from 'd3/d3.min';
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,8 @@ export class PlanService {
   public layerChangeSubject = new BehaviorSubject<string>(null);
   public layersSubject = new BehaviorSubject<any[]>(null);
 
+  public scrollingMenuSubject = new BehaviorSubject<any>(null);
+
   private plans: Plan[];                        // Array Holding All Plans
   private currentPlan: Plan;                    // Currently Active Plan
   public planSubject = new BehaviorSubject<Plan>(null);     // Plan Publisher
@@ -37,10 +41,13 @@ export class PlanService {
 
   private currentYear: number;                  // Current year
   public yearSubject = new BehaviorSubject<number>(null);   // Year Publisher
+  public yearsSubject = new BehaviorSubject<number[]>(null);
 
   private legendLayouts: string[] = [];         // Array holding possible layouts (grid / vertical)
   private currentLegendLayout: number;          // Currently selected legend layout
   public legendSubject = new BehaviorSubject<string>(null); // Legend Publisher
+
+  public technologySubject = new BehaviorSubject<any>(null);
 
   /* Reset Subjects */
   public resetLayersSubject = new Subject<any>();
@@ -49,6 +56,7 @@ export class PlanService {
   private capacityData = {};
   private generationData = {};
   private curtailmentData = {};
+
 
   constructor(private soundsService: SoundsService) {
     this.plans = Plans;
@@ -79,7 +87,7 @@ export class PlanService {
         this.layers.push(layer);
       }
     });
-    
+
     this.selectedLayer = this.layers[0];  // This is the layer that can currently be added/removed.
     this.currentYear = this.currentPlan.minYear;  // Begin with the lowest allowed year.
     this.scenarios = this.currentPlan.scenarios;  // Load array with all scenarios associated with this plan
@@ -88,15 +96,21 @@ export class PlanService {
     // Publish the data to the components.
     this.planSubject.next(plan); // Publish the current plan.
     this.yearSubject.next(this.currentYear);      // Publish current year
+    this.yearsSubject.next(this.getYears());
     this.scenarioListSubject.next(this.scenarios); // Publish a list of scenarios.
     this.layersSubject.next(this.layers); // Publish All Layers
     this.selectedLayerSubject.next(this.selectedLayer); // Publish current selected layer
     this.scenarioSubject.next(this.currentScenario); // Publish current scenario
- 
+
     // Load All Plan Data
     this.getCapacityData();
-    //this.getGenerationData();
+    this.getGenerationData().then(genData => {
+      this.generationData = genData;
+      this.technologySubject.next(this.getTechData());
+    });
     this.getCurtailmentData();
+
+
 
     // Change Legend Layout if it is not 'grid'.
     if (this.currentPlan.css.legend.defaultLayout === 'vertical') {
@@ -110,6 +124,14 @@ export class PlanService {
    * **************************************************************************************
    * **************************************************************************************
    */
+
+   public getTechData(): any {
+     const technologies = [];
+     Object.keys(this.generationData[this.currentScenario.name]).forEach(tech => {
+      technologies.push({name: tech, color: chartColors[tech]});
+     });
+     return technologies;
+   }
 
   public getGenerationTotalForCurrentYear(technologies: string[]): number {
     let generationTotal = 0;
@@ -156,25 +178,24 @@ export class PlanService {
    * 
    */
   public getGenerationData(): Promise<any> {
-    this.generationData = {};
     return new Promise((resolve, error) => {
+      let generationData = {};
       d3.csv(this.currentPlan.data.generationPath, (data) => {
         data.forEach(element => {
           const year = element.year;
           const technology = element.technology;
           const value = element.value;
           const scenario = element.scenario;
-          if (!this.generationData.hasOwnProperty(scenario)) {
-            this.generationData[scenario] = {};
+          if (!generationData.hasOwnProperty(scenario)) {
+            generationData[scenario] = {};
           }
-          if (!this.generationData[scenario].hasOwnProperty(technology)) {
-            this.generationData[scenario][technology] = [];
+          if (!generationData[scenario].hasOwnProperty(technology)) {
+            generationData[scenario][technology] = [];
           }
-          this.generationData[scenario][technology].push({ year: Number(year), value: Number(value) });
+          generationData[scenario][technology].push({ year: Number(year), value: Number(value) });
         });
-        return resolve(this.generationData);
+        return resolve(generationData);
       });
-
     });
   }
 
@@ -250,6 +271,16 @@ export class PlanService {
    */
   public getCurrentPlan(): Plan {
     return this.currentPlan;
+  }
+
+  public getScenarioNameFromDisplayName(displayName: string): string {
+    let name = this.currentScenario.name;
+    this.scenarios.forEach(scenario => {
+      if (displayName == scenario.displayName) {
+        name = scenario.name;
+      }
+    });
+    return name;
   }
 
   /** Gets all plans
@@ -363,6 +394,7 @@ export class PlanService {
       }
     });
     this.scenarioSubject.next(this.currentScenario);
+    this.yearSubject.next(this.currentYear);
     this.soundsService.tick();
   }
 
@@ -577,5 +609,29 @@ export class PlanService {
    */
   public getMaximumYear(): number {
     return this.currentPlan.maxYear;
+  }
+
+  public getScrollingMenuData(type: string) {
+    if (type === 'year') {
+      this.scrollingMenuSubject.next({type: type, data: this.getYears()});
+    } else if (type === 'scenario') {
+      this.scrollingMenuSubject.next({type: type, data: this.getScenarioNames()});
+    }
+  }
+
+  private getYears() {
+    const arr = [];
+    for (let i = this.currentPlan.minYear; i <= this.currentPlan.maxYear; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }
+
+  private getScenarioNames() {
+    const arr = [];
+    for (let i = 0; i < this.scenarios.length; i++) {
+      arr.push(this.scenarios[i].displayName);
+    }
+    return arr;
   }
 }

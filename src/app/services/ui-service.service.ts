@@ -82,6 +82,26 @@ export class UiServiceService {
     this.notifyMap('change year', year);
   }
 
+  /** The scrollable menu passes data and type to this function and the UI and Map
+   * are notified of the change.
+   * @param type the type of change
+   * @param data the value of the change.
+   */
+  public handleMenuChange(type: string, data: any): void {
+    if (type === 'year') {
+      this.setYear(data);
+    } else if (type === 'scenario') {
+      const val = this.planService.getScenarioNameFromDisplayName(data);
+      console.log(val);
+      this.changeScenario(val);
+    }
+  }
+
+  public setYear(year: number): void {
+    this.notifyMap('change year', year);
+    this.planService.setCurrentYear(year);
+  }
+
   /** Changes the scenario when a scenario button is clicked.
    * @param scenarioName The name of the new scenario.
    */

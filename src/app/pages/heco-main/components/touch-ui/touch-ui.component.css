@@ -2,10 +2,21 @@
     color: white;
 }
 
+.background-image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
 /* Styles for the UI section Titles */
 .section-title {
     color: white;
     font-size: 18px;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
 }
 
 app-border-line {
@@ -18,12 +29,14 @@ app-border-line {
     position: absolute;
     height: 100%;
     padding: 2%;
+    text-align: center;
 }
 
 .left-container > div {
     height: 50%;
     width: 100%;
     position: relative;
+    text-align: center;
 }
 
 /* The Center Container contains the mini map and the year controls */
@@ -37,28 +50,19 @@ app-border-line {
 /* First row in the center contianer */
 .center-container>.top {
     width: 100%;
-    height: 45%;
+    height: 50%;
     position: relative;
+    padding-top: 5%;
+    text-align: center;
 }
 
-.center-container>.top>div {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.center-container>.top>.left {
-    width: 75%;
-    height: 100%;
-}
 
 .map-container {
     width: 100%;
+    padding-top: 5%;
+    position: relative;
 }
 
-.center-container>.top>.right {
-    height: 100%;
-    width: 25%;
-}
 
 /* Second row in the center container */
 .center-container>.middle {
@@ -78,6 +82,7 @@ app-border-line {
     width: 50%;
     height: 100%;
     display: inline-block;
+    vertical-align: top;
 }
 
 .center-container>.middle>.right{
@@ -90,9 +95,12 @@ app-border-line {
 
 /* Positions the year graphic component */
 .year-container {
-    width: 15vw;
-    height: 15vw;
+    width: 60%;
+    padding-top: 60%;
     position: relative;
+    top: 20%;
+    left: 0;
+    height: 100%;
 }
 
 /* Bottom row in the center container */
