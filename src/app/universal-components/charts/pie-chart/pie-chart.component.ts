@@ -109,7 +109,9 @@ export class PieChartComponent implements AfterViewInit {
           text: 'Generation',
           position: 'top',
           fontColor: 'white',
-          fontSize: 18
+          fontSize: 18,
+          fontFamily: "'Dalton Maag - Elevon OneG'",
+          defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Dalton Maag - Elevon OneG'"
         },
         legend: {
           display: false,
@@ -117,6 +119,8 @@ export class PieChartComponent implements AfterViewInit {
             fontColor: 'white',
             fontStyle: 'bold',
             fontSize: 14,
+            fontFamily: 'Dalton Maag - Elevon OneG'
+
           }
         },
         responsive: false,
@@ -127,7 +131,9 @@ export class PieChartComponent implements AfterViewInit {
             fontSize: 10,
             overlap: false,
             fontStyle: 'bold',
-            fontColor: 'white'
+            fontColor: 'white',
+            fontFamily: 'Dalton Maag - Elevon OneG'
+
           },
           {
             render: 'percentage',
@@ -135,6 +141,8 @@ export class PieChartComponent implements AfterViewInit {
             fontSize: 8,
             fontStyle: 'bold',
             overlap: false,
+            fontFamily: 'Dalton Maag - Elevon OneG'
+
           }]
         },
       },

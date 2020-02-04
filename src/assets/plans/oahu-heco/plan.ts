@@ -76,7 +76,7 @@ export const HecoPlan: Plan = {
     colors: chartColors
   },
   map: {
-    scale: 0.2375,
+    scale: 0.25,
     miniMapScale: 0.1,
     width: 3613,
     height: 2794,
