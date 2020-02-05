@@ -575,23 +575,23 @@ export const BigIslandPlan: Plan = {
         },
       },
       {
-        name: 'hospitals', //start hospital layer
-        displayName: 'Hospitals',
+        name: 'streams', //start stream layer
+        displayName: 'Streams',
         active: false,
-        included: false,
-        iconPath: 'assets/plans/bigisland/images/icons/solar-icon.png',
+        included: true,
+        iconPath: 'assets/plans/bigisland/images/icons/stream-icon.png',
         secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/solar.jpg',
         secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
         fillColor: '#ff0066',
         borderColor: '#ffffff',
-        borderWidth: 0.5,
+        borderWidth: 0.9,//0.5
         legendColor: mapLayerColors.Solar.fill,
-        filePath: 'assets/plans/bigisland/layers/hospitals.json',
+        filePath: 'assets/plans/bigisland/layers/streams.json',
         parcels: [],
         setupFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
               d3.select(parcel.path)
-                .style('fill', this.fillColor)
+                .style('fill', 'transparent')
                 .style('opacity', (this.active) ? 0.85 : 0.0)
                 .style('stroke', this.borderColor)
                 .style('stroke-width', this.borderWidth + 'px');
@@ -599,12 +599,33 @@ export const BigIslandPlan: Plan = {
         },
         updateFunction(planService: PlanService) {
           this.parcels.forEach(parcel => {
+            let layerattribute = parcel.properties.type;//divide based on layer attribute 
+
+            const borderColors = {
+              'NON-PERENNIAL': '#99d6ff',//look at json file for names
+              'PERENNIAL': '#0099ff',
+            }
+
+            if(layerattribute == 'NON-PERENNIAL')
+            {
             d3.select(parcel.path)
-                .style('fill', this.fillColor)
-                .style('opacity', (this.active) ? 0.85 : 0.0);
+              .style('fill', 'transparent')//set to Colors if fill wanted, otherwise transparent
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.type])//set to borderColors if borders wanted otherwise this.bordercolor
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+            else if(layerattribute == 'PERENNIAL')
+            {
+            d3.select(parcel.path)
+              .style('fill', 'transparent')//set to Colors if fill wanted, otherwise transparent
+              .style('opacity', this.active ? 0.85 : 0.0)
+              .style('stroke', borderColors[parcel.properties.type])//set to borderColors if borders wanted otherwise this.bordercolor
+              .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+            }
+
           });
         },
-      },//end hospital layer
+      },//end stream layer
       {
         name: 'dod',
         displayName: 'Government Lands',
