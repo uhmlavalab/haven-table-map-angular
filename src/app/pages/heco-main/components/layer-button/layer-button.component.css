@@ -13,3 +13,9 @@ p {
     width: 100%;
     text-align: center;
 }
+
+.progress-bar {
+    left: -10%;
+    top: -22%;
+    position: absolute;
+}

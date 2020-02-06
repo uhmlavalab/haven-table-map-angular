@@ -48,7 +48,7 @@ export class TouchUiComponent implements AfterViewInit {
       } catch (err) {
         console.log('Failed to revieve a new message');
       }
-    }, 20);
+    }, 1000);
 
     this.planService.yearSubject.subscribe(year => {
       if (year) {

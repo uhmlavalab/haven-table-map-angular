@@ -57,6 +57,7 @@ import { YearDisplayComponent } from './pages/heco-main/components/year-display/
 import { ScrollingMenuComponent } from './pages/heco-main/components/scrolling-menu/scrolling-menu.component';
 import { MenuOptionComponent } from './pages/heco-main/components/scrolling-menu/components/menu-option/menu-option.component';
 import { YearBarComponent } from './pages/heco-main/components/year/components/year-bar/year-bar.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 
 @NgModule({
@@ -97,7 +98,16 @@ import { YearBarComponent } from './pages/heco-main/components/year/components/y
     BrowserModule,
     AppRoutingModule,
     DragDropModule,
-    MultiWindowModule
+    MultiWindowModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 40,
+      outerStrokeWidth: 4,
+      innerStrokeWidth: 0,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 700
+    })
   ],
   providers: [
     ArService,

@@ -16,6 +16,9 @@
     this.window.addEventListener('touchmove', () => {
       event.preventDefault();
     }, { passive: false });
+    this.window.addEventListener('touchend', () => {
+      event.preventDefault();
+    }, { passive: false });
   </script>
 </body>
 

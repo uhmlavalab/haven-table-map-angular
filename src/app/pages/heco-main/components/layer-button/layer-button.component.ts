@@ -1,43 +1,61 @@
 import { Component, OnInit, Input, HostListener, ElementRef } from '@angular/core';
 import { UiServiceService } from '@app/services/ui-service.service';
 import { PlanService } from '@app/services/plan.service';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { TimeInterval } from 'rxjs';
 
 @Component({
   selector: 'app-layer-button',
   templateUrl: './layer-button.component.html',
   styleUrls: ['./layer-button.component.css'],
-  host: {
-    '(click)': 'handleClick()'
-  }
 })
 export class LayerButtonComponent implements OnInit {
 
   @Input() layerName: string;
   @Input() layerDisplayName: string;
   @Input() layerIcon: string;
+  @Input() color: string;
+
+  private animationDuration: number;
+  private progress: number;
+  private progressRadius: number;
+  private on: boolean;
 
   constructor(private uiService: UiServiceService, private el: ElementRef, private planService: PlanService) {
-
+    this.animationDuration = 700;
+    this.progress = 0;
+    this.progressRadius = 0;
+    this.on = false;
   }
 
   ngOnInit() {
-  }
-
-  private handleClick(): void {
-    this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
-    this.planService.toggleSelectedLayer(this.layerName);
+    this.progressRadius = this.el.nativeElement.getBoundingClientRect().height / 2;
   }
 
   /** When these toggles are touched, they show a loading up animation */
   @HostListener('touchstart') onTouchStart(event: TouchEvent) {
     // Start the effect
-    this.el.nativeElement.style.backgroundColor =  'blue';
+    if (this.progress === 0) {
+      this.progress = 100;
+      setTimeout(() => {
+        if (this.progress === 100) {
+          this.on = true;
+          this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
+          this.planService.toggleSelectedLayer(this.layerName);
+        }
+      }, this.animationDuration * 2);
+    } else if (this.progress === 100 && this.on) {
+      this.progress = 0;
+      this.on = false;
+      this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
+      this.planService.toggleSelectedLayer(this.layerName);
+    }
   }
 
   /** If the animation isnt finished, it will end prematurely if the touch is ended. */
   @HostListener('touchend') onTouchEnd() {
-    // End the effect if it is still going
-    this.el.nativeElement.style.backgroundColor = 'transparent';
+    if (!this.on) {
+      this.progress = 0;
+    }
   }
-
 }

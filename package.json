@@ -26,6 +26,7 @@
     "core-js": "^2.5.4",
     "d3": "^3.5.4",
     "js-aruco": "^0.1.0",
+    "ng-circle-progress": "^1.5.1",
     "ngx-multi-window": "^0.3.2",
     "rx": "^4.1.0",
     "rxjs": "~6.5.2",

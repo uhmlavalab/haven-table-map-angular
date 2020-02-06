@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Plan } from '@app/interfaces/plan';
 import { Plans } from '../../assets/plans/plans';
-import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'

@@ -15,8 +15,8 @@
 <div class="center-container">
   <div class="top">
       <div class="section-title">{{mapTitle}}</div>
-      <app-map-element *ngIf="planSet" class="map-container" cdkDrag #map>
-      </app-map-element>
+      <!-- <app-map-element *ngIf="planSet" class="map-container" cdkDrag #map>
+      </app-map-element> -->
   </div>
   <div class="middle">
     <div class="left">
@@ -42,7 +42,7 @@
       <div class="buttons-container">
         <div class="layer-button-wrapper" *ngFor="let layer of layers">
           <app-layer-button class="layer-button" layerName={{layer.name}} layerDisplayName={{layer.displayName}}
-            layerIcon={{layer.iconPath}}></app-layer-button>
+            layerIcon={{layer.iconPath}} color={{layer.legendColor}}></app-layer-button>
         </div>
       </div>
     </div>

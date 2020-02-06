@@ -88,11 +88,11 @@ export class UiServiceService {
    * @param data the value of the change.
    */
   public handleMenuChange(type: string, data: any): void {
+    console.log('Menu Change');
     if (type === 'year') {
       this.setYear(data);
     } else if (type === 'scenario') {
       const val = this.planService.getScenarioNameFromDisplayName(data);
-      console.log(val);
       this.changeScenario(val);
     }
   }

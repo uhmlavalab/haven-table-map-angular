@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChildren, QueryList, ViewChild, Input } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChildren, QueryList, ViewChild, Input, HostListener } from '@angular/core';
 import { PlanService } from '@app/services/plan.service';
 import { Plan } from '@app/interfaces';
 import { interval, Subject } from 'rxjs';
@@ -41,6 +41,8 @@ export class ScrollingMenuComponent implements AfterViewInit {
 
   private selectedOption: any;
 
+  private touchId: number;
+
 
   constructor(private el: ElementRef, private planService: PlanService, private uiService: UiServiceService) {
     this.curveLeft = false;
@@ -55,7 +57,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
     this.optionArray = [];
     this.speed = 0;
     this.speedDecayRate = 0.80;
-    this.repeatRate = 30;
+    this.repeatRate = 33;
     this.selectedOption = null;
     this.dividedHeight = 0;
   }
@@ -81,7 +83,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
     });
     this.overlay.nativeElement.style.top = '0';
 
-    this.overlay.nativeElement.addEventListener('mousedown', () => this.startDrag());
+    this.overlay.nativeElement.addEventListener('mousedown', () => this.startDrag(event));
     this.overlay.nativeElement.addEventListener('mouseup', () => this.stopDragging());
     this.overlay.nativeElement.addEventListener('mouseleave', () => {
       if (this.dragging) {
@@ -94,8 +96,8 @@ export class ScrollingMenuComponent implements AfterViewInit {
       }
     });
 
-    this.overlay.nativeElement.addEventListener('touchstart', () => {
-      this.startDrag();
+    this.overlay.nativeElement.addEventListener('touchstart', event => {
+      this.startDrag(event);
     }, { passive: false });
     this.overlay.nativeElement.addEventListener('touchend', () => {
       this.stopDragging();
@@ -132,7 +134,6 @@ export class ScrollingMenuComponent implements AfterViewInit {
     this.heightOfOption = dividedHeight;
 
     if (this.menuOptions.length < this.numberVisible) {
-      const center = this.findCenter();
       const middle = Math.floor(this.menuOptions.length / 2);
       let currentTop = null;
       this.menuOptions.forEach((option, index) => {
@@ -168,9 +169,11 @@ export class ScrollingMenuComponent implements AfterViewInit {
     this.optionArray.forEach((e, index) => {
       if (this.isCenter(e)) {
         e.style.opacity = 1;
-        if (this.selectedOption !== this.options[index]) {
-          this.selectedOption = this.options[index];
-          this.uiService.handleMenuChange(this.type, this.selectedOption);
+        if (Math.abs(this.speed) < 10) {
+          if (this.selectedOption !== this.options[index]) {
+            this.selectedOption = this.options[index];
+            this.uiService.handleMenuChange(this.type, this.selectedOption);
+          }
         }
       } else {
         e.style.opacity = 0.3;
@@ -180,25 +183,26 @@ export class ScrollingMenuComponent implements AfterViewInit {
 
   isCenter(e): boolean {
     const rect = e.getBoundingClientRect();
-    if (this.findCenter() > rect.top && this.findCenter() < rect.bottom) {
+    if (this.center > rect.top && this.center < rect.bottom) {
       return true;
     } else {
       return false;
     }
   }
 
-  private startDrag(): void {
+  private startDrag(event): void {
     if (this.intervalRunning) {
       clearInterval(this.speedInterval);
       this.intervalRunning = false;
     } else {
+      this.setTouchId(event.touches);
       this.dragging = true;
     }
   }
 
   private stopDragging(): void {
     this.dragging = false;
-    if (Math.abs(this.speed) > 1) {
+    if (Math.abs(this.speed) > 5) {
       if (!this.intervalRunning) {
         this.intervalRunning = true;
         this.speedInterval = setInterval(() => {
@@ -208,6 +212,17 @@ export class ScrollingMenuComponent implements AfterViewInit {
     } else {
       this.positionHistory = [];
       this.speed = 0;
+      this.touchId = -1;
+    }
+  }
+
+  private setTouchId(touchlist): void {
+    if (this.touchId === -1) {
+      Object.values(touchlist).forEach((touch: Touch) => {
+        if (touch.target === this.overlay.nativeElement) {
+          this.touchId = touch.identifier;
+        }
+      });
     }
   }
 
@@ -216,11 +231,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
       // Capture Y position of mouse or touch
       let mouseY = event.screenY;
       if (mouseY === undefined) {
-        Object.values(event.touches).forEach((touch: Touch) => {
-          if (touch.target === this.overlay.nativeElement) {
-            mouseY = touch.screenY;
-          }
-        });
+        mouseY = event.touches[this.touchId].screenY;
       }
 
       if (mouseY) {
@@ -261,6 +272,10 @@ export class ScrollingMenuComponent implements AfterViewInit {
     });
   }
 
+  private moveAll(distance: number): void {
+    this.container.nativeElement.style.top = `${this.getTopInt(this.container.nativeElement) + distance}px`;
+  }
+
   private switchOptions(sign: number): void {
     const firstOption = this.optionArray[0];
     const lastOption = this.optionArray[this.optionArray.length - 1];
@@ -271,7 +286,6 @@ export class ScrollingMenuComponent implements AfterViewInit {
       lastOption.style.top = `${firstTop - this.heightOfOption}px`;
       const first = this.optionArray.pop();
       this.optionArray.unshift(first);
-
       const firstO = this.options.pop();
       this.options.unshift(firstO);
     } else if (sign < 0) {
@@ -310,8 +324,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
   }
 
   private decaySpeed(): void {
-
-    if (Math.abs(this.speed) < 1 || this.speed === 0) {
+    if (Math.abs(this.speed) < 3 || this.speed === 0) {
       this.intervalRunning = false;
       clearInterval(this.speedInterval);
       this.toggleBackgroundColors();
@@ -325,5 +338,10 @@ export class ScrollingMenuComponent implements AfterViewInit {
       this.runningTotal = this.checkRunningTotal(this.speed);
       this.toggleBackgroundColors();
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.center = this.findCenter();
   }
 }
