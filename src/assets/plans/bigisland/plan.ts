@@ -32,7 +32,7 @@ export const BigIslandPlan: Plan = {
   },
   css: {
     map: {
-      left: '24.5vw',
+      left: '30.5vw',
       top: '5vh'
     },
     legend: {
