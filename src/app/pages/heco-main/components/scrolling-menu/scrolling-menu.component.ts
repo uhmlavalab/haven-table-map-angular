@@ -42,6 +42,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
   private dividedHeight: number;
 
   private selectedOption: any;
+  private selectedValue: any;
 
   private touchId: number;
 
@@ -61,6 +62,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
     this.repeatRate = 33;
     this.selectedOption = null;
     this.dividedHeight = 0;
+    this.selectedValue = '0';
   }
 
   ngAfterViewInit() {
@@ -68,6 +70,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
       if (val) {
         if (val.type === this.type) {
           this.options = val.data;
+          this.selectedValue = val.data[0];
           setTimeout(() => {
             this.center = this.findCenter();
             this.setOptionsData(this.options);
@@ -149,6 +152,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
     if (centerIndex > 0 && (this.optionsData[centerIndex].value !== this.selectedOption) ) {
       this.selectedOption = this.optionsData[centerIndex];
       this.uiService.handleMenuChange(this.type, this.selectedOption.value);
+      this.selectedValue = this.selectedOption.value;
     }
   }
 
@@ -362,6 +366,8 @@ export class ScrollingMenuComponent implements AfterViewInit {
       this.runningTotal = this.checkRunningTotal(this.speed);
     }
   }
+
+  private advanceByOne
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
