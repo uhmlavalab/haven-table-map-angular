@@ -904,7 +904,45 @@ export const BigIslandPlan: Plan = {
                   }
                 });
               },
-            },//end placeholder layer
+            },//end fire layer
+
+            {//start Palila layer
+              name: 'Palila Critical Habitat', //display name
+              displayName: 'Palila Critical Habitat',//display name
+              active: false,
+              included: true,//enable-disable layer
+              iconPath: 'assets/plans/bigisland/images/icons/palila-icon.png',//controls icon image for layer
+              secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/solar.jpg',
+              secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+              fillColor: '#ff0066',
+              borderColor: '#ffffff',
+              borderWidth: 0.5,
+              legendColor: mapLayerColors.Solar.fill,
+              filePath: 'assets/plans/bigisland/layers/palila.json',//set to shapefile link
+              parcels: [],
+              setupFunction(planService: PlanService) {
+                this.parcels.forEach(parcel => {
+                    d3.select(parcel.path)
+                      .style('fill', 'transparent')
+                      .style('opacity', (this.active) ? 0.85 : 0.0)
+                      .style('stroke', this.borderColor)
+                      .style('stroke-width', this.borderWidth + 'px');
+                });
+              },
+              updateFunction(planService: PlanService) {
+                this.parcels.forEach(parcel => {
+                 
+                  d3.select(parcel.path)
+                    .style('fill', '#f0cd1f')//'transparent' if no fill is needed, otherwise set to color hex code
+                    .style('opacity', this.active ? 0.45 : 0.0)//controls opacity of layer
+                    .style('stroke', 'white')//controls bordercolor - accepts color hex code
+                    .style('stroke-width', (this.borderWidth * parcel.properties.Voltage_kV) + 'px');
+                  
+      
+                });
+              },
+            },//end paalia layer
+
     ],
   }
 }
