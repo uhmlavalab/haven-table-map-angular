@@ -63,7 +63,7 @@ export class SliderComponent implements AfterViewInit {
   }
 
   private drag(event, e): number {
-    let percentFromLeft = -1
+    let percentFromLeft = -1;
     try {
       // Capture X position of mouse or touch
       let mousex = event.screenX;

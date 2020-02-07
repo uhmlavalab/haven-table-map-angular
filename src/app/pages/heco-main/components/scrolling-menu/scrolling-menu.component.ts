@@ -16,18 +16,20 @@ import { UiServiceService } from '@app/services/ui-service.service';
 export class ScrollingMenuComponent implements AfterViewInit {
 
   @Input() type;
-  @ViewChildren('menuOption', { read: ElementRef }) menuOptions: QueryList<ElementRef>
+  @Input() curve;
+  @ViewChildren('menuOption', { read: ElementRef }) menuOptions: QueryList<ElementRef>;
   @ViewChild('container', { static: false }) container: ElementRef;
   @ViewChild('touchOverlay', { static: false }) overlay: ElementRef;
+  @ViewChild('centerBox', { static: false }) centerBox: ElementRef;
 
   private options: any[]; // Array holding all menu options.
   private numberVisible: number; // How many options are visible at one time on the screen.  The rest are hidden.
   private curveLeft: boolean;
   private dragging: boolean; // True if elements are being dragged.  False if not.
-  private optionArray: any[];
+
+  private optionsData: any[];
 
   private positionHistory: any[];
-  private heightOfOption: number;
   private runningTotal: number;
 
   private speed: number;
@@ -45,18 +47,17 @@ export class ScrollingMenuComponent implements AfterViewInit {
 
 
   constructor(private el: ElementRef, private planService: PlanService, private uiService: UiServiceService) {
+    this.optionsData = [];
     this.curveLeft = false;
-    this.numberVisible = 11;
+    this.numberVisible = 10;
     this.speedInterval = -1;
     this.intervalRunning = false;
     this.options = [];
     this.dragging = false;
     this.positionHistory = [];
-    this.heightOfOption = -1;
     this.runningTotal = 0;
-    this.optionArray = [];
     this.speed = 0;
-    this.speedDecayRate = 0.80;
+    this.speedDecayRate = 0.90;
     this.repeatRate = 33;
     this.selectedOption = null;
     this.dividedHeight = 0;
@@ -69,13 +70,18 @@ export class ScrollingMenuComponent implements AfterViewInit {
           this.options = val.data;
           setTimeout(() => {
             this.center = this.findCenter();
-            this.positionOptions(this.numberVisible);
-            this.toggleBackgroundColors();
-            this.adjustToCenter();
+            this.setOptionsData(this.options);
+            this.positionOptions();
+            this.selectedOption = val.data[0];
+            for (let i = 0; i < Math.floor((this.optionsData.length - this.numberVisible) / 2); i++) {
+                this.switchOptions(1);
+            }
+            this.adjustToCenter(val.data[0]);
           }, 100);
         }
       }
     });
+
     this.planService.planSubject.subscribe(plan => {
       if (plan) {
         this.planService.getScrollingMenuData(this.type);
@@ -87,7 +93,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
     this.overlay.nativeElement.addEventListener('mouseup', () => this.stopDragging());
     this.overlay.nativeElement.addEventListener('mouseleave', () => {
       if (this.dragging) {
-        this.stopDragging()
+        this.stopDragging();
       }
     });
     this.overlay.nativeElement.addEventListener('mousemove', event => {
@@ -110,80 +116,89 @@ export class ScrollingMenuComponent implements AfterViewInit {
 
   }
 
-  setScenarios(): void {
-    //console.log(this.planService.getScenarios());
+  private setOptionsData(options): void {
+    this.dividedHeight = this.overlay.nativeElement.getBoundingClientRect().height / this.numberVisible;
+    this.menuOptions.forEach((option, index) => {
+      this.optionsData.push(
+        {
+          value: options[index],
+          element: option.nativeElement,
+          top: this.dividedHeight * index,
+          left: 0,
+          opacity: 1,
+          fontSize: 999,
+          position: index
+        }
+      );
+    });
   }
+
 
   /** Calculates the space needed for each element based on the number of elements and the
    * size of the container.  Then positions the elements accordingly.
-   * @param num the number of elements visible at one time.
+   * @param center The center position of the element
    */
-  private positionOptions(num: number): void {
-
-    const rect = this.overlay.nativeElement.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const dividedHeight = height / this.numberVisible;
-    this.dividedHeight = dividedHeight;
-
-    this.menuOptions.forEach((option, index) => {
-      option.nativeElement.style.height = `${dividedHeight}px`;
-      option.nativeElement.style.top = `${dividedHeight * index}px`;
-      this.optionArray.push(option.nativeElement);
+  private positionOptions(): void {
+    this.optionsData.forEach(e => {
+      e.element.style.top = `${e.top}px`;
     });
-    this.heightOfOption = dividedHeight;
+  }
 
-    if (this.menuOptions.length < this.numberVisible) {
-      const middle = Math.floor(this.menuOptions.length / 2);
-      let currentTop = null;
-      this.menuOptions.forEach((option, index) => {
-        if (index === middle) {
-          currentTop = this.getTopInt(option.nativeElement);
-        }
-      });
-      this.moveEachOption(1.2 * (Math.round(this.menuOptions.length * dividedHeight) + currentTop));
+  private updateSelectedOption(): void {
+    const centerIndex = this.getCenterIndex();
+    if (centerIndex > 0 && (this.optionsData[centerIndex].value !== this.selectedOption) ) {
+      this.selectedOption = this.optionsData[centerIndex];
+      this.uiService.handleMenuChange(this.type, this.selectedOption.value);
     }
   }
 
   private findCenter(): number {
-    return this.container.nativeElement.getBoundingClientRect().height / 2 + this.container.nativeElement.getBoundingClientRect().top;
+    return this.centerBox.nativeElement.getBoundingClientRect().height / 2 +
+      this.centerBox.nativeElement.getBoundingClientRect().top - this.container.nativeElement.getBoundingClientRect().top;
   }
 
-  private adjustToCenter(): void {
-    const first = this.options[0];
-    this.optionArray.forEach((e, index) => {
-      if (this.isCenter(e)) {
-        if (this.options[index] !== first) {
-          this.moveEachOption(this.dividedHeight * Math.floor(this.numberVisible / 2));
-          this.toggleBackgroundColors();
-          for (let i = 0; i < Math.floor(this.numberVisible / 2) + 4; i++) {
+  private adjustToCenter(value: any): boolean {
+    let firstIndex = -1;
+    this.optionsData.forEach((item, index) => {
+      if (item.value === value) {
+        firstIndex = index;
+      }
+    });
+    if (firstIndex === -1) {
+      return false;
+    } else {
+      const centerIndex = this.getCenterIndex();
+      if (centerIndex > 0) {
+        const difference = firstIndex - centerIndex;
+        if (difference > 0) {
+          for (let i = difference + 1; i > 0; i--) {
+            this.switchOptions(-1);
+            this.moveEachOption(-this.dividedHeight);
+          }
+        } else if (difference < 0) {
+          for (let i = 0; i < Math.abs(difference); i++) {
             this.switchOptions(1);
+            this.moveEachOption(this.dividedHeight);
           }
-
         }
       }
-    });
+      this.positionOptions();
+      }
+    return true;
   }
 
-  toggleBackgroundColors(): void {
-    this.optionArray.forEach((e, index) => {
+  private getCenterIndex(): number {
+    let val = -1;
+    this.optionsData.forEach((e, index) => {
       if (this.isCenter(e)) {
-        e.style.opacity = 1;
-        if (Math.abs(this.speed) < 10) {
-          if (this.selectedOption !== this.options[index]) {
-            this.selectedOption = this.options[index];
-            this.uiService.handleMenuChange(this.type, this.selectedOption);
-          }
-        }
-      } else {
-        e.style.opacity = 0.3;
+        val = index;
       }
     });
+    return val;
   }
 
   isCenter(e): boolean {
-    const rect = e.getBoundingClientRect();
-    if (this.center > rect.top && this.center < rect.bottom) {
+    if (this.center > e.top && this.center < e.top + this.dividedHeight) {
       return true;
     } else {
       return false;
@@ -202,7 +217,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
 
   private stopDragging(): void {
     this.dragging = false;
-    if (Math.abs(this.speed) > 5) {
+    if (Math.abs(this.speed) > 1) {
       if (!this.intervalRunning) {
         this.intervalRunning = true;
         this.speedInterval = setInterval(() => {
@@ -237,12 +252,13 @@ export class ScrollingMenuComponent implements AfterViewInit {
       if (mouseY) {
         this.positionHistory.push({ pos: mouseY, time: new Date().getTime() });
         if (this.positionHistory.length > 3) {
-          let sum = this.getSum();
+          const sum = this.getSum();
           this.moveEachOption(Math.round(sum));
-          this.toggleBackgroundColors();
+          this.positionOptions();
           this.getSpeed();
           this.positionHistory = [];
           this.runningTotal = this.checkRunningTotal(sum);
+          this.updateSelectedOption();
         }
       }
 
@@ -256,10 +272,10 @@ export class ScrollingMenuComponent implements AfterViewInit {
 
   private checkRunningTotal(sum: number): number {
     const total = sum + this.runningTotal;
-    if (Math.abs(total) > this.heightOfOption) {
+    if (Math.abs(total) > this.dividedHeight) {
       const sign = Math.sign(total);
       this.switchOptions(sign);
-      const newTotal = sign * (Math.abs(total) - this.heightOfOption);
+      const newTotal = sign * (Math.abs(total) - this.dividedHeight);
       return newTotal;
     } else {
       return total;
@@ -267,44 +283,44 @@ export class ScrollingMenuComponent implements AfterViewInit {
   }
 
   private moveEachOption(distance: number): void {
-    this.optionArray.forEach(e => {
-      e.style.top = `${this.getTopInt(e) + distance}px`;
+    this.optionsData.forEach(e => {
+      e.top = e.top + distance;
     });
   }
 
-  private moveAll(distance: number): void {
-    this.container.nativeElement.style.top = `${this.getTopInt(this.container.nativeElement) + distance}px`;
-  }
 
   private switchOptions(sign: number): void {
-    const firstOption = this.optionArray[0];
-    const lastOption = this.optionArray[this.optionArray.length - 1];
-    const firstTop = this.getTopInt(firstOption);
-    const lastTop = this.getTopInt(lastOption);
+
+    let tempPosition = 0; // Stores the top value for either the first or last element.
+    let tempElement = null;
 
     if (sign > 0) {
-      lastOption.style.top = `${firstTop - this.heightOfOption}px`;
-      const first = this.optionArray.pop();
-      this.optionArray.unshift(first);
-      const firstO = this.options.pop();
-      this.options.unshift(firstO);
+      this.optionsData.forEach(el => {
+        el.position = (el.position + 1) % (this.optionsData.length);
+        if (el.position === 1) {
+          tempPosition = el.top;
+        } else if (el.position === 0) {
+          tempElement = el;
+        }
+      });
+      tempElement.top = tempPosition - this.dividedHeight;
     } else if (sign < 0) {
-      firstOption.style.top = `${lastTop + this.heightOfOption}px`;
-      const last = this.optionArray.shift();
-      this.optionArray.push(last);
-      const lastO = this.options.shift();
-      this.options.push(lastO);
+      this.optionsData.forEach(el => {
+        if (el.position === 0) {
+          el.position = this.optionsData.length - 1;
+          tempElement = el;
+        } else {
+          if (el.position === this.optionsData.length - 1) {
+            tempPosition = el.top;
+          }
+          el.position--;
+        }
+      });
+      tempElement.top = tempPosition + this.dividedHeight;
     } else {
-      // Do nothing at all.
+      // Do Nothing
     }
-  }
-
-  private getTopInt(element): number {
-    let top = element.style.top;
-    top = top.split('p');
-    top = top[0];
-    top = parseInt(top, 10);
-    return top;
+    tempElement.element.style.top = `${top}px`;
   }
 
   private getSum(): number {
@@ -327,16 +343,16 @@ export class ScrollingMenuComponent implements AfterViewInit {
     if (Math.abs(this.speed) < 3 || this.speed === 0) {
       this.intervalRunning = false;
       clearInterval(this.speedInterval);
-      this.toggleBackgroundColors();
       this.positionHistory = [];
       this.speed = 0;
       this.speedInterval = -1;
+      this.updateSelectedOption();
     } else {
       const sign = Math.sign(this.speed);
       this.speed = Math.floor(Math.abs(this.speed * this.speedDecayRate)) * sign;
       this.moveEachOption(this.speed);
+      this.positionOptions();
       this.runningTotal = this.checkRunningTotal(this.speed);
-      this.toggleBackgroundColors();
     }
   }
 

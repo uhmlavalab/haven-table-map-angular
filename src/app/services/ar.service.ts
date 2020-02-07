@@ -263,7 +263,7 @@ export class ArService {
   }
 
   /** This routine tracks the marker on the table by converting the data returned by
-   * the camera into coordinates of the overall map.  
+   * the camera into coordinates of the overall map.
    * @param x X position in the camera.
    * @param y Y position in the camera.
    * @param camId Id of the camera (top or bottom camera)

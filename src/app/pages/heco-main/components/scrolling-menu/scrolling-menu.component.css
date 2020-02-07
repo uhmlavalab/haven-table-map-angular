@@ -2,6 +2,7 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    text-align: center;
 }
 .options-container {
     height: 100%;
@@ -16,8 +17,20 @@
     z-index: 100;
     position: absolute;
     top: 0;
+    background-color: rgba(0,0,0,0.5);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
 }
 
 .menu-option {
     position: absolute;
+    left: 20px;
+}
+
+.center-box {
+    position: absolute;
+    border: 1px solid white;
+    height: 40px;
+    width: 120px;
+    top: calc(50%);
+    z-index: 50;
 }
