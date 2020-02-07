@@ -33,8 +33,8 @@
     top: calc(50%);
     z-index: 50;
     background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9));
-    font-size: 20px;
-    padding-top: 20px;
+    font-size: 30px;
+    padding-top: 10px;
     color: white;
     opacity: 1;
     font-weight: bolder;
