@@ -182,7 +182,7 @@ export class ScrollingMenuComponent implements AfterViewInit {
           }
         }
       } else {
-        const currentTop = this.optionsData[0].top;
+        const currentTop = this.optionsData[Math.floor(this.optionsData.length / 2)].top;
         this.moveEachOption(this.center - currentTop - this.dividedHeight / 2);
         for (let i = 0; i < Math.floor(this.options.length / 2); i++) {
           this.switchOptions(1);
