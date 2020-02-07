@@ -839,6 +839,72 @@ export const BigIslandPlan: Plan = {
           });
         },
       },//end placeholder layer
+            {//Start FIRE LAYER
+              //It sounds cool.
+              name: 'firerisk',
+              displayName: 'Fire Risk Zones',
+              active: false,
+              included: true,
+              iconPath: 'assets/plans/bigisland/images/icons/fire.png',
+              secondScreenImagePath: 'assets/plans/bigisland/images/second-screen-images/layer-images/dod.jpg',
+              secondScreenText: 'Slide the Layer Puck to add or remove this layer.',
+              fillColor: mapLayerColors.Dod.fill,
+              borderColor: mapLayerColors.Dod.border,
+              borderWidth: 1,
+              legendColor: mapLayerColors.Dod.fill,
+              filePath: 'assets/plans/bigisland/layers/Fire_Risk_Areas.json',
+              parcels: [],
+              setupFunction(planService: PlanService) {
+                this.parcels.forEach(parcel => {
+                  d3.select(parcel.path)
+                    .style('fill', 'transparent')//change from type to attribute name
+                    .style('opacity', this.active ? 0.85 : 0.0)
+                    .style('stroke', 'white')
+                    .style('stroke-width', this.borderWidth + 'px');
+                });
+              },
+
+              
+              updateFunction(planService: PlanService) {
+                this.parcels.forEach(parcel => {
+                  
+                  const fireColors = {
+                    "Low" : "#238d65",
+                    "Medium" : "2a9ed9",
+                    "High" : "fee71f",
+                    "Very High" : "f6a553",
+                    "Extreme" : "ef4246",
+                    "Critical" : "white"
+                  }
+                  let risk = parcel.properties.risk_ratin;
+
+                  if(risk == "Low")
+                  {
+                    d3.select(parcel.path)
+                    .style('fill', fireColors["Low"])
+                    .style('opacity', this.active ? 0.85 : 0.0)
+                    .style('stroke', this.borderColor)
+                    .style('stroke-width', this.borderWidth + 'px');
+                  }
+                  if(risk == "Medium")
+                  {
+                    d3.select(parcel.path)
+                    .style('fill', fireColors["Medium"])
+                    .style('opacity', this.active ? 0.85 : 0.0)
+                    .style('stroke', this.borderColor)
+                    .style('stroke-width', this.borderWidth + 'px');
+                  }
+                  if(risk == "High")
+                  {
+                    d3.select(parcel.path)
+                    .style('fill', fireColors["High"])
+                    .style('opacity', this.active ? 0.85 : 0.0)
+                    .style('stroke', this.borderColor)
+                    .style('stroke-width', this.borderWidth + 'px');
+                  }
+                });
+              },
+            },//end placeholder layer
     ],
   }
 }
