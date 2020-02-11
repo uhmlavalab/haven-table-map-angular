@@ -16,13 +16,13 @@ export class LayerButtonComponent implements OnInit {
   @Input() layerIcon: string;
   @Input() color: string;
 
-  private animationDuration: number;
+  private animationInterval: any;
   private progress: number;
   private progressRadius: number;
   private on: boolean;
 
   constructor(private uiService: UiServiceService, private el: ElementRef, private planService: PlanService) {
-    this.animationDuration = 700;
+    this.animationInterval = -1;
     this.progress = 0;
     this.progressRadius = 0;
     this.on = false;
@@ -34,28 +34,52 @@ export class LayerButtonComponent implements OnInit {
 
   /** When these toggles are touched, they show a loading up animation */
   @HostListener('touchstart') onTouchStart(event: TouchEvent) {
-    // Start the effect
-    if (this.progress === 0) {
-      this.progress = 100;
-      setTimeout(() => {
-        if (this.progress === 100) {
-          this.on = true;
-          this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
-          this.planService.toggleSelectedLayer(this.layerName);
-        }
-      }, this.animationDuration * 2);
-    } else if (this.progress === 100 && this.on) {
+
+    if (this.progress >= 100) {
       this.progress = 0;
       this.on = false;
       this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
       this.planService.toggleSelectedLayer(this.layerName);
     }
+    // Start the effect
+    if (this.animationInterval < 0) {
+      this.animationInterval = setInterval(() => {
+        this.progress++;
+        if (this.progress >= 100) {
+          if (this.on === false) {
+            this.on = true;
+            this.uiService.messageMap({ type: 'layer-update', data: this.layerName, newMsg: 'true' });
+            this.planService.toggleSelectedLayer(this.layerName);
+          }
+          this.stopAnimation(this.animationInterval);
+        }
+      }, 5);
+    } else {
+      this.stopAnimation(this.animationInterval);
+    }
+  }
+
+  private stopAnimation(intervalId): void {
+    clearInterval(intervalId);
+  }
+
+  private reverseAnimate(): void {
+    this.animationInterval = setInterval(() => {
+      if (this.progress > 0) {
+        this.progress--;
+      } else {
+        this.stopAnimation(this.animationInterval);
+      }
+    }, 5);
   }
 
   /** If the animation isnt finished, it will end prematurely if the touch is ended. */
   @HostListener('touchend') onTouchEnd() {
     if (!this.on) {
-      this.progress = 0;
+      this.stopAnimation(this.animationInterval);
+      if (this.progress > 0) {
+        this.reverseAnimate();
+      }
     }
   }
 }
