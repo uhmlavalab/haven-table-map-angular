@@ -870,10 +870,10 @@ export const BigIslandPlan: Plan = {
                   
                   const fireColors = {
                     "Low" : "#238d65",
-                    "Medium" : "2a9ed9",
-                    "High" : "fee71f",
-                    "Very High" : "f6a553",
-                    "Extreme" : "ef4246",
+                    "Medium" : "#2a9ed9",
+                    "High" : "#fee71f",
+                    "Very High" : "#f6a553",
+                    "Extreme" : "#ef4246",
                     "Critical" : "white"
                   }
                   let risk = parcel.properties.risk_ratin;
