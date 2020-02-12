@@ -58,8 +58,8 @@ export const BigIslandPlan: Plan = {
     },
     charts: {
       pie: {
-        left: '27vw',
-        top: '61vh'
+        left: '0vw',
+        top: '0vh'
       },
       line: {
         left: 'calc(100vw - 325px)',
