@@ -177,10 +177,12 @@ export class LandingHomeComponent implements OnInit {
 
     switch (position) {
       case 0: {
+        top = '5vh';
         break;
       }
       case 1: {
-        left = 'calc(22vw - 50px)';
+        top = '5vh'
+        left = 'calc(18vw - 50px)';
         break;
       }
       case 2: {
@@ -188,16 +190,16 @@ export class LandingHomeComponent implements OnInit {
         break;
       }
       case 3: {
-        left = 'calc(22vw - 50px)';
+        left = 'calc(18vw - 50px)';
         top = '50vh';
         break;
       }
       case 4: {
-        top = 'calc(96% - 50px)';
+        top = 'calc(90% - 50px)';
         break;
       }
       case 5: {
-        left = 'calc(22vw - 50px)';
+        left = 'calc(18vw - 50px)';
         top = 'calc(96% - 50px)';
         break;
       }
