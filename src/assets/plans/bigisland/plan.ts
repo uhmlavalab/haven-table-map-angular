@@ -905,7 +905,7 @@ export const BigIslandPlan: Plan = {
                 });
               },
             },//end placeholder layer
-
+    
         {//Start Volcano
           //It sounds cool.
           name: 'volcanohazard',
@@ -943,7 +943,7 @@ export const BigIslandPlan: Plan = {
                 },
         },//end volcano layer
     
-        {//Start Volcano
+        {//Start Road
           //It sounds cool.
           name: 'majorroads',
           displayName: 'Major Roads Hawaii County',
@@ -978,7 +978,7 @@ export const BigIslandPlan: Plan = {
                           .style('stroke-width', (this.borderWidth+5) + 'px');
                   });
                 },
-        }//end volcano layer
+        }//end Road layer
     ],
   }
 }
