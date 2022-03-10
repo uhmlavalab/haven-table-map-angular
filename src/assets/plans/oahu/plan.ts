@@ -2,7 +2,6 @@ import { Plan } from '@app/interfaces';
 import { mapLayerColors, chartColors } from '../defaultColors';
 import { PlanService } from '@app/services/plan.service';
 import * as d3 from 'd3';
-import { ConvertPropertyBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
 
 export const OahuPlan: Plan = {
   name: 'oahu',
@@ -251,41 +250,119 @@ export const OahuPlan: Plan = {
           let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
           const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
           solarTotal += curtailmentTotal;
-          this.parcels.sort((a, b) => parseFloat(b.properties.cf_1) - parseFloat(a.properties.cf_1));
+          const parcelWithYears = [];
+          const parcelWithoutYears = [];
+          this.parcels.forEach((parcel, index) => {
+            if (parcel.properties['year']) {
+              parcelWithYears.push(parcel);
+            } else {
+              parcelWithoutYears.push(parcel)
+            }
+          });
+
+          let sum = 0;
+          parcelWithYears.forEach(p=> sum += p.properties.est_energy);
+          parcelWithoutYears.sort((a, b) => parseFloat(b.properties.cf_1) - parseFloat(a.properties.cf_1));
+          this.parcels = parcelWithYears.concat(parcelWithoutYears);
+          const year = planService.getCurrentYear();
+          let index = 0;
+          while (this.parcels[index].properties.year != null) {
+            const parcelYear = parseFloat(this.parcels[index].properties.year);
+            if (parcelYear <= year) {
+              d3.select(this.parcels[index].path)
+                .style('fill', this.fillColor)
+                .style('display', 'none')
+                .style('opacity', 0.85)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
+              solarTotal -= parseFloat(this.parcels[index].properties.est_energy);
+            } else {
+              d3.select(this.parcels[index].path)
+                .style('fill', 'transparent')
+                .style('display', 'none')
+                .style('opacity', 0.85)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
+            }
+            index++;
+          }
           this.parcels.forEach(parcel => {
+            if (parcel.properties.year != null) return;
             if (solarTotal > 0) {
               d3.select(parcel.path)
                 .style('fill', this.fillColor)
-                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('display', 'none')
+                .style('opacity', 0.85)
                 .style('stroke', this.borderColor)
                 .style('stroke-width', this.borderWidth + 'px');
-              solarTotal -= (parcel.properties.cf_1 * parcel.properties.capacity * 8760);
+              solarTotal -= parseFloat(parcel.properties.est_energy);
             } else {
               d3.select(parcel.path)
                 .style('fill', 'transparent')
-                .style('opacity', (this.active) ? 0.85 : 0.0)
+                .style('display', 'none')
+                .style('opacity', 0.85)
                 .style('stroke', this.borderColor)
                 .style('stroke-width', this.borderWidth + 'px');
             }
           });
         },
-        updateFunction(planService: PlanService) {
-          let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
-          const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
-          solarTotal += curtailmentTotal;
-          this.parcels.forEach(parcel => {
-            if (solarTotal > 0) {
-              d3.select(parcel.path)
+        updateFunction(planService: PlanService) {  
+          const year = planService.getCurrentYear();
+          let solarTotalUpdate = planService.getGenerationTotalForCurrentYear(['PV']);
+          const curtailmentTotalUpdate = planService.getCurtailmentTotalForCurrentYear(['PV']);
+          solarTotalUpdate += curtailmentTotalUpdate;
+          let index = 0;
+          while (this.parcels[index].properties.year != null) {
+            const parcelYear = parseFloat(this.parcels[index].properties.year);
+            if (parcelYear <= year) {
+              d3.select(this.parcels[index].path)
                 .style('fill', this.fillColor)
-                .style('opacity', (this.active) ? 0.85 : 0.0);
-              solarTotal -= (parcel.properties.cf_1 * parcel.properties.capacity * 8760);
+                .style('display', this.active === 1? 'block': 'none')
+                .style('opacity', 0.85)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
+              solarTotalUpdate -= parseFloat(this.parcels[index].properties.est_energy);
             } else {
-              d3.select(parcel.path)
+              d3.select(this.parcels[index].path)
                 .style('fill', 'transparent')
-                .style('opacity', (this.active) ? 0.85 : 0.0);
+                .style('display', 'none')
+                .style('opacity', 0.85)
+                .style('stroke', this.borderColor)
+                .style('stroke-width', this.borderWidth + 'px');
             }
+            index++;
+          }
+          this.parcels.forEach((parcel, index) => {
+            if (parcel.properties.year != null) return
+              if (solarTotalUpdate > 0) {
+                d3.select(parcel.path)
+                  .style('fill', this.fillColor)
+                  .style('display', this.active === 1 ? 'block' : 'none');
+                solarTotalUpdate -= parseFloat(parcel.properties.est_energy)
+              } else {
+                d3.select(parcel.path)
+                  .style('fill', 'transparent')
+                  .style('display', this.active === 1 ? 'block' : 'none');
+              }
           });
         },
+        //   ////////////////////
+        //   let solarTotal = planService.getGenerationTotalForCurrentYear(['PV']);
+        //   const curtailmentTotal = planService.getCurtailmentTotalForCurrentYear(['PV']);
+        //   solarTotal += curtailmentTotal;
+        //   this.parcels.forEach(parcel => {
+        //     if (solarTotal > 0) {
+        //       d3.select(parcel.path)
+        //         .style('fill', this.fillColor)
+        //         .style('opacity', (this.active) ? 0.85 : 0.0);
+        //       solarTotal -= (parcel.properties.cf_1 * parcel.properties.capacity * 8760);
+        //     } else {
+        //       d3.select(parcel.path)
+        //         .style('fill', 'transparent')
+        //         .style('opacity', (this.active) ? 0.85 : 0.0);
+        //     }
+        //   });
+        // },
       },
       {
         name: 'agriculture',
